@@ -17,9 +17,9 @@ Yapılacaklar:
 - i18n altyapısı: `i18n/tr.json`, `i18n/en.json`; dil seçici; `localStorage` kaydı
 - Dünya haritası açılış ekranı: sade SVG dünya, `data/cities.json`'dan şehir
   noktaları + isimleri; şehre tıklayınca `#/{sehirId}` rotasına geçiş
-- **El yazısı logotip:** açılış ekranında büyük "layers of city" — OFL lisanslı
-  el yazısı font (öneri: Caveat) **yerel dosya** olarak eklenir (CDN yok);
-  hafif eğik, turistik his (`docs/TASARIM.md` → Logotip)
+- **El yazısı logotip:** açılış ekranında büyük "layers of city" — **Ballet**
+  fontu (OFL) `assets/fonts/` altına **yerel dosya** olarak eklenir (CDN yok);
+  hafif eğik, "of" kelimesi lila (`docs/TASARIM.md` → Logotip)
 - Üst bar: logo (ana ekrana döndürür), dil ve tema anahtarları
 - Prototipteki görünüm birebir referanstır: `prototip/index.html`
 
@@ -43,17 +43,18 @@ Yapılacaklar:
 - `data/roma/city.json` manifesti: merkez, zoom sınırları, `timezone`, `currency`,
   `language`, katman listesi
 - **Şehir çubuğu** (haritanın sol üstünde yüzen çip): şehir adı · tarih ·
-  **yerel saat (canlı, timezone'dan)** · hava simgesi. Harita ekranın en az
-  %70'ini kaplar; panel dardır
-- Katman paneli iskeleti: 5 grup başlığı (Varış/Omurga/Keşfet/Yaşam/İhtiyaçlar),
-  boş anahtarlar. Etiketler kısa: Girişler, Metro, Oteller, Konutlar...
+  **yerel saat (canlı, timezone'dan)** · hava simgesi
+- **Yüzen arayüz iskeleti** (`docs/TASARIM.md` → Ekran düzeni; panel YOK,
+  harita tam ekran): Kapılar/Hatlar çipleri + bütçe çipi (sol üst),
+  Yaşam çekmecesi (sağ kenar), `Keşfet · İhtiyaç · Tur` alt barı ve yukarı
+  açılan boş çip menüleri. Mobil ve masaüstü aynı düzen
 - **"Konumum" butonu:** Geolocation API ile kullanıcının yerini haritada gösterir
   (`docs/VERI.md` → Konum bölümü; konum cihazda kalır, gönderilmez)
 
 Bitti sayılır:
 - [ ] Roma haritası iki temada da soluk altlıkla açılıyor
 - [ ] Şehir çubuğunda Roma yerel saati canlı işliyor (tarih iki dilde doğru)
-- [ ] Panel mobilde alt çekmece, masaüstünde yan panel; harita alanı baskın
+- [ ] Çekmece, alt bar ve çipler mobilde ve masaüstünde çalışıyor; harita tam ekran
 - [ ] Konumum butonu mobilde çalışıyor (izin reddi de sessizce ele alınıyor)
 
 Durum notu: —
@@ -75,7 +76,7 @@ Yapılacaklar:
 - Hat renkleri: `docs/TASARIM.md` "metro renkleri" (soluklaştırılmış A/B/C)
 
 Bitti sayılır:
-- [ ] Varsayılan açılışta girişler+omurga+rozetler görünüyor, panelden aç/kapa çalışıyor
+- [ ] Varsayılan açılışta kapılar+hatlar+rozetler görünüyor, çiplerden aç/kapa çalışıyor
 - [ ] İçerik `PROJE_PLANI.md` B bölümüyle uyumlu, kullanıcı onayından geçti
 
 Durum notu: —
@@ -88,11 +89,15 @@ Durum notu: —
 
 Yapılacaklar:
 - `kesfet-poi.geojson`: tarihi/modern/doğa/gastronomi/alışveriş/sağlık etiketli POI'ler
-- Panelde tema filtresi (çip düzeni, çoklu seçim)
+- Alt bardaki Keşfet menüsüne tema çipleri (çoklu seçim) + yoğunluk çipi
 - `kesfet-yogunluk.geojson`: yoğun bölge alanları (yumuşak dolgu, keskin sınır yok)
+- **Yer kartı + yol tarifi:** POI'ye dokununca alt ortada yer kartı; "Yol tarifi"
+  düğmesi Google Maps dış bağlantısını açar (anahtarsız URL; koordinat varsa
+  `dir/?api=1&destination=lat,lng`)
 
 Bitti sayılır:
 - [ ] Filtreler çalışıyor; yoğunluk alanları iki temada okunaklı
+- [ ] Yer kartı açılıyor, Yol tarifi Google Maps'te doğru yeri açıyor (mobilde test)
 - [ ] POI seti kullanıcı onayından geçti
 
 Durum notu: —
@@ -108,10 +113,10 @@ Yapılacaklar:
   `yasam-ogrenci.geojson` — Yaşam grubu yalnızca **bölge** gösterir
 - Alt merkez ↔ merkez ana aks çizgileri
 - Alan katmanları için ortak stil (soluk dolgu + kısa etiket)
-- Panel etiketleri kısa: Oteller, Konutlar, Alt merkezler, Öğrenciler
+- Sağ kenar çekmecesindeki etiketler kısa: Oteller, Konutlar, Alt merkezler, Öğrenciler
 
 Bitti sayılır:
-- [ ] Dört katman da panelden yönetiliyor ve okunaklı
+- [ ] Dört katman da çekmeceden yönetiliyor ve okunaklı
 - [ ] Bölgeleme kullanıcı onayından geçti
 
 Durum notu: —
@@ -125,8 +130,8 @@ Durum notu: —
 Yapılacaklar:
 - `ihtiyac.geojson`: kategori (`theme`) etiketli noktalar — kiralık araç,
   market, müze, kütüphane, hastane, eczane, yakıt istasyonu
-- Panelde İhtiyaçlar grubu: kategori çipleri (Keşfet'teki filtre düzeniyle aynı);
-  varsayılan hepsi kapalı, çip açılınca o kategori haritada görünür
+- Alt bardaki İhtiyaç menüsü: yukarı açılan kategori çipleri (Keşfet düzeniyle
+  aynı); varsayılan hepsi kapalı, çip açılınca o kategori haritada görünür
 - Kategoriler bütçe alanı taşıyabilir (örn. kiralık araç ofisleri)
 
 Bitti sayılır:
@@ -165,7 +170,8 @@ Durum notu: —
 **Amaç:** 1-2-3 yıldızlı isteğe bağlı **genel** bütçe filtresi (soru/sihirbaz DEĞİL).
 
 Yapılacaklar:
-- Yıldız seçici **panelin en üstünde** durur; tek bir seçim üç grubu birden süzer:
+- Yıldız çipi **sol üstte, Kapılar/Hatlar çiplerinin altında** durur;
+  tek bir seçim üç grubu birden süzer:
   **Keşfet + Yaşam + İhtiyaçlar**
 - Mantık: ★=ekonomik, ★★=orta, ★★★=yüksek. Seçim yokken her şey görünür.
   `budget` etiketi taşıyan öğelerden yalnızca seçilen düzeye uyanlar kalır;
@@ -188,7 +194,7 @@ Durum notu: —
 **Amaç:** İsteğe bağlı "şehri tanıt" akışı.
 
 Yapılacaklar:
-- Panelde ayrı bir "şehri tanıt ▸" girişi (varsayılan kapalı, dayatma yok)
+- Alt bardaki **Tur** düğmesi rehberli modu başlatır (varsayılan kapalı, dayatma yok)
 - Adım verisi `data/roma/content/{dil}.json`'dan: her adım = kamera hedefi +
   açılacak katmanlar + 1-2 cümle metin
 - **Son adımlar künyeye bağlanır:** konuşulan dil, para birimi ve fiyat

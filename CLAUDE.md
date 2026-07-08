@@ -33,8 +33,15 @@ varsa kullanıcıya sor:
   İstisna değil nüans: **bütçe seçici** (★/★★/★★★) bir soru ekranı değildir;
   panelin en üstünde duran isteğe bağlı bir filtredir ve Keşfet+Yaşam+İhtiyaçlar
   gruplarını birden süzer; varsayılanda her şey görünür.
-- **Harita ekranda baskındır** (hedef: görünür alanın ≥%70'i). Yazı minimumda
-  tutulur; etiket yerine çizgisel simge yeterliyse simge kullanılır.
+- **Harita tam ekrandır; panel yoktur.** Tüm kontroller haritanın üzerinde
+  yüzer (kullanıcı eskizine göre): sol üstte şehir çubuğu + Kapılar/Hatlar
+  çipleri + bütçe; sağ kenardan kayan Yaşam çekmecesi; altta `Keşfet · İhtiyaç
+  · Tur` barı (yukarı açılan çip menüleri). Ayrıntı: `docs/TASARIM.md` →
+  "Ekran düzeni". Yazı minimumda tutulur; simge yeterliyse simge kullanılır.
+- **Yol tarifi uygulama içinde çözülmez.** Haritada seçilen yer için küçük yer
+  kartı açılır; "Yol tarifi" düğmesi Google Maps'i **anahtarsız URL şemasıyla**
+  dış bağlantı olarak açar. Uygulama oryantasyon aracıdır; navigasyon Google'a
+  devredilir.
 - **Şehir çubuğu + künye:** haritada şehir adı · tarih · yerel saat · hava
   simgesi görünür; tıklayınca künye kartı açılır (dil, para birimi + USD
   karşılığı, temel fiyat tablosu, 5 günlük hava tahmini). Fiyat tablosu
@@ -45,8 +52,9 @@ varsa kullanıcıya sor:
   Katman adları olabildiğince tek kelime: "Girişler" (giriş kapıları değil),
   "Oteller" (otel bölgeleri değil), "Konutlar", "Öğrenciler".
   Çizgisel (stroke) ikonlar; canlı/cırtlak renk yok. Ayrıntı: `docs/TASARIM.md`.
-- **Logotip:** "layers of city" açılış ekranında el yazısı karakterde (yerel
-  barındırılan OFL font), hafif eğik, turistik his; üst bardaki logo sade kalır.
+- **Logotip:** "layers of city" açılış ekranında **Ballet** fontuyla
+  (Omnibus-Type, OFL; yerel barındırılır), hafif eğik, turistik his;
+  üst bardaki logo sade kalır.
 - **Tema:** açık (soluk pastel) + koyu. Harita altlığı temayla birlikte değişir.
 - **6 dil mimarisi** (en, de, fr, it, es, tr); içerik önce en+tr.
   Arayüzde sabit yazı (hardcoded string) bırakma; her metin i18n dosyasından gelir.

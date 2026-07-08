@@ -124,7 +124,22 @@ Yayın etabında (E11) GitHub Pages'e bağlanacak.
   market, müze, kütüphane, hastane, eczane, yakıt istasyonu. Kategori çipleriyle
   açılır; bütçelendirilebilir (`budget` alanı). Yaşam grubu yalnızca bölge gösterir.
 - **Hat rozetleri:** Metro A/B/C harfleri hat renginde rozet olarak haritada.
-- **El yazısı logotip:** açılış ekranında "layers of city" el yazısı, hafif eğik,
-  turistik karakterde (yerel barındırılan OFL font; prototipte sistem el yazısı).
-- **Tasarım vurgusu:** harita ekranın ≥%70'i; yazı minimum, çizgisel simge tercih;
-  etiketler kısa (Girişler, Oteller, Konutlar).
+- **Logotip fontu: Ballet** (Omnibus-Type, OFL) — kullanıcı seçimi; açılış
+  ekranında hafif eğik, turistik karakterde; yerel barındırılır.
+- **Tasarım vurgusu:** yazı minimum, çizgisel simge tercih; etiketler kısa
+  (Kapılar, Hatlar, Oteller, Konutlar).
+
+## I. Ekran düzeni ve yol tarifi (son tur — kullanıcı eskizi)
+
+Kullanıcının el eskizine göre **panel tamamen kaldırıldı; harita tam ekran**:
+
+- Sol üst: şehir çubuğu (Roma · tarih · saat · hava) → tıklayınca künye.
+- Altında: **Kapılar** ve **Hatlar** çipleri (tıkla-aç/kapa) + **bütçe** yıldızları.
+- Sağ kenar: kayarak açılan **Yaşam çekmecesi** (Oteller, Konutlar,
+  Alt merkezler, Öğrenciler).
+- Alt orta: **Keşfet · İhtiyaç · Tur** barı; Keşfet ve İhtiyaç yukarı açılan
+  çip menüleri, Tur rehberli modu başlatır.
+- Mobil ve masaüstü aynı düzeni kullanır.
+- **Yol tarifi:** haritada yer seçilince yer kartı açılır; "Yol tarifi" düğmesi
+  Google Maps'i dış bağlantıyla açar (anahtarsız URL şeması). Navigasyon
+  Google'a devredilir — uygulama oryantasyon aracı olarak kalır.

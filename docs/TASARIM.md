@@ -59,10 +59,9 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 - Üst barda sade: `layers of city` — küçük harf, kelime araları geniş (`0.18em`),
   sistem fontu.
 - **Açılış ekranında** büyük logotip **el yazısı** karakterdedir: turistik,
-  uçarı his; hafif eğim (yaklaşık -2.5°). Font: OFL lisanslı bir el yazısı
-  (öneri: **Caveat**), `assets/fonts/` altında **yerel** barındırılır (CDN yok).
-  Prototipte sistem el yazısı yığını kullanılır
-  (`"Segoe Script","Snell Roundhand","Brush Script MT",cursive`).
+  uçarı his; hafif eğim (yaklaşık -2°). Font: **Ballet** (Omnibus-Type,
+  OFL lisanslı — kullanıcı seçimi), `assets/fonts/` altında **yerel**
+  barındırılır (CDN yok). Prototipte woff2 gömülüdür; "of" kelimesi `--lilac`.
 
 ## İkonlar
 
@@ -79,34 +78,44 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   2px `--surface` kontur.
 - Etiketler kısa: "Termini", "tarihi merkez". Cümle yazılmaz.
 
+## Ekran düzeni (kullanıcı eskizi — nihai)
+
+Şehir ekranında **panel yoktur; harita tam ekrandır.** Tüm kontroller haritanın
+üzerinde yüzer; mobil ve masaüstü aynı düzeni kullanır:
+
+- **Sol üst — şehir çubuğu:** "Roma · 8 Tem · 14:32 · ☀24°" çipi; tıklayınca
+  künye kartı açılır/kapanır.
+- **Şehir çubuğunun altında — Kapılar ve Hatlar çipleri:** tıkla-aç / tıkla-kapa
+  (varsayılan ikisi de açık). Etiketler: "Kapılar", "Hatlar".
+- **Onların altında — bütçe çipi:** ★★★ + küçük "bütçe" etiketi.
+- **Sağ kenar — Yaşam çekmecesi:** kenar sekmesine dokununca kayarak açılır;
+  içinde Oteller, Konutlar, Alt merkezler, Öğrenciler çipleri (tıkla-aç/kapa).
+- **Alt orta — alt bar:** `Keşfet · İhtiyaç · Tur`. Keşfet ve İhtiyaç dokununca
+  **yukarı açılan** çip menüleri gösterir (Keşfet: tarihi/modern/doğa/gastronomi/
+  alışveriş/sağlık + yoğunluk; İhtiyaç: kiralık araç/market/müze/kütüphane/
+  hastane/eczane/yakıt). Tur, rehberli modu başlatır.
+- **Sağ alt — Konumum butonu** (44px, çizgisel hedef ikonu). Kullanıcı konumu:
+  `--lilac` dolgulu nokta + yumuşak halo.
+- **Sponsor alanı:** v1'de yok; ileride künye kartının altına eklenebilir.
+
 ## Bileşen kuralları
 
-- **Harita baskındır:** şehir ekranında harita, görünür alanın en az %70'ini
-  kaplar. Yazı en aza iner; etiket yerine çizgisel simge yeterliyse simge.
 - **Üst bar:** solda logo (ana ekrana döner), sağda dil ve tema anahtarları.
   Yükseklik 56px, zemin `--surface`, alt çizgi `--line`.
-- **Şehir çubuğu:** haritanın sol üstünde yüzen çip: şehir adı · kısa tarih ·
-  yerel saat (canlı) · hava simgesi + derece. Tıklayınca **künye kartı** açılır:
-  konuşulan dil, para birimi + dolar karşılığı (**"1€ ≈ 1.09$"** biçiminde:
-  1 yerel birim = X USD), temel fiyat tablosu (1L su, 1L benzin, 1L süt,
-  1kg et, 1kg peynir, kutu bira, Big Mac — güncelleme tarihiyle), 5 günlük
-  hava tahmini. Kart tek ekran, kaydırmasız hedeflenir.
+- **Künye kartı:** konuşulan dil · para birimi + dolar karşılığı
+  (**"1€ ≈ 1.09$"** biçiminde: 1 yerel birim = X USD) · temel fiyat tablosu
+  (1L su, 1L benzin, 1L süt, 1kg et, 1kg peynir, kutu bira, Big Mac —
+  güncelleme tarihiyle) · 5 günlük hava tahmini. Tek ekran, kaydırmasız hedeflenir.
 - **Hat rozetleri:** metro hattı harfi (A/B/C), hattın kendi renginde dolu
-  dairede beyaz harf (18px daire, 11px kalın harf); hat başına 1-2 rozet,
-  hattın orta ve uç noktasına yakın konumlanır.
-- **Bütçe seçici:** panelin **en üstünde** üç yıldız (★★★) — geneldir,
-  Keşfet+Yaşam+İhtiyaçlar'ı birden süzer. Dolu yıldız sayısı seçimi gösterir
+  dairede beyaz harf (18px daire, 11px kalın harf); hat başına 1-2 rozet.
+- **Bütçe seçici:** geneldir — Keşfet+Yaşam+İhtiyaçlar'ı birden süzer
   (★ ekonomik, ★★ orta, ★★★ yüksek); varsayılan: seçim yok = hepsi.
   Soru ekranı değildir, akış bloklamaz.
-- **Katman paneli:** masaüstünde sol yan panel (270px), mobilde alttan çekmece.
-  5 grup: Varış, Omurga, Keşfet, Yaşam, İhtiyaçlar. Grup başlığı + anahtar
-  (toggle) listesi. Keşfet ve İhtiyaçlar gruplarında kategori çipleri
-  (çoklu seçim). Yaşam yalnızca bölge katmanları içerir.
-- **Anahtarlar (toggle):** aktif `--lilac`, pasif `--line`. Animasyon 150ms.
-- **Rehberli mod girişi:** panelin altında sade bir satır: "şehri tanıt ▸".
-- **Konumum butonu:** harita üzerinde sağ altta yüzen yuvarlak buton (44px,
-  çizgisel hedef ikonu). Kullanıcı konumu: `--lilac` dolgulu nokta + yumuşak halo.
-- **Sponsor alanı:** panel en altında rezerve, v1'de boş ve görünmez.
+- **Yer kartı + yol tarifi:** haritada bir nokta seçilince alt ortada küçük
+  kart: yer adı + **"Yol tarifi"** düğmesi. Düğme **Google Maps'i dış
+  bağlantıyla** açar (anahtarsız URL şeması:
+  `google.com/maps/search/?api=1&query=...` veya koordinat varsa
+  `dir/?api=1&destination=lat,lng`). Navigasyonu biz çözmeyiz, Google'a devrederiz.
 - Köşe yarıçapı: kartlar 12px, çipler 999px. Gölge: tek, çok yumuşak
   (`0 2px 12px rgba(0,0,0,.06)`); koyu temada gölge yerine kontur.
 
