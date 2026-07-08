@@ -135,7 +135,7 @@ Kullanıcının el eskizine göre **panel tamamen kaldırıldı; harita tam ekra
 
 - Sol üst: şehir çubuğu (Roma · tarih · saat · hava) → tıklayınca künye;
   altında **bütçe yıldızları** (şeffaf zemin, etiketsiz).
-- Sağ üst: **Kapılar** ve **Hatlar** çipleri (tıkla-aç/kapa).
+- Üst orta (şeffaf üst barda): **Kapılar** ve **Hatlar** çipleri (tıkla-aç/kapa).
 - Sağ kenar: kayarak açılan **Yaşam çekmecesi** (Oteller, Konutlar,
   Alt merkezler, Öğrenciler).
 - Alt orta: **Keşfet · İhtiyaç** barı; ikisi de yukarı açılan **fonsuz ikon

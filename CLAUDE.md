@@ -34,8 +34,8 @@ varsa kullanıcıya sor:
   panelin en üstünde duran isteğe bağlı bir filtredir ve Keşfet+Yaşam+İhtiyaçlar
   gruplarını birden süzer; varsayılanda her şey görünür.
 - **Harita tam ekrandır; panel yoktur.** Tüm kontroller haritanın üzerinde
-  yüzer (kullanıcı eskizine göre): sol üstte şehir çubuğu + Kapılar/Hatlar
-  çipleri + bütçe; sağ kenardan kayan Yaşam çekmecesi; altta `Keşfet · İhtiyaç`
+  yüzer (kullanıcı eskizine göre): sol üstte şehir çubuğu + bütçe; üst ortada
+  (şeffaf üst barda) Kapılar/Hatlar; sağ kenardan kayan Yaşam çekmecesi; altta `Keşfet · İhtiyaç`
   barı (yukarı açılan ikon menüleri); sağ altta Konumum + Tur düğmeleri. Ayrıntı: `docs/TASARIM.md` →
   "Ekran düzeni". Yazı minimumda tutulur; simge yeterliyse simge kullanılır.
 - **Yol tarifi uygulama içinde çözülmez.** Haritada seçilen yer için küçük yer

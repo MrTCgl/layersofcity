@@ -85,8 +85,9 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 
 - **Sol üst — şehir çubuğu:** "Roma · 8 Tem · 14:32 · ☀24°" çipi; tıklayınca
   künye kartı açılır/kapanır.
-- **Sağ üst — Kapılar ve Hatlar çipleri:** tıkla-aç / tıkla-kapa (varsayılan
-  ikisi de açık). Mobilde şehir çubuğunun altındaki satıra iner.
+- **Üst orta — Kapılar ve Hatlar çipleri:** şeffaf üst barın ortasında;
+  tıkla-aç / tıkla-kapa (varsayılan ikisi de açık). Yalnızca şehir ekranında
+  görünür. Mobilde şehir çubuğunun/bütçenin altına, harita üstüne ortalanır.
 - **Şehir çubuğunun altında — bütçe yıldızları:** ★★★, **tam şeffaf zeminde**
   (arka plan/çerçeve yok), etiket yok. Pasif yıldız soluk, seçili `--peach`.
 - **Sağ kenar — Yaşam çekmecesi:** kenar sekmesine dokununca kayarak açılır;
@@ -106,8 +107,9 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 
 ## Bileşen kuralları
 
-- **Üst bar:** solda logo (ana ekrana döner), sağda dil ve tema anahtarları.
-  Yükseklik 56px, zemin `--surface`, alt çizgi `--line`.
+- **Üst bar:** **şeffaf** (zemin ve alt çizgi yok); harita/dünya üstüne yüzer.
+  Solda logo (ana ekrana döner), ortada Kapılar/Hatlar (şehir ekranında),
+  sağda dil ve tema anahtarları. Yükseklik 56px.
 - **Künye kartı:** konuşulan dil · para birimi + dolar karşılığı
   (**"1€ ≈ 1.09$"** biçiminde: 1 yerel birim = X USD) · temel fiyat tablosu
   (1L su, 1L benzin, 1L süt, 1kg et, 1kg peynir, kutu bira, Big Mac —

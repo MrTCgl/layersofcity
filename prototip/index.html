@@ -26,7 +26,7 @@ button:focus-visible{outline:2px solid var(--lilac); outline-offset:2px; border-
 /* ── üst bar ─────────────────────────── */
 header{
   height:56px; flex:none; display:flex; align-items:center; gap:12px;
-  padding:0 16px; background:var(--surface); border-bottom:1px solid var(--line);
+  padding:0 16px; background:transparent; border-bottom:none;
   position:relative; z-index:30;
 }
 .logo{display:flex; align-items:center; gap:10px; letter-spacing:.18em; font-size:15px; font-weight:600}
@@ -80,7 +80,8 @@ main{flex:1; position:relative; overflow:hidden}
 .chip[aria-pressed="true"]{background:var(--peach); border-color:var(--peach); color:#4A3A33}
 :root[data-theme="dark"] .chip[aria-pressed="true"]{color:#2E2620}
 /* üst çipler + bütçe */
-#topchips{position:absolute; right:14px; top:12px; display:flex; gap:8px; z-index:15}
+#topchips{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:none; gap:8px; z-index:31}
+body.city #topchips{display:flex}
 .mchip{
   display:flex; align-items:center; gap:6px;
   background:color-mix(in srgb, var(--surface) 88%, transparent);
@@ -274,7 +275,7 @@ main{flex:1; position:relative; overflow:hidden}
 
 /* ── mobil ────────────────────────────── */
 @media (max-width:719px){
-  #topchips{top:60px}
+  #topchips{top:112px; transform:translate(-50%,0)}
   #budgetchip{top:66px}
   .protonote{display:none}
   #facts{top:104px}
@@ -288,6 +289,16 @@ main{flex:1; position:relative; overflow:hidden}
     </svg>
     <span>layers<span class="dim">of</span>city</span>
   </button>
+  <div id="topchips">
+    <button class="mchip" id="chip-varis" data-ly="ly-varis" aria-pressed="true">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 20v-8a8 8 0 0 1 16 0v8M4 20h16M8.5 20v-6.5a3.5 3.5 0 0 1 7 0V20"/></svg>
+      <span data-i18n="layer.varis"></span>
+    </button>
+    <button class="mchip" id="chip-omurga" data-ly="ly-omurga" aria-pressed="true">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 19L19 4M6 4.5l13 14.5M12 3v18"/></svg>
+      <span data-i18n="layer.omurga"></span>
+    </button>
+  </div>
   <div class="grow"></div>
   <div class="seg" role="group" aria-label="dil">
     <button id="lang-tr" aria-pressed="true">TR</button>
@@ -509,16 +520,6 @@ main{flex:1; position:relative; overflow:hidden}
           <div class="day"><span>Ct</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4.5"/></svg><b>30°</b></div>
         </div>
         <div class="upd" data-i18n="f.upd"></div>
-      </div>
-      <div id="topchips">
-        <button class="mchip" id="chip-varis" data-ly="ly-varis" aria-pressed="true">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 20v-8a8 8 0 0 1 16 0v8M4 20h16M8.5 20v-6.5a3.5 3.5 0 0 1 7 0V20"/></svg>
-          <span data-i18n="layer.varis"></span>
-        </button>
-        <button class="mchip" id="chip-omurga" data-ly="ly-omurga" aria-pressed="true">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 19L19 4M6 4.5l13 14.5M12 3v18"/></svg>
-          <span data-i18n="layer.omurga"></span>
-        </button>
       </div>
       <div id="budgetchip">
         <span class="stars" id="stars" role="group" aria-label="bütçe">
@@ -762,8 +763,8 @@ CITIES.forEach(c => {
 
 const scrWorld = document.getElementById("scr-world");
 const scrCity  = document.getElementById("scr-city");
-function gotoCity(){ scrWorld.classList.remove("on"); scrCity.classList.add("on"); }
-function gotoWorld(){ exitIntro(); scrCity.classList.remove("on"); scrWorld.classList.add("on"); }
+function gotoCity(){ scrWorld.classList.remove("on"); scrCity.classList.add("on"); document.body.classList.add("city"); }
+function gotoWorld(){ exitIntro(); scrCity.classList.remove("on"); scrWorld.classList.add("on"); document.body.classList.remove("city"); }
 document.getElementById("homebtn").onclick = gotoWorld;
 
 /* ── üst çipler + çekmece + alt bar ───── */
