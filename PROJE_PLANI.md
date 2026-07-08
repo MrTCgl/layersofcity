@@ -65,6 +65,8 @@ Katman menüsü dört grupta toplanır; açılış ekranında **Varış + Omurga
 - **6 dil** (EN, DE, FR, IT, ES, TR): arayüz metinleri dil başına JSON dosyası.
   Editoryal içerik önce **EN + TR** yazılır, diğer diller çeviriyle eklenir.
 - Kullanıcı tercihleri (dil, tema, katman durumu) **localStorage**'da tutulur.
+- **Konum:** şehir ekranında "Konumum" butonu, tarayıcı Geolocation API'siyle
+  kullanıcının yerini haritada gösterir (mobilin imkanı; konum cihazda kalır).
 - **Üyelik yok (v1).** Giriş duvarı yok, KVKK/GDPR yükü minimum.
 - **Anonim analitik:** çerezsiz araç (Plausible veya Umami) — hangi şehir,
   hangi katman, hangi dil kullanılıyor.
