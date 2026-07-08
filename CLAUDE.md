@@ -18,9 +18,9 @@ varsa kullanıcıya sor:
 
 - **Saf statik site.** Sunucu, veritabanı, API anahtarı, build zorunluluğu yok.
   Vanilla HTML/CSS/JS. Framework (React/Vue/vb.) ekleme.
-- **İzinli harici bağımlılıklar (kapalı liste):** MapLibre GL JS (harita) +
-  yalnızca **anahtarsız/ücretsiz** veri API'leri: Open-Meteo (hava),
-  Frankfurter (döviz). API anahtarı isteyen hiçbir servis eklenmez. Canlı veri
+- **İzinli harici bağımlılıklar (kapalı liste):** MapLibre GL JS (harita,
+  yerel kopya) + yalnızca **anahtarsız/ücretsiz** servisler: OpenFreeMap
+  (harita karoları), Open-Meteo (hava), Frankfurter (döviz). API anahtarı isteyen hiçbir servis eklenmez. Canlı veri
   gelmezse uygulama bozulmaz; ilgili bölüm sessizce gizlenir veya son bilinen
   değer gösterilir.
 - **Çok şehirli mimari.** Şehir = `data/<sehir>/` klasörü. Yeni şehir eklemek

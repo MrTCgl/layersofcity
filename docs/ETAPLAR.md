@@ -33,7 +33,7 @@ rota + localStorage kalıcılığı) hatasız geçti. Sıradaki: E2.
 
 ---
 
-## E2 — Şehir ekranı, harita altlığı ve şehir çubuğu 🔵
+## E2 — Şehir ekranı, harita altlığı ve şehir çubuğu ✅ tamam (2026-07-08)
 
 **Amaç:** Roma seçilince MapLibre haritasının soluk altlıkla açılması; harita
 üzerinde şehir çubuğu (künyenin kısa hali).
@@ -58,13 +58,17 @@ Yapılacaklar:
   (`docs/VERI.md` → Konum bölümü; konum cihazda kalır, gönderilmez)
 
 Bitti sayılır:
-- [ ] Roma haritası iki temada da soluk altlıkla açılıyor
-- [ ] Şehir çubuğunda Roma yerel saati canlı işliyor (tarih iki dilde doğru)
-- [ ] Çekmece, alt bar ve çipler mobilde ve masaüstünde çalışıyor; harita tam ekran
-- [ ] Zoom + pan kontrolleri ve çift-tıkla-yaklaş çalışıyor; home tümünü getiriyor
-- [ ] Konumum butonu mobilde çalışıyor (izin reddi de sessizce ele alınıyor)
+- [x] Roma haritası iki temada da soluk altlıkla açılıyor
+- [x] Şehir çubuğunda Roma yerel saati canlı işliyor (tarih iki dilde doğru)
+- [x] Çekmece, alt bar ve çipler mobilde ve masaüstünde çalışıyor; harita tam ekran
+- [x] Zoom + pan kontrolleri ve çift-tıkla-yaklaş çalışıyor; home tümünü getiriyor
+- [x] Konumum butonu çalışıyor (sahte GPS ile şehir içi/dışı test edildi;
+      izin reddi sessiz)
 
-Durum notu: —
+Durum notu: E2 tamam. Karo servisi: OpenFreeMap (anahtarsız; CLAUDE.md kapalı
+listesine eklendi). Tur düğmesi bilinçli olarak E9'a bırakıldı (ölü UI
+koymamak için). Kapılar/Hatlar/keşfet/ihtiyaç çipleri durum tutuyor; harita
+katmanlarına bağlanmaları E3-E6'da.
 
 ---
 
