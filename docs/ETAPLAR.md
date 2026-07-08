@@ -45,9 +45,10 @@ Yapılacaklar:
 - **Şehir çubuğu** (haritanın sol üstünde yüzen çip): şehir adı · tarih ·
   **yerel saat (canlı, timezone'dan)** · hava simgesi
 - **Yüzen arayüz iskeleti** (`docs/TASARIM.md` → Ekran düzeni; panel YOK,
-  harita tam ekran): Kapılar/Hatlar çipleri + bütçe çipi (sol üst),
-  Yaşam çekmecesi (sağ kenar), `Keşfet · İhtiyaç · Tur` alt barı ve yukarı
-  açılan boş çip menüleri. Mobil ve masaüstü aynı düzen
+  harita tam ekran): Kapılar/Hatlar çipleri (sağ üst), şeffaf bütçe
+  yıldızları (şehir çubuğu altı), Yaşam çekmecesi (sağ kenar),
+  `Keşfet · İhtiyaç · Tur` alt barı ve yukarı açılan fonsuz ikon menüleri.
+  Mobil ve masaüstü aynı düzen
 - **"Konumum" butonu:** Geolocation API ile kullanıcının yerini haritada gösterir
   (`docs/VERI.md` → Konum bölümü; konum cihazda kalır, gönderilmez)
 
@@ -89,7 +90,7 @@ Durum notu: —
 
 Yapılacaklar:
 - `kesfet-poi.geojson`: tarihi/modern/doğa/gastronomi/alışveriş/sağlık etiketli POI'ler
-- Alt bardaki Keşfet menüsüne tema çipleri (çoklu seçim) + yoğunluk çipi
+- Alt bardaki Keşfet menüsüne tema **ikon çipleri** (fonsuz, çoklu seçim) + yoğunluk ikonu
 - `kesfet-yogunluk.geojson`: yoğun bölge alanları (yumuşak dolgu, keskin sınır yok)
 - **Yer kartı + yol tarifi:** POI'ye dokununca alt ortada yer kartı; "Yol tarifi"
   düğmesi Google Maps dış bağlantısını açar (anahtarsız URL; koordinat varsa
@@ -130,8 +131,8 @@ Durum notu: —
 Yapılacaklar:
 - `ihtiyac.geojson`: kategori (`theme`) etiketli noktalar — kiralık araç,
   market, müze, kütüphane, hastane, eczane, yakıt istasyonu
-- Alt bardaki İhtiyaç menüsü: yukarı açılan kategori çipleri (Keşfet düzeniyle
-  aynı); varsayılan hepsi kapalı, çip açılınca o kategori haritada görünür
+- Alt bardaki İhtiyaç menüsü: yukarı açılan **ikon çipleri** (fonsuz, Keşfet
+  düzeniyle aynı); varsayılan hepsi kapalı, ikon açılınca o kategori görünür
 - Kategoriler bütçe alanı taşıyabilir (örn. kiralık araç ofisleri)
 
 Bitti sayılır:
@@ -170,7 +171,7 @@ Durum notu: —
 **Amaç:** 1-2-3 yıldızlı isteğe bağlı **genel** bütçe filtresi (soru/sihirbaz DEĞİL).
 
 Yapılacaklar:
-- Yıldız çipi **sol üstte, Kapılar/Hatlar çiplerinin altında** durur;
+- Yıldızlar **şehir çubuğunun altında, tam şeffaf zeminde, etiketsiz** durur;
   tek bir seçim üç grubu birden süzer:
   **Keşfet + Yaşam + İhtiyaçlar**
 - Mantık: ★=ekonomik, ★★=orta, ★★★=yüksek. Seçim yokken her şey görünür.

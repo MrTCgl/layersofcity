@@ -32,7 +32,7 @@ Katman menüsü dört grupta toplanır; açılış ekranında **Varış + Omurga
 | **4. Yaşam** | Yalnızca **bölgeler**: Oteller, Konutlar, Alt merkezler, Öğrenciler | Nerede kalırım / yaşarım / okurum? |
 | **5. İhtiyaçlar** | Kategori çipli **noktalar**: kiralık araç, market, müze, kütüphane, hastane, eczane, yakıt | Araç nereden kiralarım, en yakın eczane/market nerede? |
 
-Panel etiketleri kısadır: "Girişler", "Oteller", "Konutlar" ("...kapıları",
+Etiketler kısadır: "Kapılar", "Hatlar", "Oteller", "Konutlar" ("...kapıları",
 "...bölgeleri" eki yazılmaz).
 
 - Yorumsal katmanlar (konut bölgeleri, alt merkezler, yoğunluk, otel bölgeleri)
@@ -115,8 +115,8 @@ Yayın etabında (E11) GitHub Pages'e bağlanacak.
   Open-Meteo (hava), Frankfurter (döviz). Fiyat tablosu editoryaldir; şehir
   verisiyle birlikte elle güncellenir ve güncelleme tarihi gösterilir.
   API kesilirse uygulama bozulmaz (bölüm gizlenir / son değer gösterilir).
-- **Bütçe seçici (genel):** ★ / ★★ / ★★★ — panelin en üstünde isteğe bağlı
-  filtre (soru ekranı değil). Tek seçim **Keşfet + Yaşam + İhtiyaçlar**
+- **Bütçe seçici (genel):** ★ / ★★ / ★★★ — şehir çubuğunun altında, şeffaf
+  zeminde, etiketsiz; isteğe bağlı filtre (soru ekranı değil). Tek seçim **Keşfet + Yaşam + İhtiyaçlar**
   gruplarını birden süzer (★ ekonomik / ★★ orta / ★★★ yüksek). Cevaplanan
   sorular: nerede kalırım, nerede/ne yerim, araç nereden kiralarım.
   Varsayılan: hepsi görünür.
@@ -133,12 +133,13 @@ Yayın etabında (E11) GitHub Pages'e bağlanacak.
 
 Kullanıcının el eskizine göre **panel tamamen kaldırıldı; harita tam ekran**:
 
-- Sol üst: şehir çubuğu (Roma · tarih · saat · hava) → tıklayınca künye.
-- Altında: **Kapılar** ve **Hatlar** çipleri (tıkla-aç/kapa) + **bütçe** yıldızları.
+- Sol üst: şehir çubuğu (Roma · tarih · saat · hava) → tıklayınca künye;
+  altında **bütçe yıldızları** (şeffaf zemin, etiketsiz).
+- Sağ üst: **Kapılar** ve **Hatlar** çipleri (tıkla-aç/kapa).
 - Sağ kenar: kayarak açılan **Yaşam çekmecesi** (Oteller, Konutlar,
   Alt merkezler, Öğrenciler).
 - Alt orta: **Keşfet · İhtiyaç · Tur** barı; Keşfet ve İhtiyaç yukarı açılan
-  çip menüleri, Tur rehberli modu başlatır.
+  **fonsuz ikon menüleri** (yazı yerine çizgisel ikonlar), Tur rehberli modu başlatır.
 - Mobil ve masaüstü aynı düzeni kullanır.
 - **Yol tarifi:** haritada yer seçilince yer kartı açılır; "Yol tarifi" düğmesi
   Google Maps'i dış bağlantıyla açar (anahtarsız URL şeması). Navigasyon

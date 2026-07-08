@@ -51,7 +51,7 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   (web font yok → hız). Başlıklarda `letter-spacing: 0.01em`.
 - Boyut ölçeği: 12 / 13 / 15 / 18 / 24 / 32 px. Uzun paragraf kullanılmaz;
   ipuçları tek cümle, en fazla ~90 karakter.
-- **Etiketler kısa:** katman adları tek kelime hedefler — Girişler, Metro,
+- **Etiketler kısa:** katman adları tek kelime hedefler — Kapılar, Hatlar,
   Oteller, Konutlar, Öğrenciler, Eczaneler. "…bölgeleri / …kapıları" eki yazılmaz.
 
 ## Logotip
@@ -85,15 +85,20 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 
 - **Sol üst — şehir çubuğu:** "Roma · 8 Tem · 14:32 · ☀24°" çipi; tıklayınca
   künye kartı açılır/kapanır.
-- **Şehir çubuğunun altında — Kapılar ve Hatlar çipleri:** tıkla-aç / tıkla-kapa
-  (varsayılan ikisi de açık). Etiketler: "Kapılar", "Hatlar".
-- **Onların altında — bütçe çipi:** ★★★ + küçük "bütçe" etiketi.
+- **Sağ üst — Kapılar ve Hatlar çipleri:** tıkla-aç / tıkla-kapa (varsayılan
+  ikisi de açık). Mobilde şehir çubuğunun altındaki satıra iner.
+- **Şehir çubuğunun altında — bütçe yıldızları:** ★★★, **tam şeffaf zeminde**
+  (arka plan/çerçeve yok), etiket yok. Pasif yıldız soluk, seçili `--peach`.
 - **Sağ kenar — Yaşam çekmecesi:** kenar sekmesine dokununca kayarak açılır;
   içinde Oteller, Konutlar, Alt merkezler, Öğrenciler çipleri (tıkla-aç/kapa).
 - **Alt orta — alt bar:** `Keşfet · İhtiyaç · Tur`. Keşfet ve İhtiyaç dokununca
-  **yukarı açılan** çip menüleri gösterir (Keşfet: tarihi/modern/doğa/gastronomi/
-  alışveriş/sağlık + yoğunluk; İhtiyaç: kiralık araç/market/müze/kütüphane/
-  hastane/eczane/yakıt). Tur, rehberli modu başlatır.
+  **yukarı açılan menüler** gösterir; menülerin **fonu/kartı yoktur** — yalnızca
+  yüzen yuvarlak **ikon çipleri** (yazı yok; ad, erişilebilirlik etiketi ve
+  title olarak durur). Keşfet ikonları: tarihi (sütunlu yapı), modern (siluet),
+  doğa (yaprak), gastronomi (çatal-bıçak), alışveriş (çanta), sağlık (artı),
+  yoğunluk (iç içe halkalar). İhtiyaç ikonları: kiralık araç (otomobil),
+  market (sepet), müze (çerçeve), kütüphane (kitap), hastane (bina+artı),
+  eczane (kapsül), yakıt (pompa). Tur, rehberli modu başlatır.
 - **Sağ alt — Konumum butonu** (44px, çizgisel hedef ikonu). Kullanıcı konumu:
   `--lilac` dolgulu nokta + yumuşak halo.
 - **Sponsor alanı:** v1'de yok; ileride künye kartının altına eklenebilir.
