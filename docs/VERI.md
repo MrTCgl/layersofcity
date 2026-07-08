@@ -18,7 +18,7 @@ data/
       yasam-konut.geojson
       yasam-altmerkez.geojson
       yasam-ogrenci.geojson
-      yasam-kiralama.geojson  # araç kiralama noktaları/bölgeleri
+      ihtiyac.geojson        # kategori etiketli ihtiyaç noktaları
     content/
       tr.json              # editoryal metinler + rehberli mod adımları
       en.json
@@ -59,7 +59,10 @@ i18n/
     { "id": "kesfet", "layers": ["kesfet-poi", "kesfet-yogunluk"], "defaultOn": false,
       "filters": ["tarihi", "modern", "doga", "gastronomi", "alisveris", "saglik"] },
     { "id": "yasam",  "layers": ["yasam-otel", "yasam-konut", "yasam-altmerkez",
-      "yasam-ogrenci", "yasam-kiralama"], "defaultOn": false, "budgetFilter": true }
+      "yasam-ogrenci"], "defaultOn": false },
+    { "id": "ihtiyaclar", "layers": ["ihtiyac"], "defaultOn": false,
+      "filters": ["kiralik-arac", "market", "muze", "kutuphane",
+                  "hastane", "eczane", "yakit"] }
   ]
 }
 ```
@@ -80,9 +83,9 @@ Her feature'da:
 | `id` | ✔ | Benzersiz, küçük harf, tire ile: `fiumicino`, `metro-a` |
 | `kind` | ✔ | `gate` ✈🚂 · `link` (kapı→merkez) · `line` (hat) · `node` (merkez/istasyon) · `poi` · `area` |
 | `name` | ✔ | Haritada görünen kısa etiket (yer adları çevrilmez, olduğu gibi) |
-| `theme` | poi'de | `tarihi` / `modern` / `doga` / `gastronomi` / `alisveris` / `saglik` |
+| `theme` | poi'de | Keşfet: `tarihi` / `modern` / `doga` / `gastronomi` / `alisveris` / `saglik` · İhtiyaç: `kiralik-arac` / `market` / `muze` / `kutuphane` / `hastane` / `eczane` / `yakit` |
 | `lineRef` | line'da | Renk ve **harf rozeti** eşlemesi için: `metro-a`, `metro-b`, `metro-c`, `tram`, `rail` |
-| `budget` | isteğe bağlı | 1-3 arası; bütçe seçicisi (★/★★/★★★) bu alana göre süzer. Alansız feature her bütçede görünür |
+| `budget` | isteğe bağlı | 1-3 (★=ekonomik, ★★=orta, ★★★=yüksek). Genel bütçe seçicisi Keşfet+Yaşam+İhtiyaçlar'ı bu alana göre süzer: seçilen düzeye uyanlar + alansız feature'lar görünür |
 | `tip` | isteğe bağlı | Tek cümlelik ipucu **i18n anahtarı** (metnin kendisi değil) |
 
 Stil (renk/kalınlık) veriye yazılmaz; `kind` + `lineRef` üzerinden

@@ -46,6 +46,12 @@ main{flex:1; position:relative; overflow:hidden}
 
 /* ── dünya ekranı ─────────────────────── */
 #scr-world{flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:24px}
+#wordmark{
+  font-family:"Segoe Script","Snell Roundhand","Apple Chancery","Brush Script MT",cursive;
+  font-weight:400; font-size:clamp(30px,5.5vw,50px); color:var(--ink);
+  transform:rotate(-2.5deg); letter-spacing:.02em; margin-bottom:2px;
+}
+#wordmark .of{color:var(--lilac)}
 #worldwrap{width:min(1060px,100%);}
 #worldmap{width:100%; height:auto; display:block}
 .worlddot{fill:var(--land)}
@@ -69,7 +75,11 @@ main{flex:1; position:relative; overflow:hidden}
   width:270px; flex:none; background:var(--surface); border-right:1px solid var(--line);
   display:flex; flex-direction:column; overflow-y:auto; z-index:20;
 }
-#panel .pad-top{height:6px}
+.budgetbar{
+  display:flex; align-items:center; padding:13px 20px 9px;
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-soft); font-weight:600;
+}
 .group{border-top:1px solid var(--line); padding:12px 20px 14px}
 .group h3{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px; font-weight:600}
 .row{display:flex; align-items:center; gap:10px; padding:7px 0; font-size:14px}
@@ -126,6 +136,11 @@ main{flex:1; position:relative; overflow:hidden}
 .poi circle{stroke:var(--surface); stroke-width:1.6}
 .poi text{fill:var(--ink-soft); font-size:9.5px}
 .poi.hid{display:none}
+.ihp{display:none}
+.ihp circle{stroke:var(--surface); stroke-width:1.6}
+.ihp text{fill:var(--ink-soft); font-size:9.5px}
+.ihp.on{display:initial}
+.b-hid{display:none !important}
 .blob{fill:var(--peach); opacity:.3}
 .blob-lbl{fill:var(--ink-soft); font-size:9.5px; font-style:italic}
 /* yaşam */
@@ -248,6 +263,7 @@ main{flex:1; position:relative; overflow:hidden}
 <main>
   <!-- ═══ DÜNYA EKRANI ═══ -->
   <section class="screen on" id="scr-world">
+    <h1 id="wordmark">layers <span class="of">of</span> city</h1>
     <div id="worldwrap">
       <svg id="worldmap" viewBox="60 40 880 300" role="img" aria-label="dünya haritası"></svg>
     </div>
@@ -258,7 +274,12 @@ main{flex:1; position:relative; overflow:hidden}
   <section class="screen" id="scr-city">
     <aside id="panel">
       <button class="sheet-handle" id="sheethandle"><span data-i18n="panel.title"></span></button>
-      <div class="pad-top"></div>
+      <div class="budgetbar">
+        <span data-i18n="budget"></span>
+        <span class="stars" id="stars" role="group" aria-label="bütçe">
+          <button data-b="1" aria-label="1"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button><button data-b="2" aria-label="2"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button><button data-b="3" aria-label="3"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button>
+        </span>
+      </div>
 
       <div class="group">
         <h3 data-i18n="group.varis"></h3>
@@ -297,10 +318,7 @@ main{flex:1; position:relative; overflow:hidden}
       </div>
 
       <div class="group">
-        <h3 style="display:flex;align-items:center" data-i18n-keep><span data-i18n="group.yasam"></span>
-          <span class="stars" id="stars" role="group" aria-label="bütçe">
-            <button data-b="1" aria-label="1"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button><button data-b="2" aria-label="2"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button><button data-b="3" aria-label="3"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button>
-          </span></h3>
+        <h3 data-i18n="group.yasam"></h3>
         <div class="row">
           <span class="lbl"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V8.5L8 4l5 4.5V20M13 20V12h8v8M3 20h18"/></svg><span data-i18n="layer.otel"></span></span>
           <button class="tgl" data-ly="ly-otel" aria-pressed="false" aria-label="katman"></button>
@@ -317,9 +335,18 @@ main{flex:1; position:relative; overflow:hidden}
           <span class="lbl"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 5l9 4.5-9 4.5Z"/><path d="M7 12v4.5c3 2 7 2 10 0V12"/></svg><span data-i18n="layer.ogrenci"></span></span>
           <button class="tgl" data-ly="ly-ogrenci" aria-pressed="false" aria-label="katman"></button>
         </div>
-        <div class="row">
-          <span class="lbl"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l1.5-5.5A2 2 0 0 1 7.4 9h9.2a2 2 0 0 1 1.9 1.5L20 16M4 16h16v3.5h-2.5M4 16v3.5h2.5M7 19.5h10"/><circle cx="7.5" cy="19.5" r="1.5"/><circle cx="16.5" cy="19.5" r="1.5"/></svg><span data-i18n="layer.kiralama"></span></span>
-          <button class="tgl" data-ly="ly-kiralama" aria-pressed="false" aria-label="katman"></button>
+      </div>
+
+      <div class="group">
+        <h3 data-i18n="group.ihtiyac"></h3>
+        <div class="chips" id="ihchips">
+          <button class="chip" data-ih="kiralama" aria-pressed="false" data-i18n="ih.kiralama"></button>
+          <button class="chip" data-ih="market" aria-pressed="false" data-i18n="ih.market"></button>
+          <button class="chip" data-ih="muze" aria-pressed="false" data-i18n="ih.muze"></button>
+          <button class="chip" data-ih="kutuphane" aria-pressed="false" data-i18n="ih.kutuphane"></button>
+          <button class="chip" data-ih="hastane" aria-pressed="false" data-i18n="ih.hastane"></button>
+          <button class="chip" data-ih="eczane" aria-pressed="false" data-i18n="ih.eczane"></button>
+          <button class="chip" data-ih="yakit" aria-pressed="false" data-i18n="ih.yakit"></button>
         </div>
       </div>
 
@@ -340,9 +367,9 @@ main{flex:1; position:relative; overflow:hidden}
 
           <!-- YAŞAM: alanlar (altta durur) -->
           <g id="ly-otel" class="ly off">
-            <ellipse class="area" cx="565" cy="345" rx="52" ry="34" fill="var(--powder)"/>
-            <ellipse class="area" cx="460" cy="315" rx="55" ry="40" fill="var(--powder)"/>
-            <ellipse class="area" cx="358" cy="248" rx="40" ry="28" fill="var(--powder)"/>
+            <ellipse class="area" data-budget="1" cx="565" cy="345" rx="52" ry="34" fill="var(--powder)"/>
+            <ellipse class="area" data-budget="3" cx="460" cy="315" rx="55" ry="40" fill="var(--powder)"/>
+            <ellipse class="area" data-budget="2" cx="358" cy="248" rx="40" ry="28" fill="var(--powder)"/>
             <text class="area-lbl" x="588" y="308" data-i18n="a.otel1"></text>
           </g>
           <g id="ly-konut" class="ly off">
@@ -450,8 +477,8 @@ main{flex:1; position:relative; overflow:hidden}
             <g class="poi" data-th="modern"><circle cx="540" cy="640" r="7" fill="var(--m-b)"/><text x="552" y="636">EUR</text></g>
             <g class="poi" data-th="doga"><circle cx="498" cy="222" r="7" fill="var(--m-c)"/><text x="510" y="216">Villa Borghese</text></g>
             <g class="poi" data-th="doga"><circle cx="622" cy="540" r="7" fill="var(--m-c)"/><text x="634" y="536">Appia Antica</text></g>
-            <g class="poi" data-th="gastronomi"><circle cx="418" cy="405" r="7" fill="var(--peach)"/><text x="352" y="418">Trastevere</text></g>
-            <g class="poi" data-th="gastronomi"><circle cx="462" cy="470" r="7" fill="var(--peach)"/><text x="474" y="466">Testaccio</text></g>
+            <g class="poi" data-th="gastronomi" data-budget="2"><circle cx="418" cy="405" r="7" fill="var(--peach)"/><text x="352" y="418">Trastevere</text></g>
+            <g class="poi" data-th="gastronomi" data-budget="1"><circle cx="462" cy="470" r="7" fill="var(--peach)"/><text x="474" y="466">Testaccio</text></g>
             <g class="poi" data-th="alisveris"><circle cx="472" cy="286" r="7" fill="var(--lilac)"/><text x="484" y="280">Via del Corso</text></g>
             <g class="poi" data-th="saglik"><circle cx="614" cy="270" r="7" fill="var(--rail)"/><text x="626" y="264">Policlinico</text></g>
             <g class="poi" data-th="saglik"><circle cx="292" cy="122" r="7" fill="var(--rail)"/><text x="304" y="118">Gemelli</text></g>
@@ -473,11 +500,22 @@ main{flex:1; position:relative; overflow:hidden}
             <text class="area-lbl" x="432" y="496">Ostiense</text>
           </g>
 
-          <!-- YAŞAM: araç kiralama -->
-          <g id="ly-kiralama" class="ly off">
-            <g class="poi"><circle cx="96" cy="606" r="7" fill="var(--rail)"/><text x="108" y="602" data-i18n="a.kir1"></text></g>
-            <g class="poi"><circle cx="592" cy="366" r="7" fill="var(--rail)"/><text x="604" y="380" data-i18n="a.kir2"></text></g>
-            <g class="poi"><circle cx="748" cy="668" r="7" fill="var(--rail)"/></g>
+          <!-- İHTİYAÇLAR -->
+          <g id="ly-ihtiyac" class="ly">
+            <g class="ihp" data-ih="kiralama" data-budget="2"><circle cx="96" cy="606" r="6" fill="var(--rail)"/><text x="108" y="602" data-i18n="a.kir1"></text></g>
+            <g class="ihp" data-ih="kiralama" data-budget="3"><circle cx="592" cy="366" r="6" fill="var(--rail)"/><text x="604" y="380" data-i18n="a.kir2"></text></g>
+            <g class="ihp" data-ih="kiralama" data-budget="1"><circle cx="748" cy="668" r="6" fill="var(--rail)"/></g>
+            <g class="ihp" data-ih="market"><circle cx="502" cy="342" r="6" fill="var(--m-c)"/></g>
+            <g class="ihp" data-ih="market"><circle cx="590" cy="446" r="6" fill="var(--m-c)"/></g>
+            <g class="ihp" data-ih="muze" data-budget="2"><circle cx="478" cy="298" r="6" fill="var(--m-a)"/></g>
+            <g class="ihp" data-ih="muze" data-budget="1"><circle cx="548" cy="452" r="6" fill="var(--m-a)"/></g>
+            <g class="ihp" data-ih="kutuphane"><circle cx="606" cy="318" r="6" fill="var(--lilac)"/></g>
+            <g class="ihp" data-ih="hastane"><circle cx="648" cy="286" r="6" fill="#C98B8B"/></g>
+            <g class="ihp" data-ih="hastane"><circle cx="306" cy="140" r="6" fill="#C98B8B"/></g>
+            <g class="ihp" data-ih="eczane"><circle cx="466" cy="332" r="6" fill="#6E9F8B"/></g>
+            <g class="ihp" data-ih="eczane"><circle cx="426" cy="424" r="6" fill="#6E9F8B"/></g>
+            <g class="ihp" data-ih="yakit"><circle cx="644" cy="522" r="6" fill="var(--m-b)"/></g>
+            <g class="ihp" data-ih="yakit"><circle cx="366" cy="544" r="6" fill="var(--m-b)"/></g>
           </g>
 
           <!-- konum -->
@@ -498,7 +536,7 @@ main{flex:1; position:relative; overflow:hidden}
       <div id="facts">
         <h4 data-i18n="f.genel"></h4>
         <div class="frow"><span data-i18n="f.dil"></span><span>Italiano</span></div>
-        <div class="frow"><span data-i18n="f.para"></span><span>Euro · 1$ ≈ 0.92€</span></div>
+        <div class="frow"><span data-i18n="f.para"></span><span>Euro · 1€ ≈ 1.09$</span></div>
         <h4 data-i18n="f.fiyat"></h4>
         <div class="frow"><span data-i18n="f.su"></span><span>0.50€</span></div>
         <div class="frow"><span data-i18n="f.benzin"></span><span>1.85€</span></div>
@@ -547,15 +585,19 @@ const STR = {
     "panel.title": "Katmanlar",
     "city.sub": "Şehri katman katman oku",
     "group.varis": "Varış", "group.omurga": "Omurga", "group.kesfet": "Keşfet", "group.yasam": "Yaşam",
-    "layer.varis": "Giriş kapıları", "layer.omurga": "Metro ve ana hatlar",
-    "layer.poi": "İlgi noktaları", "layer.yogunluk": "Yoğun bölgeler",
-    "layer.otel": "Otel bölgeleri", "layer.konut": "Konut bölgeleri",
-    "layer.altmerkez": "Alt merkezler", "layer.ogrenci": "Öğrenci bölgeleri",
+    "layer.varis": "Girişler", "layer.omurga": "Metro",
+    "layer.poi": "Yerler", "layer.yogunluk": "Yoğunluk",
+    "layer.otel": "Oteller", "layer.konut": "Konutlar",
+    "layer.altmerkez": "Alt merkezler", "layer.ogrenci": "Öğrenciler",
+    "group.ihtiyac": "İhtiyaçlar", "budget": "bütçe",
+    "ih.kiralama": "kiralık araç", "ih.market": "market", "ih.muze": "müze",
+    "ih.kutuphane": "kütüphane", "ih.hastane": "hastane", "ih.eczane": "eczane",
+    "ih.yakit": "yakıt",
     "th.tarihi": "tarihi", "th.modern": "modern", "th.doga": "doğa",
     "th.gastronomi": "gastronomi", "th.alisveris": "alışveriş", "th.saglik": "sağlık",
     "intro.open": "şehri tanıt", "intro.step": "ŞEHRİ TANIT",
     "intro.exit": "çık", "intro.back": "geri", "intro.next": "devam", "intro.done": "bitir",
-    "a.merkez": "tarihi merkez", "a.otel1": "otel bölgesi", "a.yogun": "öğlen çok kalabalık",
+    "a.merkez": "tarihi merkez", "a.otel1": "oteller", "a.yogun": "öğlen çok kalabalık",
     "a.kir1": "kirala", "a.kir2": "kirala",
     "a.fco": "→ Leonardo Express · 32 dk", "a.cia": "→ otobüs · 40 dk", "a.termini": "ulaşımın kalbi",
     "layer.kiralama": "Araç kiralama",
@@ -573,15 +615,19 @@ const STR = {
     "panel.title": "Layers",
     "city.sub": "Read the city, layer by layer",
     "group.varis": "Arrival", "group.omurga": "Backbone", "group.kesfet": "Explore", "group.yasam": "Living",
-    "layer.varis": "City gates", "layer.omurga": "Metro & main lines",
-    "layer.poi": "Points of interest", "layer.yogunluk": "Busy areas",
-    "layer.otel": "Hotel districts", "layer.konut": "Residential districts",
-    "layer.altmerkez": "Sub-centers", "layer.ogrenci": "Student districts",
+    "layer.varis": "Gates", "layer.omurga": "Metro",
+    "layer.poi": "Places", "layer.yogunluk": "Crowds",
+    "layer.otel": "Hotels", "layer.konut": "Housing",
+    "layer.altmerkez": "Sub-centers", "layer.ogrenci": "Students",
+    "group.ihtiyac": "Needs", "budget": "budget",
+    "ih.kiralama": "car rental", "ih.market": "groceries", "ih.muze": "museums",
+    "ih.kutuphane": "libraries", "ih.hastane": "hospitals", "ih.eczane": "pharmacies",
+    "ih.yakit": "fuel",
     "th.tarihi": "historic", "th.modern": "modern", "th.doga": "nature",
     "th.gastronomi": "food", "th.alisveris": "shopping", "th.saglik": "health",
     "intro.open": "meet the city", "intro.step": "MEET THE CITY",
     "intro.exit": "exit", "intro.back": "back", "intro.next": "next", "intro.done": "done",
-    "a.merkez": "historic center", "a.otel1": "hotel district", "a.yogun": "very busy at noon",
+    "a.merkez": "historic center", "a.otel1": "hotels", "a.yogun": "very busy at noon",
     "a.kir1": "rent", "a.kir2": "rent",
     "a.fco": "→ Leonardo Express · 32 min", "a.cia": "→ bus · 40 min", "a.termini": "transit heart",
     "layer.kiralama": "Car rental",
@@ -736,12 +782,27 @@ document.getElementById("citybar").onclick = function(){
 
 /* ── bütçe yıldızları ─────────────────── */
 let budget = 0; // 0 = hepsi
+function applyBudget(){
+  document.querySelectorAll('#rome [data-budget]').forEach(el =>
+    el.classList.toggle("b-hid", budget > 0 && +el.dataset.budget !== budget));
+}
 document.querySelectorAll("#stars button").forEach(b => {
   b.onclick = () => {
     const v = +b.dataset.b;
     budget = (budget === v) ? 0 : v;
     document.querySelectorAll("#stars button").forEach(x =>
       x.classList.toggle("on", budget > 0 && +x.dataset.b <= budget));
+    applyBudget();
+  };
+});
+
+/* ── ihtiyaç çipleri ──────────────────── */
+document.querySelectorAll("#ihchips .chip").forEach(ch => {
+  ch.onclick = () => {
+    const on = ch.getAttribute("aria-pressed") !== "true";
+    ch.setAttribute("aria-pressed", on);
+    document.querySelectorAll(`.ihp[data-ih="${ch.dataset.ih}"]`)
+      .forEach(p => p.classList.toggle("on", on));
   };
 });
 
@@ -766,7 +827,7 @@ const zoomer = document.getElementById("zoomer");
 const introBox = document.getElementById("intro");
 let introOn = false, step = 0, savedState = null;
 function setLayers(ids){
-  ["ly-varis","ly-omurga","ly-poi","ly-yogunluk","ly-otel","ly-konut","ly-altmerkez","ly-ogrenci","ly-kiralama"]
+  ["ly-varis","ly-omurga","ly-poi","ly-yogunluk","ly-otel","ly-konut","ly-altmerkez","ly-ogrenci"]
     .forEach(id => document.getElementById(id).classList.toggle("off", !ids.includes(id)));
 }
 function setCam(c){

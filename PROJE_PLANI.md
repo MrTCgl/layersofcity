@@ -26,10 +26,14 @@ Katman menüsü dört grupta toplanır; açılış ekranında **Varış + Omurga
 
 | Grup | Katmanlar | Cevapladığı soru |
 |---|---|---|
-| **1. Varış** | Giriş kapıları (Fiumicino ✈, Ciampino ✈, Termini 🚂, Tiburtina 🚂) ve her kapıdan merkeze giden net bağlantı çizgisi | Şehre nereden girerim, merkeze nasıl ulaşırım? |
-| **2. Omurga** | Merkez(ler) işareti, Metro A/B/C, kilit tramvay hatları, alt merkez ↔ merkez ana aksları | Merkez neresi, ana akslar hangileri? |
+| **1. Varış** | Girişler (Fiumicino ✈, Ciampino ✈, Termini 🚂, Tiburtina 🚂) ve her girişten merkeze net bağlantı çizgisi | Şehre nereden girerim, merkeze nasıl ulaşırım? |
+| **2. Omurga** | Merkez(ler) işareti, Metro A/B/C (hat renkli harf rozetleriyle), kilit tramvaylar, alt merkez ↔ merkez aksları | Merkez neresi, ana akslar hangileri? |
 | **3. Keşfet** | İlgi noktaları — tema filtreli: tarihi, modern, doğa, gastronomi, alışveriş, sağlık turizmi. Gün içi yoğun bölgeler | Ne göreceğim, nereler kalabalık? |
-| **4. Yaşam** | Otel yoğunluğu bölgeleri, konut bölgeleri, alt merkezler, üniversite/kampüs/öğrenci bölgeleri | Nerede kalırım / yaşarım / okurum? |
+| **4. Yaşam** | Yalnızca **bölgeler**: Oteller, Konutlar, Alt merkezler, Öğrenciler | Nerede kalırım / yaşarım / okurum? |
+| **5. İhtiyaçlar** | Kategori çipli **noktalar**: kiralık araç, market, müze, kütüphane, hastane, eczane, yakıt | Araç nereden kiralarım, en yakın eczane/market nerede? |
+
+Panel etiketleri kısadır: "Girişler", "Oteller", "Konutlar" ("...kapıları",
+"...bölgeleri" eki yazılmaz).
 
 - Yorumsal katmanlar (konut bölgeleri, alt merkezler, yoğunluk, otel bölgeleri)
   **elle çizilir**: Claude araştırıp taslak çıkarır → kullanıcı onaylar → veriye girer.
@@ -76,7 +80,7 @@ Katman menüsü dört grupta toplanır; açılış ekranında **Varış + Omurga
 ## E. İsim ve alan adı ✔ kararlaştırıldı
 
 **İsim: layers of city — alan adı layersofcity.com satın alındı (2026-07-08).**
-Yayın etabında (E10) GitHub Pages'e bağlanacak.
+Yayın etabında (E11) GitHub Pages'e bağlanacak.
 
 ## F. GitHub repo ismi
 
@@ -105,16 +109,22 @@ Yayın etabında (E10) GitHub Pages'e bağlanacak.
 - **Şehir çubuğu:** haritada şehir adı yanında anlık tarih, şehrin yerel saati
   (canlı) ve hava durumu simgesi görünür.
 - **Künye kartı** (çubuğa tıklayınca): konuşulan dil · para birimi + dolar
-  karşılığı · temel fiyat tablosu (1L su, 1L benzin, 1L süt, 1kg et, 1kg peynir,
-  kutu bira, 1 Big Mac) · 5 günlük hava tahmini.
+  karşılığı ("1€ ≈ 1.09$" biçiminde) · temel fiyat tablosu (1L su, 1L benzin,
+  1L süt, 1kg et, 1kg peynir, kutu bira, 1 Big Mac) · 5 günlük hava tahmini.
 - **Canlı veri politikası:** yalnızca anahtarsız/ücretsiz API'ler —
   Open-Meteo (hava), Frankfurter (döviz). Fiyat tablosu editoryaldir; şehir
   verisiyle birlikte elle güncellenir ve güncelleme tarihi gösterilir.
   API kesilirse uygulama bozulmaz (bölüm gizlenir / son değer gösterilir).
-- **Bütçe seçici:** ★ / ★★ / ★★★ — panelde isteğe bağlı filtre (soru ekranı
-  değil). Seçime göre şu soruların cevabı süzülür: nerede kalırım,
-  nerede/ne yerim, **araç nereden kiralarım**. Varsayılan: hepsi görünür.
-- **Araç kiralama:** Yaşam grubuna `yasam-kiralama` katmanı eklendi
-  (havaalanı ofisleri, Termini çevresi, şehir ofisleri).
+- **Bütçe seçici (genel):** ★ / ★★ / ★★★ — panelin en üstünde isteğe bağlı
+  filtre (soru ekranı değil). Tek seçim **Keşfet + Yaşam + İhtiyaçlar**
+  gruplarını birden süzer (★ ekonomik / ★★ orta / ★★★ yüksek). Cevaplanan
+  sorular: nerede kalırım, nerede/ne yerim, araç nereden kiralarım.
+  Varsayılan: hepsi görünür.
+- **İhtiyaçlar grubu (5. grup):** nokta bazlı pratik ihtiyaçlar — kiralık araç,
+  market, müze, kütüphane, hastane, eczane, yakıt istasyonu. Kategori çipleriyle
+  açılır; bütçelendirilebilir (`budget` alanı). Yaşam grubu yalnızca bölge gösterir.
 - **Hat rozetleri:** Metro A/B/C harfleri hat renginde rozet olarak haritada.
-- **Tasarım vurgusu:** harita ekranın ≥%70'i; yazı minimum, çizgisel simge tercih.
+- **El yazısı logotip:** açılış ekranında "layers of city" el yazısı, hafif eğik,
+  turistik karakterde (yerel barındırılan OFL font; prototipte sistem el yazısı).
+- **Tasarım vurgusu:** harita ekranın ≥%70'i; yazı minimum, çizgisel simge tercih;
+  etiketler kısa (Girişler, Oteller, Konutlar).

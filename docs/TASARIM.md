@@ -51,7 +51,18 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   (web font yok → hız). Başlıklarda `letter-spacing: 0.01em`.
 - Boyut ölçeği: 12 / 13 / 15 / 18 / 24 / 32 px. Uzun paragraf kullanılmaz;
   ipuçları tek cümle, en fazla ~90 karakter.
-- Logo yazımı: `layers of city` — küçük harf, kelime araları geniş (`0.18em`).
+- **Etiketler kısa:** katman adları tek kelime hedefler — Girişler, Metro,
+  Oteller, Konutlar, Öğrenciler, Eczaneler. "…bölgeleri / …kapıları" eki yazılmaz.
+
+## Logotip
+
+- Üst barda sade: `layers of city` — küçük harf, kelime araları geniş (`0.18em`),
+  sistem fontu.
+- **Açılış ekranında** büyük logotip **el yazısı** karakterdedir: turistik,
+  uçarı his; hafif eğim (yaklaşık -2.5°). Font: OFL lisanslı bir el yazısı
+  (öneri: **Caveat**), `assets/fonts/` altında **yerel** barındırılır (CDN yok).
+  Prototipte sistem el yazısı yığını kullanılır
+  (`"Segoe Script","Snell Roundhand","Brush Script MT",cursive`).
 
 ## İkonlar
 
@@ -76,18 +87,21 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   Yükseklik 56px, zemin `--surface`, alt çizgi `--line`.
 - **Şehir çubuğu:** haritanın sol üstünde yüzen çip: şehir adı · kısa tarih ·
   yerel saat (canlı) · hava simgesi + derece. Tıklayınca **künye kartı** açılır:
-  konuşulan dil, para birimi + USD karşılığı, temel fiyat tablosu (1L su,
-  1L benzin, 1L süt, 1kg et, 1kg peynir, kutu bira, Big Mac — güncelleme
-  tarihiyle), 5 günlük hava tahmini. Kart tek ekran, kaydırmasız hedeflenir.
+  konuşulan dil, para birimi + dolar karşılığı (**"1€ ≈ 1.09$"** biçiminde:
+  1 yerel birim = X USD), temel fiyat tablosu (1L su, 1L benzin, 1L süt,
+  1kg et, 1kg peynir, kutu bira, Big Mac — güncelleme tarihiyle), 5 günlük
+  hava tahmini. Kart tek ekran, kaydırmasız hedeflenir.
 - **Hat rozetleri:** metro hattı harfi (A/B/C), hattın kendi renginde dolu
   dairede beyaz harf (18px daire, 11px kalın harf); hat başına 1-2 rozet,
   hattın orta ve uç noktasına yakın konumlanır.
-- **Bütçe seçici:** Yaşam grubunun başında üç yıldız (★★★). Dolu yıldız sayısı
-  seçimi gösterir; varsayılan: seçim yok = hepsi. Soru ekranı değildir,
-  akış bloklamaz.
+- **Bütçe seçici:** panelin **en üstünde** üç yıldız (★★★) — geneldir,
+  Keşfet+Yaşam+İhtiyaçlar'ı birden süzer. Dolu yıldız sayısı seçimi gösterir
+  (★ ekonomik, ★★ orta, ★★★ yüksek); varsayılan: seçim yok = hepsi.
+  Soru ekranı değildir, akış bloklamaz.
 - **Katman paneli:** masaüstünde sol yan panel (270px), mobilde alttan çekmece.
-  4 grup: Varış, Omurga, Keşfet, Yaşam. Grup başlığı + anahtar (toggle) listesi.
-  Keşfet grubunda tema filtresi çipleri (çoklu seçim).
+  5 grup: Varış, Omurga, Keşfet, Yaşam, İhtiyaçlar. Grup başlığı + anahtar
+  (toggle) listesi. Keşfet ve İhtiyaçlar gruplarında kategori çipleri
+  (çoklu seçim). Yaşam yalnızca bölge katmanları içerir.
 - **Anahtarlar (toggle):** aktif `--lilac`, pasif `--line`. Animasyon 150ms.
 - **Rehberli mod girişi:** panelin altında sade bir satır: "şehri tanıt ▸".
 - **Konumum butonu:** harita üzerinde sağ altta yüzen yuvarlak buton (44px,

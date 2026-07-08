@@ -17,6 +17,9 @@ Yapılacaklar:
 - i18n altyapısı: `i18n/tr.json`, `i18n/en.json`; dil seçici; `localStorage` kaydı
 - Dünya haritası açılış ekranı: sade SVG dünya, `data/cities.json`'dan şehir
   noktaları + isimleri; şehre tıklayınca `#/{sehirId}` rotasına geçiş
+- **El yazısı logotip:** açılış ekranında büyük "layers of city" — OFL lisanslı
+  el yazısı font (öneri: Caveat) **yerel dosya** olarak eklenir (CDN yok);
+  hafif eğik, turistik his (`docs/TASARIM.md` → Logotip)
 - Üst bar: logo (ana ekrana döndürür), dil ve tema anahtarları
 - Prototipteki görünüm birebir referanstır: `prototip/index.html`
 
@@ -42,7 +45,8 @@ Yapılacaklar:
 - **Şehir çubuğu** (haritanın sol üstünde yüzen çip): şehir adı · tarih ·
   **yerel saat (canlı, timezone'dan)** · hava simgesi. Harita ekranın en az
   %70'ini kaplar; panel dardır
-- Katman paneli iskeleti: 4 grup başlığı (Varış/Omurga/Keşfet/Yaşam), boş anahtarlar
+- Katman paneli iskeleti: 5 grup başlığı (Varış/Omurga/Keşfet/Yaşam/İhtiyaçlar),
+  boş anahtarlar. Etiketler kısa: Girişler, Metro, Oteller, Konutlar...
 - **"Konumum" butonu:** Geolocation API ile kullanıcının yerini haritada gösterir
   (`docs/VERI.md` → Konum bölümü; konum cihazda kalır, gönderilmez)
 
@@ -58,7 +62,7 @@ Durum notu: —
 
 ## E3 — Varış + Omurga katmanları ⬜
 
-**Amaç:** İlk gerçek içerik: giriş kapıları ve ulaşım omurgası.
+**Amaç:** İlk gerçek içerik: girişler ve ulaşım omurgası.
 
 Yapılacaklar:
 - `data/roma/layers/varis.geojson`: Fiumicino, Ciampino, Termini, Tiburtina +
@@ -71,7 +75,7 @@ Yapılacaklar:
 - Hat renkleri: `docs/TASARIM.md` "metro renkleri" (soluklaştırılmış A/B/C)
 
 Bitti sayılır:
-- [ ] Varsayılan açılışta kapılar+omurga+rozetler görünüyor, panelden aç/kapa çalışıyor
+- [ ] Varsayılan açılışta girişler+omurga+rozetler görünüyor, panelden aç/kapa çalışıyor
 - [ ] İçerik `PROJE_PLANI.md` B bölümüyle uyumlu, kullanıcı onayından geçti
 
 Durum notu: —
@@ -95,35 +99,54 @@ Durum notu: —
 
 ---
 
-## E5 — Yaşam katmanları + araç kiralama ⬜
+## E5 — Yaşam katmanları ⬜
 
-**Amaç:** Otel, konut, alt merkez, öğrenci bölgeleri + araç kiralama noktaları.
+**Amaç:** Bölge katmanları: oteller, konutlar, alt merkezler, öğrenciler.
 
 Yapılacaklar:
 - `yasam-otel.geojson`, `yasam-konut.geojson`, `yasam-altmerkez.geojson`,
-  `yasam-ogrenci.geojson`
-- `yasam-kiralama.geojson`: araç kiralama yoğunluğu (havaalanları, Termini
-  çevresi, şehir ofisleri) — "araç nereden kiralarım?" sorusunun cevabı
+  `yasam-ogrenci.geojson` — Yaşam grubu yalnızca **bölge** gösterir
 - Alt merkez ↔ merkez ana aks çizgileri
 - Alan katmanları için ortak stil (soluk dolgu + kısa etiket)
+- Panel etiketleri kısa: Oteller, Konutlar, Alt merkezler, Öğrenciler
 
 Bitti sayılır:
-- [ ] Beş katman da panelden yönetiliyor ve okunaklı
+- [ ] Dört katman da panelden yönetiliyor ve okunaklı
 - [ ] Bölgeleme kullanıcı onayından geçti
 
 Durum notu: —
 
 ---
 
-## E6 — Şehir künyesi ve canlı veriler ⬜
+## E6 — İhtiyaçlar katmanı ⬜
+
+**Amaç:** Pratik ihtiyaç noktaları — "araç nereden kiralarım, en yakın eczane?"
+
+Yapılacaklar:
+- `ihtiyac.geojson`: kategori (`theme`) etiketli noktalar — kiralık araç,
+  market, müze, kütüphane, hastane, eczane, yakıt istasyonu
+- Panelde İhtiyaçlar grubu: kategori çipleri (Keşfet'teki filtre düzeniyle aynı);
+  varsayılan hepsi kapalı, çip açılınca o kategori haritada görünür
+- Kategoriler bütçe alanı taşıyabilir (örn. kiralık araç ofisleri)
+
+Bitti sayılır:
+- [ ] Kategori çipleri tek tek açılıp kapanıyor; simgeler çizgisel ve ayırt edilebilir
+- [ ] Nokta seti kullanıcı onayından geçti
+
+Durum notu: —
+
+---
+
+## E7 — Şehir künyesi ve canlı veriler ⬜
 
 **Amaç:** Şehir çubuğuna tıklayınca açılan künye kartı: pratik bilgiler.
 
 Yapılacaklar:
 - **Hava durumu:** Open-Meteo API (ücretsiz, anahtarsız) — anlık + 5 günlük tahmin;
   hata/çevrimdışı durumunda künye hava bölümü sessizce gizlenir
-- **Döviz:** Frankfurter API (ücretsiz, anahtarsız) — şehir para birimi ↔ USD/EUR;
-  hata durumunda son bilinen kur `localStorage`'dan gösterilir ("~" işaretiyle)
+- **Döviz:** Frankfurter API (ücretsiz, anahtarsız) — gösterim: **1 yerel birim =
+  X USD** (örn. "1€ ≈ 1.09$"); hata durumunda son bilinen kur `localStorage`'dan
+  gösterilir ("~" işaretiyle)
 - **Künye kartı içeriği:** konuşulan dil · para birimi + dolar karşılığı ·
   temel fiyat tablosu (`city.json`'dan: 1L su, 1L benzin, 1L süt, 1kg et,
   1kg peynir, kutu bira, Big Mac) + fiyatların güncelleme tarihi
@@ -137,27 +160,30 @@ Durum notu: —
 
 ---
 
-## E7 — Bütçe seçici ⬜
+## E8 — Bütçe seçici (genel) ⬜
 
-**Amaç:** 1-2-3 yıldızlı isteğe bağlı bütçe filtresi (soru/sihirbaz DEĞİL).
+**Amaç:** 1-2-3 yıldızlı isteğe bağlı **genel** bütçe filtresi (soru/sihirbaz DEĞİL).
 
 Yapılacaklar:
-- Panelde Yaşam grubunun başında yıldız seçici (★ ★★ ★★★); varsayılan: hepsi
-- `budget` özelliği taşıyan POI/alanlar seçime göre süzülür:
-  nerede kalırım, nerede/ne yerim, araç nereden kiralarım
+- Yıldız seçici **panelin en üstünde** durur; tek bir seçim üç grubu birden süzer:
+  **Keşfet + Yaşam + İhtiyaçlar**
+- Mantık: ★=ekonomik, ★★=orta, ★★★=yüksek. Seçim yokken her şey görünür.
+  `budget` etiketi taşıyan öğelerden yalnızca seçilen düzeye uyanlar kalır;
+  etiketi olmayan öğeler her seçimde görünür
+- Cevapladığı sorular: nerede kalırım, nerede/ne yerim, araç nereden kiralarım
 - "Ne yerim?" içeriği: gastronomi POI'lerine bütçeye göre kısa yemek ipuçları
   (`tip` alanı; örn. ★ sokak lezzeti, ★★★ fine dining)
 - Seçim `localStorage`'da tutulur
 
 Bitti sayılır:
-- [ ] Yıldız seçimi kal/ye/kirala katmanlarını görünür biçimde süzüyor
+- [ ] Yıldız seçimi üç grubu da görünür biçimde süzüyor
 - [ ] Seçici hiçbir akışı bloklamıyor; varsayılanda her şey görünür
 
 Durum notu: —
 
 ---
 
-## E8 — Rehberli mod ⬜
+## E9 — Rehberli mod ⬜
 
 **Amaç:** İsteğe bağlı "şehri tanıt" akışı.
 
@@ -176,7 +202,7 @@ Durum notu: —
 
 ---
 
-## E9 — Cila ⬜
+## E10 — Cila ⬜
 
 **Amaç:** Yayın öncesi kalite.
 
@@ -193,7 +219,7 @@ Durum notu: —
 
 ---
 
-## E10 — Yayın ⬜
+## E11 — Yayın ⬜
 
 **Amaç:** Canlıya çıkış.
 

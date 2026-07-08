@@ -26,9 +26,13 @@ varsa kullanıcıya sor:
 - **Çok şehirli mimari.** Şehir = `data/<sehir>/` klasörü. Yeni şehir eklemek
   kod değişikliği gerektirmemeli.
 - **Kullanıcıya soru sorulmaz.** Persona/anket/sihirbaz ekranı yok. Ziyaret
-  amaçları katman grupları olarak var olur: Varış, Omurga, Keşfet, Yaşam.
+  amaçları katman grupları olarak var olur: **Varış, Omurga, Keşfet, Yaşam,
+  İhtiyaçlar**. Yaşam yalnızca bölge gösterir (oteller, konutlar...);
+  nokta bazlı pratik ihtiyaçlar (kiralık araç, market, eczane, hastane,
+  yakıt, müze, kütüphane) İhtiyaçlar grubundadır.
   İstisna değil nüans: **bütçe seçici** (★/★★/★★★) bir soru ekranı değildir;
-  panelde duran isteğe bağlı bir filtredir, varsayılanda her şey görünür.
+  panelin en üstünde duran isteğe bağlı bir filtredir ve Keşfet+Yaşam+İhtiyaçlar
+  gruplarını birden süzer; varsayılanda her şey görünür.
 - **Harita ekranda baskındır** (hedef: görünür alanın ≥%70'i). Yazı minimumda
   tutulur; etiket yerine çizgisel simge yeterliyse simge kullanılır.
 - **Şehir çubuğu + künye:** haritada şehir adı · tarih · yerel saat · hava
@@ -38,7 +42,11 @@ varsa kullanıcıya sor:
 - **Açılış ekranı = sade dünya haritası.** Üzerinde yalnızca hazır şehirlerin
   nokta+isimleri. Şehre tıklamak giriştir. Sol üst logo her yerden bu ekrana döndürür.
 - **Az yazı, sade görünüm.** Uzun paragraf yok; kısa etiket ve tek cümlelik ipuçları.
+  Katman adları olabildiğince tek kelime: "Girişler" (giriş kapıları değil),
+  "Oteller" (otel bölgeleri değil), "Konutlar", "Öğrenciler".
   Çizgisel (stroke) ikonlar; canlı/cırtlak renk yok. Ayrıntı: `docs/TASARIM.md`.
+- **Logotip:** "layers of city" açılış ekranında el yazısı karakterde (yerel
+  barındırılan OFL font), hafif eğik, turistik his; üst bardaki logo sade kalır.
 - **Tema:** açık (soluk pastel) + koyu. Harita altlığı temayla birlikte değişir.
 - **6 dil mimarisi** (en, de, fr, it, es, tr); içerik önce en+tr.
   Arayüzde sabit yazı (hardcoded string) bırakma; her metin i18n dosyasından gelir.
