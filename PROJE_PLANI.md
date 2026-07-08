@@ -1,6 +1,5 @@
-# Şehir Katmanları — Proje Planı
+# layers of city — Proje Planı
 
-> Çalışma adı henüz kesinleşmedi ("citylayers" öne çıkan aday).
 > Bu belge, proje konseptinin tartışmalar sonucunda geldiği son durumu özetler.
 > Son güncelleme: 2026-07-08
 
@@ -77,7 +76,7 @@ Katman menüsü dört grupta toplanır; açılış ekranında **Varış + Omurga
 ## E. İsim ve alan adı ✔ kararlaştırıldı
 
 **İsim: layers of city — alan adı layersofcity.com satın alındı (2026-07-08).**
-Yayın etabında (E8) GitHub Pages'e bağlanacak.
+Yayın etabında (E10) GitHub Pages'e bağlanacak.
 
 ## F. GitHub repo ismi
 
@@ -100,3 +99,22 @@ Yayın etabında (E8) GitHub Pages'e bağlanacak.
 6. ⬜ **Yayın** — GitHub Pages + alan adı + analitik
 7. ⬜ **İkinci şehir** — şablonun şehirden bağımsızlığının kanıtı
 8. ⬜ **Gelişim** — kalan 4 dil, affiliate/gelir katmanı, yeni şehirler
+
+## H. Şehir künyesi, canlı veriler ve bütçe (2. tur kararları)
+
+- **Şehir çubuğu:** haritada şehir adı yanında anlık tarih, şehrin yerel saati
+  (canlı) ve hava durumu simgesi görünür.
+- **Künye kartı** (çubuğa tıklayınca): konuşulan dil · para birimi + dolar
+  karşılığı · temel fiyat tablosu (1L su, 1L benzin, 1L süt, 1kg et, 1kg peynir,
+  kutu bira, 1 Big Mac) · 5 günlük hava tahmini.
+- **Canlı veri politikası:** yalnızca anahtarsız/ücretsiz API'ler —
+  Open-Meteo (hava), Frankfurter (döviz). Fiyat tablosu editoryaldir; şehir
+  verisiyle birlikte elle güncellenir ve güncelleme tarihi gösterilir.
+  API kesilirse uygulama bozulmaz (bölüm gizlenir / son değer gösterilir).
+- **Bütçe seçici:** ★ / ★★ / ★★★ — panelde isteğe bağlı filtre (soru ekranı
+  değil). Seçime göre şu soruların cevabı süzülür: nerede kalırım,
+  nerede/ne yerim, **araç nereden kiralarım**. Varsayılan: hepsi görünür.
+- **Araç kiralama:** Yaşam grubuna `yasam-kiralama` katmanı eklendi
+  (havaalanı ofisleri, Termini çevresi, şehir ofisleri).
+- **Hat rozetleri:** Metro A/B/C harfleri hat renginde rozet olarak haritada.
+- **Tasarım vurgusu:** harita ekranın ≥%70'i; yazı minimum, çizgisel simge tercih.

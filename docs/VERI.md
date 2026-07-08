@@ -18,6 +18,7 @@ data/
       yasam-konut.geojson
       yasam-altmerkez.geojson
       yasam-ogrenci.geojson
+      yasam-kiralama.geojson  # araç kiralama noktaları/bölgeleri
     content/
       tr.json              # editoryal metinler + rehberli mod adımları
       en.json
@@ -44,17 +45,31 @@ i18n/
   "id": "roma",
   "center": [12.483, 41.893],
   "zoom": { "start": 11, "min": 9, "max": 16 },
+  "timezone": "Europe/Rome",
+  "language": "it",
+  "currency": "EUR",
+  "prices": {
+    "updated": "2026-07-08",
+    "water1l": 0.5, "petrol1l": 1.85, "milk1l": 1.6,
+    "meat1kg": 13.5, "cheese1kg": 15.0, "beer05": 1.3, "bigmac": 6.15
+  },
   "groups": [
     { "id": "varis",  "layers": ["varis"], "defaultOn": true },
     { "id": "omurga", "layers": ["omurga"], "defaultOn": true },
     { "id": "kesfet", "layers": ["kesfet-poi", "kesfet-yogunluk"], "defaultOn": false,
       "filters": ["tarihi", "modern", "doga", "gastronomi", "alisveris", "saglik"] },
-    { "id": "yasam",  "layers": ["yasam-otel", "yasam-konut", "yasam-altmerkez", "yasam-ogrenci"],
-      "defaultOn": false }
+    { "id": "yasam",  "layers": ["yasam-otel", "yasam-konut", "yasam-altmerkez",
+      "yasam-ogrenci", "yasam-kiralama"], "defaultOn": false, "budgetFilter": true }
   ]
 }
 ```
 Grup/katman görünen adları i18n dosyalarından gelir (`group.varis` gibi anahtarlarla).
+
+- `timezone` → şehir çubuğundaki canlı saat/tarih (Intl API).
+- `language`, `currency`, `prices` → künye kartı. Fiyatlar **editoryaldir**,
+  yerel para birimindedir ve `updated` tarihi olmadan gösterilmez; USD karşılığı
+  çalışma anında Frankfurter kurundan hesaplanır.
+- Hava durumu için ayrı alan gerekmez; Open-Meteo `center` koordinatıyla çağrılır.
 
 ## GeoJSON özellik (properties) sözleşmesi
 
@@ -66,7 +81,8 @@ Her feature'da:
 | `kind` | ✔ | `gate` ✈🚂 · `link` (kapı→merkez) · `line` (hat) · `node` (merkez/istasyon) · `poi` · `area` |
 | `name` | ✔ | Haritada görünen kısa etiket (yer adları çevrilmez, olduğu gibi) |
 | `theme` | poi'de | `tarihi` / `modern` / `doga` / `gastronomi` / `alisveris` / `saglik` |
-| `lineRef` | line'da | Renk eşlemesi için: `metro-a`, `metro-b`, `metro-c`, `tram`, `rail` |
+| `lineRef` | line'da | Renk ve **harf rozeti** eşlemesi için: `metro-a`, `metro-b`, `metro-c`, `tram`, `rail` |
+| `budget` | isteğe bağlı | 1-3 arası; bütçe seçicisi (★/★★/★★★) bu alana göre süzer. Alansız feature her bütçede görünür |
 | `tip` | isteğe bağlı | Tek cümlelik ipucu **i18n anahtarı** (metnin kendisi değil) |
 
 Stil (renk/kalınlık) veriye yazılmaz; `kind` + `lineRef` üzerinden

@@ -66,11 +66,10 @@ main{flex:1; position:relative; overflow:hidden}
 /* ── şehir ekranı ─────────────────────── */
 #scr-city{flex-direction:row}
 #panel{
-  width:300px; flex:none; background:var(--surface); border-right:1px solid var(--line);
+  width:270px; flex:none; background:var(--surface); border-right:1px solid var(--line);
   display:flex; flex-direction:column; overflow-y:auto; z-index:20;
 }
-#panel .city-name{padding:18px 20px 6px; font-size:24px; font-weight:700; letter-spacing:.01em}
-#panel .city-sub{padding:0 20px 14px; font-size:12px; color:var(--ink-soft)}
+#panel .pad-top{height:6px}
 .group{border-top:1px solid var(--line); padding:12px 20px 14px}
 .group h3{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px; font-weight:600}
 .row{display:flex; align-items:center; gap:10px; padding:7px 0; font-size:14px}
@@ -154,6 +153,42 @@ main{flex:1; position:relative; overflow:hidden}
   position:absolute; left:16px; bottom:22px; font-size:10.5px; color:var(--ink-soft);
   background:color-mix(in srgb, var(--surface) 75%, transparent); border-radius:999px; padding:4px 10px; z-index:14;
 }
+/* şehir çubuğu + künye */
+#citybar{
+  position:absolute; left:14px; top:12px; z-index:15;
+  display:flex; align-items:center; gap:9px;
+  background:color-mix(in srgb, var(--surface) 88%, transparent);
+  border:1px solid var(--line); border-radius:999px; padding:7px 14px;
+  box-shadow:var(--shadow); font-size:13px;
+}
+#citybar .cname{font-weight:700; font-size:15px}
+#citybar .dim{color:var(--ink-soft)}
+#citybar svg{color:var(--peach)}
+#citybar:hover{border-color:var(--lilac)}
+#facts{
+  position:absolute; left:14px; top:56px; z-index:17; width:min(290px, calc(100% - 28px));
+  background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  box-shadow:var(--shadow); padding:14px 16px; display:none; font-size:13px;
+}
+#facts.show{display:block}
+#facts h4{font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-soft); margin:10px 0 6px; font-weight:600}
+#facts h4:first-child{margin-top:0}
+#facts .frow{display:flex; justify-content:space-between; padding:2.5px 0}
+#facts .frow span:last-child{font-variant-numeric:tabular-nums; color:var(--ink)}
+#facts .frow span:first-child{color:var(--ink-soft)}
+#facts .fc{display:flex; gap:10px; justify-content:space-between; padding-top:2px}
+#facts .day{display:flex; flex-direction:column; align-items:center; gap:3px; font-size:10.5px; color:var(--ink-soft)}
+#facts .day svg{color:var(--peach)}
+#facts .day b{color:var(--ink); font-weight:600}
+#facts .upd{margin-top:9px; font-size:10px; color:var(--ink-soft)}
+/* bütçe yıldızları */
+.stars{display:flex; gap:2px; margin-left:auto}
+.stars button{padding:2px; color:var(--line); display:grid; place-items:center}
+.stars button.on{color:var(--peach)}
+.stars svg{display:block}
+/* hat rozetleri */
+.badge circle{stroke:var(--surface); stroke-width:1.6}
+.badge text{fill:#fff; font-size:11px; font-weight:700; text-anchor:middle; dominant-baseline:central}
 /* rehberli mod kartı */
 #intro{
   position:absolute; left:50%; bottom:26px; transform:translateX(-50%);
@@ -185,7 +220,6 @@ main{flex:1; position:relative; overflow:hidden}
     padding:15px; font-size:13px; font-weight:600; color:var(--ink-soft); flex:none;
   }
   .sheet-handle::before{content:""; width:36px; height:4px; border-radius:99px; background:var(--line)}
-  #panel .city-name,#panel .city-sub{display:none}
   .introrow{margin-top:0}
   #locbtn{bottom:70px}
   .protonote{bottom:70px}
@@ -224,8 +258,7 @@ main{flex:1; position:relative; overflow:hidden}
   <section class="screen" id="scr-city">
     <aside id="panel">
       <button class="sheet-handle" id="sheethandle"><span data-i18n="panel.title"></span></button>
-      <div class="city-name">Roma</div>
-      <div class="city-sub" data-i18n="city.sub"></div>
+      <div class="pad-top"></div>
 
       <div class="group">
         <h3 data-i18n="group.varis"></h3>
@@ -264,7 +297,10 @@ main{flex:1; position:relative; overflow:hidden}
       </div>
 
       <div class="group">
-        <h3 data-i18n="group.yasam"></h3>
+        <h3 style="display:flex;align-items:center" data-i18n-keep><span data-i18n="group.yasam"></span>
+          <span class="stars" id="stars" role="group" aria-label="bütçe">
+            <button data-b="1" aria-label="1"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button><button data-b="2" aria-label="2"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button><button data-b="3" aria-label="3"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button>
+          </span></h3>
         <div class="row">
           <span class="lbl"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V8.5L8 4l5 4.5V20M13 20V12h8v8M3 20h18"/></svg><span data-i18n="layer.otel"></span></span>
           <button class="tgl" data-ly="ly-otel" aria-pressed="false" aria-label="katman"></button>
@@ -280,6 +316,10 @@ main{flex:1; position:relative; overflow:hidden}
         <div class="row">
           <span class="lbl"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 5l9 4.5-9 4.5Z"/><path d="M7 12v4.5c3 2 7 2 10 0V12"/></svg><span data-i18n="layer.ogrenci"></span></span>
           <button class="tgl" data-ly="ly-ogrenci" aria-pressed="false" aria-label="katman"></button>
+        </div>
+        <div class="row">
+          <span class="lbl"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l1.5-5.5A2 2 0 0 1 7.4 9h9.2a2 2 0 0 1 1.9 1.5L20 16M4 16h16v3.5h-2.5M4 16v3.5h2.5M7 19.5h10"/><circle cx="7.5" cy="19.5" r="1.5"/><circle cx="16.5" cy="19.5" r="1.5"/></svg><span data-i18n="layer.kiralama"></span></span>
+          <button class="tgl" data-ly="ly-kiralama" aria-pressed="false" aria-label="katman"></button>
         </div>
       </div>
 
@@ -366,6 +406,11 @@ main{flex:1; position:relative; overflow:hidden}
             <text class="stlbl" x="500" y="716">Laurentina</text>
             <text class="stlbl" x="856" y="452">M C →</text>
             <text class="hublbl" x="572" y="322">Termini</text>
+            <g class="badge"><circle cx="290" cy="240" r="9" fill="var(--m-a)"/><text x="290" y="240">A</text></g>
+            <g class="badge"><circle cx="762" cy="530" r="9" fill="var(--m-a)"/><text x="762" y="530">A</text></g>
+            <g class="badge"><circle cx="740" cy="190" r="9" fill="var(--m-b)"/><text x="740" y="190">B</text></g>
+            <g class="badge"><circle cx="506" cy="520" r="9" fill="var(--m-b)"/><text x="506" y="520">B</text></g>
+            <g class="badge"><circle cx="858" cy="458" r="9" fill="var(--m-c)"/><text x="858" y="458">C</text></g>
             <g class="centermark">
               <circle cx="452" cy="330" r="9" fill="none" stroke="var(--peach)" stroke-width="2"/>
               <circle cx="452" cy="330" r="2.6" fill="var(--peach)"/>
@@ -428,6 +473,13 @@ main{flex:1; position:relative; overflow:hidden}
             <text class="area-lbl" x="432" y="496">Ostiense</text>
           </g>
 
+          <!-- YAŞAM: araç kiralama -->
+          <g id="ly-kiralama" class="ly off">
+            <g class="poi"><circle cx="96" cy="606" r="7" fill="var(--rail)"/><text x="108" y="602" data-i18n="a.kir1"></text></g>
+            <g class="poi"><circle cx="592" cy="366" r="7" fill="var(--rail)"/><text x="604" y="380" data-i18n="a.kir2"></text></g>
+            <g class="poi"><circle cx="748" cy="668" r="7" fill="var(--rail)"/></g>
+          </g>
+
           <!-- konum -->
           <g id="userdot" style="display:none">
             <circle class="mehalo" cx="430" cy="418" r="16"/>
@@ -436,6 +488,35 @@ main{flex:1; position:relative; overflow:hidden}
         </g>
       </svg>
 
+      <button id="citybar" aria-expanded="false">
+        <span class="cname">Roma</span>
+        <span class="dim" id="cb-date"></span>
+        <span id="cb-time" style="font-variant-numeric:tabular-nums"></span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M18.7 5.3l-1.8 1.8M7.1 16.9l-1.8 1.8"/></svg>
+        <span>24°</span>
+      </button>
+      <div id="facts">
+        <h4 data-i18n="f.genel"></h4>
+        <div class="frow"><span data-i18n="f.dil"></span><span>Italiano</span></div>
+        <div class="frow"><span data-i18n="f.para"></span><span>Euro · 1$ ≈ 0.92€</span></div>
+        <h4 data-i18n="f.fiyat"></h4>
+        <div class="frow"><span data-i18n="f.su"></span><span>0.50€</span></div>
+        <div class="frow"><span data-i18n="f.benzin"></span><span>1.85€</span></div>
+        <div class="frow"><span data-i18n="f.sut"></span><span>1.60€</span></div>
+        <div class="frow"><span data-i18n="f.et"></span><span>13.50€</span></div>
+        <div class="frow"><span data-i18n="f.peynir"></span><span>15.00€</span></div>
+        <div class="frow"><span data-i18n="f.bira"></span><span>1.30€</span></div>
+        <div class="frow"><span>Big Mac</span><span>6.15€</span></div>
+        <h4 data-i18n="f.hava"></h4>
+        <div class="fc">
+          <div class="day"><span>Sa</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4.5"/></svg><b>31°</b></div>
+          <div class="day"><span>Ça</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4.5"/></svg><b>33°</b></div>
+          <div class="day"><span>Pe</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 16a4.5 4.5 0 1 1 .8-8.9 5.5 5.5 0 0 1 10.6 1.4A3.8 3.8 0 0 1 17 16Z"/></svg><b>29°</b></div>
+          <div class="day"><span>Cu</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 14a4.5 4.5 0 1 1 .8-8.9 5.5 5.5 0 0 1 10.6 1.4A3.8 3.8 0 0 1 17 14Z"/><path d="M9 18l-1 2.5M13 18l-1 2.5"/></svg><b>26°</b></div>
+          <div class="day"><span>Ct</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4.5"/></svg><b>30°</b></div>
+        </div>
+        <div class="upd" data-i18n="f.upd"></div>
+      </div>
       <button id="locbtn" aria-label="konumum" aria-pressed="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 1.5V4M12 20v2.5M1.5 12H4M20 12h2.5"/></svg>
       </button>
@@ -475,7 +556,14 @@ const STR = {
     "intro.open": "şehri tanıt", "intro.step": "ŞEHRİ TANIT",
     "intro.exit": "çık", "intro.back": "geri", "intro.next": "devam", "intro.done": "bitir",
     "a.merkez": "tarihi merkez", "a.otel1": "otel bölgesi", "a.yogun": "öğlen çok kalabalık",
+    "a.kir1": "kirala", "a.kir2": "kirala",
     "a.fco": "→ Leonardo Express · 32 dk", "a.cia": "→ otobüs · 40 dk", "a.termini": "ulaşımın kalbi",
+    "layer.kiralama": "Araç kiralama",
+    "f.genel": "Genel", "f.dil": "Konuşulan dil", "f.para": "Para birimi",
+    "f.fiyat": "Temel fiyatlar", "f.hava": "5 günlük hava",
+    "f.su": "Su 1L", "f.benzin": "Benzin 1L", "f.sut": "Süt 1L",
+    "f.et": "Et 1kg", "f.peynir": "Peynir 1kg", "f.bira": "Bira 0.5L",
+    "f.upd": "fiyatlar: 08.2026 · temsili veri",
     "note": "tasarım prototipi · harita temsilidir",
     "toast.loc": "Konumun gösteriliyor (prototipte temsili)",
     "soon": "yakında"
@@ -494,7 +582,14 @@ const STR = {
     "intro.open": "meet the city", "intro.step": "MEET THE CITY",
     "intro.exit": "exit", "intro.back": "back", "intro.next": "next", "intro.done": "done",
     "a.merkez": "historic center", "a.otel1": "hotel district", "a.yogun": "very busy at noon",
+    "a.kir1": "rent", "a.kir2": "rent",
     "a.fco": "→ Leonardo Express · 32 min", "a.cia": "→ bus · 40 min", "a.termini": "transit heart",
+    "layer.kiralama": "Car rental",
+    "f.genel": "Basics", "f.dil": "Language", "f.para": "Currency",
+    "f.fiyat": "Everyday prices", "f.hava": "5-day weather",
+    "f.su": "Water 1L", "f.benzin": "Petrol 1L", "f.sut": "Milk 1L",
+    "f.et": "Meat 1kg", "f.peynir": "Cheese 1kg", "f.bira": "Beer 0.5L",
+    "f.upd": "prices: 08.2026 · sample data",
     "note": "design prototype · map is schematic",
     "toast.loc": "Showing your location (simulated in prototype)",
     "soon": "soon"
@@ -540,6 +635,7 @@ function applyLang(){
   document.getElementById("lang-tr").setAttribute("aria-pressed", lang==="tr");
   document.getElementById("lang-en").setAttribute("aria-pressed", lang==="en");
   if (introOn) showStep(step);
+  if (typeof tickClock === "function") tickClock();
 }
 document.getElementById("lang-tr").onclick = () => { lang="tr"; localStorage.setItem("loc-lang",lang); applyLang(); };
 document.getElementById("lang-en").onclick = () => { lang="en"; localStorage.setItem("loc-lang",lang); applyLang(); };
@@ -621,6 +717,34 @@ document.querySelectorAll(".chip").forEach(ch => {
 document.getElementById("sheethandle").onclick =
   () => document.getElementById("panel").classList.toggle("open");
 
+/* ── şehir çubuğu: canlı saat + künye ──── */
+function tickClock(){
+  const now = new Date();
+  const loc = lang === "tr" ? "tr-TR" : "en-GB";
+  document.getElementById("cb-date").textContent =
+    new Intl.DateTimeFormat(loc, { timeZone:"Europe/Rome", day:"numeric", month:"short" }).format(now);
+  document.getElementById("cb-time").textContent =
+    new Intl.DateTimeFormat(loc, { timeZone:"Europe/Rome", hour:"2-digit", minute:"2-digit" }).format(now);
+}
+setInterval(tickClock, 10000); tickClock();
+const facts = document.getElementById("facts");
+document.getElementById("citybar").onclick = function(){
+  const open = !facts.classList.contains("show");
+  facts.classList.toggle("show", open);
+  this.setAttribute("aria-expanded", open);
+};
+
+/* ── bütçe yıldızları ─────────────────── */
+let budget = 0; // 0 = hepsi
+document.querySelectorAll("#stars button").forEach(b => {
+  b.onclick = () => {
+    const v = +b.dataset.b;
+    budget = (budget === v) ? 0 : v;
+    document.querySelectorAll("#stars button").forEach(x =>
+      x.classList.toggle("on", budget > 0 && +x.dataset.b <= budget));
+  };
+});
+
 /* ── konum ────────────────────────────── */
 const toast = document.getElementById("toast");
 let toastTimer;
@@ -642,7 +766,7 @@ const zoomer = document.getElementById("zoomer");
 const introBox = document.getElementById("intro");
 let introOn = false, step = 0, savedState = null;
 function setLayers(ids){
-  ["ly-varis","ly-omurga","ly-poi","ly-yogunluk","ly-otel","ly-konut","ly-altmerkez","ly-ogrenci"]
+  ["ly-varis","ly-omurga","ly-poi","ly-yogunluk","ly-otel","ly-konut","ly-altmerkez","ly-ogrenci","ly-kiralama"]
     .forEach(id => document.getElementById(id).classList.toggle("off", !ids.includes(id)));
 }
 function setCam(c){

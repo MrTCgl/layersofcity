@@ -17,12 +17,24 @@ Bu kararlar kullanıcı ile tartışılarak alındı. Bir oturumda değiştirme;
 varsa kullanıcıya sor:
 
 - **Saf statik site.** Sunucu, veritabanı, API anahtarı, build zorunluluğu yok.
-  Vanilla HTML/CSS/JS. Tek harici çalışma bağımlılığı: **MapLibre GL JS**.
-  Framework (React/Vue/vb.) ekleme.
+  Vanilla HTML/CSS/JS. Framework (React/Vue/vb.) ekleme.
+- **İzinli harici bağımlılıklar (kapalı liste):** MapLibre GL JS (harita) +
+  yalnızca **anahtarsız/ücretsiz** veri API'leri: Open-Meteo (hava),
+  Frankfurter (döviz). API anahtarı isteyen hiçbir servis eklenmez. Canlı veri
+  gelmezse uygulama bozulmaz; ilgili bölüm sessizce gizlenir veya son bilinen
+  değer gösterilir.
 - **Çok şehirli mimari.** Şehir = `data/<sehir>/` klasörü. Yeni şehir eklemek
   kod değişikliği gerektirmemeli.
 - **Kullanıcıya soru sorulmaz.** Persona/anket/sihirbaz ekranı yok. Ziyaret
   amaçları katman grupları olarak var olur: Varış, Omurga, Keşfet, Yaşam.
+  İstisna değil nüans: **bütçe seçici** (★/★★/★★★) bir soru ekranı değildir;
+  panelde duran isteğe bağlı bir filtredir, varsayılanda her şey görünür.
+- **Harita ekranda baskındır** (hedef: görünür alanın ≥%70'i). Yazı minimumda
+  tutulur; etiket yerine çizgisel simge yeterliyse simge kullanılır.
+- **Şehir çubuğu + künye:** haritada şehir adı · tarih · yerel saat · hava
+  simgesi görünür; tıklayınca künye kartı açılır (dil, para birimi + USD
+  karşılığı, temel fiyat tablosu, 5 günlük hava tahmini). Fiyat tablosu
+  editoryaldir ve güncelleme tarihi olmadan yayınlanmaz.
 - **Açılış ekranı = sade dünya haritası.** Üzerinde yalnızca hazır şehirlerin
   nokta+isimleri. Şehre tıklamak giriştir. Sol üst logo her yerden bu ekrana döndürür.
 - **Az yazı, sade görünüm.** Uzun paragraf yok; kısa etiket ve tek cümlelik ipuçları.

@@ -70,9 +70,22 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 
 ## Bileşen kuralları
 
+- **Harita baskındır:** şehir ekranında harita, görünür alanın en az %70'ini
+  kaplar. Yazı en aza iner; etiket yerine çizgisel simge yeterliyse simge.
 - **Üst bar:** solda logo (ana ekrana döner), sağda dil ve tema anahtarları.
   Yükseklik 56px, zemin `--surface`, alt çizgi `--line`.
-- **Katman paneli:** masaüstünde sol yan panel (300px), mobilde alttan çekmece.
+- **Şehir çubuğu:** haritanın sol üstünde yüzen çip: şehir adı · kısa tarih ·
+  yerel saat (canlı) · hava simgesi + derece. Tıklayınca **künye kartı** açılır:
+  konuşulan dil, para birimi + USD karşılığı, temel fiyat tablosu (1L su,
+  1L benzin, 1L süt, 1kg et, 1kg peynir, kutu bira, Big Mac — güncelleme
+  tarihiyle), 5 günlük hava tahmini. Kart tek ekran, kaydırmasız hedeflenir.
+- **Hat rozetleri:** metro hattı harfi (A/B/C), hattın kendi renginde dolu
+  dairede beyaz harf (18px daire, 11px kalın harf); hat başına 1-2 rozet,
+  hattın orta ve uç noktasına yakın konumlanır.
+- **Bütçe seçici:** Yaşam grubunun başında üç yıldız (★★★). Dolu yıldız sayısı
+  seçimi gösterir; varsayılan: seçim yok = hepsi. Soru ekranı değildir,
+  akış bloklamaz.
+- **Katman paneli:** masaüstünde sol yan panel (270px), mobilde alttan çekmece.
   4 grup: Varış, Omurga, Keşfet, Yaşam. Grup başlığı + anahtar (toggle) listesi.
   Keşfet grubunda tema filtresi çipleri (çoklu seçim).
 - **Anahtarlar (toggle):** aktif `--lilac`, pasif `--line`. Animasyon 150ms.
