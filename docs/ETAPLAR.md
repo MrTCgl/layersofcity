@@ -45,7 +45,7 @@ Yapılacaklar:
 - **Şehir çubuğu** (haritanın sol üstünde yüzen çip): şehir adı · tarih ·
   **yerel saat (canlı, timezone'dan)** · hava simgesi
 - **Yüzen arayüz iskeleti** (`docs/TASARIM.md` → Ekran düzeni; panel YOK,
-  harita tam ekran): Kapılar/Hatlar çipleri (sağ üst), şeffaf bütçe
+  harita tam ekran): Kapılar/Hatlar çipleri (üst orta), şeffaf bütçe
   yıldızları (şehir çubuğu altı), Yaşam çekmecesi (sağ kenar),
   `Keşfet · İhtiyaç` alt barı ve yukarı açılan fonsuz ikon menüleri;
   sağ altta zoom kontrolleri (+/−/⌂) + Konumum + Tur düğmeleri.
