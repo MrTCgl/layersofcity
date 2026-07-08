@@ -35,8 +35,8 @@ varsa kullanıcıya sor:
   gruplarını birden süzer; varsayılanda her şey görünür.
 - **Harita tam ekrandır; panel yoktur.** Tüm kontroller haritanın üzerinde
   yüzer (kullanıcı eskizine göre): sol üstte şehir çubuğu + Kapılar/Hatlar
-  çipleri + bütçe; sağ kenardan kayan Yaşam çekmecesi; altta `Keşfet · İhtiyaç
-  · Tur` barı (yukarı açılan çip menüleri). Ayrıntı: `docs/TASARIM.md` →
+  çipleri + bütçe; sağ kenardan kayan Yaşam çekmecesi; altta `Keşfet · İhtiyaç`
+  barı (yukarı açılan ikon menüleri); sağ altta Konumum + Tur düğmeleri. Ayrıntı: `docs/TASARIM.md` →
   "Ekran düzeni". Yazı minimumda tutulur; simge yeterliyse simge kullanılır.
 - **Yol tarifi uygulama içinde çözülmez.** Haritada seçilen yer için küçük yer
   kartı açılır; "Yol tarifi" düğmesi Google Maps'i **anahtarsız URL şemasıyla**

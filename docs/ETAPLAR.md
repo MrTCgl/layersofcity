@@ -47,8 +47,8 @@ Yapılacaklar:
 - **Yüzen arayüz iskeleti** (`docs/TASARIM.md` → Ekran düzeni; panel YOK,
   harita tam ekran): Kapılar/Hatlar çipleri (sağ üst), şeffaf bütçe
   yıldızları (şehir çubuğu altı), Yaşam çekmecesi (sağ kenar),
-  `Keşfet · İhtiyaç · Tur` alt barı ve yukarı açılan fonsuz ikon menüleri.
-  Mobil ve masaüstü aynı düzen
+  `Keşfet · İhtiyaç` alt barı ve yukarı açılan fonsuz ikon menüleri;
+  sağ altta Konumum + Tur düğmeleri. Mobil ve masaüstü aynı düzen
 - **"Konumum" butonu:** Geolocation API ile kullanıcının yerini haritada gösterir
   (`docs/VERI.md` → Konum bölümü; konum cihazda kalır, gönderilmez)
 
@@ -195,7 +195,8 @@ Durum notu: —
 **Amaç:** İsteğe bağlı "şehri tanıt" akışı.
 
 Yapılacaklar:
-- Alt bardaki **Tur** düğmesi rehberli modu başlatır (varsayılan kapalı, dayatma yok)
+- Sağ alttaki yuvarlak **Tur** düğmesi (Konumum altında) rehberli modu
+  başlatır (varsayılan kapalı, dayatma yok)
 - Adım verisi `data/roma/content/{dil}.json`'dan: her adım = kamera hedefi +
   açılacak katmanlar + 1-2 cümle metin
 - **Son adımlar künyeye bağlanır:** konuşulan dil, para birimi ve fiyat

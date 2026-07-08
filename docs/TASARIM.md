@@ -91,16 +91,17 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   (arka plan/çerçeve yok), etiket yok. Pasif yıldız soluk, seçili `--peach`.
 - **Sağ kenar — Yaşam çekmecesi:** kenar sekmesine dokununca kayarak açılır;
   içinde Oteller, Konutlar, Alt merkezler, Öğrenciler çipleri (tıkla-aç/kapa).
-- **Alt orta — alt bar:** `Keşfet · İhtiyaç · Tur`. Keşfet ve İhtiyaç dokununca
+- **Alt orta — alt bar:** `Keşfet · İhtiyaç`. İkisi de dokununca
   **yukarı açılan menüler** gösterir; menülerin **fonu/kartı yoktur** — yalnızca
   yüzen yuvarlak **ikon çipleri** (yazı yok; ad, erişilebilirlik etiketi ve
   title olarak durur). Keşfet ikonları: tarihi (sütunlu yapı), modern (siluet),
   doğa (yaprak), gastronomi (çatal-bıçak), alışveriş (çanta), sağlık (artı),
   yoğunluk (iç içe halkalar). İhtiyaç ikonları: kiralık araç (otomobil),
   market (sepet), müze (çerçeve), kütüphane (kitap), hastane (bina+artı),
-  eczane (kapsül), yakıt (pompa). Tur, rehberli modu başlatır.
-- **Sağ alt — Konumum butonu** (44px, çizgisel hedef ikonu). Kullanıcı konumu:
-  `--lilac` dolgulu nokta + yumuşak halo.
+  eczane (kapsül), yakıt (pompa).
+- **Sağ alt — Konumum butonu** (44px, çizgisel hedef ikonu); hemen altında
+  yuvarlak **Tur düğmesi** (44px, çizgisel ▶) — dokununca rehberli mod başlar.
+  Kullanıcı konumu: `--lilac` dolgulu nokta + yumuşak halo.
 - **Sponsor alanı:** v1'de yok; ileride künye kartının altına eklenebilir.
 
 ## Bileşen kuralları

@@ -138,8 +138,10 @@ Kullanıcının el eskizine göre **panel tamamen kaldırıldı; harita tam ekra
 - Sağ üst: **Kapılar** ve **Hatlar** çipleri (tıkla-aç/kapa).
 - Sağ kenar: kayarak açılan **Yaşam çekmecesi** (Oteller, Konutlar,
   Alt merkezler, Öğrenciler).
-- Alt orta: **Keşfet · İhtiyaç · Tur** barı; Keşfet ve İhtiyaç yukarı açılan
-  **fonsuz ikon menüleri** (yazı yerine çizgisel ikonlar), Tur rehberli modu başlatır.
+- Alt orta: **Keşfet · İhtiyaç** barı; ikisi de yukarı açılan **fonsuz ikon
+  menüleri** (yazı yerine çizgisel ikonlar).
+- Sağ alt: **Konumum** düğmesi, hemen altında yuvarlak **Tur** düğmesi (▶) —
+  dokununca rehberli mod başlar.
 - Mobil ve masaüstü aynı düzeni kullanır.
 - **Yol tarifi:** haritada yer seçilince yer kartı açılır; "Yol tarifi" düğmesi
   Google Maps'i dış bağlantıyla açar (anahtarsız URL şeması). Navigasyon
