@@ -103,6 +103,8 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 - **Sağ alt — zoom kontrolleri + Konumum + Tur** (dikey dizi):
   - **Zoom grubu** (dikey pill): `+` yakınlaştırır, `−` uzaklaştırır,
     ⌂ (home) tüm şehri getirir.
+  - **Pan pedi** (zoom grubunun altında, yuvarlak): 4 yön oku; haritayı
+    kaydırır (adım, zoom düzeyinden bağımsız sabit ekran mesafesi).
   - **Konumum butonu** (44px, çizgisel hedef ikonu); kullanıcı konumu
     `--lilac` dolgulu nokta + yumuşak halo.
   - **Tur düğmesi** (44px, çizgisel ▶) — dokununca rehberli mod başlar.

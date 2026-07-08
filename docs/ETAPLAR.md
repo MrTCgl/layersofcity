@@ -33,7 +33,7 @@ rota + localStorage kalıcılığı) hatasız geçti. Sıradaki: E2.
 
 ---
 
-## E2 — Şehir ekranı, harita altlığı ve şehir çubuğu ⬜
+## E2 — Şehir ekranı, harita altlığı ve şehir çubuğu 🔵
 
 **Amaç:** Roma seçilince MapLibre haritasının soluk altlıkla açılması; harita
 üzerinde şehir çubuğu (künyenin kısa hali).
@@ -52,7 +52,8 @@ Yapılacaklar:
   sağ altta zoom kontrolleri (+/−/⌂) + Konumum + Tur düğmeleri.
   Mobil ve masaüstü aynı düzen
 - **Harita zoom/pan:** çift tıklama o noktaya yaklaştırır; +/− kademeli
-  zoom; ⌂ (home) tüm şehri getirir. Zoom ve pan sınırlanır (clamp)
+  zoom; ⌂ (home) tüm şehri getirir; **pan pedi** (4 yön oku) haritayı kaydırır.
+  Zoom ve pan sınırlanır (clamp)
 - **"Konumum" butonu:** Geolocation API ile kullanıcının yerini haritada gösterir
   (`docs/VERI.md` → Konum bölümü; konum cihazda kalır, gönderilmez)
 
@@ -60,7 +61,7 @@ Bitti sayılır:
 - [ ] Roma haritası iki temada da soluk altlıkla açılıyor
 - [ ] Şehir çubuğunda Roma yerel saati canlı işliyor (tarih iki dilde doğru)
 - [ ] Çekmece, alt bar ve çipler mobilde ve masaüstünde çalışıyor; harita tam ekran
-- [ ] Zoom kontrolleri ve çift-tıkla-yaklaş çalışıyor; home tümünü getiriyor
+- [ ] Zoom + pan kontrolleri ve çift-tıkla-yaklaş çalışıyor; home tümünü getiriyor
 - [ ] Konumum butonu mobilde çalışıyor (izin reddi de sessizce ele alınıyor)
 
 Durum notu: —
