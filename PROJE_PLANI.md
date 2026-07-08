@@ -95,8 +95,8 @@ Yayın etabında (E11) GitHub Pages'e bağlanacak.
 1. ✅ **Konsept kilitleme** — bu belge
 2. ✅ **Görsel prototip** — ilk sürüm hazır (`prototip/index.html`);
    revizyonlar kullanıcı geri bildirimiyle sürer. Kodlamada birebir referanstır.
-3. ⬜ **Roma içerik taslağı** — bölgeleme, akslar, ilgi noktası setleri
-   (Claude taslak çıkarır → kullanıcı onaylar) — **sıradaki adım**
+3. 🔵 **Roma içerik taslağı** — taslak hazır: `docs/ICERIK_ROMA.md` —
+   **kullanıcı onayı bekleniyor** (onaydan sonra GeoJSON üretimine temel olacak)
 4. ✅ **İsim + alan adı** — layersofcity.com satın alındı (2026-07-08);
    repo rename kullanıcıda
 5. ⬜ **Kodlama v1** — iskelet + Roma verisi + EN/TR + gece-gündüz tema
