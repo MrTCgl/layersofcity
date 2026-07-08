@@ -46,8 +46,14 @@ Katman menüsü dört grupta toplanır; açılış ekranında **Varış + Omurga
 - Altlık harita soluk/gri tutulur; renk yalnızca katmanlara aittir.
 - **Gece/gündüz modu** + 2-3 tema; harita stili temayla birlikte değişir.
 - Mobil öncelikli; web ve mobilde hızlı ve temiz açılış.
-- Rehberli hikaye modu: zorunlu değil, soru sormaz; ileride isteğe bağlı,
-  varsayılan kapalı bir "tanıtım" olarak değerlendirilebilir (prototipten sonra karar).
+- **Rehberli mod:** ayrı, isteğe bağlı bir seçenek olarak var olur ("şehri tanıt"
+  düğmesi); kimseye dayatılmaz, varsayılan kapalı.
+- **Açılış ekranı = dünya haritası.** Sade, stilize bir dünya haritası; üzerinde
+  yalnızca hazır şehirlerin noktaları ve isimleri. Şehre tıklamak uygulamaya giriştir.
+  Sol üstteki logo her ekrandan dünya haritasına (şehir seçimine) geri döndürür.
+- **Renk paleti:** açık temada soluk pastel tonlar (lila, yavruağzı, pudra) —
+  soluk ve az kullanılarak profesyonel görünüm korunur; yanında koyu tema.
+  Prototipte iki varyant gösterilip karar verilecek.
 
 ## D. Teknik mimari
 
@@ -76,7 +82,8 @@ RDAP kontrolü 2026-07-08 itibarıyla:
 | **citylayers.io** | ✅ Müsait |
 | citylayers.net / .co | ✅ Müsait |
 | citylayers.org, citylayer.com, layercity.com, layeredcity.com | ❌ Alınmış |
-| unfoldcity.com, cityunfolded.com, layersofcity.com, cityinlayers.com | ✅ Müsait |
+| **layersofcity.com** | ✅ Müsait — **öne çıkan aday** (kullanıcı beğendi) |
+| unfoldcity.com, cityunfolded.com, cityinlayers.com | ✅ Müsait |
 | understandcity.com, firstday.city, cityreader.app, readthecity.com | ✅ Müsait |
 | citystrata.com, stratacity.com, urbanstrata.com, cityunfold.com | ❌ Alınmış |
 
