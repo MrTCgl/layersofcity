@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>layers of city</title>
+<meta name="description" content="Read a new city, layer by layer.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B9A6DC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L21 8 L12 13 L3 8 Z'/%3E%3Cpath d='M3 12.5 L12 17.5 L21 12.5' opacity='.55'/%3E%3Cpath d='M3 17 L12 22 L21 17' opacity='.25'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <button class="logo" id="homebtn" data-i18n-label="aria.home">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--lilac)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3 L21 8 L12 13 L3 8 Z"/><path d="M3 12.5 L12 17.5 L21 12.5" opacity=".55"/><path d="M3 17 L12 22 L21 17" opacity=".25"/>
+    </svg>
+    <span>layers<span class="dim">of</span>city</span>
+  </button>
+  <div class="grow"></div>
+  <div class="seg" role="group" aria-label="language">
+    <button id="lang-tr" aria-pressed="false">TR</button>
+    <button id="lang-en" aria-pressed="false">EN</button>
+  </div>
+  <button class="iconbtn" id="themebtn" data-i18n-label="aria.theme">
+    <svg id="ic-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20 13.5 A8.5 8.5 0 1 1 10.5 4 A7 7 0 0 0 20 13.5 Z"/></svg>
+    <svg id="ic-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="display:none"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M18.7 5.3l-1.8 1.8M7.1 16.9l-1.8 1.8"/></svg>
+  </button>
+</header>
+
+<main>
+  <!-- ═══ WORLD SCREEN (city picker) ═══ -->
+  <section class="screen" id="scr-world">
+    <h1 id="wordmark">layers <span class="of">of</span> city</h1>
+    <div id="worldwrap">
+      <svg id="worldmap" viewBox="60 40 880 300" role="img" aria-label="world map"></svg>
+    </div>
+    <p id="worldhint" data-i18n="world.hint"></p>
+  </section>
+
+  <!-- ═══ CITY SCREEN (map arrives in E2) ═══ -->
+  <section class="screen" id="scr-city">
+    <div id="maparea">
+      <div class="placeholder">
+        <h2 id="cityname"></h2>
+        <p data-i18n="city.coming"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="js/world-dots.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

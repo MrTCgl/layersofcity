@@ -1,0 +1,12 @@
+{
+  "cities": [
+    { "id": "roma", "name": "Roma", "lat": 41.893, "lon": 12.483, "status": "ready", "anchor": [10, 22] },
+    { "id": "istanbul", "name": "İstanbul", "lat": 41.01, "lon": 28.96, "status": "soon", "anchor": [8, 4] },
+    { "id": "london", "name": "London", "lat": 51.51, "lon": -0.13, "status": "soon", "anchor": [-88, 2] },
+    { "id": "paris", "name": "Paris", "lat": 48.85, "lon": 2.35, "status": "soon", "anchor": [-72, 12] },
+    { "id": "berlin", "name": "Berlin", "lat": 52.52, "lon": 13.4, "status": "soon", "anchor": [7, -2] },
+    { "id": "madrid", "name": "Madrid", "lat": 40.42, "lon": -3.7, "status": "soon", "anchor": [-84, 10] },
+    { "id": "newyork", "name": "New York", "lat": 40.71, "lon": -74.0, "status": "soon", "anchor": [8, 4] },
+    { "id": "tokyo", "name": "Tokyo", "lat": 35.68, "lon": 139.69, "status": "soon", "anchor": [-46, 20] }
+  ]
+}

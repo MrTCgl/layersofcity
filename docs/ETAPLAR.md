@@ -7,7 +7,7 @@ Durum işaretleri: ⬜ başlanmadı · 🔵 devam ediyor · ✅ tamam
 
 ---
 
-## E1 — İskelet ve açılış ekranı ⬜
+## E1 — İskelet ve açılış ekranı ✅ tamam (2026-07-08)
 
 **Amaç:** Uygulamanın temeli + dünya haritası açılış ekranı.
 
@@ -24,11 +24,12 @@ Yapılacaklar:
 - Prototipteki görünüm birebir referanstır: `prototip/index.html`
 
 Bitti sayılır:
-- [ ] İki temada ve iki dilde açılış ekranı sorunsuz
-- [ ] Mobil genişlikte (375px) düzgün görünüm
-- [ ] Şehre tıklayınca boş bir şehir ekranına rota değişiyor, logo geri döndürüyor
+- [x] İki temada ve iki dilde açılış ekranı sorunsuz
+- [x] Mobil genişlikte (375px) düzgün görünüm
+- [x] Şehre tıklayınca boş bir şehir ekranına rota değişiyor, logo geri döndürüyor
 
-Durum notu: —
+Durum notu: E1 tamam; tarayıcı testleri (2 tema × 2 dil × masaüstü/mobil,
+rota + localStorage kalıcılığı) hatasız geçti. Sıradaki: E2.
 
 ---
 

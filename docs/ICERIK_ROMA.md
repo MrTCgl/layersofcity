@@ -1,11 +1,11 @@
-# Roma İçerik Taslağı — ONAY BEKLİYOR
+# Roma İçerik Taslağı — ✅ ONAYLANDI (2026-07-08)
 
 > Bu belge, Roma'nın katman içeriklerinin **editoryal taslağıdır**. Kullanıcı
 > onayından geçmeden GeoJSON'a işlenmez (bkz. CLAUDE.md → onay süreci).
 > Araştırma/doğrulama tarihi: **2026-07-08**. Onaylanan bölümün başındaki
 > kutu ✅ yapılır; itiraz edilen satır silinir/düzeltilir.
 
-## 1. Kapılar (Varış) ⬜ onay
+## 1. Kapılar (Varış) ✅ onaylandı
 
 | Kapı | Merkeze bağlantı | Süre · Ücret |
 |---|---|---|
@@ -15,10 +15,9 @@
 | **Termini 🚂** | Ana gar; hızlı trenler (Frecciarossa/Italo), Metro A+B kesişimi | — |
 | **Tiburtina 🚂** | İkinci gar; hızlı trenler + şehirlerarası otobüs terminali; Metro B | — |
 
-- Not: Kruvaziyerle gelenler için **Civitavecchia limanı** (tren ~1 sa) ileride
-  5. kapı olarak eklenebilir → *karar: v1'e girsin mi?*
+- Karar: **Civitavecchia limanı v1 dışı**; ileride 5. kapı olarak eklenebilir.
 
-## 2. Hatlar (Omurga) ⬜ onay
+## 2. Hatlar (Omurga) ✅ onaylandı
 
 **Metrolar** (3 hat):
 
@@ -48,7 +47,7 @@
   ⚠ İpucu metni: *"Tarihi merkezin metrosu yok; Spagna veya Barberini'den
   yürüyerek gir."* — Roma'yı ilk kez görenlerin en çok şaşırdığı gerçek.
 
-## 3. Keşfet ⬜ onay
+## 3. Keşfet ✅ onaylandı
 
 ### İlgi noktaları (tema → yerler; ★ = bütçe etiketi)
 
@@ -83,7 +82,7 @@
 | Termini | 08–10 / 17–20 | valizle acele etme |
 | Trastevere | akşam 19:00+ | gündüz sakin, öğlen yemeği rahat |
 
-## 4. Yaşam (bölgeler) ⬜ onay
+## 4. Yaşam (bölgeler) ✅ onaylandı
 
 ### Oteller (bütçe etiketli)
 
@@ -118,7 +117,7 @@ Re di Roma · Garbatella · Parioli ★★★ · EUR · Pigneto
 - **Trastevere** — John Cabot vb. Amerikan üniversiteleri
 - Not: Tor Vergata kampüsü şehir dışında (haritada nokta + "kampüs uzakta" ipucu)
 
-## 5. İhtiyaçlar (noktalar) ⬜ onay
+## 5. İhtiyaçlar (noktalar) ✅ onaylandı
 
 - **kiralık araç:** FCO ofis kümesi ★★ · Termini/Via Giolitti ★★★ · CIA ★ ·
   ⚠ İpucu: *"Tarihi merkez ZTL (kapalı trafik bölgesi) — şehir içinde araç
@@ -136,7 +135,7 @@ Re di Roma · Garbatella · Parioli ★★★ · EUR · Pigneto
 - **yakıt:** merkezde istasyon azdır; Lungotevere üzeri · Ostiense · GRA
   çevre yolu istasyonları (temsili 3 nokta + "merkezde depo doldurma" ipucu)
 
-## 6. Künye verileri ⬜ onay
+## 6. Künye verileri ✅ onaylandı
 
 `data/roma/city.json` içine girecek değerler:
 
@@ -153,13 +152,13 @@ Re di Roma · Garbatella · Parioli ★★★ · EUR · Pigneto
 | Peynir 1kg (yerli) | 15.00€ |
 | Bira 0.5L (market) | 1.50€ |
 | Big Mac | 6.70€ |
+| Espresso (ayakta) | 1.30€ |
 | Metro/otobüs bileti (BIT 100 dk) | 1.50€ |
 | Leonardo Express | 14.00€ |
 
-- Öneri: tabloya Roma'ya özgü **espresso (ayakta ~1.30€)** satırı eklensin mi?
-  → *karar bekliyor*
+- Karar: **espresso satırı eklendi** (Roma'ya özgü dokunuş).
 
-## 7. Rehberli tur metinleri (TR taslak; EN onaydan sonra) ⬜ onay
+## 7. Rehberli tur metinleri (TR taslak; EN onaydan sonra) ✅ onaylandı
 
 1. *"Roma'ya iki havaalanından inersin. Fiumicino'dan Leonardo Express treni
    seni 32 dakikada Termini'ye getirir; Ciampino'dan otobüs 40 dakika."*
@@ -178,12 +177,12 @@ Re di Roma · Garbatella · Parioli ★★★ · EUR · Pigneto
 
 ---
 
-## Onay soruları (özet)
+## Onay kararları (2026-07-08)
 
-1. Civitavecchia limanı 5. kapı olarak v1'e girsin mi?
-2. Tramvay seçimi: yalnızca 8 + 3 önerisi uygun mu?
-3. Künyeye espresso satırı eklensin mi?
-4. Herhangi bir bölge/POI eksik ya da fazla mı?
+1. Civitavecchia: v1 dışı, ileride eklenebilir.
+2. Tramvaylar: 8 + 3 onaylandı.
+3. Espresso satırı: eklendi.
+4. Bölge/POI seti olduğu gibi onaylandı.
 
 ## Kaynaklar
 

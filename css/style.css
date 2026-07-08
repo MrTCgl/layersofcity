@@ -1,0 +1,85 @@
+/* layers of city — base styles (E1)
+   Tokens follow docs/TASARIM.md; the prototype is the visual reference. */
+
+@font-face{
+  font-family:"Ballet";
+  src:url("../assets/fonts/ballet-latin.woff2") format("woff2");
+  font-display:swap;
+}
+
+:root{
+  --bg:#FBF8F6; --surface:#FFFFFF; --ink:#3E3A45; --ink-soft:#8B8494;
+  --line:#EAE4EE; --lilac:#B9A6DC; --peach:#F2BBA8; --powder:#EFD9DE;
+  --land:#E4DDD6; --water:#F7F4F1; --shadow:0 2px 12px rgba(0,0,0,.06);
+}
+:root[data-theme="dark"]{
+  --bg:#232028; --surface:#2C2833; --ink:#EDE9F2; --ink-soft:#9A93A6;
+  --line:#3A3542; --lilac:#C4B2E4; --peach:#E8B39E; --powder:#8A7480;
+  --land:#332E3D; --water:#262230; --shadow:none;
+}
+
+*{box-sizing:border-box; margin:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  background:var(--bg); color:var(--ink); display:flex; flex-direction:column;
+  overflow:hidden; -webkit-font-smoothing:antialiased;
+}
+button{font:inherit; color:inherit; background:none; border:none; cursor:pointer}
+button:focus-visible{outline:2px solid var(--lilac); outline-offset:2px; border-radius:6px}
+
+/* ── top bar (transparent, floats over content) ── */
+header{
+  height:56px; flex:none; display:flex; align-items:center; gap:12px;
+  padding:0 16px; background:transparent; position:relative; z-index:30;
+}
+.logo{display:flex; align-items:center; gap:10px; letter-spacing:.18em; font-size:15px; font-weight:600}
+.logo svg{flex:none}
+.logo .dim{color:var(--ink-soft); font-weight:400}
+header .grow{flex:1}
+.seg{display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden}
+.seg button{padding:5px 12px; font-size:12px; letter-spacing:.06em; color:var(--ink-soft)}
+.seg button[aria-pressed="true"]{background:var(--lilac); color:var(--surface)}
+.iconbtn{width:36px; height:36px; display:grid; place-items:center; border-radius:999px; color:var(--ink-soft)}
+.iconbtn:hover{background:var(--powder); color:var(--ink)}
+:root[data-theme="dark"] .iconbtn:hover{background:var(--line)}
+
+/* ── screens ── */
+main{flex:1; position:relative; overflow:hidden}
+.screen{position:absolute; inset:0; display:flex; opacity:0; visibility:hidden; transition:opacity .35s}
+.screen.on{opacity:1; visibility:visible}
+
+/* ── world screen ── */
+#scr-world{flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:24px}
+#wordmark{
+  font-family:"Ballet",cursive; font-weight:400;
+  font-size:clamp(40px,7vw,66px); color:var(--ink);
+  transform:rotate(-2deg); margin-bottom:2px;
+}
+#wordmark .of{color:var(--lilac)}
+#worldwrap{width:min(1060px,100%)}
+#worldmap{width:100%; height:auto; display:block}
+.worlddot{fill:var(--land)}
+:root[data-theme="dark"] .worlddot{fill:#4A4456}
+.city-ready{cursor:pointer}
+.city-ready .halo{
+  fill:var(--lilac); opacity:.25; animation:pulse 2.6s ease-out infinite;
+  transform-origin:center; transform-box:fill-box;
+}
+@keyframes pulse{0%{transform:scale(.6);opacity:.35}70%{transform:scale(1.5);opacity:0}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.city-ready .halo{animation:none; opacity:.2}}
+.city-ready circle.core{fill:var(--lilac); stroke:var(--surface); stroke-width:2}
+.city-ready text{fill:var(--ink); font-size:13px; font-weight:600}
+.city-ready:hover circle.core{fill:var(--peach)}
+.city-soon circle{fill:var(--ink-soft); opacity:.45}
+.city-soon text{fill:var(--ink-soft); font-size:10px; opacity:0; transition:opacity .2s; pointer-events:none}
+.city-soon:hover text{opacity:.9}
+#worldhint{color:var(--ink-soft); font-size:13px; text-align:center}
+#worldhint b{color:var(--ink); font-weight:600}
+
+/* ── city screen (placeholder until E2) ── */
+#scr-city{flex-direction:row}
+#maparea{flex:1; position:relative; background:var(--water); overflow:hidden; display:grid; place-items:center}
+.placeholder{text-align:center; display:flex; flex-direction:column; gap:8px}
+.placeholder h2{font-size:32px; font-weight:700; letter-spacing:.01em}
+.placeholder p{color:var(--ink-soft); font-size:14px}
