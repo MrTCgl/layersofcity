@@ -209,6 +209,16 @@ body.city #topchips{display:flex}
   border:1px solid var(--line); display:grid; place-items:center; color:var(--ink-soft); z-index:15;
 }
 #turbtn:hover{color:var(--lilac); border-color:var(--lilac)}
+#zoomctl{
+  position:absolute; right:16px; bottom:130px; z-index:15;
+  display:flex; flex-direction:column; width:44px;
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:14px; box-shadow:var(--shadow); overflow:hidden;
+}
+#zoomctl button{height:40px; display:grid; place-items:center; color:var(--ink-soft)}
+#zoomctl button:hover{color:var(--lilac); background:var(--powder)}
+:root[data-theme="dark"] #zoomctl button:hover{background:var(--line)}
+#zoomctl button + button{border-top:1px solid var(--line)}
 .toast{
   position:absolute; left:50%; bottom:24px; transform:translateX(-50%) translateY(8px);
   background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
@@ -325,7 +335,7 @@ body.city #topchips{display:flex}
     <div id="maparea">
       <svg id="rome" viewBox="0 0 1000 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Roma şeması">
         <rect class="bg" x="0" y="0" width="1000" height="760"/>
-        <g id="zoomer" style="transition:transform .9s cubic-bezier(.4,0,.2,1)">
+        <g id="zoomer" style="transition:transform .5s cubic-bezier(.4,0,.2,1)">
           <!-- altlık -->
           <ellipse class="gra" cx="510" cy="380" rx="420" ry="320"/>
           <path class="river" d="M436 30 C 420 90, 460 140, 430 200 C 400 255, 372 270, 390 310 C 408 350, 452 348, 448 390 C 444 432, 408 450, 415 500 C 424 560, 452 600, 440 700"/>
@@ -570,6 +580,17 @@ body.city #topchips{display:flex}
           <span data-i18n="poip.dir"></span>
         </a>
         <button id="poip-x" aria-label="kapat">×</button>
+      </div>
+      <div id="zoomctl">
+        <button id="zoom-in" aria-label="yakınlaştır">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg>
+        </button>
+        <button id="zoom-out" aria-label="uzaklaştır">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 12h12"/></svg>
+        </button>
+        <button id="zoom-home" aria-label="tüm şehir">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5M6 10v9h12v-9M10 19v-5h4v5"/></svg>
+        </button>
       </div>
       <button id="turbtn" data-i18n-label="bb.tur">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="8,5 19,12 8,19"/></svg>
@@ -901,6 +922,36 @@ function setLayers(ids){
 function setCam(c){
   zoomer.style.transform = `translate(${500 - c.s*c.x}px, ${380 - c.s*c.y}px) scale(${c.s})`;
 }
+
+/* ── zoom & pan (çift tıkla + kontroller) ── */
+const HOME = { s:1, x:500, y:380 };
+let view = { ...HOME };
+function clampView(v){
+  v.s = Math.max(1, Math.min(5, v.s));
+  const hx = 500 / v.s, hy = 380 / v.s;
+  v.x = Math.max(hx, Math.min(1000 - hx, v.x));
+  v.y = Math.max(hy, Math.min(760 - hy, v.y));
+  return v;
+}
+function applyView(){ if (!introOn) setCam(view); }
+function zoomBy(f, cx, cy){
+  view = clampView({ s: view.s * f, x: cx ?? view.x, y: cy ?? view.y });
+  applyView();
+}
+const rome = document.getElementById("rome");
+function dataPoint(e){
+  const pt = rome.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  return pt.matrixTransform(zoomer.getScreenCTM().inverse());
+}
+rome.addEventListener("dblclick", e => {
+  e.preventDefault();
+  const p = dataPoint(e);
+  zoomBy(1.8, p.x, p.y);
+});
+document.getElementById("zoom-in").onclick = () => zoomBy(1.6);
+document.getElementById("zoom-out").onclick = () => zoomBy(1/1.6);
+document.getElementById("zoom-home").onclick = () => { view = { ...HOME }; applyView(); };
 function showStep(i){
   step = i;
   document.getElementById("stepnum").textContent = (i+1) + "/5";
@@ -920,7 +971,8 @@ function exitIntro(){
   if (!introOn) return;
   introOn = false;
   introBox.classList.remove("show");
-  setCam({s:1, x:500, y:380});
+  view = { ...HOME };
+  setCam(view);
   document.getElementById("ly-poi").classList.remove("intro-all");
   if (savedState) ALL_LYS.forEach(id => document.getElementById(id).classList.toggle("off", !savedState[id]));
   syncChips();

@@ -100,9 +100,14 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   yoğunluk (iç içe halkalar). İhtiyaç ikonları: kiralık araç (otomobil),
   market (sepet), müze (çerçeve), kütüphane (kitap), hastane (bina+artı),
   eczane (kapsül), yakıt (pompa).
-- **Sağ alt — Konumum butonu** (44px, çizgisel hedef ikonu); hemen altında
-  yuvarlak **Tur düğmesi** (44px, çizgisel ▶) — dokununca rehberli mod başlar.
-  Kullanıcı konumu: `--lilac` dolgulu nokta + yumuşak halo.
+- **Sağ alt — zoom kontrolleri + Konumum + Tur** (dikey dizi):
+  - **Zoom grubu** (dikey pill): `+` yakınlaştırır, `−` uzaklaştırır,
+    ⌂ (home) tüm şehri getirir.
+  - **Konumum butonu** (44px, çizgisel hedef ikonu); kullanıcı konumu
+    `--lilac` dolgulu nokta + yumuşak halo.
+  - **Tur düğmesi** (44px, çizgisel ▶) — dokununca rehberli mod başlar.
+- **Harita etkileşimi:** bir noktaya **çift tıklama** o noktaya doğru yaklaştırır.
+  Zoom aralığı sınırlıdır; harita alan dışına kaymaz (home her an tümünü getirir).
 - **Sponsor alanı:** v1'de yok; ileride künye kartının altına eklenebilir.
 
 ## Bileşen kuralları
