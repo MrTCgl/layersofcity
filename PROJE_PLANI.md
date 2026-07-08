@@ -74,40 +74,28 @@ Katman menüsü dört grupta toplanır; açılış ekranında **Varış + Omurga
   değerlendirilir (otel, tur/bilet, transfer, eSIM). Tasarımda alt bilgi kartının
   altında bir "sponsor alanı" rezerve edilir; v1'de boş kalır.
 
-## E. İsim ve alan adı (açık karar)
+## E. İsim ve alan adı ✔ kararlaştırıldı
 
-RDAP kontrolü 2026-07-08 itibarıyla:
-
-| Aday | Durum |
-|---|---|
-| citylayers.com | ❌ Alınmış — Atom.com pazarında **satılık** (fiyat muhtemelen yüksek) |
-| **citylayers.io** | ✅ Müsait |
-| citylayers.net / .co | ✅ Müsait |
-| citylayers.org, citylayer.com, layercity.com, layeredcity.com | ❌ Alınmış |
-| **layersofcity.com** | ✅ Müsait — **öne çıkan aday** (kullanıcı beğendi) |
-| unfoldcity.com, cityunfolded.com, cityinlayers.com | ✅ Müsait |
-| understandcity.com, firstday.city, cityreader.app, readthecity.com | ✅ Müsait |
-| citystrata.com, stratacity.com, urbanstrata.com, cityunfold.com | ❌ Alınmış |
-
-Karar kullanıcıda; satın almadan hemen önce kayıt firmasında son kontrol yapılmalı.
+**İsim: layers of city — alan adı layersofcity.com satın alındı (2026-07-08).**
+Yayın etabında (E8) GitHub Pages'e bağlanacak.
 
 ## F. GitHub repo ismi
 
 - Repo ismi projeye özel olacak, "ROMA" içermeyecek.
 - GitHub'da repo yeniden adlandırma tek işlemdir (Settings → General → Rename)
   ve eski adrese gelen istekler otomatik yönlendirilir; kod tarafında hiçbir şey kırılmaz.
-- Karar: **alan adı kesinleşince** repo aynı isimle yeniden adlandırılır
-  (örn. `citylayers`). Ayrı bir proje/kod taşıma işlemi gerekmez.
+- Alan adı alındığına göre repo istenildiği an `layersofcity` olarak yeniden
+  adlandırılabilir (kullanıcı yapar). Ayrı bir proje/kod taşıma işlemi gerekmez.
 
 ## G. Yol haritası
 
 1. ✅ **Konsept kilitleme** — bu belge
-2. ⬜ **Görsel prototip** — kod öncesi tıklanabilir tasarım taslağı:
-   şehir seçimi, harita ekranı, katman menüsü, tema/dil anahtarları.
-   Amaç: ucuz aşamada bol revizyon.
+2. ✅ **Görsel prototip** — ilk sürüm hazır (`prototip/index.html`);
+   revizyonlar kullanıcı geri bildirimiyle sürer. Kodlamada birebir referanstır.
 3. ⬜ **Roma içerik taslağı** — bölgeleme, akslar, ilgi noktası setleri
-   (Claude taslak çıkarır → kullanıcı onaylar)
-4. ⬜ **İsim + alan adı kararı** ve satın alma (kullanıcı) → repo rename
+   (Claude taslak çıkarır → kullanıcı onaylar) — **sıradaki adım**
+4. ✅ **İsim + alan adı** — layersofcity.com satın alındı (2026-07-08);
+   repo rename kullanıcıda
 5. ⬜ **Kodlama v1** — iskelet + Roma verisi + EN/TR + gece-gündüz tema
 6. ⬜ **Yayın** — GitHub Pages + alan adı + analitik
 7. ⬜ **İkinci şehir** — şablonun şehirden bağımsızlığının kanıtı
