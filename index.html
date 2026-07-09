@@ -7,7 +7,7 @@
 <meta name="description" content="Read a new city, layer by layer.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B9A6DC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L21 8 L12 13 L3 8 Z'/%3E%3Cpath d='M3 12.5 L12 17.5 L21 12.5' opacity='.55'/%3E%3Cpath d='M3 17 L12 22 L21 17' opacity='.25'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/vendor/maplibre-gl.css">
-<link rel="stylesheet" href="css/style.css?v=20260709-11">
+<link rel="stylesheet" href="css/style.css?v=20260709-12">
 </head>
 <body>
 
@@ -72,6 +72,22 @@
         <span class="dim" id="cb-date"></span>
         <span id="cb-time"></span>
       </button>
+
+      <!-- city info card (künye): opens from the city bar -->
+      <div class="infocard" id="infocard" hidden>
+        <div class="ic-head">
+          <span class="ic-city" id="ic-city"></span>
+          <button class="ic-close" id="ic-close" data-i18n-label="aria.close">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+        <div class="ic-meta">
+          <div><span class="ic-k" data-i18n="info.lang"></span><span id="ic-lang"></span></div>
+          <div><span class="ic-k" data-i18n="info.currency"></span><span id="ic-currency"></span></div>
+        </div>
+        <div class="ic-prices" id="ic-prices"></div>
+        <div class="ic-updated" id="ic-updated"></div>
+      </div>
 
       <!-- budget stars (filtering lands in E8) -->
       <div id="budgetchip">
@@ -150,7 +166,7 @@
 </main>
 
 <script src="assets/vendor/maplibre-gl.js"></script>
-<script src="js/world-dots.js?v=20260709-11"></script>
-<script src="js/app.js?v=20260709-11"></script>
+<script src="js/world-dots.js?v=20260709-12"></script>
+<script src="js/app.js?v=20260709-12"></script>
 </body>
 </html>

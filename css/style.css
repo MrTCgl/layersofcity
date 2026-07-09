@@ -130,6 +130,29 @@ body.city #topchips{display:flex}
 #citybar:hover{border-color:var(--lilac)}
 #cb-time{font-variant-numeric:tabular-nums}
 
+/* city info card (künye) */
+.infocard{
+  position:absolute; left:14px; top:52px; z-index:20; width:min(280px, calc(100vw - 28px));
+  max-height:calc(100vh - 120px); overflow-y:auto;
+  background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
+  border-radius:14px; padding:12px 14px;
+  opacity:0; transform:translateY(-6px); transition:opacity .2s, transform .2s; pointer-events:none;
+}
+.infocard.show{opacity:1; transform:translateY(0); pointer-events:auto}
+.infocard[hidden]{display:none}
+.ic-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
+.ic-city{font-weight:700; font-size:16px}
+.ic-close{width:26px; height:26px; display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}
+.ic-close:hover{background:var(--powder); color:var(--ink)}
+:root[data-theme="dark"] .ic-close:hover{background:var(--line)}
+.ic-meta{display:flex; gap:16px; font-size:13px; padding-bottom:9px; margin-bottom:9px; border-bottom:1px solid var(--line)}
+.ic-meta .ic-k{color:var(--ink-soft); margin-right:6px}
+.ic-prices{display:flex; flex-direction:column; gap:5px}
+.ic-price{display:flex; justify-content:space-between; gap:12px; font-size:12.5px}
+.ic-price span:first-child{color:var(--ink-soft)}
+.ic-price span:last-child{font-variant-numeric:tabular-nums; white-space:nowrap}
+.ic-updated{margin-top:9px; font-size:11px; color:var(--ink-soft)}
+
 /* budget stars (transparent, below city bar) */
 #budgetchip{position:absolute; left:18px; top:110px; z-index:15; display:flex; align-items:center}
 .stars{display:flex; gap:3px}
@@ -253,5 +276,6 @@ body.city #topchips{display:flex}
 
 /* ── mobile ── */
 @media (max-width:719px){
-  #topchips{top:112px; transform:translate(-50%,0)}
+  /* second row, right-aligned (next to the city bar) instead of a third row */
+  #topchips{left:auto; right:14px; top:64px; transform:none}
 }
