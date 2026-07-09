@@ -125,6 +125,16 @@
   let manifest = null;      // data/<city>/city.json
   let clockTimer = null;
   let meMarker = null;
+  let mapFitted = false;    // has the map fit to home once it had real size?
+
+  // Fit the whole-city view, with padding that clears the floating controls.
+  function fitHome(animate) {
+    if (!map || !manifest) return;
+    map.fitBounds(manifest.home, {
+      padding: { top: 96, right: 56, bottom: 72, left: 24 },
+      animate: !!animate
+    });
+  }
   const toastEl = document.getElementById("toast");
   let toastTimer = null;
 
@@ -171,7 +181,7 @@
         container: "map",
         style: basemapUrl(),
         bounds: manifest.home,
-        fitBoundsOptions: { padding: 30 },
+        fitBoundsOptions: { padding: 24 },
         minZoom: manifest.zoom.min,
         maxZoom: manifest.zoom.max,
         maxBounds: manifest.maxBounds,
@@ -182,6 +192,21 @@
       window.__map = map; // test/debug hook
       // fires on first load AND after every setStyle (theme change)
       map.on("style.load", addCityLayers);
+
+      // Mobile hardening: if the container wasn't sized at init (screen still
+      // transitioning), the map fits to 0×0 and over-zooms. Resize + fit once
+      // the container has real dimensions, and resize on every orientation change.
+      map.on("load", () => { map.resize(); fitHome(false); });
+      const area = document.getElementById("maparea");
+      const ro = new ResizeObserver(() => {
+        if (!map) return;
+        map.resize();
+        if (!mapFitted && area.clientWidth > 0 && area.clientHeight > 0) {
+          mapFitted = true;
+          fitHome(false);
+        }
+      });
+      ro.observe(area);
     }
 
     clearInterval(clockTimer);
@@ -327,8 +352,7 @@
   /* map chrome wiring (static elements, safe before map exists) */
   document.getElementById("zoom-in").onclick = () => map && map.zoomIn();
   document.getElementById("zoom-out").onclick = () => map && map.zoomOut();
-  document.getElementById("zoom-home").onclick = () =>
-    map && manifest && map.fitBounds(manifest.home, { padding: 30 });
+  document.getElementById("zoom-home").onclick = () => fitHome(true);
   document.querySelectorAll("#panpad button").forEach(b => {
     b.onclick = () => map && map.panBy([+b.dataset.dx * 150, +b.dataset.dy * 150]);
   });
