@@ -99,6 +99,13 @@ yönetiyor. Tema değişiminde katmanlar yeniden ekleniyor (setStyle sonrası
 'idle'). Manifest'e `available` alanı eklendi (hazır olmayan katmanlar
 çekilmiyor → temiz konsol). İki tema × iki dil × mobil test edildi.
 
+Ek (2026-07-09, kullanıcı isteği): omurga OSM Overpass'tan gerçek geometrilerle
+yeniden üretildi — Metro A/B/B1/C + Metromare, 6 tramvay hattı (2/3/5/8/14/19),
+4 kilit otobüs hattı (64/40/714/23); 77 istasyon + 171 tram/otobüs durağı
+(z12.5+'ta görünür), 4 aktarma merkezi (Termini, San Giovanni, Colosseo,
+Piramide). Tüm istasyon/durak/kapılar tıklanabilir → yer kartı → Google Maps.
+Altlığa poi-landmark/poi-minor etiket katmanları eklendi (z14+/z16+).
+
 ---
 
 ## E4 — Keşfet katmanları 🔵 devam ediyor
