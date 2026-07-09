@@ -182,6 +182,12 @@
       window.__map = map; // test/debug hook
       // fires on first load AND after every setStyle (theme change)
       map.on("style.load", addCityLayers);
+      // mobile URL/gesture bars change the visible viewport after paint;
+      // re-measure so the canvas fills the map area (trackResize can fire
+      // before the new dimensions settle on some mobile browsers).
+      map.on("load", () => map.resize());
+      window.addEventListener("orientationchange",
+        () => setTimeout(() => map && map.resize(), 250));
     }
 
     clearInterval(clockTimer);
