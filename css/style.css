@@ -129,6 +129,9 @@ body.city #topchips{display:flex}
 #citybar .dim{color:var(--ink-soft)}
 #citybar:hover{border-color:var(--lilac)}
 #cb-time{font-variant-numeric:tabular-nums}
+.cb-wx{display:inline-flex; align-items:center; gap:3px; color:var(--ink-soft)}
+.cb-wx svg{color:var(--peach)}
+.cb-wx:empty{display:none}
 
 /* city info card (künye) */
 .infocard{
@@ -151,6 +154,12 @@ body.city #topchips{display:flex}
 .ic-price{display:flex; justify-content:space-between; gap:12px; font-size:12.5px}
 .ic-price span:first-child{color:var(--ink-soft)}
 .ic-price span:last-child{font-variant-numeric:tabular-nums; white-space:nowrap}
+.ic-weather{display:flex; flex-direction:column; gap:4px; margin-top:9px; padding-top:9px; border-top:1px solid var(--line)}
+.ic-weather:empty{display:none; margin:0; padding:0; border:0}
+.ic-wx{display:flex; align-items:center; gap:8px; font-size:12.5px}
+.ic-wx .ic-wd{width:34px; color:var(--ink-soft); text-transform:capitalize}
+.ic-wx .ic-wi{color:var(--peach); display:inline-flex}
+.ic-wx .ic-wt{margin-left:auto; font-variant-numeric:tabular-nums}
 .ic-updated{margin-top:9px; font-size:11px; color:var(--ink-soft)}
 
 /* budget stars (transparent, below city bar) */

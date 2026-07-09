@@ -7,7 +7,7 @@
 <meta name="description" content="Read a new city, layer by layer.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B9A6DC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L21 8 L12 13 L3 8 Z'/%3E%3Cpath d='M3 12.5 L12 17.5 L21 12.5' opacity='.55'/%3E%3Cpath d='M3 17 L12 22 L21 17' opacity='.25'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/vendor/maplibre-gl.css">
-<link rel="stylesheet" href="css/style.css?v=20260709-12">
+<link rel="stylesheet" href="css/style.css?v=20260709-13">
 </head>
 <body>
 
@@ -66,11 +66,12 @@
         <p data-i18n="city.coming"></p>
       </div>
 
-      <!-- city bar: name · date · live local time (weather joins in E7) -->
+      <!-- city bar: name · date · live local time · live weather -->
       <button id="citybar" aria-expanded="false">
         <span class="cname" id="cb-name"></span>
         <span class="dim" id="cb-date"></span>
         <span id="cb-time"></span>
+        <span id="cb-wx" class="cb-wx"></span>
       </button>
 
       <!-- city info card (künye): opens from the city bar -->
@@ -86,6 +87,7 @@
           <div><span class="ic-k" data-i18n="info.currency"></span><span id="ic-currency"></span></div>
         </div>
         <div class="ic-prices" id="ic-prices"></div>
+        <div class="ic-weather" id="ic-weather"></div>
         <div class="ic-updated" id="ic-updated"></div>
       </div>
 
@@ -166,7 +168,7 @@
 </main>
 
 <script src="assets/vendor/maplibre-gl.js"></script>
-<script src="js/world-dots.js?v=20260709-12"></script>
-<script src="js/app.js?v=20260709-12"></script>
+<script src="js/world-dots.js?v=20260709-13"></script>
+<script src="js/app.js?v=20260709-13"></script>
 </body>
 </html>

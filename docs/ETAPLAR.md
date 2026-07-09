@@ -184,7 +184,7 @@ Durum notu: —
 
 ---
 
-## E7 — Şehir künyesi ve canlı veriler ⬜
+## E7 — Şehir künyesi ve canlı veriler ✅ tamam (2026-07-09)
 
 **Amaç:** Şehir çubuğuna tıklayınca açılan künye kartı: pratik bilgiler.
 
@@ -200,10 +200,18 @@ Yapılacaklar:
 - Şehir çubuğundaki hava simgesi canlı veriye bağlanır
 
 Bitti sayılır:
-- [ ] Künye kartı iki dilde ve iki temada düzgün; API kesintisi uygulamayı bozmuyor
-- [ ] Fiyat tablosu tarihiyle birlikte görünüyor
+- [x] Künye kartı iki dilde ve iki temada düzgün; API kesintisi uygulamayı bozmuyor
+- [x] Fiyat tablosu tarihiyle birlikte görünüyor
 
-Durum notu: —
+Durum notu: E7 tamam. Şehir çubuğuna tıklayınca künye kartı: dil, para birimi +
+canlı €→USD (Frankfurter, api.frankfurter.dev), editoryal fiyat tablosu +
+güncelleme tarihi, ve Open-Meteo ile anlık + 5 günlük hava (soluk çizgi-simge,
+WMO kod eşlemesi). Şehir çubuğunda anlık hava simgesi+derece. Veri gelmezse
+ilgili bölüm sessizce gizleniyor (fetch best-effort, loadLiveData enterCity'de).
+Küçük kalan iyileştirme: döviz kesintisinde son kuru localStorage'dan "~" ile
+gösterme (şimdilik sessizce gizleniyor). Not: sandbox'ta dış API'lere Playwright
+chromium çıkamadığından render mock veriyle doğrulandı; API'ler curl/proxy ile
+erişilebilir, canlı tarayıcıda çalışır.
 
 ---
 

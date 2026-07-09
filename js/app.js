@@ -165,6 +165,60 @@
   let meMarker = null;
   let mapFitted = false;    // has the map fit to home once it had real size?
   let longPressFired = false; // suppress the click that follows a long-press
+  let weatherData = null;   // Open-Meteo current + 5-day (keyless)
+  let fxToUsd = null;       // Frankfurter currency -> USD rate (keyless)
+
+  // WMO weather code -> minimal line icon (stays on-brand; no bright fills)
+  const WX_PATHS = {
+    clear: '<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/>',
+    partly: '<circle cx="8" cy="8" r="3"/><path d="M8 2.6v1.5M2.6 8h1.5M4.4 4.4l1 1"/><path d="M7 19h9a3.5 3.5 0 0 0 .2-7 4.5 4.5 0 0 0-8.4-1.2A3.2 3.2 0 0 0 7 19Z"/>',
+    cloud: '<path d="M7 18h9.5a4 4 0 0 0 0-8 5 5 0 0 0-9.6-1.2A3.6 3.6 0 0 0 7 18Z"/>',
+    rain: '<path d="M7 15h9.5a4 4 0 0 0 0-8 5 5 0 0 0-9.6-1.2A3.6 3.6 0 0 0 7 15Z"/><path d="M8.5 18.5l-1 2.5M12 18.5l-1 2.5M15.5 18.5l-1 2.5"/>',
+    snow: '<path d="M7 15h9.5a4 4 0 0 0 0-8 5 5 0 0 0-9.6-1.2A3.6 3.6 0 0 0 7 15Z"/><path d="M9 19v.01M12.5 20v.01M16 19v.01"/>',
+    fog: '<path d="M5 8.5h14M4 12h16M5 15.5h12M7 19h9"/>',
+    storm: '<path d="M7 14h9.5a4 4 0 0 0 0-8 5 5 0 0 0-9.6-1.2A3.6 3.6 0 0 0 7 14Z"/><path d="M12 15l-2.2 3.3h3L10.6 22"/>'
+  };
+  function wxKey(c) {
+    if (c === 0) return "clear";
+    if (c === 1 || c === 2) return "partly";
+    if (c === 3) return "cloud";
+    if (c === 45 || c === 48) return "fog";
+    if ((c >= 71 && c <= 77) || c === 85 || c === 86) return "snow";
+    if (c >= 95) return "storm";
+    return "rain"; // 51-67, 80-82
+  }
+  function wxSvg(key) {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${WX_PATHS[key] || WX_PATHS.cloud}</svg>`;
+  }
+  function updateCityBarWx() {
+    const el = document.getElementById("cb-wx");
+    if (!el) return;
+    if (weatherData && weatherData.current) {
+      el.innerHTML = wxSvg(wxKey(weatherData.current.weather_code)) +
+        `<span>${Math.round(weatherData.current.temperature_2m)}°</span>`;
+    } else { el.innerHTML = ""; }
+  }
+  // Fetch live weather + USD rate for the current city (keyless, best-effort).
+  async function loadLiveData() {
+    if (!manifest || !manifest.center) return;
+    const [lon, lat] = manifest.center;
+    weatherData = null; fxToUsd = null;
+    try {
+      const u = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+        `&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+        `&timezone=auto&forecast_days=5`;
+      const r = await fetch(u);
+      if (r.ok) weatherData = await r.json();
+    } catch { /* offline / blocked -> section stays hidden */ }
+    updateCityBarWx();
+    if (manifest.currency && manifest.currency !== "USD") {
+      try {
+        const r = await fetch(`https://api.frankfurter.dev/v1/latest?base=${manifest.currency}&symbols=USD`);
+        if (r.ok) { const d = await r.json(); fxToUsd = d.rates && d.rates.USD; }
+      } catch { /* ignore */ }
+    }
+    if (infoCard && !infoCard.hidden) renderInfoCard();
+  }
 
   // Fit the whole-city view, with padding that clears the floating controls.
   function fitHome(animate) {
@@ -322,6 +376,7 @@
     clearInterval(clockTimer);
     clockTimer = setInterval(tickClock, 10000);
     tickClock();
+    loadLiveData(); // weather + USD rate, best-effort (non-blocking)
   }
 
   /* ── city layers (GeoJSON overlays over the basemap) ── */
@@ -698,13 +753,25 @@
     document.getElementById("ic-city").textContent = document.getElementById("cb-name").textContent;
     const lk = "lang." + (manifest.language || "");
     document.getElementById("ic-lang").textContent = t(lk) !== lk ? t(lk) : (manifest.language || "—");
-    document.getElementById("ic-currency").textContent = manifest.currency || "—";
-    const P = manifest.prices || {};
     const sym = CURRENCY_SYM[manifest.currency] || (manifest.currency ? manifest.currency + " " : "");
+    document.getElementById("ic-currency").textContent =
+      (manifest.currency || "—") + (fxToUsd ? ` · 1${sym} ≈ $${fxToUsd.toFixed(2)}` : "");
+    const P = manifest.prices || {};
     document.getElementById("ic-prices").innerHTML = PRICE_ORDER
       .filter(k => typeof P[k] === "number")
       .map(k => `<div class="ic-price"><span>${t("price." + k)}</span><span>${sym}${P[k].toFixed(2)}</span></div>`)
       .join("");
+    // 5-day forecast (hidden if weather didn't load)
+    const wxEl = document.getElementById("ic-weather");
+    if (weatherData && weatherData.daily && weatherData.daily.time) {
+      const d = weatherData.daily, loc = lang === "tr" ? "tr-TR" : "en-GB";
+      wxEl.innerHTML = d.time.map((iso, i) => {
+        const day = new Intl.DateTimeFormat(loc, { weekday: "short", timeZone: manifest.timezone }).format(new Date(iso + "T12:00"));
+        return `<div class="ic-wx"><span class="ic-wd">${day}</span>` +
+          `<span class="ic-wi">${wxSvg(wxKey(d.weather_code[i]))}</span>` +
+          `<span class="ic-wt">${Math.round(d.temperature_2m_min[i])}° / ${Math.round(d.temperature_2m_max[i])}°</span></div>`;
+      }).join("");
+    } else { wxEl.innerHTML = ""; }
     document.getElementById("ic-updated").textContent = P.updated ? t("info.updated") + " " + P.updated : "";
   }
   function closeInfoCard() {
