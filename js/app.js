@@ -149,15 +149,14 @@
   /* place card: name + external Google Maps link (no key, no in-app nav) */
   const placeCard = document.getElementById("placecard");
   function showPlaceCard(name, lng, lat) {
-    // Location-biased Google Maps search: the name is shown, but the search is
-    // pinned to the tapped coordinates (/@lat,lng,zoom), so a same-named place
-    // elsewhere can't hijack it. Unnamed points use bare coordinates.
+    // Drop a Google Maps pin at the EXACT tapped coordinates (q=lat,lng), with
+    // the name as the pin label — no text search, so it never snaps to a
+    // same-named place or a nearby street. Unnamed points get a bare pin.
+    const ll = lat.toFixed(6) + "," + lng.toFixed(6);
     document.getElementById("pc-name").textContent =
       name || (lat.toFixed(5) + ", " + lng.toFixed(5));
-    document.getElementById("pc-dir").href = name
-      ? "https://www.google.com/maps/search/" + encodeURIComponent(name) +
-        "/@" + lat.toFixed(6) + "," + lng.toFixed(6) + ",16z"
-      : "https://www.google.com/maps/search/?api=1&query=" + lat.toFixed(6) + "," + lng.toFixed(6);
+    document.getElementById("pc-dir").href =
+      "https://www.google.com/maps?q=" + ll + (name ? "(" + encodeURIComponent(name) + ")" : "");
     placeCard.hidden = false;
     requestAnimationFrame(() => placeCard.classList.add("show"));
   }
