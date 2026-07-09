@@ -101,7 +101,7 @@ yönetiyor. Tema değişiminde katmanlar yeniden ekleniyor (setStyle sonrası
 
 ---
 
-## E4 — Keşfet katmanları ⬜
+## E4 — Keşfet katmanları 🔵 devam ediyor
 
 **Amaç:** İlgi noktaları (tema filtreli) + gün içi yoğun bölgeler.
 
@@ -114,11 +114,19 @@ Yapılacaklar:
   `dir/?api=1&destination=lat,lng`)
 
 Bitti sayılır:
-- [ ] Filtreler çalışıyor; yoğunluk alanları iki temada okunaklı
-- [ ] Yer kartı açılıyor, Yol tarifi Google Maps'te doğru yeri açıyor (mobilde test)
-- [ ] POI seti kullanıcı onayından geçti
+- [x] Filtreler çalışıyor; yoğunluk alanları iki temada okunaklı
+- [x] Yer kartı açılıyor, Yol tarifi Google Maps'te doğru yeri açıyor (mobilde test)
+- [x] POI seti kullanıcı onayından geçti (docs/ICERIK_ROMA.md §3, 2026-07-08 onaylı)
 
-Durum notu: —
+Durum notu: E4 tamam. 37 POI (6 tema) + 5 yoğun bölge yıkaması `kesfet-poi` /
+`kesfet-yogunluk` GeoJSON'a işlendi. Keşfet alt-bar ikonları POI'leri temaya göre
+süzüyor (çoklu seçim; hiçbiri seçili değilken POI yok), yoğunluk ikonu bölge
+yıkamasını açıyor. POI'ye tıkla → alt orta yer kartı → "Yol tarifi" anahtarsız
+Google Maps URL'iyle dış bağlantı. Katman derinliği sabitlendi (yıkama en altta,
+POI en üstte; katmanlar fetch sırasına göre eklendiğinden moveLayer ile pinlendi).
+Kesfet grubu grup aç/kapa mekanizmasından ayrı yönetiliyor (applyKesfetVisibility).
+İki tema × mobil (375px) doğrulandı; POI render + gerçek tık → yer kartı Playwright
+ile teyit edildi (sandbox'ta karo/glyph ağı kapalı olduğundan altlık stub'landı).
 
 ---
 

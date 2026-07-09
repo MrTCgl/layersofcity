@@ -7,7 +7,7 @@
   "timezone": "Europe/Rome",
   "language": "it",
   "currency": "EUR",
-  "available": ["varis", "omurga"],
+  "available": ["varis", "omurga", "kesfet-poi", "kesfet-yogunluk"],
   "prices": {
     "updated": "2026-07",
     "water05": 0.45, "petrol1l": 1.85, "milk1l": 1.70,

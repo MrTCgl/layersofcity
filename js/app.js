@@ -145,6 +145,21 @@
     toastTimer = setTimeout(() => toastEl.classList.remove("show"), 3200);
   }
 
+  /* place card: name + external Google Maps directions (no key, no in-app nav) */
+  const placeCard = document.getElementById("placecard");
+  function showPlaceCard(name, lng, lat) {
+    document.getElementById("pc-name").textContent = name;
+    document.getElementById("pc-dir").href =
+      "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng;
+    placeCard.hidden = false;
+    requestAnimationFrame(() => placeCard.classList.add("show"));
+  }
+  function hidePlaceCard() {
+    placeCard.classList.remove("show");
+    placeCard.hidden = true;
+  }
+  document.getElementById("pc-close").onclick = hidePlaceCard;
+
   function basemapUrl() {
     return `assets/basemap-${theme}.json`;
   }
@@ -193,6 +208,23 @@
       // fires on first load AND after every setStyle (theme change)
       map.on("style.load", addCityLayers);
 
+      // POI tap -> place card; a tap on empty map closes it. Bound by layer id,
+      // so it keeps working after layers are re-added on theme change.
+      const poiLayer = "lyr-kesfet-poi-poi";
+      map.on("click", poiLayer, e => {
+        const f = e.features && e.features[0];
+        if (!f) return;
+        const [lng, lat] = f.geometry.coordinates;
+        showPlaceCard(f.properties._name || f.properties.name || "", lng, lat);
+      });
+      map.on("mouseenter", poiLayer, () => { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", poiLayer, () => { map.getCanvas().style.cursor = ""; });
+      map.on("click", e => {
+        if (!map.getLayer(poiLayer)) return;
+        const hits = map.queryRenderedFeatures(e.point, { layers: [poiLayer] });
+        if (!hits.length) hidePlaceCard();
+      });
+
       // Mobile hardening: if the container wasn't sized at init (screen still
       // transitioning), the map fits to 0×0 and over-zooms. Resize + fit once
       // the container has real dimensions, and resize on every orientation change.
@@ -228,6 +260,10 @@
   // a no-op until an omurga feature carries lineRef "bus".
   const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c"], tram: ["tram"], bus: ["bus"] };
   const transitState = { metro: true, tram: true, bus: true };
+
+  // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
+  const themeState = new Set();   // active POI themes; empty -> no POIs shown
+  let crowdOn = false;            // crowded-zone wash visible?
 
   const cityData = {};          // layerId -> raw FeatureCollection
   const groupState = {};        // groupId -> visible?
@@ -329,9 +365,34 @@
         layout: { "text-field": ["get", "_sub"], "text-font": ["Noto Sans Regular"],
           "text-size": 9.5, "text-anchor": "top", "text-offset": [0, 2.0], "text-optional": true },
         paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.2 } });
+      // Keşfet: crowded-zone wash (soft fill, no crisp border — interpretation, not cadastre)
+      add("-fill", { type: "fill", filter: ["==", ["get", "kind"], "area"],
+        paint: { "fill-color": pal.peach, "fill-opacity": 0.20 } });
+      add("-area-label", { type: "symbol", filter: ["==", ["get", "kind"], "area-label"],
+        layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"],
+          "text-size": 11, "text-optional": true },
+        paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
+      // Keşfet: POI markers + labels
+      add("-poi", { type: "circle", filter: ["==", ["get", "kind"], "poi"],
+        paint: { "circle-radius": 5, "circle-color": pal.surface, "circle-stroke-color": pal.lilac, "circle-stroke-width": 2 } });
+      add("-poi-label", { type: "symbol", filter: ["==", ["get", "kind"], "poi"],
+        layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"], "text-size": 11,
+          "text-anchor": "top", "text-offset": [0, 0.7], "text-optional": true },
+        paint: { "text-color": pal.ink, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
+    });
+    // Layers are added in fetch-resolution order, so pin the two that need a
+    // fixed depth: the crowd wash to the bottom, the POI markers to the top.
+    const fillId = "lyr-kesfet-yogunluk-fill";
+    if (map.getLayer(fillId)) {
+      const firstOther = map.getStyle().layers.find(l => l.id.startsWith("lyr-") && l.id !== fillId);
+      if (firstOther) map.moveLayer(fillId, firstOther.id);
+    }
+    ["lyr-kesfet-poi-poi", "lyr-kesfet-poi-poi-label"].forEach(id => {
+      if (map.getLayer(id)) map.moveLayer(id); // no beforeId -> move to top
     });
     applyGroupVisibility();
     applyTransitFilter();
+    applyKesfetVisibility();
   }
 
   // Show only the transit sub-types currently enabled. Features without a
@@ -358,10 +419,31 @@
   function applyGroupVisibility() {
     if (!map) return;
     Object.keys(cityData).forEach(layerId => {
+      if (groupOf(layerId) === "kesfet") return; // kesfet owned by applyKesfetVisibility
       const vis = groupState[groupOf(layerId)] ? "visible" : "none";
       map.getStyle().layers.forEach(l => {
         if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);
       });
+    });
+  }
+
+  // POIs show only for the picked themes (none picked -> hidden); the crowd
+  // wash follows its own icon. Independent of the group on/off machinery.
+  function applyKesfetVisibility() {
+    if (!map) return;
+    const themes = [...themeState];
+    const poiVis = themes.length ? "visible" : "none";
+    ["-poi", "-poi-label"].forEach(suf => {
+      const id = "lyr-kesfet-poi" + suf;
+      if (!map.getLayer(id)) return;
+      map.setLayoutProperty(id, "visibility", poiVis);
+      const base = baseFilters[id];
+      const pred = ["any", ...themes.map(th => ["==", ["get", "theme"], th])];
+      map.setFilter(id, themes.length ? ["all", base, pred] : base);
+    });
+    ["-fill", "-area-label"].forEach(suf => {
+      const id = "lyr-kesfet-yogunluk" + suf;
+      if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", crowdOn ? "visible" : "none");
     });
   }
   function refreshLayerLabels() { // on language change
@@ -375,6 +457,7 @@
   function leaveCity() {
     clearInterval(clockTimer);
     clockTimer = null;
+    hidePlaceCard();
   }
 
   /* map chrome wiring (static elements, safe before map exists) */
@@ -469,7 +552,14 @@
       } else {
         const on = b.getAttribute("aria-pressed") !== "true";
         b.setAttribute("aria-pressed", on);
-        // TODO(E4/E6): toggle themed POIs on the map
+        if (b.dataset.th) {                       // Keşfet theme chip -> filter POIs
+          if (on) themeState.add(b.dataset.th); else themeState.delete(b.dataset.th);
+          applyKesfetVisibility();
+        } else if (b.id === "chip-yog") {         // crowded-zone wash
+          crowdOn = on;
+          applyKesfetVisibility();
+        }
+        // TODO(E6): İhtiyaç (data-ih) chips toggle need-category points
       }
     };
   });
