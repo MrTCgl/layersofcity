@@ -504,12 +504,18 @@
     lineMenu.hidden = !open;
     this.setAttribute("aria-expanded", open);
   };
+  // Hatlar stays "active" (lilac) as long as at least one transit line is on.
+  function updateOmurgaActive() {
+    const any = Object.keys(TRANSIT_REFS).some(t => transitState[t]);
+    document.getElementById("chip-omurga").setAttribute("aria-pressed", any);
+  }
   document.querySelectorAll("#linemenu .lchip").forEach(b => {
     b.onclick = () => {
       const on = b.getAttribute("aria-pressed") !== "true";
       b.setAttribute("aria-pressed", on);
       transitState[b.dataset.transit] = on;
       applyTransitFilter();
+      updateOmurgaActive();
     };
   });
   /* Yaşam drawer chips: state now, per-layer wiring lands in E5 */

@@ -96,12 +96,13 @@ main{flex:1; position:relative; overflow:hidden}
 #topchips{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:none; gap:8px; z-index:31}
 body.city #topchips{display:flex}
 .mchip{
-  display:flex; align-items:center; gap:6px;
+  width:40px; height:40px; display:grid; place-items:center;
   background:color-mix(in srgb, var(--surface) 88%, transparent);
-  border:1px solid var(--line); border-radius:999px; padding:7px 13px;
-  font-size:12.5px; color:var(--ink-soft); box-shadow:var(--shadow);
+  border:1px solid var(--line); border-radius:999px;
+  color:var(--ink-soft); box-shadow:var(--shadow);
 }
-.mchip[aria-pressed="true"],.mchip[aria-expanded="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
+/* active color reflects the layer being on (for Hatlar: any transit line on) */
+.mchip[aria-pressed="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
 /* Hatlar disclosure: metro/tram/bus icons drop below the chip */
 .mchip-wrap{position:relative; display:flex}
 .linemenu{
