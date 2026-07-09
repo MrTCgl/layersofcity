@@ -1,0 +1,645 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "colosseo",
+    "kind": "poi",
+    "name": "Colosseo",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4922,
+     41.8902
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "foro-romano",
+    "kind": "poi",
+    "name": "Foro Romano",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4853,
+     41.8925
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "pantheon",
+    "kind": "poi",
+    "name": "Pantheon",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4769,
+     41.8986
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "trevi",
+    "kind": "poi",
+    "name": "Fontana di Trevi",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4833,
+     41.9009
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "navona",
+    "kind": "poi",
+    "name": "Piazza Navona",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4731,
+     41.8992
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "san-pietro",
+    "kind": "poi",
+    "name": "San Pietro",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4539,
+     41.9022
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "musei-vaticani",
+    "kind": "poi",
+    "name": "Musei Vaticani",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4536,
+     41.9065
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "castel-sant-angelo",
+    "kind": "poi",
+    "name": "Castel Sant'Angelo",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4663,
+     41.9031
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "piazza-di-spagna",
+    "kind": "poi",
+    "name": "Piazza di Spagna",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4823,
+     41.9058
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "campo-de-fiori",
+    "kind": "poi",
+    "name": "Campo de' Fiori",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4722,
+     41.8956
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "caracalla",
+    "kind": "poi",
+    "name": "Terme di Caracalla",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4924,
+     41.879
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "appia-antica",
+    "kind": "poi",
+    "name": "Appia Antica",
+    "theme": "tarihi",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.5017,
+     41.876
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "maxxi",
+    "kind": "poi",
+    "name": "MAXXI",
+    "theme": "modern",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4667,
+     41.9283
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "auditorium",
+    "kind": "poi",
+    "name": "Auditorium",
+    "theme": "modern",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.472,
+     41.9287
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "eur",
+    "kind": "poi",
+    "name": "EUR",
+    "theme": "modern",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4686,
+     41.8352
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "macro",
+    "kind": "poi",
+    "name": "MACRO",
+    "theme": "modern",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.5003,
+     41.9152
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "villa-borghese",
+    "kind": "poi",
+    "name": "Villa Borghese",
+    "theme": "doga",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4922,
+     41.9142
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "gianicolo",
+    "kind": "poi",
+    "name": "Gianicolo",
+    "theme": "doga",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4614,
+     41.8917
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "villa-pamphilj",
+    "kind": "poi",
+    "name": "Villa Doria Pamphilj",
+    "theme": "doga",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.447,
+     41.8859
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "giardino-aranci",
+    "kind": "poi",
+    "name": "Giardino degli Aranci",
+    "theme": "doga",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4797,
+     41.8843
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "appia-parco",
+    "kind": "poi",
+    "name": "Appia Antica Parkı",
+    "theme": "doga",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.523,
+     41.8497
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "villa-ada",
+    "kind": "poi",
+    "name": "Villa Ada",
+    "theme": "doga",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.5039,
+     41.9308
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "gastro-trastevere",
+    "kind": "poi",
+    "name": "Trastevere",
+    "theme": "gastronomi",
+    "lab": 1,
+    "budget": 2
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4699,
+     41.8896
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "gastro-testaccio",
+    "kind": "poi",
+    "name": "Testaccio",
+    "theme": "gastronomi",
+    "lab": 1,
+    "budget": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4753,
+     41.8759
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "gastro-monti",
+    "kind": "poi",
+    "name": "Monti",
+    "theme": "gastronomi",
+    "lab": 1,
+    "budget": 2
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4919,
+     41.8946
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "gastro-campo",
+    "kind": "poi",
+    "name": "Campo de' Fiori",
+    "theme": "gastronomi",
+    "lab": 1,
+    "budget": 2
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4726,
+     41.8953
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "gastro-prati",
+    "kind": "poi",
+    "name": "Prati",
+    "theme": "gastronomi",
+    "lab": 1,
+    "budget": 3
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.459,
+     41.907
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "gastro-pigneto",
+    "kind": "poi",
+    "name": "Pigneto",
+    "theme": "gastronomi",
+    "lab": 1,
+    "budget": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.5316,
+     41.8887
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "via-del-corso",
+    "kind": "poi",
+    "name": "Via del Corso",
+    "theme": "alisveris",
+    "lab": 1,
+    "budget": 2
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.479,
+     41.901
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "via-condotti",
+    "kind": "poi",
+    "name": "Via Condotti",
+    "theme": "alisveris",
+    "lab": 1,
+    "budget": 3
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.48,
+     41.9053
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "cola-di-rienzo",
+    "kind": "poi",
+    "name": "Via Cola di Rienzo",
+    "theme": "alisveris",
+    "lab": 1,
+    "budget": 2
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.464,
+     41.9075
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "porta-portese",
+    "kind": "poi",
+    "name": "Porta Portese",
+    "theme": "alisveris",
+    "lab": 1,
+    "budget": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.472,
+     41.879
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "mercato-monti",
+    "kind": "poi",
+    "name": "Mercato Monti",
+    "theme": "alisveris",
+    "lab": 1,
+    "budget": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.493,
+     41.8955
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "policlinico",
+    "kind": "poi",
+    "name": "Policlinico Umberto I",
+    "theme": "saglik",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.5108,
+     41.9089
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "gemelli",
+    "kind": "poi",
+    "name": "Gemelli",
+    "theme": "saglik",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.43,
+     41.933
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "salvator-mundi",
+    "kind": "poi",
+    "name": "Salvator Mundi",
+    "theme": "saglik",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.456,
+     41.8887
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "bambino-gesu",
+    "kind": "poi",
+    "name": "Bambino Gesù",
+    "theme": "saglik",
+    "lab": 1
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.4625,
+     41.8905
+    ]
+   }
+  }
+ ]
+}

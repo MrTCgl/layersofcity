@@ -215,6 +215,26 @@ body.city #topchips{display:flex}
   background:var(--lilac); border:2.5px solid var(--surface);
 }
 
+/* place card (POI tap -> name + Google Maps directions) */
+.placecard{
+  position:absolute; left:50%; bottom:64px; transform:translateX(-50%) translateY(8px);
+  display:flex; align-items:center; gap:12px; z-index:17;
+  background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
+  border-radius:12px; padding:9px 10px 9px 16px; max-width:calc(100% - 24px);
+  opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+}
+.placecard.show{opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto}
+.placecard[hidden]{display:none}
+.pc-name{font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.pc-dir{
+  flex:none; font-size:12.5px; text-decoration:none; color:#fff; background:var(--lilac);
+  border-radius:999px; padding:6px 14px;
+}
+.pc-dir:hover{background:var(--peach); color:var(--ink)}
+.pc-close{flex:none; width:28px; height:28px; display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}
+.pc-close:hover{background:var(--powder); color:var(--ink)}
+:root[data-theme="dark"] .pc-close:hover{background:var(--line)}
+
 /* toast */
 .toast{
   position:absolute; left:50%; bottom:64px; transform:translateX(-50%) translateY(8px);
