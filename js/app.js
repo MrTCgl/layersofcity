@@ -148,17 +148,16 @@
 
   /* place card: name + external Google Maps link (no key, no in-app nav) */
   const placeCard = document.getElementById("placecard");
-  let cityDisplayName = ""; // set on enterCity; disambiguates name searches
   function showPlaceCard(name, lng, lat) {
-    // Google Maps by place name (+ city) so the destination card is named;
-    // unnamed points fall back to bare coordinates.
-    const query = name
-      ? encodeURIComponent(name + ", " + cityDisplayName)
-      : lat.toFixed(5) + "," + lng.toFixed(5);
+    // Location-biased Google Maps search: the name is shown, but the search is
+    // pinned to the tapped coordinates (/@lat,lng,zoom), so a same-named place
+    // elsewhere can't hijack it. Unnamed points use bare coordinates.
     document.getElementById("pc-name").textContent =
       name || (lat.toFixed(5) + ", " + lng.toFixed(5));
-    document.getElementById("pc-dir").href =
-      "https://www.google.com/maps/search/?api=1&query=" + query;
+    document.getElementById("pc-dir").href = name
+      ? "https://www.google.com/maps/search/" + encodeURIComponent(name) +
+        "/@" + lat.toFixed(6) + "," + lng.toFixed(6) + ",16z"
+      : "https://www.google.com/maps/search/?api=1&query=" + lat.toFixed(6) + "," + lng.toFixed(6);
     placeCard.hidden = false;
     requestAnimationFrame(() => placeCard.classList.add("show"));
   }
@@ -183,7 +182,6 @@
   }
 
   async function enterCity(city) {
-    cityDisplayName = city.name;
     document.getElementById("cb-name").textContent = city.name;
     const ph = document.getElementById("cityph");
     try {
@@ -292,7 +290,7 @@
   /* ── city layers (GeoJSON overlays over the basemap) ── */
   const LINE_COLORS = {
     "metro-a": "#E08A5B", "metro-b": "#6E93C4", "metro-c": "#7FA98A",
-    "tram": "#A8A0B5", "rail": "#B5ADA0", "bus": "#C9AE85"
+    "tram": "#A8A0B5", "rail": "#B5ADA0", "bus": "#C9AE85", "train": "#8FA1B3"
   };
   const PALETTE = {
     light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8" },
@@ -301,8 +299,8 @@
   // Transit sub-types inside the Hatlar (omurga) group, toggled from the
   // metro/tram/bus disclosure under the chip. Metromare (lineRef "rail")
   // rides with the metro toggle — it's the metro-like coastal line.
-  const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c", "rail"], tram: ["tram"], bus: ["bus"] };
-  const transitState = { metro: true, tram: true, bus: true };
+  const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c", "rail"], tram: ["tram"], bus: ["bus"], train: ["train"] };
+  const transitState = { metro: true, tram: true, bus: true, train: true };
 
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
   const themeState = new Set();   // active POI themes; empty -> no POIs shown
@@ -344,7 +342,8 @@
   const lineColorExpr = ["match", ["get", "lineRef"],
     "metro-a", LINE_COLORS["metro-a"], "metro-b", LINE_COLORS["metro-b"],
     "metro-c", LINE_COLORS["metro-c"], "tram", LINE_COLORS["tram"],
-    "rail", LINE_COLORS["rail"], "bus", LINE_COLORS["bus"], "#B5ADA0"];
+    "rail", LINE_COLORS["rail"], "bus", LINE_COLORS["bus"],
+    "train", LINE_COLORS["train"], "#B5ADA0"];
 
   function addCityLayers() {
     if (!map || !manifest) return;
@@ -365,8 +364,15 @@
       add("-link", { type: "line", filter: ["==", ["get", "kind"], "link"],
         paint: { "line-color": pal.lilac, "line-width": 2.4, "line-dasharray": [1, 2.5], "line-opacity": 0.85 },
         layout: { "line-cap": "round" } });
-      // transit lines
-      add("-line", { type: "line", filter: ["==", ["get", "kind"], "line"],
+      // regional rail (FL trains) — drawn beneath metro/tram/bus, thin
+      add("-railline", { type: "line",
+        filter: ["all", ["==", ["get", "kind"], "line"], ["==", ["get", "lineRef"], "train"]],
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: { "line-color": LINE_COLORS.train, "line-opacity": 0.85,
+          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 0.8, 14, 2] } });
+      // transit lines (metro/tram/bus/rail — not the FL train network)
+      add("-line", { type: "line",
+        filter: ["all", ["==", ["get", "kind"], "line"], ["!=", ["get", "lineRef"], "train"]],
         layout: { "line-cap": "round", "line-join": "round" },
         paint: { "line-color": lineColorExpr,
           "line-width": ["interpolate", ["linear"], ["zoom"],
@@ -474,7 +480,7 @@
       if (transitState[t]) TRANSIT_REFS[t].forEach(r => refPreds.push(["==", ["get", "lineRef"], r]));
     });
     const pred = ["any", ["!", ["has", "lineRef"]], ...refPreds];
-    ["-line", "-node", "-stop", "-stop-label", "-badge", "-badge-label", "-label"].forEach(suf => {
+    ["-railline", "-line", "-node", "-stop", "-stop-label", "-badge", "-badge-label", "-label"].forEach(suf => {
       const id = "lyr-omurga" + suf;
       if (!map.getLayer(id)) return;
       const base = baseFilters[id];
