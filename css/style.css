@@ -285,6 +285,7 @@ body.city #topchips{display:flex}
 
 /* ── mobile ── */
 @media (max-width:719px){
-  /* second row, right-aligned (next to the city bar) instead of a third row */
-  #topchips{left:auto; right:14px; top:64px; transform:none}
+  /* second row, next to the city bar. Hatlar goes left of Girişler (row-reverse)
+     and the pair sits toward the city name, so the Hatlar drop-down has room. */
+  #topchips{left:auto; right:48px; top:64px; transform:none; flex-direction:row-reverse}
 }
