@@ -178,13 +178,25 @@ body.city #topchips{display:flex}
 
 /* right-bottom control stack */
 #zoomctl{
-  position:absolute; right:16px; bottom:126px; z-index:15; width:44px;
+  position:absolute; right:16px; bottom:186px; z-index:15;
+  display:flex; flex-direction:column; width:44px;
   background:var(--surface); border:1px solid var(--line);
-  border-radius:999px; box-shadow:var(--shadow); overflow:hidden;
+  border-radius:14px; box-shadow:var(--shadow); overflow:hidden;
 }
-#zoomctl button{width:44px; height:44px; display:grid; place-items:center; color:var(--ink-soft)}
+#zoomctl button{height:40px; display:grid; place-items:center; color:var(--ink-soft)}
 #zoomctl button:hover{color:var(--lilac); background:var(--powder)}
 :root[data-theme="dark"] #zoomctl button:hover{background:var(--line)}
+#zoomctl button + button{border-top:1px solid var(--line)}
+/* grab-pan: press and drag this to move the map (mouse-free) */
+#panbtn{
+  position:absolute; right:16px; bottom:126px; width:44px; height:44px;
+  border-radius:999px; background:var(--surface); box-shadow:var(--shadow);
+  border:1px solid var(--line); display:grid; place-items:center; color:var(--ink-soft); z-index:15;
+  touch-action:none; cursor:grab;
+}
+#panbtn:hover{color:var(--lilac)}
+#panbtn.active{color:var(--lilac); cursor:grabbing; background:var(--powder)}
+:root[data-theme="dark"] #panbtn.active{background:var(--line)}
 #locbtn{
   position:absolute; right:16px; bottom:74px; width:44px; height:44px;
   border-radius:999px; background:var(--surface); box-shadow:var(--shadow);
