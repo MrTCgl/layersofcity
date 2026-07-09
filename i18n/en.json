@@ -11,6 +11,7 @@
   "transit.metro": "metro",
   "transit.tram": "tram",
   "transit.bus": "bus",
+  "transit.train": "train",
   "layer.otel": "Hotels",
   "layer.konut": "Housing",
   "layer.altmerkez": "Sub-centers",
