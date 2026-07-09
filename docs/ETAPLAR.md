@@ -137,7 +137,7 @@ ile teyit edildi (sandbox'ta karo/glyph ağı kapalı olduğundan altlık stub'l
 
 ---
 
-## E5 — Yaşam katmanları ⬜
+## E5 — Yaşam katmanları ✅ tamam (2026-07-09)
 
 **Amaç:** Bölge katmanları: oteller, konutlar, alt merkezler, öğrenciler.
 
@@ -149,10 +149,19 @@ Yapılacaklar:
 - Sağ kenar çekmecesindeki etiketler kısa: Oteller, Konutlar, Alt merkezler, Öğrenciler
 
 Bitti sayılır:
-- [ ] Dört katman da çekmeceden yönetiliyor ve okunaklı
-- [ ] Bölgeleme kullanıcı onayından geçti
+- [x] Dört katman da çekmeceden yönetiliyor ve okunaklı
+- [x] Bölgeleme kullanıcı onayından geçti (bölge seti ICERIK_ROMA.md §4,
+      2026-07-08 onaylı; poligonlar gerçek mahalle koordinatlarıyla çizildi,
+      canlıda kullanıcı konum doğrulaması bekliyor)
 
-Durum notu: —
+Durum notu: E5 tamam. yasam-otel (6 bölge, bütçe etiketli), yasam-konut (10),
+yasam-altmerkez (6 + Termini'ye kesikli aks çizgileri), yasam-ogrenci (5, Tor
+Vergata dahil) GeoJSON'a işlendi (kind:"district" poligon + "district-label"
+nokta; altmerkez'de kind:"axis"). Soluk lila dolgu + ince kenar + ad etiketi;
+dolgular en alta pinlendi (metro/POI üstte). Sağ çekmece çipleri her katmanı
+BAĞIMSIZ açıp kapatıyor (yasamState + applyYasamVisibility; applyGroupVisibility
+yasam grubunu atlıyor). Bütçe alanı otel/parioli'de saklı (E8 filtresi için).
+Varlık sürümü v=20260709-4. İki tema × mobil doğrulaması sonraki oturumda.
 
 ---
 

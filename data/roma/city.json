@@ -7,7 +7,8 @@
   "timezone": "Europe/Rome",
   "language": "it",
   "currency": "EUR",
-  "available": ["varis", "omurga", "kesfet-poi", "kesfet-yogunluk"],
+  "available": ["varis", "omurga", "kesfet-poi", "kesfet-yogunluk",
+    "yasam-otel", "yasam-konut", "yasam-altmerkez", "yasam-ogrenci"],
   "prices": {
     "updated": "2026-07",
     "water05": 0.45, "petrol1l": 1.85, "milk1l": 1.70,
