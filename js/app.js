@@ -149,8 +149,9 @@
   const placeCard = document.getElementById("placecard");
   function showPlaceCard(name, lng, lat) {
     document.getElementById("pc-name").textContent = name;
+    // Open the place on Google Maps (pin only); the user takes directions there.
     document.getElementById("pc-dir").href =
-      "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng;
+      "https://www.google.com/maps/search/?api=1&query=" + lat + "," + lng;
     placeCard.hidden = false;
     requestAnimationFrame(() => placeCard.classList.add("show"));
   }
