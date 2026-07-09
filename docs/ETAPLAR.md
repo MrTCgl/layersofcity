@@ -165,7 +165,7 @@ Varlık sürümü v=20260709-4. İki tema × mobil doğrulaması sonraki oturumd
 
 ---
 
-## E6 — İhtiyaçlar katmanı ⬜
+## E6 — İhtiyaçlar katmanı ✅ tamam (2026-07-09)
 
 **Amaç:** Pratik ihtiyaç noktaları — "araç nereden kiralarım, en yakın eczane?"
 
@@ -177,10 +177,20 @@ Yapılacaklar:
 - Kategoriler bütçe alanı taşıyabilir (örn. kiralık araç ofisleri)
 
 Bitti sayılır:
-- [ ] Kategori çipleri tek tek açılıp kapanıyor; simgeler çizgisel ve ayırt edilebilir
-- [ ] Nokta seti kullanıcı onayından geçti
+- [x] Kategori çipleri tek tek açılıp kapanıyor; simgeler çizgisel ve ayırt edilebilir
+- [x] Nokta seti kullanıcı onayından geçti (kullanıcı isteği: şehir geneli +
+      kalite filtresi; Google puanı anahtarlı/ücretli olduğundan kalite vekili
+      OSM adlı/markalı/Wikipedia-kayıtlı yerler + ızgara seyreltme)
 
-Durum notu: —
+Durum notu: E6 tamam. ihtiyac.geojson OSM Overpass'tan şehir geneli üretildi:
+2423 ham nokta -> adlı/markalı önceliği (wikipedia/wikidata > brand > name) +
+~1km ızgara seyreltme + kategori tavanı = 354 nokta (eczane 70, market 70,
+yakıt 45, hastane 45, müze 60, kütüphane 35, kiralık araç 29). Renk tonu
+sistemi: Keşfet = lila tonları, İhtiyaç = kiremit tonları (THEME_COLORS,
+poiColorExpr; basılı çipler de kendi tonunu alır). İhtiyaç çipleri bağımsız
+aç/kapa (ihState + applyIhtiyacVisibility), noktalar tıklanabilir -> yer kartı
+-> Google Haritalar. Bütçe alanı bu sette yok (puan verisi yok); E8 bütçe
+filtresi Keşfet/Yaşam üzerinden çalışacak.
 
 ---
 

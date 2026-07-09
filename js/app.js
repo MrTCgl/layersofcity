@@ -309,8 +309,8 @@
       // Tap a POI, station, stop, hub or gate -> place card (name + Google
       // Maps). A tap on empty map closes it. Bound by layer id, so it keeps
       // working after layers are re-added on theme change.
-      const tappable = ["lyr-kesfet-poi-poi", "lyr-omurga-node", "lyr-omurga-stop",
-                        "lyr-omurga-hub", "lyr-varis-gate"];
+      const tappable = ["lyr-kesfet-poi-poi", "lyr-ihtiyac-poi", "lyr-omurga-node",
+                        "lyr-omurga-stop", "lyr-omurga-hub", "lyr-varis-gate"];
       tappable.forEach(id => {
         map.on("click", id, e => {
           const f = e.features && e.features[0];
@@ -384,6 +384,16 @@
     "metro-a": "#E08A5B", "metro-b": "#6E93C4", "metro-c": "#7FA98A",
     "tram": "#A8A0B5", "rail": "#B5ADA0", "bus": "#C9AE85", "train": "#8FA1B3"
   };
+  // POI marker tones: Keşfet = shades of lilac, İhtiyaç = shades of terracotta.
+  // One hue per group, so the map reads as two families at a glance.
+  const THEME_COLORS = {
+    "tarihi": "#6F5799", "modern": "#8168AC", "doga": "#937CBE",
+    "gastronomi": "#A590CE", "alisveris": "#B7A5DC", "saglik": "#C9BAE8",
+    "hastane": "#B34F39", "eczane": "#C1654B", "kiralik-arac": "#CE7A5E",
+    "yakit": "#DA8F72", "market": "#E4A487", "muze": "#EDB99D", "kutuphane": "#F4CDB4"
+  };
+  const poiColorExpr = ["match", ["get", "theme"],
+    ...Object.entries(THEME_COLORS).flat(), "#B9A6DC"];
   const PALETTE = {
     light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8" },
     dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E" }
@@ -396,6 +406,7 @@
 
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
   const themeState = new Set();   // active POI themes; empty -> no POIs shown
+  const ihState = new Set();      // active İhtiyaç categories; empty -> hidden
   let crowdOn = false;            // crowded-zone wash visible?
   const yasamState = {};          // yasam layerId -> visible? (drawer chips, per layer)
 
@@ -537,9 +548,10 @@
         layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"],
           "text-size": 11, "text-optional": true },
         paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
-      // Keşfet: POI markers + labels
+      // Keşfet/İhtiyaç: POI markers + labels (stroke tone = theme family)
       add("-poi", { type: "circle", filter: ["==", ["get", "kind"], "poi"],
-        paint: { "circle-radius": 5, "circle-color": pal.surface, "circle-stroke-color": pal.lilac, "circle-stroke-width": 2 } });
+        paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.5, 14, 5.5],
+          "circle-color": pal.surface, "circle-stroke-color": poiColorExpr, "circle-stroke-width": 2 } });
       add("-poi-label", { type: "symbol", filter: ["==", ["get", "kind"], "poi"],
         layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"], "text-size": 11,
           "text-anchor": "top", "text-offset": [0, 0.7], "text-optional": true },
@@ -554,12 +566,13 @@
       const firstOther = map.getStyle().layers.find(l => l.id.startsWith("lyr-") && !washes.includes(l.id));
       if (firstOther) map.moveLayer(fillId, firstOther.id);
     });
-    ["lyr-kesfet-poi-poi", "lyr-kesfet-poi-poi-label"].forEach(id => {
+    ["lyr-kesfet-poi-poi", "lyr-kesfet-poi-poi-label", "lyr-ihtiyac-poi", "lyr-ihtiyac-poi-label"].forEach(id => {
       if (map.getLayer(id)) map.moveLayer(id); // no beforeId -> move to top
     });
     applyGroupVisibility();
     applyTransitFilter();
     applyKesfetVisibility();
+    applyIhtiyacVisibility();
     applyYasamVisibility();
   }
 
@@ -588,7 +601,7 @@
     if (!map) return;
     Object.keys(cityData).forEach(layerId => {
       const g = groupOf(layerId);
-      if (g === "kesfet" || g === "yasam") return; // owned by their own visibility fns
+      if (g === "kesfet" || g === "yasam" || g === "ihtiyaclar") return; // owned by their own visibility fns
       const vis = groupState[g] ? "visible" : "none";
       map.getStyle().layers.forEach(l => {
         if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);
@@ -626,6 +639,21 @@
     ["-fill", "-area-label"].forEach(suf => {
       const id = "lyr-kesfet-yogunluk" + suf;
       if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", crowdOn ? "visible" : "none");
+    });
+  }
+
+  // İhtiyaç POIs: same machinery as Keşfet, own category set.
+  function applyIhtiyacVisibility() {
+    if (!map) return;
+    const cats = [...ihState];
+    const vis = cats.length ? "visible" : "none";
+    ["-poi", "-poi-label"].forEach(suf => {
+      const id = "lyr-ihtiyac" + suf;
+      if (!map.getLayer(id)) return;
+      map.setLayoutProperty(id, "visibility", vis);
+      const base = baseFilters[id];
+      const pred = ["any", ...cats.map(c => ["==", ["get", "theme"], c])];
+      map.setFilter(id, cats.length ? ["all", base, pred] : base);
     });
   }
   function refreshLayerLabels() { // on language change
@@ -835,11 +863,13 @@
         if (b.dataset.th) {                       // Keşfet theme chip -> filter POIs
           if (on) themeState.add(b.dataset.th); else themeState.delete(b.dataset.th);
           applyKesfetVisibility();
+        } else if (b.dataset.ih) {                // İhtiyaç category chip -> filter need points
+          if (on) ihState.add(b.dataset.ih); else ihState.delete(b.dataset.ih);
+          applyIhtiyacVisibility();
         } else if (b.id === "chip-yog") {         // crowded-zone wash
           crowdOn = on;
           applyKesfetVisibility();
         }
-        // TODO(E6): İhtiyaç (data-ih) chips toggle need-category points
       }
     };
   });

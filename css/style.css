@@ -213,6 +213,20 @@ body.city #topchips{display:flex}
   border:1px solid var(--line); color:var(--ink-soft); box-shadow:var(--shadow);
 }
 .ichip[aria-pressed="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
+/* pressed chips take their theme tone (Keşfet = lilac family, İhtiyaç = terracotta family) */
+.ichip[data-th="tarihi"][aria-pressed="true"]{background:#6F5799; border-color:#6F5799}
+.ichip[data-th="modern"][aria-pressed="true"]{background:#8168AC; border-color:#8168AC}
+.ichip[data-th="doga"][aria-pressed="true"]{background:#937CBE; border-color:#937CBE}
+.ichip[data-th="gastronomi"][aria-pressed="true"]{background:#A590CE; border-color:#A590CE}
+.ichip[data-th="alisveris"][aria-pressed="true"]{background:#B7A5DC; border-color:#B7A5DC}
+.ichip[data-th="saglik"][aria-pressed="true"]{background:#C9BAE8; border-color:#C9BAE8}
+.ichip[data-ih="hastane"][aria-pressed="true"]{background:#B34F39; border-color:#B34F39}
+.ichip[data-ih="eczane"][aria-pressed="true"]{background:#C1654B; border-color:#C1654B}
+.ichip[data-ih="kiralik-arac"][aria-pressed="true"]{background:#CE7A5E; border-color:#CE7A5E}
+.ichip[data-ih="yakit"][aria-pressed="true"]{background:#DA8F72; border-color:#DA8F72}
+.ichip[data-ih="market"][aria-pressed="true"]{background:#E4A487; border-color:#E4A487}
+.ichip[data-ih="muze"][aria-pressed="true"]{background:#EDB99D; border-color:#EDB99D}
+.ichip[data-ih="kutuphane"][aria-pressed="true"]{background:#F4CDB4; border-color:#F4CDB4}
 
 /* right-bottom control stack */
 #zoomctl{
