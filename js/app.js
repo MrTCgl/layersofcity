@@ -461,10 +461,31 @@
     hidePlaceCard();
   }
 
-  /* map chrome wiring (static elements, safe before map exists).
-     Zoom/pan handled natively (mouse wheel + drag, touch pinch + drag);
-     only the home button remains. */
+  /* map chrome wiring (static elements, safe before map exists) */
+  document.getElementById("zoom-in").onclick = () => map && map.zoomIn();
+  document.getElementById("zoom-out").onclick = () => map && map.zoomOut();
   document.getElementById("zoom-home").onclick = () => fitHome(true);
+
+  /* grab-pan: press the hand button and drag to move the map, no mouse-drag on
+     the map needed. Pointer capture keeps it tracking outside the button. */
+  const panbtn = document.getElementById("panbtn");
+  let panLast = null;
+  panbtn.addEventListener("pointerdown", e => {
+    if (!map) return;
+    panbtn.setPointerCapture(e.pointerId);
+    panLast = { x: e.clientX, y: e.clientY };
+    panbtn.classList.add("active");
+    e.preventDefault();
+  });
+  panbtn.addEventListener("pointermove", e => {
+    if (!panLast || !map) return;
+    const dx = e.clientX - panLast.x, dy = e.clientY - panLast.y;
+    panLast = { x: e.clientX, y: e.clientY };
+    map.panBy([-dx, -dy], { duration: 0 }); // grab feel: drag hand = drag map
+  });
+  function endPan() { if (panLast) { panLast = null; panbtn.classList.remove("active"); } }
+  panbtn.addEventListener("pointerup", endPan);
+  panbtn.addEventListener("pointercancel", endPan);
 
   document.getElementById("locbtn").onclick = function () {
     if (!map || !navigator.geolocation) return;
