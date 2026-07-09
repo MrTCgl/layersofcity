@@ -82,13 +82,13 @@ Etiketler kısadır: "Kapılar", "Hatlar", "Oteller", "Konutlar" ("...kapıları
 **İsim: layers of city — alan adı layersofcity.com satın alındı (2026-07-08).**
 Yayın etabında (E11) GitHub Pages'e bağlanacak.
 
-## F. GitHub repo ismi
+## F. GitHub repo ismi ✔ tamam
 
 - Repo ismi projeye özel olacak, "ROMA" içermeyecek.
 - GitHub'da repo yeniden adlandırma tek işlemdir (Settings → General → Rename)
   ve eski adrese gelen istekler otomatik yönlendirilir; kod tarafında hiçbir şey kırılmaz.
-- Alan adı alındığına göre repo istenildiği an `layersofcity` olarak yeniden
-  adlandırılabilir (kullanıcı yapar). Ayrı bir proje/kod taşıma işlemi gerekmez.
+- ✅ Repo `layersofcity` olarak yeniden adlandırıldı (2026-07-09). Eski adrese
+  gelen istekler GitHub tarafından otomatik yönlendiriliyor; kodda değişiklik gerekmedi.
 
 ## G. Yol haritası
 
@@ -97,7 +97,7 @@ Yayın etabında (E11) GitHub Pages'e bağlanacak.
    revizyonlar kullanıcı geri bildirimiyle sürer. Kodlamada birebir referanstır.
 3. ✅ **Roma içerik taslağı** — `docs/ICERIK_ROMA.md` onaylandı (2026-07-08)
 4. ✅ **İsim + alan adı** — layersofcity.com satın alındı (2026-07-08);
-   repo rename kullanıcıda
+   repo `layersofcity` olarak yeniden adlandırıldı (2026-07-09)
 5. ⬜ **Kodlama v1** — iskelet + Roma verisi + EN/TR + gece-gündüz tema
 6. ⬜ **Yayın** — GitHub Pages + alan adı + analitik
 7. ⬜ **İkinci şehir** — şablonun şehirden bağımsızlığının kanıtı
