@@ -11,6 +11,7 @@
   "transit.metro": "metro",
   "transit.tram": "tramvay",
   "transit.bus": "otobüs",
+  "transit.train": "tren",
   "layer.otel": "Oteller",
   "layer.konut": "Konutlar",
   "layer.altmerkez": "Alt merkezler",

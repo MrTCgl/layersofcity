@@ -44,6 +44,7 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 - Metro A: `#E08A5B` (soluk turuncu) · Metro B: `#6E93C4` (soluk mavi)
 - Metro C: `#7FA98A` (soluk yeşil) · Tramvay: `#A8A0B5` · Banliyö/FL: `#B5ADA0`
 - Otobüs (kilit hatlar): `#C9AE85` (soluk hardal); metro/tramvaydan ince çizilir
+- Bölgesel tren (FL hatları): `#8FA1B3` (soluk slate); metronun **altında**, ince
 - Koyu temada aynı hex'ler kullanılır (koyu zeminde zaten yumuşak dururlar).
 
 ## Tipografi
