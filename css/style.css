@@ -139,11 +139,11 @@ body.city #topchips{display:flex}
 }
 .stars button.on{color:var(--peach); opacity:1}
 
-/* right-edge drawer */
-#drawerwrap{position:absolute; right:0; top:50%; transform:translateY(-50%); display:flex; align-items:center; z-index:15}
+/* left-edge drawer (moved off the right so it clears the zoom +/- stack) */
+#drawerwrap{position:absolute; left:0; top:50%; transform:translateY(-50%); display:flex; flex-direction:row-reverse; align-items:center; z-index:15}
 #drawertab{
-  width:32px; height:76px; border:1px solid var(--line); border-right:none;
-  border-radius:12px 0 0 12px; background:color-mix(in srgb, var(--surface) 88%, transparent);
+  width:32px; height:76px; border:1px solid var(--line); border-left:none;
+  border-radius:0 12px 12px 0; background:color-mix(in srgb, var(--surface) 88%, transparent);
   color:var(--ink-soft); display:grid; place-items:center; box-shadow:var(--shadow);
 }
 #drawertab svg{transition:transform .3s}
@@ -151,9 +151,9 @@ body.city #topchips{display:flex}
 #drawer{
   width:0; overflow:hidden; transition:width .3s, padding .3s;
   background:var(--surface); border:0 solid var(--line);
-  display:flex; flex-direction:column; gap:7px; padding:0; border-radius:0 0 0 12px;
+  display:flex; flex-direction:column; gap:7px; padding:0; border-radius:0 12px 12px 0;
 }
-#drawerwrap.open #drawer{width:132px; padding:12px; border-width:1px; border-right:none}
+#drawerwrap.open #drawer{width:132px; padding:12px; border-width:1px; border-left:none}
 .dchip{
   border:1px solid var(--line); border-radius:999px; padding:6px 10px;
   font-size:12.5px; color:var(--ink-soft); white-space:nowrap;
