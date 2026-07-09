@@ -675,9 +675,15 @@
     };
   });
   const drawerwrap = document.getElementById("drawerwrap");
+  function closeDrawer() {
+    if (!drawerwrap.classList.contains("open")) return;
+    drawerwrap.classList.remove("open");
+    document.getElementById("drawertab").setAttribute("aria-expanded", "false");
+  }
   document.getElementById("drawertab").onclick = function () {
     const open = drawerwrap.classList.toggle("open");
     this.setAttribute("aria-expanded", open);
+    if (open) { closeSheets(); closeLineMenu(); } // don't leave other menus open behind it
   };
   function closeSheets() {
     document.querySelectorAll(".sheet").forEach(s => s.classList.remove("show"));
@@ -701,10 +707,11 @@
     document.getElementById("chip-omurga").setAttribute("aria-expanded", "false");
   }
   document.addEventListener("click", e => {
-    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu")) return; // inside a menu
-    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga")) return;    // a trigger toggles itself
+    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer")) return; // inside a menu
+    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab")) return; // a trigger toggles itself
     closeSheets();
     closeLineMenu();
+    closeDrawer();
   });
   document.querySelectorAll(".sheet .chip, #stars button").forEach(b => {
     b.onclick = () => {
