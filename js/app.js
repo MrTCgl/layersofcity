@@ -461,13 +461,10 @@
     hidePlaceCard();
   }
 
-  /* map chrome wiring (static elements, safe before map exists) */
-  document.getElementById("zoom-in").onclick = () => map && map.zoomIn();
-  document.getElementById("zoom-out").onclick = () => map && map.zoomOut();
+  /* map chrome wiring (static elements, safe before map exists).
+     Zoom/pan handled natively (mouse wheel + drag, touch pinch + drag);
+     only the home button remains. */
   document.getElementById("zoom-home").onclick = () => fitHome(true);
-  document.querySelectorAll("#panpad button").forEach(b => {
-    b.onclick = () => map && map.panBy([+b.dataset.dx * 150, +b.dataset.dy * 150]);
-  });
 
   document.getElementById("locbtn").onclick = function () {
     if (!map || !navigator.geolocation) return;

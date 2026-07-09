@@ -177,25 +177,13 @@ body.city #topchips{display:flex}
 
 /* right-bottom control stack */
 #zoomctl{
-  position:absolute; right:16px; bottom:206px; z-index:15;
-  display:flex; flex-direction:column; width:44px;
+  position:absolute; right:16px; bottom:126px; z-index:15; width:44px;
   background:var(--surface); border:1px solid var(--line);
-  border-radius:14px; box-shadow:var(--shadow); overflow:hidden;
+  border-radius:999px; box-shadow:var(--shadow); overflow:hidden;
 }
-#zoomctl button{height:40px; display:grid; place-items:center; color:var(--ink-soft)}
+#zoomctl button{width:44px; height:44px; display:grid; place-items:center; color:var(--ink-soft)}
 #zoomctl button:hover{color:var(--lilac); background:var(--powder)}
 :root[data-theme="dark"] #zoomctl button:hover{background:var(--line)}
-#zoomctl button + button{border-top:1px solid var(--line)}
-#panpad{
-  position:absolute; right:6px; bottom:126px; width:64px; height:64px; z-index:15;
-  background:var(--surface); border:1px solid var(--line); border-radius:999px; box-shadow:var(--shadow);
-}
-#panpad button{position:absolute; width:24px; height:24px; display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}
-#panpad button:hover{color:var(--lilac)}
-#panpad .pn{top:2px; left:20px}
-#panpad .ps{bottom:2px; left:20px}
-#panpad .pw{left:2px; top:20px}
-#panpad .pe{right:2px; top:20px}
 #locbtn{
   position:absolute; right:16px; bottom:74px; width:44px; height:44px;
   border-radius:999px; background:var(--surface); box-shadow:var(--shadow);
