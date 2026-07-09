@@ -36,5 +36,10 @@
   "pan.w": "pan left",
   "pan.e": "pan right",
   "loc.me": "my location",
-  "loc.outside": "You seem to be outside the city"
+  "loc.outside": "You seem to be outside the city",
+  "e3.fco.sub": "→ Termini · Leonardo Express · 32 min",
+  "e3.cia.sub": "→ Termini · bus · 40 min",
+  "e3.termini.sub": "transit heart",
+  "e3.center": "historic center",
+  "e3.c.east": "→ Pantano"
 }

@@ -23,7 +23,12 @@
     theme = theme === "light" ? "dark" : "light";
     localStorage.setItem("loc-theme", theme);
     applyTheme();
-    if (map) map.setStyle(`assets/basemap-${theme}.json`); // basemap follows the theme
+    if (map) {
+      // setStyle wipes custom layers; 'style.load' only fires on first load in
+      // this MapLibre build, so re-add explicitly once the new style settles.
+      map.setStyle(`assets/basemap-${theme}.json`);
+      map.once("idle", addCityLayers);
+    }
   };
 
   /* ── i18n ──────────────────────────────── */
@@ -67,6 +72,7 @@
     applyI18n();
     renderWorld(); // soon-labels use i18n
     if (typeof tickClock === "function") tickClock(); // date format follows language
+    if (typeof refreshLayerLabels === "function") refreshLayerLabels(); // map labels follow language
   }
   SUPPORTED_LANGS.forEach(code => {
     const btn = document.getElementById("lang-" + code);
@@ -160,6 +166,7 @@
     ph.hidden = true;
 
     if (!map) {
+      await loadCityData(city.id);   // fetch layer geojson before the map draws
       map = new maplibregl.Map({
         container: "map",
         style: basemapUrl(),
@@ -172,11 +179,144 @@
       });
       map.touchPitch.disable();
       map.dragRotate.disable();
+      window.__map = map; // test/debug hook
+      // fires on first load AND after every setStyle (theme change)
+      map.on("style.load", addCityLayers);
     }
 
     clearInterval(clockTimer);
     clockTimer = setInterval(tickClock, 10000);
     tickClock();
+  }
+
+  /* ── city layers (GeoJSON overlays over the basemap) ── */
+  const LINE_COLORS = {
+    "metro-a": "#E08A5B", "metro-b": "#6E93C4", "metro-c": "#7FA98A",
+    "tram": "#A8A0B5", "rail": "#B5ADA0"
+  };
+  const PALETTE = {
+    light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8" },
+    dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E" }
+  };
+  const cityData = {};          // layerId -> raw FeatureCollection
+  const groupState = {};        // groupId -> visible?
+
+  async function loadCityData(cityId) {
+    // Only fetch layers marked available, so unfinished ones don't 404 in console.
+    const all = [...new Set(manifest.groups.flatMap(g => g.layers))];
+    const files = manifest.available ? all.filter(f => manifest.available.includes(f)) : all;
+    await Promise.all(files.map(async f => {
+      try {
+        const res = await fetch(`data/${cityId}/layers/${f}.geojson`);
+        if (res.ok) cityData[f] = await res.json();
+      } catch { /* layer not ready yet -> skip silently */ }
+    }));
+    manifest.groups.forEach(g => { groupState[g.id] = !!g.defaultOn; });
+  }
+
+  // Inject language-resolved label fields, so MapLibre text-field can read them.
+  function localize(fc) {
+    return {
+      type: "FeatureCollection",
+      features: fc.features.map(f => {
+        const p = f.properties;
+        return { ...f, properties: {
+          ...p,
+          _name: p.nameKey ? t(p.nameKey) : (p.name || ""),
+          _sub: p.subKey ? t(p.subKey) : ""
+        }};
+      })
+    };
+  }
+
+  const lineColorExpr = ["match", ["get", "lineRef"],
+    "metro-a", LINE_COLORS["metro-a"], "metro-b", LINE_COLORS["metro-b"],
+    "metro-c", LINE_COLORS["metro-c"], "tram", LINE_COLORS["tram"],
+    "rail", LINE_COLORS["rail"], "#B5ADA0"];
+
+  function addCityLayers() {
+    if (!map || !manifest) return;
+    const pal = PALETTE[theme];
+    Object.keys(cityData).forEach(layerId => {
+      const src = "lyr-" + layerId;
+      // idempotent: drop any stale copy so this is safe on every style.load
+      map.getStyle().layers.forEach(l => { if (l.id.startsWith(src) && map.getLayer(l.id)) map.removeLayer(l.id); });
+      if (map.getSource(src)) map.removeSource(src);
+      map.addSource(src, { type: "geojson", data: localize(cityData[layerId]) });
+
+      const add = (suffix, spec) => map.addLayer(Object.assign({ id: src + suffix, source: src }, spec));
+
+      // gate -> center connector (dashed lilac)
+      add("-link", { type: "line", filter: ["==", ["get", "kind"], "link"],
+        paint: { "line-color": pal.lilac, "line-width": 2.4, "line-dasharray": [1, 2.5], "line-opacity": 0.85 },
+        layout: { "line-cap": "round" } });
+      // transit lines
+      add("-line", { type: "line", filter: ["==", ["get", "kind"], "line"],
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: { "line-color": lineColorExpr,
+          "line-width": ["interpolate", ["linear"], ["zoom"],
+            10, ["match", ["get", "lineRef"], "rail", 1.4, "tram", 1.8, 2.6],
+            14, ["match", ["get", "lineRef"], "rail", 2, "tram", 3, 5]] } });
+      // historic-center ring + dot
+      add("-center", { type: "circle", filter: ["==", ["get", "kind"], "center"],
+        paint: { "circle-radius": 9, "circle-color": "rgba(0,0,0,0)", "circle-stroke-color": pal.peach, "circle-stroke-width": 2 } });
+      add("-center-dot", { type: "circle", filter: ["==", ["get", "kind"], "center"],
+        paint: { "circle-radius": 2.6, "circle-color": pal.peach } });
+      // stations
+      add("-node", { type: "circle", filter: ["==", ["get", "kind"], "node"],
+        paint: { "circle-radius": 4.5, "circle-color": pal.surface, "circle-stroke-color": lineColorExpr, "circle-stroke-width": 2 } });
+      // Termini hub
+      add("-hub", { type: "circle", filter: ["==", ["get", "kind"], "hub"],
+        paint: { "circle-radius": 7, "circle-color": pal.surface, "circle-stroke-color": pal.ink, "circle-stroke-width": 2.5 } });
+      // gates
+      add("-gate", { type: "circle", filter: ["==", ["get", "kind"], "gate"],
+        paint: { "circle-radius": 7, "circle-color": pal.surface, "circle-stroke-color": pal.inkSoft, "circle-stroke-width": 1.6 } });
+      // C east hint dot
+      add("-hint", { type: "circle", filter: ["==", ["get", "kind"], "hint"],
+        paint: { "circle-radius": 3, "circle-color": pal.inkSoft } });
+      // line letter badges
+      add("-badge", { type: "circle", filter: ["==", ["get", "kind"], "badge"],
+        paint: { "circle-radius": 9, "circle-color": lineColorExpr, "circle-stroke-color": pal.surface, "circle-stroke-width": 1.6 } });
+      add("-badge-label", { type: "symbol", filter: ["==", ["get", "kind"], "badge"],
+        layout: { "text-field": ["get", "ref"], "text-font": ["Noto Sans Regular"], "text-size": 12, "text-allow-overlap": true },
+        paint: { "text-color": "#ffffff" } });
+      // place labels (nodes, hub, gates, center, hint)
+      add("-label", { type: "symbol",
+        filter: ["all", ["==", ["get", "lab"], 1], ["!=", ["get", "kind"], "badge"]],
+        layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"],
+          "text-size": ["match", ["get", "kind"], "hub", 13, 11],
+          "text-anchor": "top", "text-offset": [0, 0.7], "text-optional": true },
+        paint: { "text-color": ["match", ["get", "kind"], "hint", pal.inkSoft, pal.ink],
+          "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
+      // gate / hub subtitles (the arrival answer)
+      add("-sub", { type: "symbol",
+        filter: ["any", ["==", ["get", "kind"], "gate"], ["==", ["get", "kind"], "hub"]],
+        layout: { "text-field": ["get", "_sub"], "text-font": ["Noto Sans Regular"],
+          "text-size": 9.5, "text-anchor": "top", "text-offset": [0, 2.0], "text-optional": true },
+        paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.2 } });
+    });
+    applyGroupVisibility();
+  }
+
+  function groupOf(layerId) {
+    const g = manifest.groups.find(gr => gr.layers.includes(layerId));
+    return g ? g.id : null;
+  }
+  function applyGroupVisibility() {
+    if (!map) return;
+    Object.keys(cityData).forEach(layerId => {
+      const vis = groupState[groupOf(layerId)] ? "visible" : "none";
+      map.getStyle().layers.forEach(l => {
+        if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);
+      });
+    });
+  }
+  function refreshLayerLabels() { // on language change
+    if (!map) return;
+    Object.keys(cityData).forEach(layerId => {
+      const s = map.getSource("lyr-" + layerId);
+      if (s) s.setData(localize(cityData[layerId]));
+    });
   }
 
   function leaveCity() {
@@ -215,12 +355,21 @@
     }, () => { /* permission denied -> stay quiet */ });
   };
 
-  /* layer-group chips: state now, map layers arrive in E3+ */
-  document.querySelectorAll("#topchips .mchip, #drawer .dchip").forEach(b => {
+  /* Kapılar/Hatlar chips -> toggle whole layer group */
+  document.querySelectorAll("#topchips .mchip").forEach(b => {
     b.onclick = () => {
       const on = b.getAttribute("aria-pressed") !== "true";
       b.setAttribute("aria-pressed", on);
-      // TODO(E3+): toggle the matching map layers
+      groupState[b.dataset.group] = on;
+      applyGroupVisibility();
+    };
+  });
+  /* Yaşam drawer chips: state now, per-layer wiring lands in E5 */
+  document.querySelectorAll("#drawer .dchip").forEach(b => {
+    b.onclick = () => {
+      const on = b.getAttribute("aria-pressed") !== "true";
+      b.setAttribute("aria-pressed", on);
+      // TODO(E5): toggle the matching yasam layer
     };
   });
   const drawerwrap = document.getElementById("drawerwrap");

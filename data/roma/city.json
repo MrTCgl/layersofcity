@@ -7,6 +7,7 @@
   "timezone": "Europe/Rome",
   "language": "it",
   "currency": "EUR",
+  "available": ["varis", "omurga"],
   "prices": {
     "updated": "2026-07",
     "water05": 0.45, "petrol1l": 1.85, "milk1l": 1.70,

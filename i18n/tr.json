@@ -36,5 +36,10 @@
   "pan.w": "sola kaydır",
   "pan.e": "sağa kaydır",
   "loc.me": "konumum",
-  "loc.outside": "Şehrin dışında görünüyorsun"
+  "loc.outside": "Şehrin dışında görünüyorsun",
+  "e3.fco.sub": "→ Termini · Leonardo Express · 32 dk",
+  "e3.cia.sub": "→ Termini · otobüs · 40 dk",
+  "e3.termini.sub": "ulaşımın kalbi",
+  "e3.center": "tarihi merkez",
+  "e3.c.east": "→ Pantano"
 }

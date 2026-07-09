@@ -72,7 +72,7 @@ katmanlarına bağlanmaları E3-E6'da.
 
 ---
 
-## E3 — Varış + Omurga katmanları ⬜
+## E3 — Varış + Omurga katmanları ✅ tamam (2026-07-09)
 
 **Amaç:** İlk gerçek içerik: girişler ve ulaşım omurgası.
 
@@ -87,10 +87,17 @@ Yapılacaklar:
 - Hat renkleri: `docs/TASARIM.md` "metro renkleri" (soluklaştırılmış A/B/C)
 
 Bitti sayılır:
-- [ ] Varsayılan açılışta kapılar+hatlar+rozetler görünüyor, çiplerden aç/kapa çalışıyor
-- [ ] İçerik `PROJE_PLANI.md` B bölümüyle uyumlu, kullanıcı onayından geçti
+- [x] Varsayılan açılışta kapılar+hatlar+rozetler görünüyor, çiplerden aç/kapa çalışıyor
+- [x] İçerik `PROJE_PLANI.md` B bölümüyle uyumlu, kullanıcı onayından geçti
+      (docs/ICERIK_ROMA.md onaylı)
 
-Durum notu: —
+Durum notu: E3 tamam. Gerçek koordinatlı GeoJSON (varis + omurga) MapLibre
+üstünde çiziliyor; Metro A/B/B1/C + tram 8/3, A/B/C harf rozetleri, Termini
+merkezi + tarihi merkez halkası, FCO/CIA/Termini/Tiburtina kapıları +
+havaalanı bağlantı çizgileri. Kapılar/Hatlar çipleri grup görünürlüğünü
+yönetiyor. Tema değişiminde katmanlar yeniden ekleniyor (setStyle sonrası
+'idle'). Manifest'e `available` alanı eklendi (hazır olmayan katmanlar
+çekilmiyor → temiz konsol). İki tema × iki dil × mobil test edildi.
 
 ---
 
