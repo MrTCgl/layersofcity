@@ -698,6 +698,16 @@
   /* ── router ────────────────────────────── */
   const scrWorld = document.getElementById("scr-world");
   const scrCity = document.getElementById("scr-city");
+  const viewportMeta = document.querySelector('meta[name="viewport"]');
+
+  // World screen: let the page pinch-zoom/pan (small SVG on phones). City
+  // screen: lock page zoom (the map owns zoom); locking to maximum-scale=1 also
+  // clamps any leftover world-screen zoom back to 1, so you never get stuck.
+  function setPageZoom(locked) {
+    viewportMeta.setAttribute("content", locked
+      ? "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+      : "width=device-width, initial-scale=1, viewport-fit=cover");
+  }
 
   function route() {
     const id = location.hash.replace(/^#\/?/, "");
@@ -706,6 +716,7 @@
       scrWorld.classList.remove("on");
       scrCity.classList.add("on");
       document.body.classList.add("city");
+      setPageZoom(true);
       enterCity(city);
     } else {
       if (id) history.replaceState(null, "", "#/"); // unknown city -> world
@@ -713,6 +724,7 @@
       scrCity.classList.remove("on");
       scrWorld.classList.add("on");
       document.body.classList.remove("city");
+      setPageZoom(false);
     }
   }
   window.addEventListener("hashchange", route);
