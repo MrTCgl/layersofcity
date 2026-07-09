@@ -209,20 +209,25 @@
       // fires on first load AND after every setStyle (theme change)
       map.on("style.load", addCityLayers);
 
-      // POI tap -> place card; a tap on empty map closes it. Bound by layer id,
-      // so it keeps working after layers are re-added on theme change.
-      const poiLayer = "lyr-kesfet-poi-poi";
-      map.on("click", poiLayer, e => {
-        const f = e.features && e.features[0];
-        if (!f) return;
-        const [lng, lat] = f.geometry.coordinates;
-        showPlaceCard(f.properties._name || f.properties.name || "", lng, lat);
+      // Tap a POI, station, stop, hub or gate -> place card (name + Google
+      // Maps). A tap on empty map closes it. Bound by layer id, so it keeps
+      // working after layers are re-added on theme change.
+      const tappable = ["lyr-kesfet-poi-poi", "lyr-omurga-node", "lyr-omurga-stop",
+                        "lyr-omurga-hub", "lyr-varis-gate"];
+      tappable.forEach(id => {
+        map.on("click", id, e => {
+          const f = e.features && e.features[0];
+          if (!f) return;
+          const [lng, lat] = f.geometry.coordinates;
+          showPlaceCard(f.properties._name || f.properties.name || "", lng, lat);
+        });
+        map.on("mouseenter", id, () => { map.getCanvas().style.cursor = "pointer"; });
+        map.on("mouseleave", id, () => { map.getCanvas().style.cursor = ""; });
       });
-      map.on("mouseenter", poiLayer, () => { map.getCanvas().style.cursor = "pointer"; });
-      map.on("mouseleave", poiLayer, () => { map.getCanvas().style.cursor = ""; });
       map.on("click", e => {
-        if (!map.getLayer(poiLayer)) return;
-        const hits = map.queryRenderedFeatures(e.point, { layers: [poiLayer] });
+        const live = tappable.filter(id => map.getLayer(id));
+        if (!live.length) return;
+        const hits = map.queryRenderedFeatures(e.point, { layers: live });
         if (!hits.length) hidePlaceCard();
       });
 
@@ -250,16 +255,16 @@
   /* ── city layers (GeoJSON overlays over the basemap) ── */
   const LINE_COLORS = {
     "metro-a": "#E08A5B", "metro-b": "#6E93C4", "metro-c": "#7FA98A",
-    "tram": "#A8A0B5", "rail": "#B5ADA0"
+    "tram": "#A8A0B5", "rail": "#B5ADA0", "bus": "#C9AE85"
   };
   const PALETTE = {
     light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8" },
     dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E" }
   };
   // Transit sub-types inside the Hatlar (omurga) group, toggled from the
-  // metro/tram/bus disclosure under the chip. bus has no data yet -> toggle is
-  // a no-op until an omurga feature carries lineRef "bus".
-  const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c"], tram: ["tram"], bus: ["bus"] };
+  // metro/tram/bus disclosure under the chip. Metromare (lineRef "rail")
+  // rides with the metro toggle — it's the metro-like coastal line.
+  const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c", "rail"], tram: ["tram"], bus: ["bus"] };
   const transitState = { metro: true, tram: true, bus: true };
 
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
@@ -301,7 +306,7 @@
   const lineColorExpr = ["match", ["get", "lineRef"],
     "metro-a", LINE_COLORS["metro-a"], "metro-b", LINE_COLORS["metro-b"],
     "metro-c", LINE_COLORS["metro-c"], "tram", LINE_COLORS["tram"],
-    "rail", LINE_COLORS["rail"], "#B5ADA0"];
+    "rail", LINE_COLORS["rail"], "bus", LINE_COLORS["bus"], "#B5ADA0"];
 
   function addCityLayers() {
     if (!map || !manifest) return;
@@ -327,16 +332,27 @@
         layout: { "line-cap": "round", "line-join": "round" },
         paint: { "line-color": lineColorExpr,
           "line-width": ["interpolate", ["linear"], ["zoom"],
-            10, ["match", ["get", "lineRef"], "rail", 1.4, "tram", 1.8, 2.6],
-            14, ["match", ["get", "lineRef"], "rail", 2, "tram", 3, 5]] } });
+            10, ["match", ["get", "lineRef"], "rail", 1.4, "tram", 1.8, "bus", 1.2, 2.6],
+            14, ["match", ["get", "lineRef"], "rail", 2, "tram", 3, "bus", 2.2, 5]] } });
       // historic-center ring + dot
       add("-center", { type: "circle", filter: ["==", ["get", "kind"], "center"],
         paint: { "circle-radius": 9, "circle-color": "rgba(0,0,0,0)", "circle-stroke-color": pal.peach, "circle-stroke-width": 2 } });
       add("-center-dot", { type: "circle", filter: ["==", ["get", "kind"], "center"],
         paint: { "circle-radius": 2.6, "circle-color": pal.peach } });
-      // stations
+      // stations (metro + Metromare) — grow with zoom
       add("-node", { type: "circle", filter: ["==", ["get", "kind"], "node"],
-        paint: { "circle-radius": 4.5, "circle-color": pal.surface, "circle-stroke-color": lineColorExpr, "circle-stroke-width": 2 } });
+        paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3, 13, 4.5, 16, 6],
+          "circle-color": pal.surface, "circle-stroke-color": lineColorExpr, "circle-stroke-width": 2 } });
+      // tram/bus stops — small, appear from z12.5, tappable like stations
+      add("-stop", { type: "circle", filter: ["==", ["get", "kind"], "stop"], minzoom: 12.5,
+        paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 12.5, 1.8, 16, 4],
+          "circle-color": pal.surface, "circle-stroke-color": lineColorExpr, "circle-stroke-width": 1.4,
+          "circle-opacity": ["interpolate", ["linear"], ["zoom"], 12.5, 0, 13.2, 1],
+          "circle-stroke-opacity": ["interpolate", ["linear"], ["zoom"], 12.5, 0, 13.2, 1] } });
+      add("-stop-label", { type: "symbol", filter: ["==", ["get", "kind"], "stop"], minzoom: 15,
+        layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"], "text-size": 9.5,
+          "text-anchor": "top", "text-offset": [0, 0.6], "text-optional": true },
+        paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.2 } });
       // Termini hub
       add("-hub", { type: "circle", filter: ["==", ["get", "kind"], "hub"],
         paint: { "circle-radius": 7, "circle-color": pal.surface, "circle-stroke-color": pal.ink, "circle-stroke-width": 2.5 } });
@@ -346,11 +362,13 @@
       // C east hint dot
       add("-hint", { type: "circle", filter: ["==", ["get", "kind"], "hint"],
         paint: { "circle-radius": 3, "circle-color": pal.inkSoft } });
-      // line letter badges
+      // line ref badges (A/B/C letters, tram + bus numbers)
       add("-badge", { type: "circle", filter: ["==", ["get", "kind"], "badge"],
-        paint: { "circle-radius": 9, "circle-color": lineColorExpr, "circle-stroke-color": pal.surface, "circle-stroke-width": 1.6 } });
+        paint: { "circle-radius": ["case", [">", ["length", ["get", "ref"]], 1], 10, 9],
+          "circle-color": lineColorExpr, "circle-stroke-color": pal.surface, "circle-stroke-width": 1.6 } });
       add("-badge-label", { type: "symbol", filter: ["==", ["get", "kind"], "badge"],
-        layout: { "text-field": ["get", "ref"], "text-font": ["Noto Sans Regular"], "text-size": 12, "text-allow-overlap": true },
+        layout: { "text-field": ["get", "ref"], "text-font": ["Noto Sans Regular"],
+          "text-size": ["case", [">", ["length", ["get", "ref"]], 2], 9, 12], "text-allow-overlap": true },
         paint: { "text-color": "#ffffff" } });
       // place labels (nodes, hub, gates, center, hint)
       add("-label", { type: "symbol",
@@ -405,7 +423,7 @@
       if (transitState[t]) TRANSIT_REFS[t].forEach(r => refPreds.push(["==", ["get", "lineRef"], r]));
     });
     const pred = ["any", ["!", ["has", "lineRef"]], ...refPreds];
-    ["-line", "-node", "-badge", "-badge-label", "-label"].forEach(suf => {
+    ["-line", "-node", "-stop", "-stop-label", "-badge", "-badge-label", "-label"].forEach(suf => {
       const id = "lyr-omurga" + suf;
       if (!map.getLayer(id)) return;
       const base = baseFilters[id];
