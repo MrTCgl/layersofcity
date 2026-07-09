@@ -33,6 +33,8 @@ header{
   height:56px; flex:none; display:flex; align-items:center; gap:12px;
   padding:0 16px; background:transparent; position:relative; z-index:30;
 }
+/* city screen: map is full-screen, header floats over it (no background band) */
+body.city header{position:absolute; top:0; left:0; right:0}
 .logo{display:flex; align-items:center; gap:10px; letter-spacing:.18em; font-size:15px; font-weight:600}
 .logo svg{flex:none}
 .logo .dim{color:var(--ink-soft); font-weight:400}
@@ -74,8 +76,6 @@ main{flex:1; position:relative; overflow:hidden}
 .city-soon circle{fill:var(--ink-soft); opacity:.45}
 .city-soon text{fill:var(--ink-soft); font-size:10px; opacity:0; transition:opacity .2s; pointer-events:none}
 .city-soon:hover text{opacity:.9}
-#worldhint{color:var(--ink-soft); font-size:13px; text-align:center}
-#worldhint b{color:var(--ink); font-weight:600}
 
 /* ── city screen ── */
 #scr-city{flex-direction:row}
@@ -101,11 +101,18 @@ body.city #topchips{display:flex}
   border:1px solid var(--line); border-radius:999px; padding:7px 13px;
   font-size:12.5px; color:var(--ink-soft); box-shadow:var(--shadow);
 }
-.mchip[aria-pressed="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
+.mchip[aria-pressed="true"],.mchip[aria-expanded="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
+/* Hatlar disclosure: metro/tram/bus icons drop below the chip */
+.mchip-wrap{position:relative; display:flex}
+.linemenu{
+  position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+  display:flex; gap:6px; z-index:31;
+}
+.linemenu[hidden]{display:none}
 
 /* city bar (top-left) */
 #citybar{
-  position:absolute; left:14px; top:12px; z-index:15;
+  position:absolute; left:14px; top:64px; z-index:15;
   display:flex; align-items:center; gap:9px;
   background:color-mix(in srgb, var(--surface) 88%, transparent);
   border:1px solid var(--line); border-radius:999px; padding:7px 14px;
@@ -117,7 +124,7 @@ body.city #topchips{display:flex}
 #cb-time{font-variant-numeric:tabular-nums}
 
 /* budget stars (transparent, below city bar) */
-#budgetchip{position:absolute; left:18px; top:60px; z-index:15; display:flex; align-items:center}
+#budgetchip{position:absolute; left:18px; top:110px; z-index:15; display:flex; align-items:center}
 .stars{display:flex; gap:3px}
 .stars button{
   padding:3px; color:var(--ink-soft); opacity:.45; display:grid; place-items:center;

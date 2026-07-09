@@ -223,8 +223,15 @@
     light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8" },
     dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E" }
   };
+  // Transit sub-types inside the Hatlar (omurga) group, toggled from the
+  // metro/tram/bus disclosure under the chip. bus has no data yet -> toggle is
+  // a no-op until an omurga feature carries lineRef "bus".
+  const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c"], tram: ["tram"], bus: ["bus"] };
+  const transitState = { metro: true, tram: true, bus: true };
+
   const cityData = {};          // layerId -> raw FeatureCollection
   const groupState = {};        // groupId -> visible?
+  const baseFilters = {};       // full layer id -> its kind filter (before transit filtering)
 
   async function loadCityData(cityId) {
     // Only fetch layers marked available, so unfinished ones don't 404 in console.
@@ -269,7 +276,10 @@
       if (map.getSource(src)) map.removeSource(src);
       map.addSource(src, { type: "geojson", data: localize(cityData[layerId]) });
 
-      const add = (suffix, spec) => map.addLayer(Object.assign({ id: src + suffix, source: src }, spec));
+      const add = (suffix, spec) => {
+        baseFilters[src + suffix] = spec.filter; // remember for transit filtering
+        map.addLayer(Object.assign({ id: src + suffix, source: src }, spec));
+      };
 
       // gate -> center connector (dashed lilac)
       add("-link", { type: "line", filter: ["==", ["get", "kind"], "link"],
@@ -321,6 +331,24 @@
         paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.2 } });
     });
     applyGroupVisibility();
+    applyTransitFilter();
+  }
+
+  // Show only the transit sub-types currently enabled. Features without a
+  // lineRef (hub, historic center, hint labels) are always kept.
+  function applyTransitFilter() {
+    if (!map) return;
+    const refPreds = [];
+    Object.keys(TRANSIT_REFS).forEach(t => {
+      if (transitState[t]) TRANSIT_REFS[t].forEach(r => refPreds.push(["==", ["get", "lineRef"], r]));
+    });
+    const pred = ["any", ["!", ["has", "lineRef"]], ...refPreds];
+    ["-line", "-node", "-badge", "-badge-label", "-label"].forEach(suf => {
+      const id = "lyr-omurga" + suf;
+      if (!map.getLayer(id)) return;
+      const base = baseFilters[id];
+      map.setFilter(id, base ? ["all", base, pred] : pred);
+    });
   }
 
   function groupOf(layerId) {
@@ -379,13 +407,28 @@
     }, () => { /* permission denied -> stay quiet */ });
   };
 
-  /* Kapılar/Hatlar chips -> toggle whole layer group */
-  document.querySelectorAll("#topchips .mchip").forEach(b => {
+  /* Girişler chip -> toggle its whole layer group */
+  document.querySelectorAll("#topchips .mchip[data-group]").forEach(b => {
     b.onclick = () => {
       const on = b.getAttribute("aria-pressed") !== "true";
       b.setAttribute("aria-pressed", on);
       groupState[b.dataset.group] = on;
       applyGroupVisibility();
+    };
+  });
+  /* Hatlar chip -> reveal metro/tram/bus icons; each icon toggles that transit type */
+  const lineMenu = document.getElementById("linemenu");
+  document.getElementById("chip-omurga").onclick = function () {
+    const open = lineMenu.hidden;
+    lineMenu.hidden = !open;
+    this.setAttribute("aria-expanded", open);
+  };
+  document.querySelectorAll("#linemenu .lchip").forEach(b => {
+    b.onclick = () => {
+      const on = b.getAttribute("aria-pressed") !== "true";
+      b.setAttribute("aria-pressed", on);
+      transitState[b.dataset.transit] = on;
+      applyTransitFilter();
     };
   });
   /* Yaşam drawer chips: state now, per-layer wiring lands in E5 */
