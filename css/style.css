@@ -52,14 +52,20 @@ main{flex:1; position:relative; overflow:hidden}
 .screen.on{opacity:1; visibility:visible}
 
 /* ── world screen ── */
-#scr-world{flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:16px}
+#scr-world{overflow:hidden; touch-action:none}
+/* zoom layer: wordmark + world map scale/pan together, over the full screen */
+#worldzoom{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:6px; padding:16px;
+  transform-origin:0 0; will-change:transform;
+}
 #wordmark{
   font-family:"Ballet",cursive; font-weight:400;
   font-size:clamp(46px,7.5vw,76px); color:var(--ink);
   transform:rotate(-2deg); margin-bottom:2px;
 }
 #wordmark .of{color:var(--lilac)}
-#worldwrap{width:min(1320px,98%); overflow:hidden; touch-action:none}
+#worldwrap{width:min(1320px,98%)}
 #worldmap{width:100%; height:auto; display:block}
 .worlddot{fill:var(--land)}
 :root[data-theme="dark"] .worlddot{fill:#4A4456}
