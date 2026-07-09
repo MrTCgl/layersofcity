@@ -501,6 +501,7 @@
   const lineMenu = document.getElementById("linemenu");
   document.getElementById("chip-omurga").onclick = function () {
     const open = lineMenu.hidden;
+    if (open) closeSheets();            // don't leave a bottom sheet open behind it
     lineMenu.hidden = !open;
     this.setAttribute("aria-expanded", open);
   };
@@ -539,10 +540,25 @@
     const s = document.getElementById(id);
     const show = !s.classList.contains("show");
     closeSheets();
+    closeLineMenu();                     // don't leave the Hatlar icons open behind it
     if (show) { s.classList.add("show"); btn.setAttribute("aria-expanded", "true"); }
   }
   document.getElementById("bb-kesfet").onclick = function () { toggleSheet("sheet-kesfet", this); };
   document.getElementById("bb-ihtiyac").onclick = function () { toggleSheet("sheet-ihtiyac", this); };
+
+  // Close any open pop-up menu (Hatlar icons, Keşfet/İhtiyaç sheets) when the
+  // user taps the map or anywhere outside the menu and its trigger button.
+  function closeLineMenu() {
+    if (lineMenu.hidden) return;
+    lineMenu.hidden = true;
+    document.getElementById("chip-omurga").setAttribute("aria-expanded", "false");
+  }
+  document.addEventListener("click", e => {
+    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu")) return; // inside a menu
+    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga")) return;    // a trigger toggles itself
+    closeSheets();
+    closeLineMenu();
+  });
   document.querySelectorAll(".sheet .chip, #stars button").forEach(b => {
     b.onclick = () => {
       if (b.dataset.b) { // budget stars: single-select with re-tap to clear
