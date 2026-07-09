@@ -45,6 +45,9 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 - Metro C: `#7FA98A` (soluk yeşil) · Tramvay: `#A8A0B5` · Banliyö/FL: `#B5ADA0`
 - Otobüs (kilit hatlar): `#C9AE85` (soluk hardal); metro/tramvaydan ince çizilir
 - Bölgesel tren (FL hatları): `#8FA1B3` (soluk slate); metronun **altında**, ince
+- POI ton aileleri: **Keşfet = lila tonları** (tarihi `#6F5799` → sağlık
+  `#C9BAE8`), **İhtiyaç = kiremit tonları** (hastane `#B34F39` → kütüphane
+  `#F4CDB4`); grup tek renk ailesi olarak okunur, basılı çipler aynı tonu alır
 - Koyu temada aynı hex'ler kullanılır (koyu zeminde zaten yumuşak dururlar).
 
 ## Tipografi
