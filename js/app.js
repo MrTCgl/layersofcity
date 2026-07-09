@@ -307,6 +307,7 @@
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
   const themeState = new Set();   // active POI themes; empty -> no POIs shown
   let crowdOn = false;            // crowded-zone wash visible?
+  const yasamState = {};          // yasam layerId -> visible? (drawer chips, per layer)
 
   const cityData = {};          // layerId -> raw FeatureCollection
   const groupState = {};        // groupId -> visible?
@@ -421,6 +422,16 @@
         layout: { "text-field": ["get", "_sub"], "text-font": ["Noto Sans Regular"],
           "text-size": 9.5, "text-anchor": "top", "text-offset": [0, 2.0], "text-optional": true },
         paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.2 } });
+      // Yaşam: district areas (soft lilac wash + short label) + sub-center axis
+      add("-axis", { type: "line", filter: ["==", ["get", "kind"], "axis"],
+        paint: { "line-color": pal.lilac, "line-width": 1.2, "line-dasharray": [2, 3], "line-opacity": 0.5 } });
+      add("-district", { type: "fill", filter: ["==", ["get", "kind"], "district"],
+        paint: { "fill-color": pal.lilac, "fill-opacity": 0.16 } });
+      add("-district-line", { type: "line", filter: ["==", ["get", "kind"], "district"],
+        paint: { "line-color": pal.lilac, "line-width": 1, "line-opacity": 0.55 } });
+      add("-district-label", { type: "symbol", filter: ["==", ["get", "kind"], "district-label"],
+        layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"], "text-size": 11.5, "text-optional": true },
+        paint: { "text-color": pal.ink, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
       // Keşfet: crowded-zone wash (soft fill, no crisp border — interpretation, not cadastre)
       add("-fill", { type: "fill", filter: ["==", ["get", "kind"], "area"],
         paint: { "fill-color": pal.peach, "fill-opacity": 0.20 } });
@@ -436,19 +447,22 @@
           "text-anchor": "top", "text-offset": [0, 0.7], "text-optional": true },
         paint: { "text-color": pal.ink, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
     });
-    // Layers are added in fetch-resolution order, so pin the two that need a
-    // fixed depth: the crowd wash to the bottom, the POI markers to the top.
-    const fillId = "lyr-kesfet-yogunluk-fill";
-    if (map.getLayer(fillId)) {
-      const firstOther = map.getStyle().layers.find(l => l.id.startsWith("lyr-") && l.id !== fillId);
+    // Layers are added in fetch-resolution order, so pin depth explicitly:
+    // area washes (district fills + crowd wash) sink to the bottom, POI markers rise to the top.
+    const washes = ["lyr-yasam-otel-district", "lyr-yasam-konut-district",
+      "lyr-yasam-altmerkez-district", "lyr-yasam-ogrenci-district", "lyr-kesfet-yogunluk-fill"];
+    washes.forEach(fillId => {
+      if (!map.getLayer(fillId)) return;
+      const firstOther = map.getStyle().layers.find(l => l.id.startsWith("lyr-") && !washes.includes(l.id));
       if (firstOther) map.moveLayer(fillId, firstOther.id);
-    }
+    });
     ["lyr-kesfet-poi-poi", "lyr-kesfet-poi-poi-label"].forEach(id => {
       if (map.getLayer(id)) map.moveLayer(id); // no beforeId -> move to top
     });
     applyGroupVisibility();
     applyTransitFilter();
     applyKesfetVisibility();
+    applyYasamVisibility();
   }
 
   // Show only the transit sub-types currently enabled. Features without a
@@ -475,8 +489,22 @@
   function applyGroupVisibility() {
     if (!map) return;
     Object.keys(cityData).forEach(layerId => {
-      if (groupOf(layerId) === "kesfet") return; // kesfet owned by applyKesfetVisibility
-      const vis = groupState[groupOf(layerId)] ? "visible" : "none";
+      const g = groupOf(layerId);
+      if (g === "kesfet" || g === "yasam") return; // owned by their own visibility fns
+      const vis = groupState[g] ? "visible" : "none";
+      map.getStyle().layers.forEach(l => {
+        if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);
+      });
+    });
+  }
+
+  // Yaşam districts toggle per layer from the right-edge drawer, independent of
+  // the group machinery (like Keşfet).
+  function applyYasamVisibility() {
+    if (!map) return;
+    ["yasam-otel", "yasam-konut", "yasam-altmerkez", "yasam-ogrenci"].forEach(layerId => {
+      if (!cityData[layerId]) return;
+      const vis = yasamState[layerId] ? "visible" : "none";
       map.getStyle().layers.forEach(l => {
         if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);
       });
@@ -595,12 +623,13 @@
       updateOmurgaActive();
     };
   });
-  /* Yaşam drawer chips: state now, per-layer wiring lands in E5 */
+  /* Yaşam drawer chips -> toggle the matching district layer */
   document.querySelectorAll("#drawer .dchip").forEach(b => {
     b.onclick = () => {
       const on = b.getAttribute("aria-pressed") !== "true";
       b.setAttribute("aria-pressed", on);
-      // TODO(E5): toggle the matching yasam layer
+      yasamState[b.dataset.layer] = on;
+      applyYasamVisibility();
     };
   });
   const drawerwrap = document.getElementById("drawerwrap");
