@@ -126,6 +126,7 @@
   let clockTimer = null;
   let meMarker = null;
   let mapFitted = false;    // has the map fit to home once it had real size?
+  let longPressFired = false; // suppress the click that follows a long-press
 
   // Fit the whole-city view, with padding that clears the floating controls.
   function fitHome(animate) {
@@ -145,13 +146,19 @@
     toastTimer = setTimeout(() => toastEl.classList.remove("show"), 3200);
   }
 
-  /* place card: name + external Google Maps directions (no key, no in-app nav) */
+  /* place card: name + external Google Maps link (no key, no in-app nav) */
   const placeCard = document.getElementById("placecard");
+  let cityDisplayName = ""; // set on enterCity; disambiguates name searches
   function showPlaceCard(name, lng, lat) {
-    document.getElementById("pc-name").textContent = name;
-    // Open the place on Google Maps (pin only); the user takes directions there.
+    // Google Maps by place name (+ city) so the destination card is named;
+    // unnamed points fall back to bare coordinates.
+    const query = name
+      ? encodeURIComponent(name + ", " + cityDisplayName)
+      : lat.toFixed(5) + "," + lng.toFixed(5);
+    document.getElementById("pc-name").textContent =
+      name || (lat.toFixed(5) + ", " + lng.toFixed(5));
     document.getElementById("pc-dir").href =
-      "https://www.google.com/maps/search/?api=1&query=" + lat + "," + lng;
+      "https://www.google.com/maps/search/?api=1&query=" + query;
     placeCard.hidden = false;
     requestAnimationFrame(() => placeCard.classList.add("show"));
   }
@@ -176,6 +183,7 @@
   }
 
   async function enterCity(city) {
+    cityDisplayName = city.name;
     document.getElementById("cb-name").textContent = city.name;
     const ph = document.getElementById("cityph");
     try {
@@ -225,11 +233,40 @@
         map.on("mouseleave", id, () => { map.getCanvas().style.cursor = ""; });
       });
       map.on("click", e => {
+        if (longPressFired) { longPressFired = false; return; } // keep the long-press card open
         const live = tappable.filter(id => map.getLayer(id));
         if (!live.length) return;
         const hits = map.queryRenderedFeatures(e.point, { layers: live });
         if (!hits.length) hidePlaceCard();
       });
+
+      // Long-press anywhere on the map -> place card for that spot (coords),
+      // whose Google Maps button hands the point over. Cancelled by movement,
+      // a second finger (pinch) or map pan/zoom.
+      const canvas = map.getCanvas();
+      let lpTimer = null, lpStart = null, lpPointers = 0;
+      const lpCancel = () => { clearTimeout(lpTimer); lpTimer = null; lpStart = null; };
+      canvas.addEventListener("pointerdown", e => {
+        lpPointers++;
+        if (lpPointers > 1) { lpCancel(); return; }
+        lpStart = { x: e.clientX, y: e.clientY };
+        clearTimeout(lpTimer);
+        lpTimer = setTimeout(() => {
+          if (!lpStart) return;
+          const rect = canvas.getBoundingClientRect();
+          const ll = map.unproject([lpStart.x - rect.left, lpStart.y - rect.top]);
+          longPressFired = true;
+          showPlaceCard("", ll.lng, ll.lat);
+          lpStart = null;
+        }, 550);
+      });
+      canvas.addEventListener("pointermove", e => {
+        if (lpStart && Math.hypot(e.clientX - lpStart.x, e.clientY - lpStart.y) > 8) lpCancel();
+      });
+      ["pointerup", "pointercancel"].forEach(t =>
+        canvas.addEventListener(t, () => { lpPointers = Math.max(0, lpPointers - 1); if (!lpPointers) clearTimeout(lpTimer); lpStart = null; }));
+      map.on("movestart", lpCancel);
+      map.on("zoomstart", lpCancel);
 
       // Mobile hardening: if the container wasn't sized at init (screen still
       // transitioning), the map fits to 0×0 and over-zooms. Resize + fit once
