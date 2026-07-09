@@ -59,7 +59,7 @@ main{flex:1; position:relative; overflow:hidden}
   transform:rotate(-2deg); margin-bottom:2px;
 }
 #wordmark .of{color:var(--lilac)}
-#worldwrap{width:min(1320px,98%)}
+#worldwrap{width:min(1320px,98%); overflow:hidden; touch-action:none}
 #worldmap{width:100%; height:auto; display:block}
 .worlddot{fill:var(--land)}
 :root[data-theme="dark"] .worlddot{fill:#4A4456}

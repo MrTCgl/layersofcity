@@ -120,6 +120,43 @@
     });
   }
 
+  /* ── world map pinch-zoom + drag-pan (SVG only; header stays fixed) ── */
+  const worldWrap = document.getElementById("worldwrap");
+  let wScale = 1, wX = 0, wY = 0, wMode = null, wStartDist = 0, wStartScale = 1, wMid = null, wPan = null, wMoved = false;
+  const W_MAX = 6;
+  worldSvg.style.transformOrigin = "0 0";
+  worldSvg.style.willChange = "transform";
+  function wApply() { worldSvg.style.transform = `translate(${wX}px,${wY}px) scale(${wScale})`; }
+  function wClamp() {
+    wScale = Math.max(1, Math.min(W_MAX, wScale));
+    const w = worldWrap.clientWidth, h = worldSvg.clientHeight || worldWrap.clientHeight;
+    wX = Math.max(w * (1 - wScale), Math.min(0, wX));
+    wY = Math.max(h * (1 - wScale), Math.min(0, wY));
+    if (wScale === 1) { wX = 0; wY = 0; }
+  }
+  function resetWorldZoom() { wScale = 1; wX = 0; wY = 0; wApply(); }
+  const wDist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  const wMidpoint = t => { const r = worldWrap.getBoundingClientRect(); return { x: (t[0].clientX + t[1].clientX) / 2 - r.left, y: (t[0].clientY + t[1].clientY) / 2 - r.top }; };
+  worldWrap.addEventListener("touchstart", e => {
+    if (e.touches.length === 2) { wMode = "pinch"; wStartDist = wDist(e.touches); wStartScale = wScale; wMid = wMidpoint(e.touches); wMoved = true; e.preventDefault(); }
+    else if (e.touches.length === 1) { wMode = "pan"; wPan = { x: e.touches[0].clientX - wX, y: e.touches[0].clientY - wY }; wMoved = false; }
+  }, { passive: false });
+  worldWrap.addEventListener("touchmove", e => {
+    if (wMode === "pinch" && e.touches.length === 2) {
+      e.preventDefault();
+      let ns = wStartScale * (wDist(e.touches) / wStartDist);
+      ns = Math.max(1, Math.min(W_MAX, ns));
+      wX = wMid.x - (wMid.x - wX) * (ns / wScale); // zoom around the pinch focal point
+      wY = wMid.y - (wMid.y - wY) * (ns / wScale);
+      wScale = ns; wClamp(); wApply();
+    } else if (wMode === "pan" && e.touches.length === 1 && wScale > 1) {
+      e.preventDefault();
+      wX = e.touches[0].clientX - wPan.x; wY = e.touches[0].clientY - wPan.y;
+      wMoved = true; wClamp(); wApply();
+    }
+  }, { passive: false });
+  worldWrap.addEventListener("touchend", e => { if (e.touches.length === 0) wMode = null; });
+
   /* ── city screen: map + chrome ─────────── */
   let map = null;
   let manifest = null;      // data/<city>/city.json
@@ -697,16 +734,6 @@
   /* ── router ────────────────────────────── */
   const scrWorld = document.getElementById("scr-world");
   const scrCity = document.getElementById("scr-city");
-  const viewportMeta = document.querySelector('meta[name="viewport"]');
-
-  // World screen: let the page pinch-zoom/pan (small SVG on phones). City
-  // screen: lock page zoom (the map owns zoom); locking to maximum-scale=1 also
-  // clamps any leftover world-screen zoom back to 1, so you never get stuck.
-  function setPageZoom(locked) {
-    viewportMeta.setAttribute("content", locked
-      ? "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
-      : "width=device-width, initial-scale=1, viewport-fit=cover");
-  }
 
   function route() {
     const id = location.hash.replace(/^#\/?/, "");
@@ -715,7 +742,6 @@
       scrWorld.classList.remove("on");
       scrCity.classList.add("on");
       document.body.classList.add("city");
-      setPageZoom(true);
       enterCity(city);
     } else {
       if (id) history.replaceState(null, "", "#/"); // unknown city -> world
@@ -723,7 +749,7 @@
       scrCity.classList.remove("on");
       scrWorld.classList.add("on");
       document.body.classList.remove("city");
-      setPageZoom(false);
+      if (typeof resetWorldZoom === "function") resetWorldZoom();
     }
   }
   window.addEventListener("hashchange", route);
