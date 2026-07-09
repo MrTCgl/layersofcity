@@ -73,6 +73,7 @@
     renderWorld(); // soon-labels use i18n
     if (typeof tickClock === "function") tickClock(); // date format follows language
     if (typeof refreshLayerLabels === "function") refreshLayerLabels(); // map labels follow language
+    if (typeof renderInfoCard === "function" && !document.getElementById("infocard").hidden) renderInfoCard();
   }
   SUPPORTED_LANGS.forEach(code => {
     const btn = document.getElementById("lang-" + code);
@@ -584,6 +585,7 @@
     clearInterval(clockTimer);
     clockTimer = null;
     hidePlaceCard();
+    if (typeof closeInfoCard === "function") closeInfoCard();
   }
 
   /* map chrome wiring (static elements, safe before map exists) */
@@ -683,8 +685,44 @@
   document.getElementById("drawertab").onclick = function () {
     const open = drawerwrap.classList.toggle("open");
     this.setAttribute("aria-expanded", open);
-    if (open) { closeSheets(); closeLineMenu(); } // don't leave other menus open behind it
+    if (open) { closeSheets(); closeLineMenu(); closeInfoCard(); } // don't leave other menus open behind it
   };
+
+  /* city info card (künye): language, currency, editorial price table */
+  const infoCard = document.getElementById("infocard");
+  const PRICE_ORDER = ["water05", "petrol1l", "milk1l", "meat1kg", "cheese1kg",
+    "beer05", "bigmac", "espresso", "transitTicket", "airportTrain"];
+  const CURRENCY_SYM = { EUR: "€", USD: "$", GBP: "£", TRY: "₺", JPY: "¥" };
+  function renderInfoCard() {
+    if (!manifest) return;
+    document.getElementById("ic-city").textContent = document.getElementById("cb-name").textContent;
+    const lk = "lang." + (manifest.language || "");
+    document.getElementById("ic-lang").textContent = t(lk) !== lk ? t(lk) : (manifest.language || "—");
+    document.getElementById("ic-currency").textContent = manifest.currency || "—";
+    const P = manifest.prices || {};
+    const sym = CURRENCY_SYM[manifest.currency] || (manifest.currency ? manifest.currency + " " : "");
+    document.getElementById("ic-prices").innerHTML = PRICE_ORDER
+      .filter(k => typeof P[k] === "number")
+      .map(k => `<div class="ic-price"><span>${t("price." + k)}</span><span>${sym}${P[k].toFixed(2)}</span></div>`)
+      .join("");
+    document.getElementById("ic-updated").textContent = P.updated ? t("info.updated") + " " + P.updated : "";
+  }
+  function closeInfoCard() {
+    if (infoCard.hidden) return;
+    infoCard.classList.remove("show");
+    infoCard.hidden = true;
+    document.getElementById("citybar").setAttribute("aria-expanded", "false");
+  }
+  document.getElementById("citybar").onclick = function () {
+    if (infoCard.hidden) {
+      renderInfoCard();
+      closeSheets(); closeLineMenu(); closeDrawer();
+      infoCard.hidden = false;
+      requestAnimationFrame(() => infoCard.classList.add("show"));
+      this.setAttribute("aria-expanded", "true");
+    } else { closeInfoCard(); }
+  };
+  document.getElementById("ic-close").onclick = closeInfoCard;
   function closeSheets() {
     document.querySelectorAll(".sheet").forEach(s => s.classList.remove("show"));
     document.querySelectorAll("#bottombar [aria-expanded]").forEach(b => b.setAttribute("aria-expanded", "false"));
@@ -707,11 +745,12 @@
     document.getElementById("chip-omurga").setAttribute("aria-expanded", "false");
   }
   document.addEventListener("click", e => {
-    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer")) return; // inside a menu
-    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab")) return; // a trigger toggles itself
+    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer, #infocard")) return; // inside a menu
+    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab, #citybar")) return; // a trigger toggles itself
     closeSheets();
     closeLineMenu();
     closeDrawer();
+    closeInfoCard();
   });
   document.querySelectorAll(".sheet .chip, #stars button").forEach(b => {
     b.onclick = () => {
