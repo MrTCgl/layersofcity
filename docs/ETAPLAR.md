@@ -170,6 +170,13 @@ BAĞIMSIZ açıp kapatıyor (yasamState + applyYasamVisibility; applyGroupVisibi
 yasam grubunu atlıyor). Bütçe alanı otel/parioli'de saklı (E8 filtresi için).
 Varlık sürümü v=20260709-4. İki tema × mobil doğrulaması sonraki oturumda.
 
+Ek (2026-07-10, kullanıcı isteği): bölgeler gerçek OSM rione/quartiere
+sınırlarına taşındı (place=quarter/suburb relation'ları; 27 bölgeden 24'ü
+gerçek sınır, Garbatella/San Lorenzo/Tor Vergata OSM'de sınırsız -> el çizimi
+kaldı). Centro Storico = 8 tarihî rione birleşimi (MultiPolygon). Her bölge
+kendine özgü soluk renkte (DISTRICT_COLORS, katmanlar arası tutarlı:
+Trastevere her katmanda aynı yeşil).
+
 ---
 
 ## E6 — İhtiyaçlar katmanı ✅ tamam (2026-07-09)

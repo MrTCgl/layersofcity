@@ -394,6 +394,18 @@
   };
   const poiColorExpr = ["match", ["get", "theme"],
     ...Object.entries(THEME_COLORS).flat(), "#B9A6DC"];
+  // Yaşam district colors — one distinct muted hue per district, stable
+  // across layers (Trastevere is the same green in Oteller and Konutlar).
+  const DISTRICT_COLORS = {
+    "Termini": "#C98A4B", "Centro Storico": "#B85C6E", "Prati": "#5B8FBF",
+    "Monti": "#A66A9E", "Trastevere": "#7FA05B", "EUR": "#4E9A8F",
+    "Monteverde": "#8AA84B", "Testaccio": "#C96A52", "Ostiense": "#6B79B8",
+    "San Giovanni": "#B8863F", "Garbatella": "#9C6BB5", "Parioli": "#B5527C",
+    "Pigneto": "#58A1B8", "Tiburtina": "#A8A04A", "Cinecittà": "#8F6F4B",
+    "San Lorenzo": "#6BAF8C", "Tor Vergata": "#7D74C9"
+  };
+  const districtColorExpr = ["match", ["get", "name"],
+    ...Object.entries(DISTRICT_COLORS).flat(), "#B9A6DC"];
   const PALETTE = {
     light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8" },
     dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E" }
@@ -535,9 +547,9 @@
       add("-axis", { type: "line", filter: ["==", ["get", "kind"], "axis"],
         paint: { "line-color": pal.lilac, "line-width": 1.2, "line-dasharray": [2, 3], "line-opacity": 0.5 } });
       add("-district", { type: "fill", filter: ["==", ["get", "kind"], "district"],
-        paint: { "fill-color": pal.lilac, "fill-opacity": 0.16 } });
+        paint: { "fill-color": districtColorExpr, "fill-opacity": 0.18 } });
       add("-district-line", { type: "line", filter: ["==", ["get", "kind"], "district"],
-        paint: { "line-color": pal.lilac, "line-width": 1, "line-opacity": 0.55 } });
+        paint: { "line-color": districtColorExpr, "line-width": 1.4, "line-opacity": 0.65 } });
       add("-district-label", { type: "symbol", filter: ["==", ["get", "kind"], "district-label"],
         layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"], "text-size": 11.5, "text-optional": true },
         paint: { "text-color": pal.ink, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
