@@ -1,4 +1,4 @@
-# TODO — Geliştirme Turu (2026-07-10) · ✅ ONAYLANDI (uygulama sürüyor)
+# TODO — Geliştirme Turu (2026-07-10) · ✅ TAMAMLANDI
 
 > Kullanıcının 2026-07-10 tarihli toplu isteği. **Onaydan sonra** T1→T10 sırasıyla
 > uygulanır; her T maddesi tek commit + tek PR olarak canlıya alınır (varlık
@@ -52,7 +52,7 @@ gelince yukarı kayarak açılsın, ayrılınca geri saklansın.
   yalnız seçiciler güncellenir.
 - **Kabul:** PC'de hover ile açılıp kapanıyor; mobilde dokunuşla; pan/zoom işlevleri değişmedi.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ## T2 — Altlık değiştirici (3 katman) + sade altlık tamamen yazısız
 
@@ -86,7 +86,7 @@ Durum: ⬜ onay bekliyor
   sade modda hiçbir altlık yazısı yok; tercih localStorage'da; tema değişimi
   yalnız sade modu etkiler.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ## T3 — Koordinat kutusu
 
@@ -105,7 +105,7 @@ haritaya dokununca kutu kapansın.
 - **Kabul:** örnek koordinat yapıştırınca harita uçuyor + kart açılıyor; boş/bozuk
   girişte sessizce hiçbir şey olmuyor; mobilde kutu ekranı taşırmıyor.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ## T4 — Girişler bağlantı çizgileri koyulaştırılsın
 
@@ -116,7 +116,7 @@ Durum: ⬜ onay bekliyor
 `line-width` 2.4→3, `line-opacity` .85→.95.
 - **Kabul:** Girişler açıkken FCO/CIA rotaları ilk bakışta seçiliyor.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ## T5 — Kapı simgeleri: uçak / tren / otobüs / gemi
 
@@ -136,7 +136,7 @@ Durum: ⬜ onay bekliyor
 - **Kabul:** 4 kapı doğru simgeyle görünür (uçak×2, tren×2, otobüs×1);
   tıklanınca yer kartı çalışmaya devam eder; iki temada okunaklı.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ## T6 — Keşfet menüsü: sağlık+yoğunluk çıkar; oteller/yurtlar/kamu girer
 
@@ -172,7 +172,7 @@ o grubun rengiyle renklensin.
 - **Kabul:** 3 yeni tema şehir geneli görünür ve tıklanabilir; sağlık/yoğunluk
   izleri UI+veri+i18n'den tamamen gitti; Keşfet/İhtiyaç etiketi seçim varken renkli.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ## T7 — Sol çekmece: Yaşam → Bölgeler (Turistik/Ticari/Eğitim/Doğal)
 
@@ -202,7 +202,7 @@ değil; yerine şehir geneli 4 bölge türü: **Turistik, Ticari, Eğitim, Doğa
   egitim/dogal` eklenir; çekmece başlık anahtarı `group.yasam` → etiketi "Bölgeler".
 - **Kabul:** 4 tür bağımsız açılıyor; şehir genelinde anlamlı kapsama; renkler ayırt edilebilir.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ## T8 — Bütçe yıldızları kaldırılsın (E8 iptal)
 
@@ -213,7 +213,7 @@ kullanıcı kararı)" işaretlenir; `CLAUDE.md` değişmez kararlardaki bütçe 
 kaldırılır, `PROJE_PLANI.md` H bölümüne iptal notu düşülür.
 - **Kabul:** UI'da yıldız kalmadı; dokümanlar tutarlı.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ## T9 — Dil seçici: tek kısaltma + kayar menü (6 dile hazır)
 
@@ -223,7 +223,7 @@ aktif, diğerleri `disabled` soluk, E10'da açılır). `js/app.js` `SUPPORTED_LA
 mekanizması aynı; menü aç/kapa mevcut belge-tık desenine eklenir.
 - **Kabul:** Tek kısaltma görünüyor; menüden dil değişiyor; kapalı diller soluk.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ## T10 — MD dosyalarının güncellenmesi (çok şehirli geleceğe hazırlık)
 
@@ -244,7 +244,7 @@ Bu turdaki tüm değişikliklerden sonra:
 - **Kabul:** dokümanlar mevcut uygulamayla birebir uyumlu; "yeni şehir" tarifi
   bu boru hattını içeriyor.
 
-Durum: ⬜ onay bekliyor
+Durum: ✅ tamam (2026-07-10)
 
 ---
 

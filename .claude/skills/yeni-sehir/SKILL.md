@@ -34,3 +34,11 @@ Kod değişikliği gerektiren bir eksik bulursan önce kullanıcıya bildir.
 - GeoJSON'ları şişirme: omurga hattı için ~10m hassasiyet yeterli;
   dosya başına hedef < 200KB.
 - Yer adları çevrilmez; ipuçları i18n anahtarıdır.
+
+
+## OSM boru hattı (2026-07-10'dan itibaren zorunlu adım)
+
+Yeni şehrin omurga/kesfet/ihtiyac/bolge katmanları elle çizilmez; `docs/VERI.md`
+→ "OSM üretim boru hattı" bölümündeki Overpass sorguları şehrin bbox'ıyla
+çalıştırılır (kalite vekili + ızgara seyreltme + DP sadeleştirme). Kapılara
+`mode` (plane/train/bus/ship), bölgelere `btype` alanı verilir.

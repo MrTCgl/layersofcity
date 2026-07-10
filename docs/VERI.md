@@ -12,12 +12,11 @@ data/
     layers/
       varis.geojson        # giriş kapıları + merkez bağlantıları
       omurga.geojson       # metro/tram omurgası + merkez işaretleri
-      kesfet-poi.geojson   # ilgi noktaları (tema etiketli)
-      kesfet-yogunluk.geojson
-      yasam-otel.geojson
-      yasam-konut.geojson
-      yasam-altmerkez.geojson
-      yasam-ogrenci.geojson
+      kesfet-poi.geojson   # ilgi noktaları (tema etiketli, şehir geneli)
+      bolge-turistik.geojson # bölge türleri (kind:"district", btype alanlı)
+      bolge-ticari.geojson
+      bolge-egitim.geojson
+      bolge-dogal.geojson
       ihtiyac.geojson        # kategori etiketli ihtiyaç noktaları
     content/
       tr.json              # editoryal metinler + rehberli mod adımları
@@ -126,3 +125,36 @@ en+tr her zaman tam olmalı; diğer diller eksik anahtarda İngilizce'ye düşer
   Süreç: Claude taslak çıkarır → kullanıcı onaylar → GeoJSON'a işlenir.
   Onaysız yorumsal katman yayınlanmaz.
 - Referans belgeler (ATAC resmi PDF haritaları) depoya eklenmez; boyut şişirir.
+
+
+## OSM üretim boru hattı (yeni şehir eklerken aynen uygulanır — 2026-07-10)
+
+Tüm nokta/çizgi/alan katmanları OpenStreetMap Overpass API'sinden **build
+anında** üretilir (çalışma zamanı bağımlılığı yok; atıf altbilgide):
+
+1. **Sorgular** (bbox = şehir `home` sınırları):
+   - omurga: `route=subway/tram/train/bus` relation'ları + istasyon düğümleri
+   - kesfet-poi temaları: `historic|place_of_worship[wikipedia]|attraction`
+     (tarihi), `gallery|arts_centre` (modern), `park|garden|viewpoint` (doğa),
+     `restaurant|cafe|ice_cream[wikidata] + marketplace` (gastronomi),
+     `mall|department_store` (alışveriş), `tourism=hotel` (otel),
+     `dormitory` (yurt), `office=government|townhall|courthouse` (kamu)
+   - ihtiyac: `pharmacy, supermarket, fuel, car_rental, library, museum, hospital`
+   - bolge-*: turistik = merkez rioni + landmark sınırları; ticari =
+     `landuse=commercial|retail` (>0.04 km²); egitim = `amenity=university`
+     poligonları; dogal = adlı `park|nature_reserve` (>0.15 km²)
+2. **Kalite vekili** (Google puanı anahtarlı olduğundan): wikipedia/wikidata
+   kaydı > marka/zincir > adlı; adsızlar elenir; otelde `stars>=4` bonusu.
+3. **Izgara seyreltme:** ~1 km hücrede en iyi aday + kategori tavanı →
+   şehir geneli yayılım, yığılmasız.
+4. **Geometri:** relation way'leri uç-uca dikilir (stitch), Douglas-Peucker
+   (~40 m) ile sadeleştirilir, 5 hane yuvarlanır.
+
+## Ek alanlar (2026-07-10)
+
+| Alan | Nerede | Açıklama |
+|---|---|---|
+| `mode` | varis gate'leri | `plane/train/bus/ship` → kapı simgesi |
+| `btype` | bolge-* | `turistik/ticari/egitim/dogal` → tür rengi |
+| `kind:"stop"` | omurga | tramvay/otobüs/tren durağı (z12.5+) |
+| `kind:"district(-label)"` | bolge-* | bölge poligonu / etiket noktası |
