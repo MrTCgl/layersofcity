@@ -1,4 +1,4 @@
-# TODO — Geliştirme Turu (2026-07-10) · ⏳ ONAY BEKLİYOR
+# TODO — Geliştirme Turu (2026-07-10) · ✅ ONAYLANDI (uygulama sürüyor)
 
 > Kullanıcının 2026-07-10 tarihli toplu isteği. **Onaydan sonra** T1→T10 sırasıyla
 > uygulanır; her T maddesi tek commit + tek PR olarak canlıya alınır (varlık
@@ -17,21 +17,19 @@
 
 ## Açık kararlar (onayda netleşecek)
 
-- **K1 — MapTiler OMT kullanılamaz:** MapTiler karoları API anahtarı ister
-  (anayasa: anahtarlı servis yasak). Önerilen ikame: **OSM Standart raster**
-  (`https://tile.openstreetmap.org/{z}/{x}/{y}.png`, anahtarsız, atıf zorunlu).
-  Kullanıcının istediği "Harita Notları" ve "GPS izleri" anahtarsız eklenebilir:
-  Notlar → `https://api.openstreetmap.org/api/0.6/notes?bbox=...` (JSON),
-  GPS → `https://gps.tile.openstreetmap.org/lines/{z}/{x}/{y}.png` (raster overlay).
-- **K2 — Google uydu kullanılamaz:** Google karoları anahtar + ToS engeli.
-  Önerilen ikame: **Esri World Imagery**
+- **K1 — KARAR (2026-07-10):** Kullanıcı OSM görünümünü istiyor ama rasterdeki
+  küçük POI ikonları OLMASIN dedi → raster yerine **vektör "OSM Detaylı" stili**
+  yazılır (`assets/basemap-detail.json`, OpenFreeMap kaynağı): OSM Standart renk
+  dili (sarı ana yollar, beyaz sokaklar, yeşil parklar, mavi su), yol/semt adları
+  VAR, POI ikonları YOK. Notlar (`api.openstreetmap.org/api/0.6/notes?bbox`) ve
+  GPS izleri (`gps.tile.openstreetmap.org/lines/{z}/{x}/{y}.png`) aç/kapa.
+- **K2 — KARAR (2026-07-10): Esri World Imagery onaylandı.**
   (`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
   anahtarsız, atıfla serbest). Görsel olarak Google uydusuna eşdeğer.
 - **K3 — Roma'da liman yok** (Civitavecchia v1 dışı kararı): gemi simgesi
   altyapısı yine hazırlanır (başka şehirler için), Roma'da kullanılmaz.
-- **K4 — Sağlık/yoğunluk verisi:** UI'dan kaldırılacak (T6); veri dosyalarda
-  dursun mu silinsin mi? Öneri: `kesfet-yogunluk.geojson` silinir, sağlık
-  noktaları `kesfet-poi.geojson`'dan çıkarılır (İhtiyaç'ta hastane zaten var).
+- **K4 — KARAR (2026-07-10): tamamen silinecek** — `kesfet-yogunluk.geojson`
+  + sağlık noktaları + ilgili kod/i18n.
 
 ---
 

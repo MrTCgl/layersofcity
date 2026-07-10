@@ -23,7 +23,7 @@
     theme = theme === "light" ? "dark" : "light";
     localStorage.setItem("loc-theme", theme);
     applyTheme();
-    if (map) {
+    if (map && basemapMode === "sade") {
       // setStyle wipes custom layers; 'style.load' only fires on first load in
       // this MapLibre build, so re-add explicitly once the new style settles.
       map.setStyle(`assets/basemap-${theme}.json`);
@@ -57,6 +57,9 @@
       const v = t(el.dataset.i18nLabel);
       el.setAttribute("aria-label", v);
       el.setAttribute("title", v);
+    });
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+      el.setAttribute("placeholder", t(el.dataset.i18nPh));
     });
     SUPPORTED_LANGS.forEach(code => {
       const btn = document.getElementById("lang-" + code);
@@ -258,8 +261,69 @@
   }
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
-  function basemapUrl() {
+  /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
+  let basemapMode = localStorage.getItem("loc-basemap") || "sade";
+  if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
+  const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
+  function rasterStyle(tiles, attribution) {
+    return { version: 8, glyphs: GLYPHS,
+      sources: { r: { type: "raster", tiles: [tiles], tileSize: 256, attribution } },
+      layers: [{ id: "r", type: "raster", source: "r" }] };
+  }
+  function basemapStyle() {
+    if (basemapMode === "detay") return "assets/basemap-detail.json";
+    if (basemapMode === "uydu") return rasterStyle(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      "Esri, Maxar, Earthstar Geographics");
     return `assets/basemap-${theme}.json`;
+  }
+  function updateBasemapMenu() {
+    document.querySelectorAll("#basemapmenu .bmopt").forEach(b =>
+      b.setAttribute("aria-pressed", b.dataset.bm === basemapMode));
+  }
+  function applyBasemap(mode) {
+    basemapMode = mode;
+    localStorage.setItem("loc-basemap", mode);
+    updateBasemapMenu();
+    if (map) {
+      // style.load doesn't refire after setStyle in this build -> re-add on idle
+      map.setStyle(basemapStyle());
+      map.once("idle", addCityLayers);
+    }
+  }
+
+  /* OSM notes + GPS traces overlays (keyless), toggleable on any basemap */
+  let notesOn = false, gpsOn = false, notesData = null;
+  function addOverlayExtras() {
+    if (!map) return;
+    const firstLyr = (map.getStyle().layers.find(l => l.id.startsWith("lyr-")) || {}).id;
+    if (gpsOn && !map.getSource("gpstrace")) {
+      map.addSource("gpstrace", { type: "raster", tileSize: 256,
+        tiles: ["https://gps.tile.openstreetmap.org/lines/{z}/{x}/{y}.png"] });
+      map.addLayer({ id: "gpstrace", type: "raster", source: "gpstrace",
+        paint: { "raster-opacity": 0.7 } }, firstLyr);
+    }
+    if (!gpsOn && map.getLayer("gpstrace")) { map.removeLayer("gpstrace"); map.removeSource("gpstrace"); }
+    if (notesOn && notesData && !map.getSource("osmnotes")) {
+      map.addSource("osmnotes", { type: "geojson", data: notesData });
+      map.addLayer({ id: "osmnotes-pt", type: "circle", source: "osmnotes",
+        paint: { "circle-radius": 5.5, "circle-color": "#E0A24B",
+          "circle-stroke-color": "#FFFFFF", "circle-stroke-width": 1.6 } });
+    }
+    if (!notesOn && map.getLayer("osmnotes-pt")) { map.removeLayer("osmnotes-pt"); map.removeSource("osmnotes"); }
+  }
+  async function fetchNotes() {
+    if (notesData || !manifest) return;
+    try {
+      const [[w, s], [e, n]] = manifest.maxBounds;
+      const r = await fetch(`https://api.openstreetmap.org/api/0.6/notes.json?bbox=${w},${s},${e},${n}&limit=100&closed=0`);
+      if (r.ok) {
+        const d = await r.json();
+        notesData = { type: "FeatureCollection", features: (d.features || []).map(f => ({
+          type: "Feature", geometry: f.geometry,
+          properties: { name: ((f.properties.comments || [])[0] || {}).text || "OSM note" } })) };
+      }
+    } catch { /* offline -> toggle just does nothing visible */ }
   }
 
   function tickClock() {
@@ -292,7 +356,7 @@
       await loadCityData(city.id);   // fetch layer geojson before the map draws
       map = new maplibregl.Map({
         container: "map",
-        style: basemapUrl(),
+        style: basemapStyle(),
         bounds: manifest.home,
         fitBoundsOptions: { padding: 24 },
         minZoom: manifest.zoom.min,
@@ -321,9 +385,15 @@
         map.on("mouseenter", id, () => { map.getCanvas().style.cursor = "pointer"; });
         map.on("mouseleave", id, () => { map.getCanvas().style.cursor = ""; });
       });
+      map.on("click", "osmnotes-pt", e => {
+        const f = e.features && e.features[0];
+        if (!f) return;
+        const [lng, lat] = f.geometry.coordinates;
+        showPlaceCard(f.properties.name || "OSM note", lng, lat);
+      });
       map.on("click", e => {
         if (longPressFired) { longPressFired = false; return; } // keep the long-press card open
-        const live = tappable.filter(id => map.getLayer(id));
+        const live = tappable.concat(["osmnotes-pt"]).filter(id => map.getLayer(id));
         if (!live.length) return;
         const hits = map.queryRenderedFeatures(e.point, { layers: live });
         if (!hits.length) hidePlaceCard();
@@ -407,8 +477,8 @@
   const districtColorExpr = ["match", ["get", "name"],
     ...Object.entries(DISTRICT_COLORS).flat(), "#B9A6DC"];
   const PALETTE = {
-    light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8" },
-    dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E" }
+    light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8", linkStrong: "#7C5FB0" },
+    dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E", linkStrong: "#9B85CC" }
   };
   // Transit sub-types inside the Hatlar (omurga) group, toggled from the
   // metro/tram/bus disclosure under the chip. Metromare (lineRef "rail")
@@ -477,7 +547,7 @@
 
       // gate -> center connector (dashed lilac)
       add("-link", { type: "line", filter: ["==", ["get", "kind"], "link"],
-        paint: { "line-color": pal.lilac, "line-width": 2.4, "line-dasharray": [1, 2.5], "line-opacity": 0.85 },
+        paint: { "line-color": pal.linkStrong, "line-width": 3, "line-dasharray": [1, 2.2], "line-opacity": 0.95 },
         layout: { "line-cap": "round" } });
       // regional rail (FL trains) — drawn beneath metro/tram/bus, thin
       add("-railline", { type: "line",
@@ -586,6 +656,7 @@
     applyKesfetVisibility();
     applyIhtiyacVisibility();
     applyYasamVisibility();
+    addOverlayExtras();
   }
 
   // Show only the transit sub-types currently enabled. Features without a
@@ -686,7 +757,74 @@
   /* map chrome wiring (static elements, safe before map exists) */
   document.getElementById("zoom-in").onclick = () => map && map.zoomIn();
   document.getElementById("zoom-out").onclick = () => map && map.zoomOut();
-  document.getElementById("zoom-home").onclick = () => fitHome(true);
+  /* basemap menu + overlay toggles */
+  const basemapMenu = document.getElementById("basemapmenu");
+  function closeBasemapMenu() {
+    basemapMenu.classList.remove("show");
+    basemapMenu.hidden = true;
+    document.getElementById("basemapbtn").setAttribute("aria-expanded", "false");
+  }
+  document.getElementById("basemapbtn").onclick = function () {
+    if (basemapMenu.hidden) {
+      updateBasemapMenu();
+      basemapMenu.hidden = false;
+      requestAnimationFrame(() => basemapMenu.classList.add("show"));
+      this.setAttribute("aria-expanded", "true");
+      closeCoordBox();
+    } else closeBasemapMenu();
+  };
+  document.querySelectorAll("#basemapmenu .bmopt").forEach(b => {
+    b.onclick = () => { applyBasemap(b.dataset.bm); };
+  });
+  document.getElementById("tog-notes").onclick = async function () {
+    notesOn = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", notesOn);
+    if (notesOn) await fetchNotes();
+    addOverlayExtras();
+  };
+  document.getElementById("tog-gps").onclick = function () {
+    gpsOn = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", gpsOn);
+    addOverlayExtras();
+  };
+
+  /* coordinate box: paste "lat, lon" -> fly there + place card */
+  const coordBox = document.getElementById("coordbox");
+  const coordInput = document.getElementById("coordinput");
+  function closeCoordBox() {
+    coordBox.classList.remove("show");
+    coordBox.hidden = true;
+  }
+  document.getElementById("coordbtn").onclick = function () {
+    if (coordBox.hidden) {
+      coordBox.hidden = false;
+      requestAnimationFrame(() => { coordBox.classList.add("show"); coordInput.focus(); });
+      closeBasemapMenu();
+    } else closeCoordBox();
+  };
+  function tryGoCoord() {
+    if (!map || !manifest) return;
+    const m = coordInput.value.match(/(-?\d{1,3}(?:\.\d+)?)[,;\s]+(-?\d{1,3}(?:\.\d+)?)/);
+    if (!m) return;
+    let lat = +m[1], lon = +m[2];
+    const [[w, s], [e, n]] = manifest.maxBounds;
+    const ok = (la, lo) => la > s && la < n && lo > w && lo < e;
+    if (!ok(lat, lon)) { if (ok(lon, lat)) { const tmp = lat; lat = lon; lon = tmp; } else return; }
+    map.flyTo({ center: [lon, lat], zoom: Math.max(map.getZoom(), 15) });
+    showPlaceCard("", lon, lat);
+  }
+  coordInput.addEventListener("keydown", e => { if (e.key === "Enter") tryGoCoord(); });
+  coordInput.addEventListener("paste", () => setTimeout(tryGoCoord, 0));
+
+  const zoomctl = document.getElementById("zoomctl");
+  document.getElementById("zoom-home").onclick = () => {
+    // no hover on touch: first tap reveals the hidden +/−/pan stack
+    if (matchMedia("(hover: none)").matches && !zoomctl.classList.contains("open")) {
+      zoomctl.classList.add("open");
+      return;
+    }
+    fitHome(true);
+  };
 
   /* grab-pan: press the hand button and drag to move the map, no mouse-drag on
      the map needed. Pointer capture keeps it tracking outside the button. */
@@ -852,12 +990,15 @@
     document.getElementById("chip-omurga").setAttribute("aria-expanded", "false");
   }
   document.addEventListener("click", e => {
-    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer, #infocard")) return; // inside a menu
-    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab, #citybar")) return; // a trigger toggles itself
+    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer, #infocard, #basemapmenu, #coordbox")) return; // inside a menu
+    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab, #citybar, #basemapbtn, #coordbtn")) return; // a trigger toggles itself
     closeSheets();
     closeLineMenu();
     closeDrawer();
     closeInfoCard();
+    closeBasemapMenu();
+    closeCoordBox();
+    if (!e.target.closest("#zoomctl")) zoomctl.classList.remove("open");
   });
   document.querySelectorAll(".sheet .chip, #stars button").forEach(b => {
     b.onclick = () => {
