@@ -21,15 +21,11 @@
   "price.airportTrain": "Havaalanı treni",
   "group.varis": "Girişler",
   "group.omurga": "Hatlar",
-  "group.yasam": "Yaşam",
+  "group.yasam": "Bölgeler",
   "transit.metro": "metro",
   "transit.tram": "tramvay",
   "transit.bus": "otobüs",
   "transit.train": "tren",
-  "layer.otel": "Oteller",
-  "layer.konut": "Konutlar",
-  "layer.altmerkez": "Alt merkezler",
-  "layer.ogrenci": "Öğrenciler",
   "bb.kesfet": "Keşfet",
   "bb.ihtiyac": "İhtiyaç",
   "th.tarihi": "tarihi",
@@ -70,5 +66,9 @@
   "coord.ph": "enlem, boylam yapıştır",
   "th.otel": "oteller",
   "th.yurt": "yurtlar",
-  "th.kamu": "kamu"
+  "th.kamu": "kamu",
+  "bolge.turistik": "Turistik",
+  "bolge.ticari": "Ticari",
+  "bolge.egitim": "Eğitim",
+  "bolge.dogal": "Doğal"
 }

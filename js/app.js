@@ -464,18 +464,10 @@
   };
   const poiColorExpr = ["match", ["get", "theme"],
     ...Object.entries(THEME_COLORS).flat(), "#B9A6DC"];
-  // Yaşam district colors — one distinct muted hue per district, stable
-  // across layers (Trastevere is the same green in Oteller and Konutlar).
-  const DISTRICT_COLORS = {
-    "Termini": "#C98A4B", "Centro Storico": "#B85C6E", "Prati": "#5B8FBF",
-    "Monti": "#A66A9E", "Trastevere": "#7FA05B", "EUR": "#4E9A8F",
-    "Monteverde": "#8AA84B", "Testaccio": "#C96A52", "Ostiense": "#6B79B8",
-    "San Giovanni": "#B8863F", "Garbatella": "#9C6BB5", "Parioli": "#B5527C",
-    "Pigneto": "#58A1B8", "Tiburtina": "#A8A04A", "Cinecittà": "#8F6F4B",
-    "San Lorenzo": "#6BAF8C", "Tor Vergata": "#7D74C9"
-  };
-  const districtColorExpr = ["match", ["get", "name"],
-    ...Object.entries(DISTRICT_COLORS).flat(), "#B9A6DC"];
+  // Zone colors — one color per zone TYPE (turistik/ticari/egitim/dogal)
+  const BTYPE_COLORS = { "turistik": "#B85C6E", "ticari": "#5B8FBF", "egitim": "#B8863F", "dogal": "#5E9A6B" };
+  const districtColorExpr = ["match", ["get", "btype"],
+    ...Object.entries(BTYPE_COLORS).flat(), "#B9A6DC"];
   const PALETTE = {
     light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8", linkStrong: "#7C5FB0" },
     dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E", linkStrong: "#9B85CC" }
@@ -489,7 +481,7 @@
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
   const themeState = new Set();   // active POI themes; empty -> no POIs shown
   const ihState = new Set();      // active İhtiyaç categories; empty -> hidden
-  const yasamState = {};          // yasam layerId -> visible? (drawer chips, per layer)
+  const bolgeState = {};          // bolge layerId -> visible? (drawer chips, per layer)
 
   const cityData = {};          // layerId -> raw FeatureCollection
   const groupState = {};        // groupId -> visible?
@@ -665,8 +657,8 @@
     });
     // Layers are added in fetch-resolution order, so pin depth explicitly:
     // area washes (district fills + crowd wash) sink to the bottom, POI markers rise to the top.
-    const washes = ["lyr-yasam-otel-district", "lyr-yasam-konut-district",
-      "lyr-yasam-altmerkez-district", "lyr-yasam-ogrenci-district"];
+    const washes = ["lyr-bolge-turistik-district", "lyr-bolge-ticari-district",
+      "lyr-bolge-egitim-district", "lyr-bolge-dogal-district"];
     washes.forEach(fillId => {
       if (!map.getLayer(fillId)) return;
       const firstOther = map.getStyle().layers.find(l => l.id.startsWith("lyr-") && !washes.includes(l.id));
@@ -682,7 +674,7 @@
     applyTransitFilter();
     applyKesfetVisibility();
     applyIhtiyacVisibility();
-    applyYasamVisibility();
+    applyBolgeVisibility();
     addOverlayExtras();
   }
 
@@ -711,7 +703,7 @@
     if (!map) return;
     Object.keys(cityData).forEach(layerId => {
       const g = groupOf(layerId);
-      if (g === "kesfet" || g === "yasam" || g === "ihtiyaclar") return; // owned by their own visibility fns
+      if (g === "kesfet" || g === "bolgeler" || g === "ihtiyaclar") return; // owned by their own visibility fns
       const vis = groupState[g] ? "visible" : "none";
       map.getStyle().layers.forEach(l => {
         if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);
@@ -719,13 +711,13 @@
     });
   }
 
-  // Yaşam districts toggle per layer from the right-edge drawer, independent of
+  // City zones toggle per layer from the left-edge drawer, independent of
   // the group machinery (like Keşfet).
-  function applyYasamVisibility() {
+  function applyBolgeVisibility() {
     if (!map) return;
-    ["yasam-otel", "yasam-konut", "yasam-altmerkez", "yasam-ogrenci"].forEach(layerId => {
+    ["bolge-turistik", "bolge-ticari", "bolge-egitim", "bolge-dogal"].forEach(layerId => {
       if (!cityData[layerId]) return;
-      const vis = yasamState[layerId] ? "visible" : "none";
+      const vis = bolgeState[layerId] ? "visible" : "none";
       map.getStyle().layers.forEach(l => {
         if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);
       });
@@ -925,13 +917,13 @@
       updateOmurgaActive();
     };
   });
-  /* Yaşam drawer chips -> toggle the matching district layer */
+  /* zone drawer chips -> toggle the matching zone layer */
   document.querySelectorAll("#drawer .dchip").forEach(b => {
     b.onclick = () => {
       const on = b.getAttribute("aria-pressed") !== "true";
       b.setAttribute("aria-pressed", on);
-      yasamState[b.dataset.layer] = on;
-      applyYasamVisibility();
+      bolgeState[b.dataset.layer] = on;
+      applyBolgeVisibility();
     };
   });
   const drawerwrap = document.getElementById("drawerwrap");

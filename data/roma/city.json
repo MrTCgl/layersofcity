@@ -36,11 +36,11 @@
     "varis",
     "omurga",
     "kesfet-poi",
-    "yasam-otel",
-    "yasam-konut",
-    "yasam-altmerkez",
-    "yasam-ogrenci",
-    "ihtiyac"
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
   ],
   "prices": {
     "updated": "2026-07",
@@ -88,12 +88,12 @@
       ]
     },
     {
-      "id": "yasam",
+      "id": "bolgeler",
       "layers": [
-        "yasam-otel",
-        "yasam-konut",
-        "yasam-altmerkez",
-        "yasam-ogrenci"
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
       ],
       "defaultOn": false
     },

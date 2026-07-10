@@ -21,15 +21,11 @@
   "price.airportTrain": "Airport train",
   "group.varis": "Entrances",
   "group.omurga": "Lines",
-  "group.yasam": "Living",
+  "group.yasam": "Zones",
   "transit.metro": "metro",
   "transit.tram": "tram",
   "transit.bus": "bus",
   "transit.train": "train",
-  "layer.otel": "Hotels",
-  "layer.konut": "Housing",
-  "layer.altmerkez": "Sub-centers",
-  "layer.ogrenci": "Students",
   "bb.kesfet": "Explore",
   "bb.ihtiyac": "Needs",
   "th.tarihi": "historic",
@@ -70,5 +66,9 @@
   "coord.ph": "paste lat, lon",
   "th.otel": "hotels",
   "th.yurt": "dorms",
-  "th.kamu": "public"
+  "th.kamu": "public",
+  "bolge.turistik": "Tourist",
+  "bolge.ticari": "Commercial",
+  "bolge.egitim": "Education",
+  "bolge.dogal": "Nature"
 }
