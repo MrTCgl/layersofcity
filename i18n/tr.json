@@ -30,7 +30,6 @@
   "layer.konut": "Konutlar",
   "layer.altmerkez": "Alt merkezler",
   "layer.ogrenci": "Öğrenciler",
-  "layer.yogunluk": "Yoğunluk",
   "bb.kesfet": "Keşfet",
   "bb.ihtiyac": "İhtiyaç",
   "th.tarihi": "tarihi",
@@ -38,7 +37,6 @@
   "th.doga": "doğa",
   "th.gastronomi": "gastronomi",
   "th.alisveris": "alışveriş",
-  "th.saglik": "sağlık",
   "ih.kiralama": "kiralık araç",
   "ih.market": "market",
   "ih.muze": "müze",
@@ -69,5 +67,8 @@
   "base.notlar": "OSM notları",
   "base.gps": "GPS izleri",
   "coord.go": "koordinata git",
-  "coord.ph": "enlem, boylam yapıştır"
+  "coord.ph": "enlem, boylam yapıştır",
+  "th.otel": "oteller",
+  "th.yurt": "yurtlar",
+  "th.kamu": "kamu"
 }

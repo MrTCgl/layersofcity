@@ -30,7 +30,6 @@
   "layer.konut": "Housing",
   "layer.altmerkez": "Sub-centers",
   "layer.ogrenci": "Students",
-  "layer.yogunluk": "Crowds",
   "bb.kesfet": "Explore",
   "bb.ihtiyac": "Needs",
   "th.tarihi": "historic",
@@ -38,7 +37,6 @@
   "th.doga": "nature",
   "th.gastronomi": "food",
   "th.alisveris": "shopping",
-  "th.saglik": "health",
   "ih.kiralama": "car rental",
   "ih.market": "groceries",
   "ih.muze": "museums",
@@ -69,5 +67,8 @@
   "base.notlar": "OSM notes",
   "base.gps": "GPS traces",
   "coord.go": "go to coordinates",
-  "coord.ph": "paste lat, lon"
+  "coord.ph": "paste lat, lon",
+  "th.otel": "hotels",
+  "th.yurt": "dorms",
+  "th.kamu": "public"
 }

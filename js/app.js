@@ -457,8 +457,8 @@
   // POI marker tones: Keşfet = shades of lilac, İhtiyaç = shades of terracotta.
   // One hue per group, so the map reads as two families at a glance.
   const THEME_COLORS = {
-    "tarihi": "#6F5799", "modern": "#8168AC", "doga": "#937CBE",
-    "gastronomi": "#A590CE", "alisveris": "#B7A5DC", "saglik": "#C9BAE8",
+    "kamu": "#4A3970", "tarihi": "#5F4A8C", "otel": "#7460A3", "modern": "#8A76B8",
+    "doga": "#9F8CCA", "gastronomi": "#B3A2D9", "alisveris": "#C6B8E6", "yurt": "#8A5FA0",
     "hastane": "#B34F39", "eczane": "#C1654B", "kiralik-arac": "#CE7A5E",
     "yakit": "#DA8F72", "market": "#E4A487", "muze": "#EDB99D", "kutuphane": "#F4CDB4"
   };
@@ -489,7 +489,6 @@
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
   const themeState = new Set();   // active POI themes; empty -> no POIs shown
   const ihState = new Set();      // active İhtiyaç categories; empty -> hidden
-  let crowdOn = false;            // crowded-zone wash visible?
   const yasamState = {};          // yasam layerId -> visible? (drawer chips, per layer)
 
   const cityData = {};          // layerId -> raw FeatureCollection
@@ -655,13 +654,6 @@
       add("-district-label", { type: "symbol", filter: ["==", ["get", "kind"], "district-label"],
         layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"], "text-size": 11.5, "text-optional": true },
         paint: { "text-color": pal.ink, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
-      // Keşfet: crowded-zone wash (soft fill, no crisp border — interpretation, not cadastre)
-      add("-fill", { type: "fill", filter: ["==", ["get", "kind"], "area"],
-        paint: { "fill-color": pal.peach, "fill-opacity": 0.20 } });
-      add("-area-label", { type: "symbol", filter: ["==", ["get", "kind"], "area-label"],
-        layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"],
-          "text-size": 11, "text-optional": true },
-        paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
       // Keşfet/İhtiyaç: POI markers + labels (stroke tone = theme family)
       add("-poi", { type: "circle", filter: ["==", ["get", "kind"], "poi"],
         paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.5, 14, 5.5],
@@ -674,7 +666,7 @@
     // Layers are added in fetch-resolution order, so pin depth explicitly:
     // area washes (district fills + crowd wash) sink to the bottom, POI markers rise to the top.
     const washes = ["lyr-yasam-otel-district", "lyr-yasam-konut-district",
-      "lyr-yasam-altmerkez-district", "lyr-yasam-ogrenci-district", "lyr-kesfet-yogunluk-fill"];
+      "lyr-yasam-altmerkez-district", "lyr-yasam-ogrenci-district"];
     washes.forEach(fillId => {
       if (!map.getLayer(fillId)) return;
       const firstOther = map.getStyle().layers.find(l => l.id.startsWith("lyr-") && !washes.includes(l.id));
@@ -754,10 +746,7 @@
       const pred = ["any", ...themes.map(th => ["==", ["get", "theme"], th])];
       map.setFilter(id, themes.length ? ["all", base, pred] : base);
     });
-    ["-fill", "-area-label"].forEach(suf => {
-      const id = "lyr-kesfet-yogunluk" + suf;
-      if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", crowdOn ? "visible" : "none");
-    });
+    document.getElementById("bb-kesfet").classList.toggle("haslayers", themeState.size > 0);
   }
 
   // İhtiyaç POIs: same machinery as Keşfet, own category set.
@@ -773,6 +762,7 @@
       const pred = ["any", ...cats.map(c => ["==", ["get", "theme"], c])];
       map.setFilter(id, cats.length ? ["all", base, pred] : base);
     });
+    document.getElementById("bb-ihtiyac").classList.toggle("haslayers", ihState.size > 0);
   }
   function refreshLayerLabels() { // on language change
     if (!map) return;
@@ -1054,9 +1044,6 @@
         } else if (b.dataset.ih) {                // İhtiyaç category chip -> filter need points
           if (on) ihState.add(b.dataset.ih); else ihState.delete(b.dataset.ih);
           applyIhtiyacVisibility();
-        } else if (b.id === "chip-yog") {         // crowded-zone wash
-          crowdOn = on;
-          applyKesfetVisibility();
         }
       }
     };

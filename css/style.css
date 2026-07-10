@@ -201,6 +201,9 @@ body.city #topchips{display:flex}
 }
 #bottombar button{padding:8px 18px; border-radius:999px; font-size:13.5px; color:var(--ink-soft)}
 #bottombar button[aria-expanded="true"]{background:var(--lilac); color:#fff}
+/* label takes its group's family color while any of its layers are on */
+#bottombar #bb-kesfet.haslayers{background:#8A76B8; color:#fff}
+#bottombar #bb-ihtiyac.haslayers{background:#C1654B; color:#fff}
 .sheet{
   position:absolute; left:50%; bottom:64px; transform:translateX(-50%) translateY(10px);
   max-width:calc(100% - 24px); z-index:16; opacity:0; pointer-events:none; transition:all .25s;
@@ -214,12 +217,14 @@ body.city #topchips{display:flex}
 }
 .ichip[aria-pressed="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
 /* pressed chips take their theme tone (Keşfet = lilac family, İhtiyaç = terracotta family) */
-.ichip[data-th="tarihi"][aria-pressed="true"]{background:#6F5799; border-color:#6F5799}
-.ichip[data-th="modern"][aria-pressed="true"]{background:#8168AC; border-color:#8168AC}
-.ichip[data-th="doga"][aria-pressed="true"]{background:#937CBE; border-color:#937CBE}
-.ichip[data-th="gastronomi"][aria-pressed="true"]{background:#A590CE; border-color:#A590CE}
-.ichip[data-th="alisveris"][aria-pressed="true"]{background:#B7A5DC; border-color:#B7A5DC}
-.ichip[data-th="saglik"][aria-pressed="true"]{background:#C9BAE8; border-color:#C9BAE8}
+.ichip[data-th="kamu"][aria-pressed="true"]{background:#4A3970; border-color:#4A3970}
+.ichip[data-th="tarihi"][aria-pressed="true"]{background:#5F4A8C; border-color:#5F4A8C}
+.ichip[data-th="otel"][aria-pressed="true"]{background:#7460A3; border-color:#7460A3}
+.ichip[data-th="modern"][aria-pressed="true"]{background:#8A76B8; border-color:#8A76B8}
+.ichip[data-th="doga"][aria-pressed="true"]{background:#9F8CCA; border-color:#9F8CCA}
+.ichip[data-th="gastronomi"][aria-pressed="true"]{background:#B3A2D9; border-color:#B3A2D9}
+.ichip[data-th="alisveris"][aria-pressed="true"]{background:#C6B8E6; border-color:#C6B8E6}
+.ichip[data-th="yurt"][aria-pressed="true"]{background:#8A5FA0; border-color:#8A5FA0}
 .ichip[data-ih="hastane"][aria-pressed="true"]{background:#B34F39; border-color:#B34F39}
 .ichip[data-ih="eczane"][aria-pressed="true"]{background:#C1654B; border-color:#C1654B}
 .ichip[data-ih="kiralik-arac"][aria-pressed="true"]{background:#CE7A5E; border-color:#CE7A5E}
