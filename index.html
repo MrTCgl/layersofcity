@@ -7,7 +7,7 @@
 <meta name="description" content="Read a new city, layer by layer.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B9A6DC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L21 8 L12 13 L3 8 Z'/%3E%3Cpath d='M3 12.5 L12 17.5 L21 12.5' opacity='.55'/%3E%3Cpath d='M3 17 L12 22 L21 17' opacity='.25'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/vendor/maplibre-gl.css">
-<link rel="stylesheet" href="css/style.css?v=20260710-6">
+<link rel="stylesheet" href="css/style.css?v=20260710-7">
 </head>
 <body>
 
@@ -35,9 +35,16 @@
     </div>
   </div>
   <div class="grow"></div>
-  <div class="seg" role="group" aria-label="language">
-    <button id="lang-tr" aria-pressed="false">TR</button>
-    <button id="lang-en" aria-pressed="false">EN</button>
+  <div class="langwrap">
+    <button id="langbtn" aria-expanded="false" aria-label="language">TR</button>
+    <div id="langmenu" hidden>
+      <button data-lang="tr">TR</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="de" disabled>DE</button>
+      <button data-lang="fr" disabled>FR</button>
+      <button data-lang="it" disabled>IT</button>
+      <button data-lang="es" disabled>ES</button>
+    </div>
   </div>
   <button class="iconbtn" id="themebtn" data-i18n-label="aria.theme">
     <svg id="ic-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20 13.5 A8.5 8.5 0 1 1 10.5 4 A7 7 0 0 0 20 13.5 Z"/></svg>
@@ -89,13 +96,6 @@
         <div class="ic-prices" id="ic-prices"></div>
         <div class="ic-weather" id="ic-weather"></div>
         <div class="ic-updated" id="ic-updated"></div>
-      </div>
-
-      <!-- budget stars (filtering lands in E8) -->
-      <div id="budgetchip">
-        <span class="stars" id="stars" role="group" data-i18n-label="budget">
-          <button data-b="1" aria-label="1"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button><button data-b="2" aria-label="2"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button><button data-b="3" aria-label="3"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9L3.5 9.7l5.9-.9Z"/></svg></button>
-        </span>
       </div>
 
       <!-- left-edge drawer: city zones (turistik/ticari/egitim/dogal) -->
@@ -188,7 +188,7 @@
 </main>
 
 <script src="assets/vendor/maplibre-gl.js"></script>
-<script src="js/world-dots.js?v=20260710-6"></script>
-<script src="js/app.js?v=20260710-6"></script>
+<script src="js/world-dots.js?v=20260710-7"></script>
+<script src="js/app.js?v=20260710-7"></script>
 </body>
 </html>

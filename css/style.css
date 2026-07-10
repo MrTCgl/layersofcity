@@ -39,9 +39,21 @@ body.city header{position:absolute; top:0; left:0; right:0}
 .logo svg{flex:none}
 .logo .dim{color:var(--ink-soft); font-weight:400}
 header .grow{flex:1}
-.seg{display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden}
-.seg button{padding:5px 12px; font-size:12px; letter-spacing:.06em; color:var(--ink-soft)}
-.seg button[aria-pressed="true"]{background:var(--lilac); color:var(--surface)}
+.langwrap{position:relative}
+#langbtn{padding:6px 13px; font-size:12px; letter-spacing:.06em; border:1px solid var(--line);
+  border-radius:999px; color:var(--ink-soft); background:color-mix(in srgb, var(--surface) 88%, transparent)}
+#langbtn[aria-expanded="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
+#langmenu{position:absolute; right:0; top:calc(100% + 6px); z-index:40; width:64px;
+  background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow);
+  padding:5px; display:flex; flex-direction:column; gap:2px;
+  opacity:0; transform:translateY(-4px); pointer-events:none; transition:opacity .2s, transform .2s}
+#langmenu.show{opacity:1; transform:none; pointer-events:auto}
+#langmenu[hidden]{display:none}
+#langmenu button{padding:6px 0; border-radius:8px; font-size:12px; letter-spacing:.06em; color:var(--ink-soft)}
+#langmenu button:hover:not(:disabled){background:var(--powder); color:var(--ink)}
+:root[data-theme="dark"] #langmenu button:hover:not(:disabled){background:var(--line)}
+#langmenu button.on{background:var(--lilac); color:#fff}
+#langmenu button:disabled{opacity:.35; cursor:default}
 .iconbtn{width:36px; height:36px; display:grid; place-items:center; border-radius:999px; color:var(--ink-soft)}
 .iconbtn:hover{background:var(--powder); color:var(--ink)}
 :root[data-theme="dark"] .iconbtn:hover{background:var(--line)}
@@ -161,15 +173,6 @@ body.city #topchips{display:flex}
 .ic-wx .ic-wi{color:var(--peach); display:inline-flex}
 .ic-wx .ic-wt{margin-left:auto; font-variant-numeric:tabular-nums}
 .ic-updated{margin-top:9px; font-size:11px; color:var(--ink-soft)}
-
-/* budget stars (transparent, below city bar) */
-#budgetchip{position:absolute; left:18px; top:110px; z-index:15; display:flex; align-items:center}
-.stars{display:flex; gap:3px}
-.stars button{
-  padding:3px; color:var(--ink-soft); opacity:.45; display:grid; place-items:center;
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,.15));
-}
-.stars button.on{color:var(--peach); opacity:1}
 
 /* left-edge drawer (moved off the right so it clears the zoom +/- stack) */
 #drawerwrap{position:absolute; left:0; top:50%; transform:translateY(-50%); display:flex; flex-direction:row-reverse; align-items:center; z-index:15}

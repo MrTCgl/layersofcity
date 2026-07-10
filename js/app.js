@@ -61,10 +61,9 @@
     document.querySelectorAll("[data-i18n-ph]").forEach(el => {
       el.setAttribute("placeholder", t(el.dataset.i18nPh));
     });
-    SUPPORTED_LANGS.forEach(code => {
-      const btn = document.getElementById("lang-" + code);
-      if (btn) btn.setAttribute("aria-pressed", code === lang);
-    });
+    document.getElementById("langbtn").textContent = lang.toUpperCase();
+    document.querySelectorAll("#langmenu button").forEach(b =>
+      b.classList.toggle("on", b.dataset.lang === lang));
     document.documentElement.lang = lang;
   }
 
@@ -78,9 +77,20 @@
     if (typeof refreshLayerLabels === "function") refreshLayerLabels(); // map labels follow language
     if (typeof renderInfoCard === "function" && !document.getElementById("infocard").hidden) renderInfoCard();
   }
-  SUPPORTED_LANGS.forEach(code => {
-    const btn = document.getElementById("lang-" + code);
-    if (btn) btn.onclick = () => setLang(code);
+  const langMenu = document.getElementById("langmenu");
+  function closeLangMenu() {
+    langMenu.classList.remove("show"); langMenu.hidden = true;
+    document.getElementById("langbtn").setAttribute("aria-expanded", "false");
+  }
+  document.getElementById("langbtn").onclick = function () {
+    if (langMenu.hidden) {
+      langMenu.hidden = false;
+      requestAnimationFrame(() => langMenu.classList.add("show"));
+      this.setAttribute("aria-expanded", "true");
+    } else closeLangMenu();
+  };
+  document.querySelectorAll("#langmenu button").forEach(b => {
+    b.onclick = () => { if (!b.disabled) { setLang(b.dataset.lang); closeLangMenu(); } };
   });
 
   /* ── world screen ──────────────────────── */
@@ -1007,27 +1017,20 @@
     document.getElementById("chip-omurga").setAttribute("aria-expanded", "false");
   }
   document.addEventListener("click", e => {
-    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer, #infocard, #basemapmenu, #coordbox")) return; // inside a menu
-    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab, #citybar, #basemapbtn, #coordbtn")) return; // a trigger toggles itself
+    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer, #infocard, #basemapmenu, #coordbox, #langmenu")) return; // inside a menu
+    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab, #citybar, #basemapbtn, #coordbtn, #langbtn")) return; // a trigger toggles itself
     closeSheets();
     closeLineMenu();
     closeDrawer();
     closeInfoCard();
     closeBasemapMenu();
     closeCoordBox();
+    closeLangMenu();
     if (!e.target.closest("#zoomctl")) zoomctl.classList.remove("open");
   });
-  document.querySelectorAll(".sheet .chip, #stars button").forEach(b => {
+  document.querySelectorAll(".sheet .chip").forEach(b => {
     b.onclick = () => {
-      if (b.dataset.b) { // budget stars: single-select with re-tap to clear
-        const v = +b.dataset.b;
-        const cur = +(document.getElementById("stars").dataset.budget || 0);
-        const next = cur === v ? 0 : v;
-        document.getElementById("stars").dataset.budget = next;
-        document.querySelectorAll("#stars button").forEach(x =>
-          x.classList.toggle("on", next > 0 && +x.dataset.b <= next));
-        // TODO(E8): filter kesfet/yasam/ihtiyac by budget
-      } else {
+      {
         const on = b.getAttribute("aria-pressed") !== "true";
         b.setAttribute("aria-pressed", on);
         if (b.dataset.th) {                       // Keşfet theme chip -> filter POIs
