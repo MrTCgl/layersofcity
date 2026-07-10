@@ -61,5 +61,13 @@
   "e3.lido": "→ Ostia · Metromare",
   "hub.ac": "A ↔ C aktarma",
   "hub.bc": "B ↔ C aktarma",
-  "hub.blido": "B ↔ Metromare aktarma"
+  "hub.blido": "B ↔ Metromare aktarma",
+  "base.title": "harita altlığı",
+  "base.sade": "Sade",
+  "base.detay": "OSM Detaylı",
+  "base.uydu": "Uydu",
+  "base.notlar": "OSM notları",
+  "base.gps": "GPS izleri",
+  "coord.go": "koordinata git",
+  "coord.ph": "enlem, boylam yapıştır"
 }

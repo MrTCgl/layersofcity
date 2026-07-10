@@ -61,5 +61,13 @@
   "e3.lido": "→ Ostia · Metromare",
   "hub.ac": "A ↔ C interchange",
   "hub.bc": "B ↔ C interchange",
-  "hub.blido": "B ↔ Metromare interchange"
+  "hub.blido": "B ↔ Metromare interchange",
+  "base.title": "basemap",
+  "base.sade": "Minimal",
+  "base.detay": "OSM detailed",
+  "base.uydu": "Satellite",
+  "base.notlar": "OSM notes",
+  "base.gps": "GPS traces",
+  "coord.go": "go to coordinates",
+  "coord.ph": "paste lat, lon"
 }
