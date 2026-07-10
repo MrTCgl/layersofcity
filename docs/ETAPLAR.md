@@ -135,6 +135,13 @@ Kesfet grubu grup aç/kapa mekanizmasından ayrı yönetiliyor (applyKesfetVisib
 İki tema × mobil (375px) doğrulandı; POI render + gerçek tık → yer kartı Playwright
 ile teyit edildi (sandbox'ta karo/glyph ağı kapalı olduğundan altlık stub'landı).
 
+Ek (2026-07-10, kullanıcı isteği): Keşfet şehir geneline genişletildi — OSM
+Overpass + kalite vekili (wikipedia/wikidata kayıtlı yerler; ünlü restoran/
+kafe/dondurmacılarda wiki zorunlu, pazarlar/AVM'ler adlı) + ızgara seyreltme.
+37 editoryal nokta korunarak 266 nokta: tarihi 107 (Wikipedia kayıtlı kilise/
+anıt/ören), modern 29, doğa 45 (adlı park/bahçe + manzara), gastronomi 51
+(ünlü mekân + gıda pazarları), alışveriş 30, sağlık 4 (editoryal).
+
 ---
 
 ## E5 — Yaşam katmanları ✅ tamam (2026-07-09)

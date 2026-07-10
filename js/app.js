@@ -381,8 +381,8 @@
 
   /* ── city layers (GeoJSON overlays over the basemap) ── */
   const LINE_COLORS = {
-    "metro-a": "#E08A5B", "metro-b": "#6E93C4", "metro-c": "#7FA98A",
-    "tram": "#A8A0B5", "rail": "#B5ADA0", "bus": "#C9AE85", "train": "#8FA1B3"
+    "metro-a": "#C9682F", "metro-b": "#3D69A8", "metro-c": "#4F8A5F",
+    "tram": "#6F6390", "rail": "#8D8272", "bus": "#A67C42", "train": "#5F7A94"
   };
   // POI marker tones: Keşfet = shades of lilac, İhtiyaç = shades of terracotta.
   // One hue per group, so the map reads as two families at a glance.
@@ -471,16 +471,16 @@
       add("-railline", { type: "line",
         filter: ["all", ["==", ["get", "kind"], "line"], ["==", ["get", "lineRef"], "train"]],
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": LINE_COLORS.train, "line-opacity": 0.85,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 0.8, 14, 2] } });
+        paint: { "line-color": LINE_COLORS.train, "line-opacity": 0.9,
+          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 1.2, 14, 2.6] } });
       // transit lines (metro/tram/bus/rail — not the FL train network)
       add("-line", { type: "line",
         filter: ["all", ["==", ["get", "kind"], "line"], ["!=", ["get", "lineRef"], "train"]],
         layout: { "line-cap": "round", "line-join": "round" },
         paint: { "line-color": lineColorExpr,
           "line-width": ["interpolate", ["linear"], ["zoom"],
-            10, ["match", ["get", "lineRef"], "rail", 1.4, "tram", 1.8, "bus", 1.2, 2.6],
-            14, ["match", ["get", "lineRef"], "rail", 2, "tram", 3, "bus", 2.2, 5]] } });
+            10, ["match", ["get", "lineRef"], "rail", 1.6, "tram", 2.2, "bus", 1.4, 2.8],
+            14, ["match", ["get", "lineRef"], "rail", 2.4, "tram", 3.6, "bus", 2.4, 5]] } });
       // historic-center ring + dot
       add("-center", { type: "circle", filter: ["==", ["get", "kind"], "center"],
         paint: { "circle-radius": 9, "circle-color": "rgba(0,0,0,0)", "circle-stroke-color": pal.peach, "circle-stroke-width": 2 } });
