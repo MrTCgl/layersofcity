@@ -530,9 +530,39 @@
     "rail", LINE_COLORS["rail"], "bus", LINE_COLORS["bus"],
     "train", LINE_COLORS["train"], "#B5ADA0"];
 
+  // Gate glyphs (plane/train/bus/ship) rendered onto canvas -> map images.
+  // Stroke paths reuse the app's 24x24 line-icon language; plane is a fill glyph.
+  const GATE_GLYPHS = {
+    plane: { fill: "M21 15l-8-4V4.5C13 3.7 12.3 3 11.5 3S10 3.7 10 4.5V11l-8 4v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-4.5l8 2.5z" },
+    train: { strokes: ["M6 14V8c0-3 2.5-4.5 6-4.5s6 1.5 6 4.5v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z", "M6 11h12", "M8.5 21l1.7-3", "M15.5 21l-1.7-3"] },
+    bus: { strokes: ["M6 4h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z", "M4 11h16", "M8 21l1-4", "M16 21l-1-4"] },
+    ship: { strokes: ["M4 15l2 4.5h12l2-4.5", "M4 15l8-2.5 8 2.5", "M12 12.5V4", "M12 5l5 2.5M12 5L7 7.5"] }
+  };
+  function makeGateIcons() {
+    if (!map) return;
+    const pal = PALETTE[theme];
+    Object.entries(GATE_GLYPHS).forEach(([mode, g]) => {
+      const c = document.createElement("canvas");
+      c.width = 92; c.height = 92;
+      const x = c.getContext("2d");
+      x.beginPath(); x.arc(46, 46, 42, 0, Math.PI * 2);
+      x.fillStyle = pal.surface; x.fill();
+      x.lineWidth = 4; x.strokeStyle = pal.inkSoft; x.stroke();
+      x.translate(19.6, 19.6); x.scale(2.2, 2.2);
+      x.lineWidth = 1.6; x.lineCap = "round"; x.lineJoin = "round";
+      x.strokeStyle = pal.ink; x.fillStyle = pal.ink;
+      if (g.fill) x.fill(new Path2D(g.fill));
+      (g.strokes || []).forEach(d => x.stroke(new Path2D(d)));
+      const id = "gate-" + mode;
+      if (map.hasImage(id)) map.removeImage(id);
+      map.addImage(id, x.getImageData(0, 0, 92, 92), { pixelRatio: 2 });
+    });
+  }
+
   function addCityLayers() {
     if (!map || !manifest) return;
     const pal = PALETTE[theme];
+    makeGateIcons();
     Object.keys(cityData).forEach(layerId => {
       const src = "lyr-" + layerId;
       // idempotent: drop any stale copy so this is safe on every style.load
@@ -585,9 +615,11 @@
       // Termini hub
       add("-hub", { type: "circle", filter: ["==", ["get", "kind"], "hub"],
         paint: { "circle-radius": 7, "circle-color": pal.surface, "circle-stroke-color": pal.ink, "circle-stroke-width": 2.5 } });
-      // gates
-      add("-gate", { type: "circle", filter: ["==", ["get", "kind"], "gate"],
-        paint: { "circle-radius": 7, "circle-color": pal.surface, "circle-stroke-color": pal.inkSoft, "circle-stroke-width": 1.6 } });
+      // gates: mode icon (plane/train/bus/ship)
+      add("-gate", { type: "symbol", filter: ["==", ["get", "kind"], "gate"],
+        layout: { "icon-image": ["concat", "gate-", ["get", "mode"]],
+          "icon-size": ["interpolate", ["linear"], ["zoom"], 9, 0.55, 13, 0.75],
+          "icon-allow-overlap": true } });
       // C east hint dot
       add("-hint", { type: "circle", filter: ["==", ["get", "kind"], "hint"],
         paint: { "circle-radius": 3, "circle-color": pal.inkSoft } });
@@ -651,6 +683,9 @@
     ["lyr-kesfet-poi-poi", "lyr-kesfet-poi-poi-label", "lyr-ihtiyac-poi", "lyr-ihtiyac-poi-label"].forEach(id => {
       if (map.getLayer(id)) map.moveLayer(id); // no beforeId -> move to top
     });
+    // gate icons are larger than the old dots -> push their labels down a bit
+    if (map.getLayer("lyr-varis-label")) map.setLayoutProperty("lyr-varis-label", "text-offset", [0, 1.2]);
+    if (map.getLayer("lyr-varis-sub")) map.setLayoutProperty("lyr-varis-sub", "text-offset", [0, 2.5]);
     applyGroupVisibility();
     applyTransitFilter();
     applyKesfetVisibility();
