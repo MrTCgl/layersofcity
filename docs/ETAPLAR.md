@@ -108,7 +108,7 @@ Altlığa poi-landmark/poi-minor etiket katmanları eklendi (z14+/z16+).
 
 ---
 
-## E4 — Keşfet katmanları 🔵 devam ediyor
+## E4 — Keşfet katmanları ✅ tamam (2026-07-09)
 
 **Amaç:** İlgi noktaları (tema filtreli) + gün içi yoğun bölgeler.
 
@@ -169,6 +169,13 @@ dolgular en alta pinlendi (metro/POI üstte). Sağ çekmece çipleri her katman�
 BAĞIMSIZ açıp kapatıyor (yasamState + applyYasamVisibility; applyGroupVisibility
 yasam grubunu atlıyor). Bütçe alanı otel/parioli'de saklı (E8 filtresi için).
 Varlık sürümü v=20260709-4. İki tema × mobil doğrulaması sonraki oturumda.
+
+Ek (2026-07-10, kullanıcı isteği): bölgeler gerçek OSM rione/quartiere
+sınırlarına taşındı (place=quarter/suburb relation'ları; 27 bölgeden 24'ü
+gerçek sınır, Garbatella/San Lorenzo/Tor Vergata OSM'de sınırsız -> el çizimi
+kaldı). Centro Storico = 8 tarihî rione birleşimi (MultiPolygon). Her bölge
+kendine özgü soluk renkte (DISTRICT_COLORS, katmanlar arası tutarlı:
+Trastevere her katmanda aynı yeşil).
 
 ---
 
