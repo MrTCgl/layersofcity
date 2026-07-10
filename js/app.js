@@ -401,6 +401,23 @@
         const [lng, lat] = f.geometry.coordinates;
         showPlaceCard(f.properties.name || "OSM note", lng, lat);
       });
+      // hovering a note shows its text in a small tooltip (desktop)
+      let notePopup = null;
+      map.on("mousemove", "osmnotes-pt", e => {
+        const f = e.features && e.features[0];
+        if (!f) return;
+        map.getCanvas().style.cursor = "pointer";
+        let txt = f.properties.name || "OSM note";
+        if (txt.length > 220) txt = txt.slice(0, 220) + "…";
+        if (!notePopup) notePopup = new maplibregl.Popup({
+          closeButton: false, closeOnClick: false, offset: 10,
+          maxWidth: "260px", className: "notepopup" });
+        notePopup.setLngLat(f.geometry.coordinates).setText(txt).addTo(map);
+      });
+      map.on("mouseleave", "osmnotes-pt", () => {
+        map.getCanvas().style.cursor = "";
+        if (notePopup) notePopup.remove();
+      });
       map.on("click", e => {
         if (longPressFired) { longPressFired = false; return; } // keep the long-press card open
         const live = tappable.concat(["osmnotes-pt"]).filter(id => map.getLayer(id));

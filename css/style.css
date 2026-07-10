@@ -336,6 +336,14 @@ body.city #topchips{display:flex}
 .pc-close:hover{background:var(--powder); color:var(--ink)}
 :root[data-theme="dark"] .pc-close:hover{background:var(--line)}
 
+/* OSM note hover tooltip */
+.notepopup .maplibregl-popup-content{
+  background:var(--surface); color:var(--ink); border:1px solid var(--line);
+  border-radius:10px; box-shadow:var(--shadow); padding:8px 11px;
+  font-size:12px; line-height:1.45;
+}
+.notepopup .maplibregl-popup-tip{border-top-color:var(--surface); border-bottom-color:var(--surface)}
+
 /* toast */
 .toast{
   position:absolute; left:50%; bottom:64px; transform:translateX(-50%) translateY(8px);
