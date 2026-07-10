@@ -108,7 +108,7 @@ Altlığa poi-landmark/poi-minor etiket katmanları eklendi (z14+/z16+).
 
 ---
 
-## E4 — Keşfet katmanları 🔵 devam ediyor
+## E4 — Keşfet katmanları ✅ tamam (2026-07-09)
 
 **Amaç:** İlgi noktaları (tema filtreli) + gün içi yoğun bölgeler.
 
