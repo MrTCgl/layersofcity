@@ -48,9 +48,19 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 - Bölgesel tren (FL hatları): `#5F7A94` (koyu slate); metronun **altında**, ince
 - Not (2026-07-10): hat renkleri kullanıcı isteğiyle koyulaştırıldı — soluk
   altlık üstünde hatlar netlik kazandı; altlık pastel kalmaya devam ediyor
-- POI ton aileleri: **Keşfet = lila tonları** (tarihi `#6F5799` → sağlık
-  `#C9BAE8`), **İhtiyaç = kiremit tonları** (hastane `#B34F39` → kütüphane
-  `#F4CDB4`); grup tek renk ailesi olarak okunur, basılı çipler aynı tonu alır
+- POI ton aileleri: **Keşfet = lila tonları** (kamu `#4A3970` en koyu →
+  alışveriş `#C6B8E6` en açık; yurt `#8A5FA0` ayrık mor), **İhtiyaç = kiremit
+  tonları** (hastane `#B34F39` → kütüphane `#F4CDB4`); basılı çipler aynı tonu
+  alır; Keşfet/İhtiyaç bottombar etiketi açık katman varken grup rengini alır
+- Bölge türü renkleri: Turistik `#B85C6E` · Ticari `#5B8FBF` · Eğitim
+  `#B8863F` · Doğal `#5E9A6B` (dolgu .18, kenar 1.4px .65)
+- Altlık modları (2026-07-10): **Sade** = pastel vektör, TAMAMEN yazısız
+  (yazılar yalnız açılan katmanlardan) · **OSM Detaylı** = vektör, OSM renk
+  dili, yol/semt adları var, POI ikonu yok (`assets/basemap-detail.json`) ·
+  **Uydu** = Esri World Imagery raster. + OSM notları / GPS izleri overlay
+- Kapı simgeleri: uçak/tren/otobüs/gemi — canvas'a çizilen 24x24 çizgisel
+  glyph, daire zemin (makeGateIcons); Girişler bağlantı rotası `linkStrong`
+  (`#7C5FB0`/`#9B85CC`), 3px kesikli
 - Koyu temada aynı hex'ler kullanılır (koyu zeminde zaten yumuşak dururlar).
 
 ## Tipografi

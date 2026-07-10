@@ -161,7 +161,10 @@ Bitti sayılır:
       2026-07-08 onaylı; poligonlar gerçek mahalle koordinatlarıyla çizildi,
       canlıda kullanıcı konum doğrulaması bekliyor)
 
-Durum notu: E5 tamam. yasam-otel (6 bölge, bütçe etiketli), yasam-konut (10),
+Durum notu (GÜNCELLENDİ 2026-07-10): Yaşam bölümü kullanıcı kararıyla
+**Bölgeler**e dönüştü (bolge-turistik/ticari/egitim/dogal, OSM poligonları,
+tür başına renk; yasam-* dosyaları silindi). Ayrıntı: docs/TODO.md T7.
+Eski not: E5 tamam. yasam-otel (6 bölge, bütçe etiketli), yasam-konut (10),
 yasam-altmerkez (6 + Termini'ye kesikli aks çizgileri), yasam-ogrenci (5, Tor
 Vergata dahil) GeoJSON'a işlendi (kind:"district" poligon + "district-label"
 nokta; altmerkez'de kind:"axis"). Soluk lila dolgu + ince kenar + ad etiketi;
@@ -239,7 +242,10 @@ erişilebilir, canlı tarayıcıda çalışır.
 
 ---
 
-## E8 — Bütçe seçici (genel) ⬜
+## E8 — Bütçe seçici (genel) ❌ iptal (2026-07-10, kullanıcı kararı)
+
+> Yıldız UI ve filtre fikri kaldırıldı; verilerdeki `budget` alanları zararsız
+> şekilde duruyor. Gerekirse ileride yeniden değerlendirilir.
 
 **Amaç:** 1-2-3 yıldızlı isteğe bağlı **genel** bütçe filtresi (soru/sihirbaz DEĞİL).
 
@@ -314,3 +320,14 @@ Bitti sayılır:
 - [ ] Site layersofcity.com'da açılıyor, analitik veri düşüyor
 
 Durum notu: —
+
+---
+
+## Geliştirme Turu (2026-07-10) ✅ tamam
+
+docs/TODO.md'deki onaylı 10 madde uygulandı: zoom yığını Home altında,
+3 altlık modu (+OSM notları/GPS izleri), koordinat kutusu, koyu rota çizgileri,
+kapı simgeleri (uçak/tren/otobüs), Keşfet revizyonu (sağlık/yoğunluk çıktı;
+oteller/yurtlar/kamu şehir geneli girdi; bottombar renklenmesi), Bölgeler
+çekmecesi, bütçe iptali, dil seçici menüsü, doküman güncellemeleri.
+E10 için dil menüsü altyapısı hazır (DE/FR/IT/ES disabled bekliyor).

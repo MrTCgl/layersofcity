@@ -26,19 +26,21 @@ varsa kullanıcıya sor:
 - **Çok şehirli mimari.** Şehir = `data/<sehir>/` klasörü. Yeni şehir eklemek
   kod değişikliği gerektirmemeli.
 - **Kullanıcıya soru sorulmaz.** Persona/anket/sihirbaz ekranı yok. Ziyaret
-  amaçları katman grupları olarak var olur: **Varış, Omurga, Keşfet, Yaşam,
-  İhtiyaçlar**. Yaşam yalnızca bölge gösterir (oteller, konutlar...);
-  nokta bazlı pratik ihtiyaçlar (kiralık araç, market, eczane, hastane,
-  yakıt, müze, kütüphane) İhtiyaçlar grubundadır.
-  İstisna değil nüans: **bütçe seçici** (★/★★/★★★) bir soru ekranı değildir;
-  panelin en üstünde duran isteğe bağlı bir filtredir ve Keşfet+Yaşam+İhtiyaçlar
-  gruplarını birden süzer; varsayılanda her şey görünür.
+  amaçları katman grupları olarak var olur: **Varış, Omurga, Keşfet, Bölgeler,
+  İhtiyaçlar**. Bölgeler yalnızca alan gösterir (Turistik, Ticari, Eğitim,
+  Doğal); nokta bazlı pratik ihtiyaçlar (kiralık araç, market, eczane,
+  hastane, yakıt, müze, kütüphane) İhtiyaçlar grubundadır; Keşfet noktaları
+  (tarihi, modern, doğa, gastronomi, alışveriş, oteller, yurtlar, kamu)
+  şehir geneline yayılıdır. (Bütçe seçici 2026-07-10'da kullanıcı kararıyla
+  kaldırıldı.)
 - **Harita tam ekrandır; panel yoktur.** Tüm kontroller haritanın üzerinde
-  yüzer (kullanıcı eskizine göre): sol üstte şehir çubuğu + bütçe; üst ortada
-  (şeffaf üst barda) Kapılar/Hatlar; sağ kenardan kayan Yaşam çekmecesi; altta `Keşfet · İhtiyaç`
-  barı (yukarı açılan ikon menüleri); sağ altta zoom (+/−/⌂) + pan pedi + Konumum +
-  Tur düğmeleri. Haritaya çift tıklama o noktaya yaklaştırır. Ayrıntı: `docs/TASARIM.md` →
-  "Ekran düzeni". Yazı minimumda tutulur; simge yeterliyse simge kullanılır.
+  yüzer: sol üstte şehir çubuğu (künye + canlı hava); üst ortada Girişler/Hatlar
+  ikon çipleri (Hatlar altından metro/tramvay/otobüs/tren); SOL kenardan kayan
+  **Bölgeler** çekmecesi; altta `Keşfet · İhtiyaç` barı (yukarı açılan ikon
+  menüleri; açık katman varken etiket grup rengini alır); sağ altta dikey
+  kontrol sütunu: koordinat kutusu, **altlık değiştirici** (Sade/OSM
+  Detaylı/Uydu + OSM notları/GPS izleri), Home (altında saklı +/−/pan yığını),
+  Konumum. Haritada uzun basma → yer kartı. Ayrıntı: `docs/TASARIM.md`.
 - **Yol tarifi uygulama içinde çözülmez.** Haritada seçilen yer için küçük yer
   kartı açılır; "Yol tarifi" düğmesi Google Maps'i **anahtarsız URL şemasıyla**
   dış bağlantı olarak açar. Uygulama oryantasyon aracıdır; navigasyon Google'a

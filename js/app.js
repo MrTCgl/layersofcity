@@ -23,7 +23,7 @@
     theme = theme === "light" ? "dark" : "light";
     localStorage.setItem("loc-theme", theme);
     applyTheme();
-    if (map) {
+    if (map && basemapMode === "sade") {
       // setStyle wipes custom layers; 'style.load' only fires on first load in
       // this MapLibre build, so re-add explicitly once the new style settles.
       map.setStyle(`assets/basemap-${theme}.json`);
@@ -58,10 +58,12 @@
       el.setAttribute("aria-label", v);
       el.setAttribute("title", v);
     });
-    SUPPORTED_LANGS.forEach(code => {
-      const btn = document.getElementById("lang-" + code);
-      if (btn) btn.setAttribute("aria-pressed", code === lang);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+      el.setAttribute("placeholder", t(el.dataset.i18nPh));
     });
+    document.getElementById("langbtn").textContent = lang.toUpperCase();
+    document.querySelectorAll("#langmenu button").forEach(b =>
+      b.classList.toggle("on", b.dataset.lang === lang));
     document.documentElement.lang = lang;
   }
 
@@ -75,9 +77,20 @@
     if (typeof refreshLayerLabels === "function") refreshLayerLabels(); // map labels follow language
     if (typeof renderInfoCard === "function" && !document.getElementById("infocard").hidden) renderInfoCard();
   }
-  SUPPORTED_LANGS.forEach(code => {
-    const btn = document.getElementById("lang-" + code);
-    if (btn) btn.onclick = () => setLang(code);
+  const langMenu = document.getElementById("langmenu");
+  function closeLangMenu() {
+    langMenu.classList.remove("show"); langMenu.hidden = true;
+    document.getElementById("langbtn").setAttribute("aria-expanded", "false");
+  }
+  document.getElementById("langbtn").onclick = function () {
+    if (langMenu.hidden) {
+      langMenu.hidden = false;
+      requestAnimationFrame(() => langMenu.classList.add("show"));
+      this.setAttribute("aria-expanded", "true");
+    } else closeLangMenu();
+  };
+  document.querySelectorAll("#langmenu button").forEach(b => {
+    b.onclick = () => { if (!b.disabled) { setLang(b.dataset.lang); closeLangMenu(); } };
   });
 
   /* ── world screen ──────────────────────── */
@@ -258,8 +271,69 @@
   }
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
-  function basemapUrl() {
+  /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
+  let basemapMode = localStorage.getItem("loc-basemap") || "sade";
+  if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
+  const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
+  function rasterStyle(tiles, attribution) {
+    return { version: 8, glyphs: GLYPHS,
+      sources: { r: { type: "raster", tiles: [tiles], tileSize: 256, attribution } },
+      layers: [{ id: "r", type: "raster", source: "r" }] };
+  }
+  function basemapStyle() {
+    if (basemapMode === "detay") return "assets/basemap-detail.json";
+    if (basemapMode === "uydu") return rasterStyle(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      "Esri, Maxar, Earthstar Geographics");
     return `assets/basemap-${theme}.json`;
+  }
+  function updateBasemapMenu() {
+    document.querySelectorAll("#basemapmenu .bmopt").forEach(b =>
+      b.setAttribute("aria-pressed", b.dataset.bm === basemapMode));
+  }
+  function applyBasemap(mode) {
+    basemapMode = mode;
+    localStorage.setItem("loc-basemap", mode);
+    updateBasemapMenu();
+    if (map) {
+      // style.load doesn't refire after setStyle in this build -> re-add on idle
+      map.setStyle(basemapStyle());
+      map.once("idle", addCityLayers);
+    }
+  }
+
+  /* OSM notes + GPS traces overlays (keyless), toggleable on any basemap */
+  let notesOn = false, gpsOn = false, notesData = null;
+  function addOverlayExtras() {
+    if (!map) return;
+    const firstLyr = (map.getStyle().layers.find(l => l.id.startsWith("lyr-")) || {}).id;
+    if (gpsOn && !map.getSource("gpstrace")) {
+      map.addSource("gpstrace", { type: "raster", tileSize: 256,
+        tiles: ["https://gps.tile.openstreetmap.org/lines/{z}/{x}/{y}.png"] });
+      map.addLayer({ id: "gpstrace", type: "raster", source: "gpstrace",
+        paint: { "raster-opacity": 0.7 } }, firstLyr);
+    }
+    if (!gpsOn && map.getLayer("gpstrace")) { map.removeLayer("gpstrace"); map.removeSource("gpstrace"); }
+    if (notesOn && notesData && !map.getSource("osmnotes")) {
+      map.addSource("osmnotes", { type: "geojson", data: notesData });
+      map.addLayer({ id: "osmnotes-pt", type: "circle", source: "osmnotes",
+        paint: { "circle-radius": 5.5, "circle-color": "#E0A24B",
+          "circle-stroke-color": "#FFFFFF", "circle-stroke-width": 1.6 } });
+    }
+    if (!notesOn && map.getLayer("osmnotes-pt")) { map.removeLayer("osmnotes-pt"); map.removeSource("osmnotes"); }
+  }
+  async function fetchNotes() {
+    if (notesData || !manifest) return;
+    try {
+      const [[w, s], [e, n]] = manifest.maxBounds;
+      const r = await fetch(`https://api.openstreetmap.org/api/0.6/notes.json?bbox=${w},${s},${e},${n}&limit=100&closed=0`);
+      if (r.ok) {
+        const d = await r.json();
+        notesData = { type: "FeatureCollection", features: (d.features || []).map(f => ({
+          type: "Feature", geometry: f.geometry,
+          properties: { name: ((f.properties.comments || [])[0] || {}).text || "OSM note" } })) };
+      }
+    } catch { /* offline -> toggle just does nothing visible */ }
   }
 
   function tickClock() {
@@ -292,7 +366,7 @@
       await loadCityData(city.id);   // fetch layer geojson before the map draws
       map = new maplibregl.Map({
         container: "map",
-        style: basemapUrl(),
+        style: basemapStyle(),
         bounds: manifest.home,
         fitBoundsOptions: { padding: 24 },
         minZoom: manifest.zoom.min,
@@ -321,9 +395,15 @@
         map.on("mouseenter", id, () => { map.getCanvas().style.cursor = "pointer"; });
         map.on("mouseleave", id, () => { map.getCanvas().style.cursor = ""; });
       });
+      map.on("click", "osmnotes-pt", e => {
+        const f = e.features && e.features[0];
+        if (!f) return;
+        const [lng, lat] = f.geometry.coordinates;
+        showPlaceCard(f.properties.name || "OSM note", lng, lat);
+      });
       map.on("click", e => {
         if (longPressFired) { longPressFired = false; return; } // keep the long-press card open
-        const live = tappable.filter(id => map.getLayer(id));
+        const live = tappable.concat(["osmnotes-pt"]).filter(id => map.getLayer(id));
         if (!live.length) return;
         const hits = map.queryRenderedFeatures(e.point, { layers: live });
         if (!hits.length) hidePlaceCard();
@@ -387,28 +467,20 @@
   // POI marker tones: Keşfet = shades of lilac, İhtiyaç = shades of terracotta.
   // One hue per group, so the map reads as two families at a glance.
   const THEME_COLORS = {
-    "tarihi": "#6F5799", "modern": "#8168AC", "doga": "#937CBE",
-    "gastronomi": "#A590CE", "alisveris": "#B7A5DC", "saglik": "#C9BAE8",
+    "kamu": "#4A3970", "tarihi": "#5F4A8C", "otel": "#7460A3", "modern": "#8A76B8",
+    "doga": "#9F8CCA", "gastronomi": "#B3A2D9", "alisveris": "#C6B8E6", "yurt": "#8A5FA0",
     "hastane": "#B34F39", "eczane": "#C1654B", "kiralik-arac": "#CE7A5E",
     "yakit": "#DA8F72", "market": "#E4A487", "muze": "#EDB99D", "kutuphane": "#F4CDB4"
   };
   const poiColorExpr = ["match", ["get", "theme"],
     ...Object.entries(THEME_COLORS).flat(), "#B9A6DC"];
-  // Yaşam district colors — one distinct muted hue per district, stable
-  // across layers (Trastevere is the same green in Oteller and Konutlar).
-  const DISTRICT_COLORS = {
-    "Termini": "#C98A4B", "Centro Storico": "#B85C6E", "Prati": "#5B8FBF",
-    "Monti": "#A66A9E", "Trastevere": "#7FA05B", "EUR": "#4E9A8F",
-    "Monteverde": "#8AA84B", "Testaccio": "#C96A52", "Ostiense": "#6B79B8",
-    "San Giovanni": "#B8863F", "Garbatella": "#9C6BB5", "Parioli": "#B5527C",
-    "Pigneto": "#58A1B8", "Tiburtina": "#A8A04A", "Cinecittà": "#8F6F4B",
-    "San Lorenzo": "#6BAF8C", "Tor Vergata": "#7D74C9"
-  };
-  const districtColorExpr = ["match", ["get", "name"],
-    ...Object.entries(DISTRICT_COLORS).flat(), "#B9A6DC"];
+  // Zone colors — one color per zone TYPE (turistik/ticari/egitim/dogal)
+  const BTYPE_COLORS = { "turistik": "#B85C6E", "ticari": "#5B8FBF", "egitim": "#B8863F", "dogal": "#5E9A6B" };
+  const districtColorExpr = ["match", ["get", "btype"],
+    ...Object.entries(BTYPE_COLORS).flat(), "#B9A6DC"];
   const PALETTE = {
-    light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8" },
-    dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E" }
+    light: { ink: "#3E3A45", inkSoft: "#8B8494", surface: "#FFFFFF", halo: "#F0EBE6", lilac: "#B9A6DC", peach: "#F2BBA8", linkStrong: "#7C5FB0" },
+    dark:  { ink: "#EDE9F2", inkSoft: "#9A93A6", surface: "#2C2833", halo: "#2A2631", lilac: "#C4B2E4", peach: "#E8B39E", linkStrong: "#9B85CC" }
   };
   // Transit sub-types inside the Hatlar (omurga) group, toggled from the
   // metro/tram/bus disclosure under the chip. Metromare (lineRef "rail")
@@ -419,8 +491,7 @@
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
   const themeState = new Set();   // active POI themes; empty -> no POIs shown
   const ihState = new Set();      // active İhtiyaç categories; empty -> hidden
-  let crowdOn = false;            // crowded-zone wash visible?
-  const yasamState = {};          // yasam layerId -> visible? (drawer chips, per layer)
+  const bolgeState = {};          // bolge layerId -> visible? (drawer chips, per layer)
 
   const cityData = {};          // layerId -> raw FeatureCollection
   const groupState = {};        // groupId -> visible?
@@ -460,9 +531,39 @@
     "rail", LINE_COLORS["rail"], "bus", LINE_COLORS["bus"],
     "train", LINE_COLORS["train"], "#B5ADA0"];
 
+  // Gate glyphs (plane/train/bus/ship) rendered onto canvas -> map images.
+  // Stroke paths reuse the app's 24x24 line-icon language; plane is a fill glyph.
+  const GATE_GLYPHS = {
+    plane: { fill: "M21 15l-8-4V4.5C13 3.7 12.3 3 11.5 3S10 3.7 10 4.5V11l-8 4v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-4.5l8 2.5z" },
+    train: { strokes: ["M6 14V8c0-3 2.5-4.5 6-4.5s6 1.5 6 4.5v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z", "M6 11h12", "M8.5 21l1.7-3", "M15.5 21l-1.7-3"] },
+    bus: { strokes: ["M6 4h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z", "M4 11h16", "M8 21l1-4", "M16 21l-1-4"] },
+    ship: { strokes: ["M4 15l2 4.5h12l2-4.5", "M4 15l8-2.5 8 2.5", "M12 12.5V4", "M12 5l5 2.5M12 5L7 7.5"] }
+  };
+  function makeGateIcons() {
+    if (!map) return;
+    const pal = PALETTE[theme];
+    Object.entries(GATE_GLYPHS).forEach(([mode, g]) => {
+      const c = document.createElement("canvas");
+      c.width = 92; c.height = 92;
+      const x = c.getContext("2d");
+      x.beginPath(); x.arc(46, 46, 42, 0, Math.PI * 2);
+      x.fillStyle = pal.surface; x.fill();
+      x.lineWidth = 4; x.strokeStyle = pal.inkSoft; x.stroke();
+      x.translate(19.6, 19.6); x.scale(2.2, 2.2);
+      x.lineWidth = 1.6; x.lineCap = "round"; x.lineJoin = "round";
+      x.strokeStyle = pal.ink; x.fillStyle = pal.ink;
+      if (g.fill) x.fill(new Path2D(g.fill));
+      (g.strokes || []).forEach(d => x.stroke(new Path2D(d)));
+      const id = "gate-" + mode;
+      if (map.hasImage(id)) map.removeImage(id);
+      map.addImage(id, x.getImageData(0, 0, 92, 92), { pixelRatio: 2 });
+    });
+  }
+
   function addCityLayers() {
     if (!map || !manifest) return;
     const pal = PALETTE[theme];
+    makeGateIcons();
     Object.keys(cityData).forEach(layerId => {
       const src = "lyr-" + layerId;
       // idempotent: drop any stale copy so this is safe on every style.load
@@ -477,7 +578,7 @@
 
       // gate -> center connector (dashed lilac)
       add("-link", { type: "line", filter: ["==", ["get", "kind"], "link"],
-        paint: { "line-color": pal.lilac, "line-width": 2.4, "line-dasharray": [1, 2.5], "line-opacity": 0.85 },
+        paint: { "line-color": pal.linkStrong, "line-width": 3, "line-dasharray": [1, 2.2], "line-opacity": 0.95 },
         layout: { "line-cap": "round" } });
       // regional rail (FL trains) — drawn beneath metro/tram/bus, thin
       add("-railline", { type: "line",
@@ -515,9 +616,11 @@
       // Termini hub
       add("-hub", { type: "circle", filter: ["==", ["get", "kind"], "hub"],
         paint: { "circle-radius": 7, "circle-color": pal.surface, "circle-stroke-color": pal.ink, "circle-stroke-width": 2.5 } });
-      // gates
-      add("-gate", { type: "circle", filter: ["==", ["get", "kind"], "gate"],
-        paint: { "circle-radius": 7, "circle-color": pal.surface, "circle-stroke-color": pal.inkSoft, "circle-stroke-width": 1.6 } });
+      // gates: mode icon (plane/train/bus/ship)
+      add("-gate", { type: "symbol", filter: ["==", ["get", "kind"], "gate"],
+        layout: { "icon-image": ["concat", "gate-", ["get", "mode"]],
+          "icon-size": ["interpolate", ["linear"], ["zoom"], 9, 0.55, 13, 0.75],
+          "icon-allow-overlap": true } });
       // C east hint dot
       add("-hint", { type: "circle", filter: ["==", ["get", "kind"], "hint"],
         paint: { "circle-radius": 3, "circle-color": pal.inkSoft } });
@@ -553,13 +656,6 @@
       add("-district-label", { type: "symbol", filter: ["==", ["get", "kind"], "district-label"],
         layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"], "text-size": 11.5, "text-optional": true },
         paint: { "text-color": pal.ink, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
-      // Keşfet: crowded-zone wash (soft fill, no crisp border — interpretation, not cadastre)
-      add("-fill", { type: "fill", filter: ["==", ["get", "kind"], "area"],
-        paint: { "fill-color": pal.peach, "fill-opacity": 0.20 } });
-      add("-area-label", { type: "symbol", filter: ["==", ["get", "kind"], "area-label"],
-        layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"],
-          "text-size": 11, "text-optional": true },
-        paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
       // Keşfet/İhtiyaç: POI markers + labels (stroke tone = theme family)
       add("-poi", { type: "circle", filter: ["==", ["get", "kind"], "poi"],
         paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.5, 14, 5.5],
@@ -571,8 +667,8 @@
     });
     // Layers are added in fetch-resolution order, so pin depth explicitly:
     // area washes (district fills + crowd wash) sink to the bottom, POI markers rise to the top.
-    const washes = ["lyr-yasam-otel-district", "lyr-yasam-konut-district",
-      "lyr-yasam-altmerkez-district", "lyr-yasam-ogrenci-district", "lyr-kesfet-yogunluk-fill"];
+    const washes = ["lyr-bolge-turistik-district", "lyr-bolge-ticari-district",
+      "lyr-bolge-egitim-district", "lyr-bolge-dogal-district"];
     washes.forEach(fillId => {
       if (!map.getLayer(fillId)) return;
       const firstOther = map.getStyle().layers.find(l => l.id.startsWith("lyr-") && !washes.includes(l.id));
@@ -581,11 +677,15 @@
     ["lyr-kesfet-poi-poi", "lyr-kesfet-poi-poi-label", "lyr-ihtiyac-poi", "lyr-ihtiyac-poi-label"].forEach(id => {
       if (map.getLayer(id)) map.moveLayer(id); // no beforeId -> move to top
     });
+    // gate icons are larger than the old dots -> push their labels down a bit
+    if (map.getLayer("lyr-varis-label")) map.setLayoutProperty("lyr-varis-label", "text-offset", [0, 1.2]);
+    if (map.getLayer("lyr-varis-sub")) map.setLayoutProperty("lyr-varis-sub", "text-offset", [0, 2.5]);
     applyGroupVisibility();
     applyTransitFilter();
     applyKesfetVisibility();
     applyIhtiyacVisibility();
-    applyYasamVisibility();
+    applyBolgeVisibility();
+    addOverlayExtras();
   }
 
   // Show only the transit sub-types currently enabled. Features without a
@@ -613,7 +713,7 @@
     if (!map) return;
     Object.keys(cityData).forEach(layerId => {
       const g = groupOf(layerId);
-      if (g === "kesfet" || g === "yasam" || g === "ihtiyaclar") return; // owned by their own visibility fns
+      if (g === "kesfet" || g === "bolgeler" || g === "ihtiyaclar") return; // owned by their own visibility fns
       const vis = groupState[g] ? "visible" : "none";
       map.getStyle().layers.forEach(l => {
         if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);
@@ -621,13 +721,13 @@
     });
   }
 
-  // Yaşam districts toggle per layer from the right-edge drawer, independent of
+  // City zones toggle per layer from the left-edge drawer, independent of
   // the group machinery (like Keşfet).
-  function applyYasamVisibility() {
+  function applyBolgeVisibility() {
     if (!map) return;
-    ["yasam-otel", "yasam-konut", "yasam-altmerkez", "yasam-ogrenci"].forEach(layerId => {
+    ["bolge-turistik", "bolge-ticari", "bolge-egitim", "bolge-dogal"].forEach(layerId => {
       if (!cityData[layerId]) return;
-      const vis = yasamState[layerId] ? "visible" : "none";
+      const vis = bolgeState[layerId] ? "visible" : "none";
       map.getStyle().layers.forEach(l => {
         if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);
       });
@@ -648,10 +748,7 @@
       const pred = ["any", ...themes.map(th => ["==", ["get", "theme"], th])];
       map.setFilter(id, themes.length ? ["all", base, pred] : base);
     });
-    ["-fill", "-area-label"].forEach(suf => {
-      const id = "lyr-kesfet-yogunluk" + suf;
-      if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", crowdOn ? "visible" : "none");
-    });
+    document.getElementById("bb-kesfet").classList.toggle("haslayers", themeState.size > 0);
   }
 
   // İhtiyaç POIs: same machinery as Keşfet, own category set.
@@ -667,6 +764,7 @@
       const pred = ["any", ...cats.map(c => ["==", ["get", "theme"], c])];
       map.setFilter(id, cats.length ? ["all", base, pred] : base);
     });
+    document.getElementById("bb-ihtiyac").classList.toggle("haslayers", ihState.size > 0);
   }
   function refreshLayerLabels() { // on language change
     if (!map) return;
@@ -686,7 +784,74 @@
   /* map chrome wiring (static elements, safe before map exists) */
   document.getElementById("zoom-in").onclick = () => map && map.zoomIn();
   document.getElementById("zoom-out").onclick = () => map && map.zoomOut();
-  document.getElementById("zoom-home").onclick = () => fitHome(true);
+  /* basemap menu + overlay toggles */
+  const basemapMenu = document.getElementById("basemapmenu");
+  function closeBasemapMenu() {
+    basemapMenu.classList.remove("show");
+    basemapMenu.hidden = true;
+    document.getElementById("basemapbtn").setAttribute("aria-expanded", "false");
+  }
+  document.getElementById("basemapbtn").onclick = function () {
+    if (basemapMenu.hidden) {
+      updateBasemapMenu();
+      basemapMenu.hidden = false;
+      requestAnimationFrame(() => basemapMenu.classList.add("show"));
+      this.setAttribute("aria-expanded", "true");
+      closeCoordBox();
+    } else closeBasemapMenu();
+  };
+  document.querySelectorAll("#basemapmenu .bmopt").forEach(b => {
+    b.onclick = () => { applyBasemap(b.dataset.bm); };
+  });
+  document.getElementById("tog-notes").onclick = async function () {
+    notesOn = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", notesOn);
+    if (notesOn) await fetchNotes();
+    addOverlayExtras();
+  };
+  document.getElementById("tog-gps").onclick = function () {
+    gpsOn = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", gpsOn);
+    addOverlayExtras();
+  };
+
+  /* coordinate box: paste "lat, lon" -> fly there + place card */
+  const coordBox = document.getElementById("coordbox");
+  const coordInput = document.getElementById("coordinput");
+  function closeCoordBox() {
+    coordBox.classList.remove("show");
+    coordBox.hidden = true;
+  }
+  document.getElementById("coordbtn").onclick = function () {
+    if (coordBox.hidden) {
+      coordBox.hidden = false;
+      requestAnimationFrame(() => { coordBox.classList.add("show"); coordInput.focus(); });
+      closeBasemapMenu();
+    } else closeCoordBox();
+  };
+  function tryGoCoord() {
+    if (!map || !manifest) return;
+    const m = coordInput.value.match(/(-?\d{1,3}(?:\.\d+)?)[,;\s]+(-?\d{1,3}(?:\.\d+)?)/);
+    if (!m) return;
+    let lat = +m[1], lon = +m[2];
+    const [[w, s], [e, n]] = manifest.maxBounds;
+    const ok = (la, lo) => la > s && la < n && lo > w && lo < e;
+    if (!ok(lat, lon)) { if (ok(lon, lat)) { const tmp = lat; lat = lon; lon = tmp; } else return; }
+    map.flyTo({ center: [lon, lat], zoom: Math.max(map.getZoom(), 15) });
+    showPlaceCard("", lon, lat);
+  }
+  coordInput.addEventListener("keydown", e => { if (e.key === "Enter") tryGoCoord(); });
+  coordInput.addEventListener("paste", () => setTimeout(tryGoCoord, 0));
+
+  const zoomctl = document.getElementById("zoomctl");
+  document.getElementById("zoom-home").onclick = () => {
+    // no hover on touch: first tap reveals the hidden +/−/pan stack
+    if (matchMedia("(hover: none)").matches && !zoomctl.classList.contains("open")) {
+      zoomctl.classList.add("open");
+      return;
+    }
+    fitHome(true);
+  };
 
   /* grab-pan: press the hand button and drag to move the map, no mouse-drag on
      the map needed. Pointer capture keeps it tracking outside the button. */
@@ -762,13 +927,13 @@
       updateOmurgaActive();
     };
   });
-  /* Yaşam drawer chips -> toggle the matching district layer */
+  /* zone drawer chips -> toggle the matching zone layer */
   document.querySelectorAll("#drawer .dchip").forEach(b => {
     b.onclick = () => {
       const on = b.getAttribute("aria-pressed") !== "true";
       b.setAttribute("aria-pressed", on);
-      yasamState[b.dataset.layer] = on;
-      applyYasamVisibility();
+      bolgeState[b.dataset.layer] = on;
+      applyBolgeVisibility();
     };
   });
   const drawerwrap = document.getElementById("drawerwrap");
@@ -852,24 +1017,20 @@
     document.getElementById("chip-omurga").setAttribute("aria-expanded", "false");
   }
   document.addEventListener("click", e => {
-    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer, #infocard")) return; // inside a menu
-    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab, #citybar")) return; // a trigger toggles itself
+    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer, #infocard, #basemapmenu, #coordbox, #langmenu")) return; // inside a menu
+    if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab, #citybar, #basemapbtn, #coordbtn, #langbtn")) return; // a trigger toggles itself
     closeSheets();
     closeLineMenu();
     closeDrawer();
     closeInfoCard();
+    closeBasemapMenu();
+    closeCoordBox();
+    closeLangMenu();
+    if (!e.target.closest("#zoomctl")) zoomctl.classList.remove("open");
   });
-  document.querySelectorAll(".sheet .chip, #stars button").forEach(b => {
+  document.querySelectorAll(".sheet .chip").forEach(b => {
     b.onclick = () => {
-      if (b.dataset.b) { // budget stars: single-select with re-tap to clear
-        const v = +b.dataset.b;
-        const cur = +(document.getElementById("stars").dataset.budget || 0);
-        const next = cur === v ? 0 : v;
-        document.getElementById("stars").dataset.budget = next;
-        document.querySelectorAll("#stars button").forEach(x =>
-          x.classList.toggle("on", next > 0 && +x.dataset.b <= next));
-        // TODO(E8): filter kesfet/yasam/ihtiyac by budget
-      } else {
+      {
         const on = b.getAttribute("aria-pressed") !== "true";
         b.setAttribute("aria-pressed", on);
         if (b.dataset.th) {                       // Keşfet theme chip -> filter POIs
@@ -878,9 +1039,6 @@
         } else if (b.dataset.ih) {                // İhtiyaç category chip -> filter need points
           if (on) ihState.add(b.dataset.ih); else ihState.delete(b.dataset.ih);
           applyIhtiyacVisibility();
-        } else if (b.id === "chip-yog") {         // crowded-zone wash
-          crowdOn = on;
-          applyKesfetVisibility();
         }
       }
     };

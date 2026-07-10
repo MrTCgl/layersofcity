@@ -1,7 +1,7 @@
 # layers of city — Proje Planı
 
 > Bu belge, proje konseptinin tartışmalar sonucunda geldiği son durumu özetler.
-> Son güncelleme: 2026-07-08
+> Son güncelleme: 2026-07-10
 
 ## A. Konsept (kararlaştırıldı)
 
@@ -145,3 +145,25 @@ Kullanıcının el eskizine göre **panel tamamen kaldırıldı; harita tam ekra
 - **Yol tarifi:** haritada yer seçilince yer kartı açılır; "Yol tarifi" düğmesi
   Google Maps'i dış bağlantıyla açar (anahtarsız URL şeması). Navigasyon
   Google'a devredilir — uygulama oryantasyon aracı olarak kalır.
+
+
+## J. Geliştirme Turu güncellemeleri (2026-07-10 — uygulandı)
+
+Kullanıcı istekleriyle B ve I bölümlerini güncelleyen kararlar:
+
+- **Yaşam grubu → Bölgeler:** oteller/konutlar/alt merkezler/öğrenciler bölgeleri
+  yerine şehir geneli 4 bölge türü: **Turistik, Ticari, Eğitim, Doğal**
+  (OSM poligonları; tür başına renk). Çekmece sol kenarda.
+- **Keşfet genişledi:** tarihi/modern/doğa/gastronomi/alışveriş + **oteller,
+  yurtlar, kamu** — şehir geneli, OSM + kalite vekili (wikipedia/wikidata/marka)
+  + ~1km ızgara seyreltme. Sağlık ve yoğunluk kaldırıldı.
+- **Bütçe seçici (H bölümü) iptal edildi** (kullanıcı kararı); yıldız UI kaldırıldı.
+- **Altlık modları:** Sade (yazısız pastel vektör — yazılar yalnız açılan
+  katmanlardan), OSM Detaylı (vektör, OSM renk dili, POI ikonsuz), Uydu (Esri
+  World Imagery). OSM notları + GPS izleri anahtarsız overlay olarak aç/kapa.
+- **Kapı simgeleri:** havaalanı=uçak, gar=tren, otobüs terminali=otobüs
+  (liman=gemi şablonu hazır; Roma'da liman v1 dışı).
+- **Koordinat kutusu:** "enlem, boylam" yapıştır → haritaya uçuş + yer kartı.
+- **Dil seçici:** sağ üstte tek kısaltma + kayar menü (6 dile hazır).
+- Ulaşım hat renkleri koyulaştırıldı; Girişler bağlantı rotaları gerçek
+  geometride ve belirgin.

@@ -39,9 +39,21 @@ body.city header{position:absolute; top:0; left:0; right:0}
 .logo svg{flex:none}
 .logo .dim{color:var(--ink-soft); font-weight:400}
 header .grow{flex:1}
-.seg{display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden}
-.seg button{padding:5px 12px; font-size:12px; letter-spacing:.06em; color:var(--ink-soft)}
-.seg button[aria-pressed="true"]{background:var(--lilac); color:var(--surface)}
+.langwrap{position:relative}
+#langbtn{padding:6px 13px; font-size:12px; letter-spacing:.06em; border:1px solid var(--line);
+  border-radius:999px; color:var(--ink-soft); background:color-mix(in srgb, var(--surface) 88%, transparent)}
+#langbtn[aria-expanded="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
+#langmenu{position:absolute; right:0; top:calc(100% + 6px); z-index:40; width:64px;
+  background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow);
+  padding:5px; display:flex; flex-direction:column; gap:2px;
+  opacity:0; transform:translateY(-4px); pointer-events:none; transition:opacity .2s, transform .2s}
+#langmenu.show{opacity:1; transform:none; pointer-events:auto}
+#langmenu[hidden]{display:none}
+#langmenu button{padding:6px 0; border-radius:8px; font-size:12px; letter-spacing:.06em; color:var(--ink-soft)}
+#langmenu button:hover:not(:disabled){background:var(--powder); color:var(--ink)}
+:root[data-theme="dark"] #langmenu button:hover:not(:disabled){background:var(--line)}
+#langmenu button.on{background:var(--lilac); color:#fff}
+#langmenu button:disabled{opacity:.35; cursor:default}
 .iconbtn{width:36px; height:36px; display:grid; place-items:center; border-radius:999px; color:var(--ink-soft)}
 .iconbtn:hover{background:var(--powder); color:var(--ink)}
 :root[data-theme="dark"] .iconbtn:hover{background:var(--line)}
@@ -162,15 +174,6 @@ body.city #topchips{display:flex}
 .ic-wx .ic-wt{margin-left:auto; font-variant-numeric:tabular-nums}
 .ic-updated{margin-top:9px; font-size:11px; color:var(--ink-soft)}
 
-/* budget stars (transparent, below city bar) */
-#budgetchip{position:absolute; left:18px; top:110px; z-index:15; display:flex; align-items:center}
-.stars{display:flex; gap:3px}
-.stars button{
-  padding:3px; color:var(--ink-soft); opacity:.45; display:grid; place-items:center;
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,.15));
-}
-.stars button.on{color:var(--peach); opacity:1}
-
 /* left-edge drawer (moved off the right so it clears the zoom +/- stack) */
 #drawerwrap{position:absolute; left:0; top:50%; transform:translateY(-50%); display:flex; flex-direction:row-reverse; align-items:center; z-index:15}
 #drawertab{
@@ -201,6 +204,9 @@ body.city #topchips{display:flex}
 }
 #bottombar button{padding:8px 18px; border-radius:999px; font-size:13.5px; color:var(--ink-soft)}
 #bottombar button[aria-expanded="true"]{background:var(--lilac); color:#fff}
+/* label takes its group's family color while any of its layers are on */
+#bottombar #bb-kesfet.haslayers{background:#8A76B8; color:#fff}
+#bottombar #bb-ihtiyac.haslayers{background:#C1654B; color:#fff}
 .sheet{
   position:absolute; left:50%; bottom:64px; transform:translateX(-50%) translateY(10px);
   max-width:calc(100% - 24px); z-index:16; opacity:0; pointer-events:none; transition:all .25s;
@@ -214,12 +220,14 @@ body.city #topchips{display:flex}
 }
 .ichip[aria-pressed="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
 /* pressed chips take their theme tone (Keşfet = lilac family, İhtiyaç = terracotta family) */
-.ichip[data-th="tarihi"][aria-pressed="true"]{background:#6F5799; border-color:#6F5799}
-.ichip[data-th="modern"][aria-pressed="true"]{background:#8168AC; border-color:#8168AC}
-.ichip[data-th="doga"][aria-pressed="true"]{background:#937CBE; border-color:#937CBE}
-.ichip[data-th="gastronomi"][aria-pressed="true"]{background:#A590CE; border-color:#A590CE}
-.ichip[data-th="alisveris"][aria-pressed="true"]{background:#B7A5DC; border-color:#B7A5DC}
-.ichip[data-th="saglik"][aria-pressed="true"]{background:#C9BAE8; border-color:#C9BAE8}
+.ichip[data-th="kamu"][aria-pressed="true"]{background:#4A3970; border-color:#4A3970}
+.ichip[data-th="tarihi"][aria-pressed="true"]{background:#5F4A8C; border-color:#5F4A8C}
+.ichip[data-th="otel"][aria-pressed="true"]{background:#7460A3; border-color:#7460A3}
+.ichip[data-th="modern"][aria-pressed="true"]{background:#8A76B8; border-color:#8A76B8}
+.ichip[data-th="doga"][aria-pressed="true"]{background:#9F8CCA; border-color:#9F8CCA}
+.ichip[data-th="gastronomi"][aria-pressed="true"]{background:#B3A2D9; border-color:#B3A2D9}
+.ichip[data-th="alisveris"][aria-pressed="true"]{background:#C6B8E6; border-color:#C6B8E6}
+.ichip[data-th="yurt"][aria-pressed="true"]{background:#8A5FA0; border-color:#8A5FA0}
 .ichip[data-ih="hastane"][aria-pressed="true"]{background:#B34F39; border-color:#B34F39}
 .ichip[data-ih="eczane"][aria-pressed="true"]{background:#C1654B; border-color:#C1654B}
 .ichip[data-ih="kiralik-arac"][aria-pressed="true"]{background:#CE7A5E; border-color:#CE7A5E}
@@ -229,30 +237,70 @@ body.city #topchips{display:flex}
 .ichip[data-ih="kutuphane"][aria-pressed="true"]{background:#F4CDB4; border-color:#F4CDB4}
 
 /* right-bottom control stack */
+/* right control column: coord + basemap + zoom stack + locate */
+#rightctl{
+  position:absolute; right:16px; bottom:74px; z-index:15;
+  display:flex; flex-direction:column; gap:8px; align-items:flex-end;
+}
+.ctlwrap{position:relative}
+.cbtn{
+  width:44px; height:44px; border-radius:999px; background:var(--surface);
+  border:1px solid var(--line); box-shadow:var(--shadow);
+  display:grid; place-items:center; color:var(--ink-soft);
+}
+.cbtn:hover{color:var(--lilac)}
+.cbtn[aria-expanded="true"]{color:var(--lilac); border-color:var(--lilac)}
+/* coordinate box slides out to the left of its button */
+#coordbox{
+  position:absolute; right:52px; top:50%;
+  transform:translateY(-50%) translateX(10px); opacity:0; pointer-events:none;
+  transition:opacity .25s, transform .25s;
+  background:var(--surface); border:1px solid var(--line); border-radius:999px;
+  box-shadow:var(--shadow); padding:8px 14px;
+}
+#coordbox.show{transform:translateY(-50%); opacity:1; pointer-events:auto}
+#coordbox[hidden]{display:none}
+#coordinput{border:none; outline:none; background:transparent; color:var(--ink);
+  font:inherit; font-size:13px; width:min(220px, 46vw)}
+#coordinput::placeholder{color:var(--ink-soft)}
+/* basemap menu */
+#basemapmenu{
+  position:absolute; right:52px; bottom:0; width:150px;
+  background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  box-shadow:var(--shadow); padding:7px; display:flex; flex-direction:column; gap:3px;
+  opacity:0; transform:translateX(10px); pointer-events:none; transition:opacity .2s, transform .2s;
+}
+#basemapmenu.show{opacity:1; transform:none; pointer-events:auto}
+#basemapmenu[hidden]{display:none}
+.bmopt,.bmtog{padding:7px 10px; border-radius:8px; font-size:12.5px; text-align:left; color:var(--ink-soft)}
+.bmopt:hover,.bmtog:hover{background:var(--powder); color:var(--ink)}
+:root[data-theme="dark"] .bmopt:hover,:root[data-theme="dark"] .bmtog:hover{background:var(--line)}
+.bmopt[aria-pressed="true"]{background:var(--lilac); color:#fff}
+.bmtog[aria-pressed="true"]{color:var(--lilac); font-weight:600}
+.bmsep{height:1px; background:var(--line); margin:4px 2px}
 #zoomctl{
-  position:absolute; right:16px; bottom:186px; z-index:15;
   display:flex; flex-direction:column; width:44px;
   background:var(--surface); border:1px solid var(--line);
   border-radius:14px; box-shadow:var(--shadow); overflow:hidden;
 }
-#zoomctl button{height:40px; display:grid; place-items:center; color:var(--ink-soft)}
+#zoomctl button{height:40px; width:44px; display:grid; place-items:center; color:var(--ink-soft)}
 #zoomctl button:hover{color:var(--lilac); background:var(--powder)}
 :root[data-theme="dark"] #zoomctl button:hover{background:var(--line)}
-#zoomctl button + button{border-top:1px solid var(--line)}
+#zoom-home{height:44px}
+/* +/−/pan hide under Home; hover (or .open on touch) slides them out */
+#zoomstack{display:flex; flex-direction:column; max-height:0; opacity:0; overflow:hidden;
+  transition:max-height .3s ease, opacity .25s}
+#zoomstack button + button{border-top:1px solid var(--line)}
+#zoomstack button:last-child{border-bottom:1px solid var(--line)}
+#zoomctl:hover #zoomstack, #zoomctl.open #zoomstack{max-height:140px; opacity:1}
 /* grab-pan: press and drag this to move the map (mouse-free) */
-#panbtn{
-  position:absolute; right:16px; bottom:126px; width:44px; height:44px;
-  border-radius:999px; background:var(--surface); box-shadow:var(--shadow);
-  border:1px solid var(--line); display:grid; place-items:center; color:var(--ink-soft); z-index:15;
-  touch-action:none; cursor:grab;
-}
-#panbtn:hover{color:var(--lilac)}
+#panbtn{touch-action:none; cursor:grab}
 #panbtn.active{color:var(--lilac); cursor:grabbing; background:var(--powder)}
 :root[data-theme="dark"] #panbtn.active{background:var(--line)}
 #locbtn{
-  position:absolute; right:16px; bottom:74px; width:44px; height:44px;
+  width:44px; height:44px;
   border-radius:999px; background:var(--surface); box-shadow:var(--shadow);
-  border:1px solid var(--line); display:grid; place-items:center; color:var(--ink-soft); z-index:15;
+  border:1px solid var(--line); display:grid; place-items:center; color:var(--ink-soft);
 }
 #locbtn:hover{color:var(--lilac)}
 #locbtn[aria-pressed="true"]{color:var(--lilac)}
