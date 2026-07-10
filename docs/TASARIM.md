@@ -41,10 +41,13 @@ Renkler CSS değişkeni olarak tanımlanır (`--renk-adı`); bileşenlere hex ya
 
 Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağırmaz:
 
-- Metro A: `#E08A5B` (soluk turuncu) · Metro B: `#6E93C4` (soluk mavi)
-- Metro C: `#7FA98A` (soluk yeşil) · Tramvay: `#A8A0B5` · Banliyö/FL: `#B5ADA0`
-- Otobüs (kilit hatlar): `#C9AE85` (soluk hardal); metro/tramvaydan ince çizilir
-- Bölgesel tren (FL hatları): `#8FA1B3` (soluk slate); metronun **altında**, ince
+- Metro A: `#C9682F` (koyu turuncu) · Metro B: `#3D69A8` (koyu mavi)
+- Metro C: `#4F8A5F` (koyu yeşil) · Tramvay: `#6F6390` (koyu mor-gri) ·
+  Banliyö: `#8D8272`
+- Otobüs (kilit hatlar): `#A67C42` (koyu hardal); metro/tramvaydan ince çizilir
+- Bölgesel tren (FL hatları): `#5F7A94` (koyu slate); metronun **altında**, ince
+- Not (2026-07-10): hat renkleri kullanıcı isteğiyle koyulaştırıldı — soluk
+  altlık üstünde hatlar netlik kazandı; altlık pastel kalmaya devam ediyor
 - POI ton aileleri: **Keşfet = lila tonları** (tarihi `#6F5799` → sağlık
   `#C9BAE8`), **İhtiyaç = kiremit tonları** (hastane `#B34F39` → kütüphane
   `#F4CDB4`); grup tek renk ailesi olarak okunur, basılı çipler aynı tonu alır
