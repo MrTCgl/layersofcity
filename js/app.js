@@ -272,14 +272,83 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260711-3"; // cache-bust for the basemap style JSON files
+  const BM_VER = "20260711-4"; // cache-bust for the basemap style JSON files
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
   function rasterStyle(tiles, attribution) {
     return { version: 8, glyphs: GLYPHS,
       sources: { r: { type: "raster", tiles: [tiles], tileSize: 256, attribution } },
-      layers: [{ id: "r", type: "raster", source: "r" }] };
+      // lift the darkest pixels a touch: this imagery has heavy shadows
+      layers: [{ id: "r", type: "raster", source: "r",
+        paint: { "raster-brightness-min": 0.08, "raster-contrast": -0.06, "raster-saturation": -0.04 } }] };
+  }
+
+  /* ── place-name skeleton: pale OSM labels shown on Sade + Uydu, independent
+     of any layer toggle, so the map always "reads" as the city. One definition,
+     laid over both basemaps from the live OpenFreeMap (omt) vector source. ── */
+  const NAME = ["coalesce", ["get", "name:latin"], ["get", "name"]];
+  const SK_COLORS = {
+    light: { ink: "#5C5348", strong: "#453E35", water: "#7A80A4", green: "#69764F", road: "#847A6C", halo: "#F2EDE7", hw: 1.5 },
+    dark:  { ink: "#CFC8D8", strong: "#E4DEEC", water: "#8E88AC", green: "#8C9578", road: "#8B849C", halo: "#26222C", hw: 1.5 },
+    sat:   { ink: "#FFFFFF", strong: "#FFFFFF", water: "#CFE0FF", green: "#DDEBC8", road: "#FFEEC2", halo: "#151515", hw: 1.9 }
+  };
+  function skeletonLabels(c) {
+    const F = ["Noto Sans Regular"];
+    return [
+      { id: "sk-water-name", type: "symbol", source: "omt", "source-layer": "water_name", minzoom: 10.5,
+        layout: { "text-field": NAME, "text-font": F, "text-letter-spacing": 0.15, "symbol-placement": "line",
+          "text-max-angle": 40, "text-size": ["interpolate", ["linear"], ["zoom"], 10.5, 11, 15, 14], "text-optional": true },
+        paint: { "text-color": c.water, "text-halo-color": c.halo, "text-halo-width": 1.3, "text-halo-blur": 0.4 } },
+      { id: "sk-park-name", type: "symbol", source: "omt", "source-layer": "park", minzoom: 12,
+        layout: { "text-field": NAME, "text-font": F, "text-max-width": 7, "text-letter-spacing": 0.03,
+          "text-size": ["interpolate", ["linear"], ["zoom"], 12, 10.5, 15, 12.5], "text-optional": true },
+        paint: { "text-color": c.green, "text-halo-color": c.halo, "text-halo-width": 1.3, "text-halo-blur": 0.4 } },
+      { id: "sk-road-name", type: "symbol", source: "omt", "source-layer": "transportation_name",
+        filter: ["in", "class", "motorway", "trunk", "primary", "secondary"], minzoom: 13,
+        layout: { "text-field": NAME, "text-font": F, "symbol-placement": "line", "text-max-angle": 38,
+          "text-size": ["interpolate", ["linear"], ["zoom"], 13, 10.5, 16, 12.5], "text-optional": true },
+        paint: { "text-color": c.road, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.3 } },
+      // landmark POIs: universities, hospitals, museums, stadiums… (Sapienza et al.)
+      { id: "sk-poi", type: "symbol", source: "omt", "source-layer": "poi", minzoom: 14,
+        filter: ["all", ["<=", ["get", "rank"], 8],
+          ["in", ["get", "class"], ["literal", ["college", "university", "school", "hospital", "museum",
+            "attraction", "monument", "memorial", "castle", "stadium", "pitch", "cemetery", "library",
+            "theatre", "arts_centre", "town_hall", "townhall", "place_of_worship", "park", "garden", "zoo"]]]],
+        layout: { "text-field": NAME, "text-font": F, "text-anchor": "top", "text-offset": [0, 0.5],
+          "text-max-width": 8, "symbol-sort-key": ["get", "rank"], "text-padding": 4,
+          "text-size": ["interpolate", ["linear"], ["zoom"], 14, 11, 17, 13.5], "text-optional": true },
+        paint: { "text-color": c.ink, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.4 } },
+      { id: "sk-place-suburb", type: "symbol", source: "omt", "source-layer": "place",
+        filter: ["in", "class", "suburb", "quarter", "neighbourhood"], minzoom: 11.5,
+        layout: { "text-field": NAME, "text-font": F, "text-letter-spacing": 0.08, "text-transform": "uppercase",
+          "text-max-width": 8, "text-padding": 6, "text-size": ["interpolate", ["linear"], ["zoom"], 11.5, 11.5, 15, 15], "text-optional": true },
+        paint: { "text-color": c.ink, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.4 } },
+      { id: "sk-place-village", type: "symbol", source: "omt", "source-layer": "place",
+        filter: ["in", "class", "village", "hamlet"], minzoom: 11,
+        layout: { "text-field": NAME, "text-font": F, "text-max-width": 8, "text-padding": 6,
+          "text-size": ["interpolate", ["linear"], ["zoom"], 11, 11, 14, 13], "text-optional": true },
+        paint: { "text-color": c.ink, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.4 } },
+      { id: "sk-place-town", type: "symbol", source: "omt", "source-layer": "place",
+        filter: ["==", "class", "town"], minzoom: 9.5,
+        layout: { "text-field": NAME, "text-font": F, "text-max-width": 8, "text-padding": 8,
+          "text-size": ["interpolate", ["linear"], ["zoom"], 9.5, 11.5, 14, 15], "text-optional": true },
+        paint: { "text-color": c.strong, "text-halo-color": c.halo, "text-halo-width": 1.6, "text-halo-blur": 0.4 } },
+      { id: "sk-place-city", type: "symbol", source: "omt", "source-layer": "place",
+        filter: ["==", "class", "city"], maxzoom: 13,
+        layout: { "text-field": NAME, "text-font": F, "text-letter-spacing": 0.12, "text-transform": "uppercase", "text-padding": 10,
+          "text-size": ["interpolate", ["linear"], ["zoom"], 6, 13, 11, 19], "text-optional": true },
+        paint: { "text-color": c.strong, "text-halo-color": c.halo, "text-halo-width": 1.7, "text-halo-blur": 0.4 } }
+    ];
+  }
+  function addSkeletonLabels() {
+    if (!map || basemapMode === "detay") return; // OSM Detaylı brings its own labels
+    if (!map.getSource("omt")) map.addSource("omt", { type: "vector", url: "https://tiles.openfreemap.org/planet" });
+    const c = basemapMode === "uydu" ? SK_COLORS.sat : SK_COLORS[theme];
+    skeletonLabels(c).forEach(spec => {
+      if (map.getLayer(spec.id)) map.removeLayer(spec.id);
+      map.addLayer(spec);
+    });
   }
   function basemapStyle() {
     if (basemapMode === "detay") return `assets/basemap-detail.json?v=${BM_VER}`;
@@ -582,6 +651,7 @@
     if (!map || !manifest) return;
     const pal = PALETTE[theme];
     makeGateIcons();
+    addSkeletonLabels();   // pale place names first, so our overlays sit on top
     Object.keys(cityData).forEach(layerId => {
       const src = "lyr-" + layerId;
       // idempotent: drop any stale copy so this is safe on every style.load
