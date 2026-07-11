@@ -272,7 +272,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260711-4"; // cache-bust for the basemap style JSON files
+  const BM_VER = "20260711-6"; // cache-bust for the basemap style JSON files
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
@@ -397,11 +397,11 @@
     if (walkOn && walkData && !map.getSource("walk")) {
       map.addSource("walk", { type: "geojson", data: walkData });
       const on = theme === "dark";
-      const ped = on ? "#5FBE86" : "#3E9E63", art = on ? "#D08A5E" : "#C67A4E";
+      const ped = on ? "#5FBE86" : "#3E9E63", art = on ? "#E8935A" : "#C7561F";
       map.addLayer({ id: "walk-artery", type: "line", source: "walk", filter: ["==", ["get", "k"], "artery"],
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": art, "line-opacity": 0.55,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 11, 0.8, 14, 2.4, 17, 5] } }, firstLyr);
+        paint: { "line-color": art, "line-opacity": 0.85,
+          "line-width": ["interpolate", ["linear"], ["zoom"], 11, 1.4, 14, 3.4, 17, 6.5] } }, firstLyr);
       map.addLayer({ id: "walk-ped-area", type: "fill", source: "walk", filter: ["==", ["get", "k"], "ped-area"],
         paint: { "fill-color": ped, "fill-opacity": 0.22 } }, firstLyr);
       map.addLayer({ id: "walk-ped-line", type: "line", source: "walk", filter: ["==", ["get", "k"], "ped-line"],
@@ -417,7 +417,7 @@
   async function fetchWalk() {
     if (walkData || !manifest) return;
     try {
-      const r = await fetch(`data/${manifest.id}/walkability.geojson`);
+      const r = await fetch(`data/${manifest.id}/walkability.geojson?v=${BM_VER}`);
       if (r.ok) walkData = await r.json();
     } catch { /* offline -> toggle just does nothing visible */ }
   }
