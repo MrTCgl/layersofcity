@@ -61,8 +61,14 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   altlık paletiyle uyumlu soluk tonlar (`sk-*` katmanları, OpenFreeMap omt
   vektör kaynağından). Katman açılınca üstüne biner. · **OSM Detaylı** =
   vektör, OSM renk dili, yol/semt adları var, POI ikonu yok
-  (`assets/basemap-detail.json`) · **Uydu** = Esri World Imagery raster.
-  + OSM notları / GPS izleri overlay
+  (`assets/basemap-detail.json`) · **Uydu** = Esri World Imagery raster
+  (koyu gölgeler `raster-brightness-min .08` ile hafif açıldı).
+  + OSM notları / GPS izleri / **Yaya & araç** overlay (altlık menüsünde,
+  GPS'in altında). Yaya & araç (2026-07-11): OSM'den türetilmiş sokak
+  karakteri — yeşil = yaya öncelikli (`highway=pedestrian/living_street` +
+  yaya meydanları), turuncu = ana arter (`primary/trunk/motorway`).
+  `data/<sehir>/walkability.geojson`, katman gruplarından bağımsız, istenince
+  yüklenir. Canlı trafik hacmi DEĞİL, sokağın karakteridir.
 - Kapı simgeleri: uçak/tren/otobüs/gemi — canvas'a çizilen 24x24 çizgisel
   glyph, daire zemin (makeGateIcons); Girişler bağlantı rotası `linkStrong`
   (`#7C5FB0`/`#9B85CC`), 3px kesikli

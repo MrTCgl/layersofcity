@@ -61,6 +61,8 @@
   "base.uydu": "Satellite",
   "base.notlar": "OSM notes",
   "base.gps": "GPS traces",
+  "base.walk": "Walk & drive",
+  "base.walk.hint": "Green: pedestrian-first · Orange: main artery",
   "coord.go": "go to coordinates",
   "coord.ph": "paste lat, lon",
   "th.otel": "hotels",

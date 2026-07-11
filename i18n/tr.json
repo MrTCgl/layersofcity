@@ -61,6 +61,8 @@
   "base.uydu": "Uydu",
   "base.notlar": "OSM notları",
   "base.gps": "GPS izleri",
+  "base.walk": "Yaya & araç",
+  "base.walk.hint": "Yeşil: yaya öncelikli · Turuncu: ana arter",
   "coord.go": "koordinata git",
   "coord.ph": "enlem, boylam yapıştır",
   "th.otel": "oteller",
