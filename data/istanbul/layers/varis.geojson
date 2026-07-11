@@ -1,0 +1,16 @@
+{"type":"FeatureCollection","features":[
+{"type":"Feature","properties":{"id":"link-ist","kind":"link","subKey":"arr.ist.sub"},"geometry":{"type":"LineString","coordinates":[[28.7519,41.2753],[28.8600,41.1600],[29.0090,41.0680]]}},
+{"type":"Feature","properties":{"id":"link-saw","kind":"link","subKey":"arr.saw.sub"},"geometry":{"type":"LineString","coordinates":[[29.3092,40.8986],[29.1500,40.9500],[29.0300,40.9970]]}},
+{"type":"Feature","properties":{"id":"link-halkali","kind":"link","subKey":"arr.halkali.sub"},"geometry":{"type":"LineString","coordinates":[[28.7756,41.0566],[28.8700,41.0250],[28.9500,41.0050]]}},
+{"type":"Feature","properties":{"id":"link-sogutlucesme","kind":"link","subKey":"arr.sogutlucesme.sub"},"geometry":{"type":"LineString","coordinates":[[29.0356,40.9906],[29.0250,41.0100],[29.0157,41.0256]]}},
+{"type":"Feature","properties":{"id":"gate-ist","kind":"gate","name":"İstanbul Havalimanı","gtype":"air","mode":"plane","subKey":"arr.ist.sub","lab":1},"geometry":{"type":"Point","coordinates":[28.7519,41.2753]}},
+{"type":"Feature","properties":{"id":"gate-saw","kind":"gate","name":"Sabiha Gökçen","gtype":"air","mode":"plane","subKey":"arr.saw.sub","lab":1},"geometry":{"type":"Point","coordinates":[29.3092,40.8986]}},
+{"type":"Feature","properties":{"id":"gate-halkali","kind":"gate","name":"Halkalı","gtype":"rail","mode":"train","subKey":"arr.halkali.sub","lab":1},"geometry":{"type":"Point","coordinates":[28.7756,41.0566]}},
+{"type":"Feature","properties":{"id":"gate-sogutlucesme","kind":"gate","name":"Söğütlüçeşme","gtype":"rail","mode":"train","subKey":"arr.sogutlucesme.sub","lab":1},"geometry":{"type":"Point","coordinates":[29.0356,40.9906]}},
+{"type":"Feature","properties":{"id":"gate-otogar","kind":"gate","name":"Esenler Otogarı","mode":"bus","subKey":"arr.otogar.sub","lab":1},"geometry":{"type":"Point","coordinates":[28.8889,41.0399]}},
+{"type":"Feature","properties":{"id":"gate-eminonu","kind":"gate","name":"Eminönü","mode":"ship","subKey":"arr.ferry.sub","lab":1},"geometry":{"type":"Point","coordinates":[28.9736,41.0175]}},
+{"type":"Feature","properties":{"id":"gate-karakoy","kind":"gate","name":"Karaköy","mode":"ship","subKey":"arr.ferry.sub","lab":1},"geometry":{"type":"Point","coordinates":[28.9770,41.0245]}},
+{"type":"Feature","properties":{"id":"gate-kadikoy","kind":"gate","name":"Kadıköy","mode":"ship","subKey":"arr.ferry.sub","lab":1},"geometry":{"type":"Point","coordinates":[29.0230,40.9925]}},
+{"type":"Feature","properties":{"id":"gate-uskudar","kind":"gate","name":"Üsküdar","mode":"ship","subKey":"arr.ferry.sub","lab":1},"geometry":{"type":"Point","coordinates":[29.0157,41.0255]}},
+{"type":"Feature","properties":{"id":"gate-besiktas","kind":"gate","name":"Beşiktaş","mode":"ship","subKey":"arr.ferry.sub","lab":1},"geometry":{"type":"Point","coordinates":[29.0050,41.0410]}}
+]}

@@ -331,3 +331,53 @@ kapı simgeleri (uçak/tren/otobüs), Keşfet revizyonu (sağlık/yoğunluk çı
 oteller/yurtlar/kamu şehir geneli girdi; bottombar renklenmesi), Bölgeler
 çekmecesi, bütçe iptali, dil seçici menüsü, doküman güncellemeleri.
 E10 için dil menüsü altyapısı hazır (DE/FR/IT/ES disabled bekliyor).
+
+---
+
+## İkinci şehir — İstanbul ✅ tamam (2026-07-11)
+
+**Amaç:** Roma modelini ikinci bir şehirle doğrulamak; `yeni-sehir` akışıyla,
+kod değişmeden (tek genel dokunuş dışında) şehir geneline yayılı çok noktalı
+İstanbul. Kullanıcı isteği: "Roma gibi, çok sayıda nokta, şehir geneli."
+
+Yapıldı (hepsi OSM Overpass boru hattı — `docs/VERI.md`):
+- **Omurga (120KB):** 21 hat gerçek renkleriyle — M1A/M1B/M2/M3/M4/M5/M6/M7/M8/
+  M9/M11, Marmaray, T1/T3/T4/T5, F1-F4 füniküler, Metrobüs; 210 metro/Marmaray
+  istasyonu (kind:node), 136 tramvay durağı (kind:stop), 21 hat rozeti, 7
+  aktarma merkezi (Yenikapı, Üsküdar, Ayrılık Çeşmesi, Mecidiyeköy, Gayrettepe,
+  Sirkeci, Taksim). DP ~40m sadeleştirme.
+- **Keşfet (450 nokta, 82KB):** tarihi 130 / modern 30 / doğa 60 / gastronomi
+  70 / alışveriş 40 / otel 55 / yurt 25 / kamu 40. Kalite vekili
+  (wikipedia/wikidata > marka > adlı) + ~1km ızgara seyreltme.
+- **İhtiyaç (355 nokta, 63KB):** eczane 70 / market 70 / yakıt 45 / kiralık
+  araç 30 / kütüphane 35 / müze 60 / hastane 45. Aynı vekil + seyreltme.
+- **Bölgeler:** ticari 45 (landuse=commercial/retail >0.04km²), eğitim 30
+  (amenity=university), doğal 40 (adlı park/orman >0.15km²) — mekanik; turistik
+  10 (Sultanahmet, Beyoğlu, Galata, Beşiktaş-Ortaköy, Balat-Fener, Eyüpsultan,
+  Bebek-Boğaz, Üsküdar, Kadıköy-Moda, Eminönü-Kapalıçarşı) — kaba oryantasyon
+  zonları, el çizimi.
+- **Varış (14):** IST + SAW (uçak), Halkalı + Söğütlüçeşme (Marmaray/YHT),
+  Esenler Otogarı (otobüs), 5 Boğaz vapur iskelesi (mode:ship); 4 bağlantı
+  çizgisi merkeze.
+- **Manifest:** center [28.98,41.03], home/maxBounds iki kıtayı + IST/SAW +
+  Marmaray Halkalı↔Gebze'yi kapsar; timezone Europe/Istanbul, currency TRY,
+  editoryal fiyat tablosu (2026-07, yaklaşık). cities.json → `ready`.
+- **i18n:** `arr.*` (kapı ipuçları) + `hub.*` (aktarma altyazıları) tr+en.
+
+**Tek kod dokunuşu (kullanıcı onaylı, genel):** hat/istasyon rengi artık
+veriden okunuyor — feature'da `color` alanı varsa (OSM `colour` etiketinden)
+o kullanılır, yoksa Roma'nın lineRef paletine düşer (`lineColorExpr`). Çok
+hatlı şehirler her hattı kendi resmi renginde gösterir; gelecek şehirler için
+de geçerli, çok-şehir güvenli.
+
+Bitti sayılır:
+- [x] İstanbul dünya ekranından açılıyor, harita iki kıtayı getiriyor
+- [x] Tüm katmanlar (395 omurga + 450 keşfet + 355 ihtiyaç + 4 bölge + varış)
+      hatasız kuruluyor; headless doğrulamada 176 lyr-* katman, 0 stil/ifade
+      hatası; `lyr-omurga-line` renk ifadesi veriden-renk `case` olarak bağlı
+- [x] Dosya başına < 200KB (en büyük omurga 120KB)
+
+Durum notu: İkinci şehir tamam. walkability.geojson İstanbul için üretilmedi
+(Roma'ya özel; yaya altlık düğmesi veri gelmeyince sessizce boş kalıyor —
+graceful). Sandbox'ta karo/glyph ağı kapalı olduğundan render mock/stub ile
+doğrulandı (E7'deki gibi); canlı tarayıcıda karolar yüklenir.

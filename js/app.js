@@ -657,11 +657,17 @@
     };
   }
 
-  const lineColorExpr = ["match", ["get", "lineRef"],
+  // Line/station colour is data-driven: a feature may carry its own `color`
+  // (from the OSM `colour` tag), so a city with many lines shows each in its
+  // real hue with no code change. Falls back to the lineRef palette (Rome).
+  const lineRefColorExpr = ["match", ["get", "lineRef"],
     "metro-a", LINE_COLORS["metro-a"], "metro-b", LINE_COLORS["metro-b"],
     "metro-c", LINE_COLORS["metro-c"], "tram", LINE_COLORS["tram"],
     "rail", LINE_COLORS["rail"], "bus", LINE_COLORS["bus"],
     "train", LINE_COLORS["train"], "#B5ADA0"];
+  const lineColorExpr = ["case",
+    ["all", ["has", "color"], ["!=", ["get", "color"], ""]], ["get", "color"],
+    lineRefColorExpr];
 
   // Gate glyphs (plane/train/bus/ship) rendered onto canvas -> map images.
   // Stroke paths reuse the app's 24x24 line-icon language; plane is a fill glyph.
@@ -717,7 +723,7 @@
       add("-railline", { type: "line",
         filter: ["all", ["==", ["get", "kind"], "line"], ["==", ["get", "lineRef"], "train"]],
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": LINE_COLORS.train, "line-opacity": 0.9,
+        paint: { "line-color": lineColorExpr, "line-opacity": 0.9,
           "line-width": ["interpolate", ["linear"], ["zoom"], 10, 1.2, 14, 2.6] } });
       // transit lines (metro/tram/bus/rail — not the FL train network)
       add("-line", { type: "line",
