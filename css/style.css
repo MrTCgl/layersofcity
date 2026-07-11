@@ -319,6 +319,20 @@ body.city #topchips{display:flex}
   background:var(--lilac); border:2.5px solid var(--surface);
 }
 
+/* temporary coordinate marker (target ring) dropped by the coordinate jump box;
+   centred exactly on the point, clears on the next map move */
+.coord-pin{width:22px; height:22px; position:relative}
+.coord-pin::before{
+  content:""; position:absolute; inset:0; border-radius:999px;
+  border:2.5px solid var(--lilac); background:transparent;
+  box-shadow:0 1px 4px rgba(0,0,0,.3); animation:pulse 2.4s ease-out infinite;
+}
+.coord-pin::after{
+  content:""; position:absolute; left:50%; top:50%; width:7px; height:7px;
+  transform:translate(-50%,-50%); border-radius:999px;
+  background:var(--lilac); border:2px solid var(--surface);
+}
+
 /* place card (POI tap -> name + Google Maps directions) */
 .placecard{
   position:absolute; left:50%; bottom:64px; transform:translateX(-50%) translateY(8px);
