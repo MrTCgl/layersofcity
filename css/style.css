@@ -287,11 +287,15 @@ body.city #topchips{display:flex}
 #zoomctl button:hover{color:var(--lilac); background:var(--powder)}
 :root[data-theme="dark"] #zoomctl button:hover{background:var(--line)}
 #zoom-home{height:44px}
-/* +/−/pan hide under Home; hover (or .open on touch) slides them out */
+/* +/−/pan hide ABOVE Home; hover (or .open on touch) slides them up. The whole
+   right column is bottom-anchored, so this growth pushes only empty space above
+   — the coordinate/basemap/locate icons below never move. */
 #zoomstack{display:flex; flex-direction:column; max-height:0; opacity:0; overflow:hidden;
   transition:max-height .3s ease, opacity .25s}
-#zoomstack button{border-top:1px solid var(--line)}
+#zoomstack button + button{border-top:1px solid var(--line)}
 #zoomctl:hover #zoomstack, #zoomctl.open #zoomstack{max-height:140px; opacity:1}
+/* divider between the stack and Home only shows once the stack is out */
+#zoomctl:hover #zoom-home, #zoomctl.open #zoom-home{border-top:1px solid var(--line)}
 /* grab-pan: press and drag this to move the map (mouse-free) */
 #panbtn{touch-action:none; cursor:grab}
 #panbtn.active{color:var(--lilac); cursor:grabbing; background:var(--powder)}
