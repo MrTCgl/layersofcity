@@ -26,7 +26,7 @@
     if (map && basemapMode === "sade") {
       // setStyle wipes custom layers; 'style.load' only fires on first load in
       // this MapLibre build, so re-add explicitly once the new style settles.
-      map.setStyle(`assets/basemap-${theme}.json`);
+      map.setStyle(`assets/basemap-${theme}.json?v=${BM_VER}`);
       map.once("idle", addCityLayers);
     }
   };
@@ -272,6 +272,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
+  const BM_VER = "20260711-3"; // cache-bust for the basemap style JSON files
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
@@ -281,11 +282,11 @@
       layers: [{ id: "r", type: "raster", source: "r" }] };
   }
   function basemapStyle() {
-    if (basemapMode === "detay") return "assets/basemap-detail.json";
+    if (basemapMode === "detay") return `assets/basemap-detail.json?v=${BM_VER}`;
     if (basemapMode === "uydu") return rasterStyle(
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       "Esri, Maxar, Earthstar Geographics");
-    return `assets/basemap-${theme}.json`;
+    return `assets/basemap-${theme}.json?v=${BM_VER}`;
   }
   function updateBasemapMenu() {
     document.querySelectorAll("#basemapmenu .bmopt").forEach(b =>
