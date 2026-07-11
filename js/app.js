@@ -649,14 +649,23 @@
         layout: { "text-field": ["get", "ref"], "text-font": ["Noto Sans Regular"],
           "text-size": ["case", [">", ["length", ["get", "ref"]], 2], 9, 12], "text-allow-overlap": true },
         paint: { "text-color": "#ffffff" } });
-      // place labels (nodes, hub, gates, center, hint)
+      // important place labels (hub, center, hint) — always visible so the map
+      // never reads as anonymous: only the landmarks that orient a newcomer.
       add("-label", { type: "symbol",
-        filter: ["all", ["==", ["get", "lab"], 1], ["!=", ["get", "kind"], "badge"]],
+        filter: ["all", ["==", ["get", "lab"], 1],
+          ["any", ["==", ["get", "kind"], "hub"], ["==", ["get", "kind"], "center"], ["==", ["get", "kind"], "hint"]]],
         layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"],
           "text-size": ["match", ["get", "kind"], "hub", 13, 11],
           "text-anchor": "top", "text-offset": [0, 0.7], "text-optional": true },
         paint: { "text-color": ["match", ["get", "kind"], "hint", pal.inkSoft, pal.ink],
           "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
+      // station names (nodes) — the crowd; only surface once the user zooms in
+      // to read a neighbourhood, so the far view stays uncluttered.
+      add("-node-label", { type: "symbol",
+        filter: ["all", ["==", ["get", "lab"], 1], ["==", ["get", "kind"], "node"]], minzoom: 12.8,
+        layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"], "text-size": 10.5,
+          "text-anchor": "top", "text-offset": [0, 0.7], "text-optional": true },
+        paint: { "text-color": pal.ink, "text-halo-color": pal.halo, "text-halo-width": 1.4 } });
       // gate / hub subtitles (the arrival answer)
       add("-sub", { type: "symbol",
         filter: ["any", ["==", ["get", "kind"], "gate"], ["==", ["get", "kind"], "hub"]],
@@ -706,17 +715,23 @@
   }
 
   // Show only the transit sub-types currently enabled. Features without a
-  // lineRef (hub, historic center, hint labels) are always kept.
+  // lineRef (hubs, historic center) ride along while ANY type is on; when the
+  // user turns everything off, the whole backbone disappears — no stray dots
+  // or labels left on an otherwise empty map.
   function applyTransitFilter() {
     if (!map) return;
     const refPreds = [];
     Object.keys(TRANSIT_REFS).forEach(t => {
       if (transitState[t]) TRANSIT_REFS[t].forEach(r => refPreds.push(["==", ["get", "lineRef"], r]));
     });
+    const anyOn = refPreds.length > 0;
     const pred = ["any", ["!", ["has", "lineRef"]], ...refPreds];
-    ["-railline", "-line", "-node", "-stop", "-stop-label", "-badge", "-badge-label", "-label"].forEach(suf => {
+    ["-railline", "-line", "-node", "-stop", "-stop-label", "-badge", "-badge-label",
+     "-label", "-node-label", "-hub", "-center", "-center-dot", "-hint", "-sub"].forEach(suf => {
       const id = "lyr-omurga" + suf;
       if (!map.getLayer(id)) return;
+      map.setLayoutProperty(id, "visibility", anyOn ? "visible" : "none");
+      if (!anyOn) return;
       const base = baseFilters[id];
       map.setFilter(id, base ? ["all", base, pred] : pred);
     });
