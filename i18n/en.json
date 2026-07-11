@@ -71,5 +71,6 @@
   "bolge.turistik": "Tourist",
   "bolge.ticari": "Commercial",
   "bolge.egitim": "Education",
-  "bolge.dogal": "Nature"
+  "bolge.dogal": "Nature",
+  "coord.submit": "go"
 }

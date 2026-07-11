@@ -256,13 +256,18 @@ body.city #topchips{display:flex}
   transform:translateY(-50%) translateX(10px); opacity:0; pointer-events:none;
   transition:opacity .25s, transform .25s;
   background:var(--surface); border:1px solid var(--line); border-radius:999px;
-  box-shadow:var(--shadow); padding:8px 14px;
+  box-shadow:var(--shadow); padding:6px 6px 6px 14px;
+  display:flex; align-items:center; gap:6px;
 }
 #coordbox.show{transform:translateY(-50%); opacity:1; pointer-events:auto}
 #coordbox[hidden]{display:none}
 #coordinput{border:none; outline:none; background:transparent; color:var(--ink);
-  font:inherit; font-size:13px; width:min(220px, 46vw)}
+  font:inherit; font-size:13px; width:min(200px, 42vw)}
 #coordinput::placeholder{color:var(--ink-soft)}
+#coordgo{flex:none; width:32px; height:32px; border-radius:999px;
+  display:grid; place-items:center; color:var(--surface); background:var(--lilac)}
+#coordgo:hover{filter:brightness(1.06)}
+#coordgo:active{transform:scale(.94)}
 /* basemap menu */
 #basemapmenu{
   position:absolute; right:52px; bottom:0; width:150px;
