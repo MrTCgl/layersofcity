@@ -617,7 +617,10 @@
   // Transit sub-types inside the Hatlar (omurga) group, toggled from the
   // metro/tram/bus disclosure under the chip. Metromare (lineRef "rail")
   // rides with the metro toggle — it's the metro-like coastal line.
-  const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c", "rail"], tram: ["tram"], bus: ["bus"], train: ["train"] };
+  // Each disclosure category maps to the lineRef values that belong to it.
+  // Rome uses per-line refs (metro-a/b/c); other cities may use the generic
+  // class name ("metro"/"tram"/"bus"/"train") — both are listed so either works.
+  const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c", "rail", "metro"], tram: ["tram"], bus: ["bus"], train: ["train"] };
   const transitState = { metro: true, tram: true, bus: true, train: true };
 
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
@@ -867,7 +870,10 @@
     if (!map) return;
     Object.keys(cityData).forEach(layerId => {
       const g = groupOf(layerId);
-      if (g === "kesfet" || g === "bolgeler" || g === "ihtiyaclar") return; // owned by their own visibility fns
+      // These groups own their own visibility fns; omurga is driven by the
+      // transit sub-filter (applyTransitFilter), so don't let a sibling toggle
+      // (e.g. Girişler) force the backbone back on here.
+      if (g === "kesfet" || g === "bolgeler" || g === "ihtiyaclar" || g === "omurga") return;
       const vis = groupState[g] ? "visible" : "none";
       map.getStyle().layers.forEach(l => {
         if (l.id.startsWith("lyr-" + layerId)) map.setLayoutProperty(l.id, "visibility", vis);

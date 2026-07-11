@@ -377,6 +377,15 @@ Bitti sayılır:
       hatası; `lyr-omurga-line` renk ifadesi veriden-renk `case` olarak bağlı
 - [x] Dosya başına < 200KB (en büyük omurga 120KB)
 
+Düzeltme (2026-07-11, canlı mobil geri bildirimi): (A) `applyGroupVisibility`
+omurga'yı da yönetiyordu (groupState.omurga hep true) → "Girişler"e dokununca
+kapatılan omurga geri geliyordu; artık omurga bu fonksiyondan muaf (görünürlüğü
+yalnız `applyTransitFilter` yönetir). Roma'da da olan gizli hata. (B) metro
+hatlarının generic `lineRef:"metro"` değeri `TRANSIT_REFS.metro`'da yoktu →
+metro çizgileri süzülüp gizleniyordu; listeye "metro" eklendi (çok-şehir
+güvenli). (C) istasyon/durak/rozetlere en yakın hattın rengi + `lineRef` sınıfı
+atandı (Roma gibi renkli istasyonlar + alt-tür süzmesi çalışır).
+
 Durum notu: İkinci şehir tamam. walkability.geojson İstanbul için üretilmedi
 (Roma'ya özel; yaya altlık düğmesi veri gelmeyince sessizce boş kalıyor —
 graceful). Sandbox'ta karo/glyph ağı kapalı olduğundan render mock/stub ile
