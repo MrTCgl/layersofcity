@@ -290,8 +290,7 @@ body.city #topchips{display:flex}
 /* +/−/pan hide under Home; hover (or .open on touch) slides them out */
 #zoomstack{display:flex; flex-direction:column; max-height:0; opacity:0; overflow:hidden;
   transition:max-height .3s ease, opacity .25s}
-#zoomstack button + button{border-top:1px solid var(--line)}
-#zoomstack button:last-child{border-bottom:1px solid var(--line)}
+#zoomstack button{border-top:1px solid var(--line)}
 #zoomctl:hover #zoomstack, #zoomctl.open #zoomstack{max-height:140px; opacity:1}
 /* grab-pan: press and drag this to move the map (mouse-free) */
 #panbtn{touch-action:none; cursor:grab}
