@@ -1011,6 +1011,7 @@
   }
   coordInput.addEventListener("keydown", e => { if (e.key === "Enter") tryGoCoord(); });
   coordInput.addEventListener("paste", () => setTimeout(tryGoCoord, 0));
+  document.getElementById("coordgo").onclick = tryGoCoord;
 
   const zoomctl = document.getElementById("zoomctl");
   document.getElementById("zoom-home").onclick = () => {
