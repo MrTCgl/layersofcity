@@ -272,7 +272,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260711-8"; // cache-bust for the basemap style JSON files
+  const BM_VER = "20260711-9"; // cache-bust for the basemap style JSON files
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
@@ -556,6 +556,7 @@
           const rect = canvas.getBoundingClientRect();
           const ll = map.unproject([lpStart.x - rect.left, lpStart.y - rect.top]);
           longPressFired = true;
+          dropCoordPin(ll.lng, ll.lat, false);
           showPlaceCard("", ll.lng, ll.lat);
           lpStart = null;
         }, 550);
@@ -991,19 +992,22 @@
     const ok = (la, lo) => la > s && la < n && lo > w && lo < e;
     if (!ok(lat, lon)) { if (ok(lon, lat)) { const tmp = lat; lat = lon; lon = tmp; } else return; }
     map.flyTo({ center: [lon, lat], zoom: Math.max(map.getZoom(), 15) });
-    dropCoordPin(lon, lat);
+    dropCoordPin(lon, lat, true);
     showPlaceCard("", lon, lat);
   }
-  /* temporary pin marking a jumped-to coordinate; clears on the next user move */
+  /* temporary pin marking a chosen point (coordinate jump or long-press);
+     clears on the next user-driven map move */
   let coordPin = null;
-  function dropCoordPin(lon, lat) {
+  function dropCoordPin(lon, lat, afterFly) {
     if (coordPin) { coordPin.remove(); coordPin = null; }
     const el = document.createElement("div");
     el.className = "coord-pin";
     coordPin = new maplibregl.Marker({ element: el }).setLngLat([lon, lat]).addTo(map);
     const clear = () => { if (coordPin) { coordPin.remove(); coordPin = null; } };
-    // let the programmatic flyTo settle, then drop the pin on the next real move
-    map.once("moveend", () => { map.once("movestart", clear); });
+    // after a flyTo: wait for it to settle, THEN arm on the next real move.
+    // long-press (no camera move): arm on the next move straight away.
+    if (afterFly) map.once("moveend", () => { map.once("movestart", clear); });
+    else map.once("movestart", clear);
   }
   coordInput.addEventListener("keydown", e => { if (e.key === "Enter") tryGoCoord(); });
   coordInput.addEventListener("paste", () => setTimeout(tryGoCoord, 0));
