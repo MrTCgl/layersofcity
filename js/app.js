@@ -272,7 +272,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260711-6"; // cache-bust for the basemap style JSON files
+  const BM_VER = "20260711-7"; // cache-bust for the basemap style JSON files
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
@@ -397,17 +397,33 @@
     if (walkOn && walkData && !map.getSource("walk")) {
       map.addSource("walk", { type: "geojson", data: walkData });
       const on = theme === "dark";
-      const ped = on ? "#5FBE86" : "#3E9E63", art = on ? "#E8935A" : "#C7561F";
+      // colour by tier: t1 = main axis (darkest/strongest) … t3 = minor (light).
+      // For pedestrian, tiers are street class (pedestrian > living_street >
+      // footway/path); for vehicles, road class (motorway/trunk > primary >
+      // secondary). This is character/importance, not measured usage.
+      const pedC = on ? ["match", ["get", "t"], 1, "#7CDCA0", 2, "#54B27C", "#3B885C"]
+                      : ["match", ["get", "t"], 1, "#2C8A50", 2, "#57A570", "#93CBA4"];
+      const artC = on ? ["match", ["get", "t"], 1, "#F2A468", 2, "#DB8850", "#B0704A"]
+                      : ["match", ["get", "t"], 1, "#A8420F", 2, "#C7561F", "#E0996A"];
+      const pedTop = on ? "#7CDCA0" : "#2C8A50";
       map.addLayer({ id: "walk-artery", type: "line", source: "walk", filter: ["==", ["get", "k"], "artery"],
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": art, "line-opacity": 0.85,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 11, 1.4, 14, 3.4, 17, 6.5] } }, firstLyr);
+        paint: { "line-color": artC,
+          "line-opacity": ["match", ["get", "t"], 1, 0.9, 2, 0.82, 0.65],
+          "line-width": ["interpolate", ["linear"], ["zoom"],
+            11, ["match", ["get", "t"], 1, 2, 2, 1.4, 0.9],
+            14, ["match", ["get", "t"], 1, 4.6, 2, 3.2, 1.9],
+            17, ["match", ["get", "t"], 1, 8, 2, 6, 3.4]] } }, firstLyr);
       map.addLayer({ id: "walk-ped-area", type: "fill", source: "walk", filter: ["==", ["get", "k"], "ped-area"],
-        paint: { "fill-color": ped, "fill-opacity": 0.22 } }, firstLyr);
+        paint: { "fill-color": pedTop, "fill-opacity": 0.22 } }, firstLyr);
       map.addLayer({ id: "walk-ped-line", type: "line", source: "walk", filter: ["==", ["get", "k"], "ped-line"],
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": ped, "line-opacity": 0.8,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 11, 1, 14, 2.6, 17, 5] } }, firstLyr);
+        paint: { "line-color": pedC,
+          "line-opacity": ["match", ["get", "t"], 1, 0.9, 2, 0.82, 0.6],
+          "line-width": ["interpolate", ["linear"], ["zoom"],
+            11, ["match", ["get", "t"], 1, 1.8, 2, 1.3, 0.7],
+            14, ["match", ["get", "t"], 1, 3.8, 2, 2.8, 1.5],
+            17, ["match", ["get", "t"], 1, 6.5, 2, 5, 3]] } }, firstLyr);
     }
     if (!walkOn) ["walk-ped-line", "walk-ped-area", "walk-artery"].forEach(id => {
       if (map.getLayer(id)) map.removeLayer(id);
