@@ -374,6 +374,8 @@
 
   /* OSM notes + GPS traces overlays (keyless), toggleable on any basemap */
   let notesOn = false, gpsOn = false, notesData = null;
+  /* street-character overlay: pedestrian-priority vs vehicle arteries (from OSM) */
+  let walkOn = false, walkData = null;
   function addOverlayExtras() {
     if (!map) return;
     const firstLyr = (map.getStyle().layers.find(l => l.id.startsWith("lyr-")) || {}).id;
@@ -391,6 +393,33 @@
           "circle-stroke-color": "#FFFFFF", "circle-stroke-width": 1.6 } });
     }
     if (!notesOn && map.getLayer("osmnotes-pt")) { map.removeLayer("osmnotes-pt"); map.removeSource("osmnotes"); }
+    // walkability: arteries (warm) at the bottom, pedestrian areas + streets (green) on top
+    if (walkOn && walkData && !map.getSource("walk")) {
+      map.addSource("walk", { type: "geojson", data: walkData });
+      const on = theme === "dark";
+      const ped = on ? "#5FBE86" : "#3E9E63", art = on ? "#D08A5E" : "#C67A4E";
+      map.addLayer({ id: "walk-artery", type: "line", source: "walk", filter: ["==", ["get", "k"], "artery"],
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: { "line-color": art, "line-opacity": 0.55,
+          "line-width": ["interpolate", ["linear"], ["zoom"], 11, 0.8, 14, 2.4, 17, 5] } }, firstLyr);
+      map.addLayer({ id: "walk-ped-area", type: "fill", source: "walk", filter: ["==", ["get", "k"], "ped-area"],
+        paint: { "fill-color": ped, "fill-opacity": 0.22 } }, firstLyr);
+      map.addLayer({ id: "walk-ped-line", type: "line", source: "walk", filter: ["==", ["get", "k"], "ped-line"],
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: { "line-color": ped, "line-opacity": 0.8,
+          "line-width": ["interpolate", ["linear"], ["zoom"], 11, 1, 14, 2.6, 17, 5] } }, firstLyr);
+    }
+    if (!walkOn) ["walk-ped-line", "walk-ped-area", "walk-artery"].forEach(id => {
+      if (map.getLayer(id)) map.removeLayer(id);
+    });
+    if (!walkOn && map.getSource("walk")) map.removeSource("walk");
+  }
+  async function fetchWalk() {
+    if (walkData || !manifest) return;
+    try {
+      const r = await fetch(`data/${manifest.id}/walkability.geojson`);
+      if (r.ok) walkData = await r.json();
+    } catch { /* offline -> toggle just does nothing visible */ }
   }
   async function fetchNotes() {
     if (notesData || !manifest) return;
@@ -915,6 +944,12 @@
   document.getElementById("tog-gps").onclick = function () {
     gpsOn = this.getAttribute("aria-pressed") !== "true";
     this.setAttribute("aria-pressed", gpsOn);
+    addOverlayExtras();
+  };
+  document.getElementById("tog-walk").onclick = async function () {
+    walkOn = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", walkOn);
+    if (walkOn) { await fetchWalk(); showToast(t("base.walk.hint")); }
     addOverlayExtras();
   };
 
