@@ -845,12 +845,13 @@
         const [lng, lat] = f.geometry.coordinates;
         showPlaceCard(f.properties.name || "OSM note", lng, lat);
       });
-      // tap a saved marker -> its note in a small popup
+      // tap a saved marker -> the same place card as any other point (its
+      // pencil already reflects the saved state, so the note stays editable)
       map.on("click", "lyr-bm-dot", e => {
         const f = e.features && e.features[0];
         if (!f) return;
         const [lng, lat] = f.geometry.coordinates;
-        openBookmarkPopup(lng, lat, f.properties.note, f.properties.name);
+        showPlaceCard(f.properties.name || "", lng, lat);
       });
       map.on("mouseenter", "lyr-bm-dot", () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", "lyr-bm-dot", () => { map.getCanvas().style.cursor = ""; });
