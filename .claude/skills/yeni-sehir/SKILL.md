@@ -12,7 +12,8 @@ Kod değişikliği gerektiren bir eksik bulursan önce kullanıcıya bildir.
 
 1. `docs/VERI.md`'yi oku; `data/roma/` örnek uygulamadır.
 2. `data/cities.json`'a şehri `status: "soon"` olarak ekle (dünya ekranında
-   soluk görünür). Push'la — kullanıcı vitrini erken görsün.
+   soluk görünür). Push'la — kullanıcı vitrini erken görsün. **`anchor` koyma:**
+   etiket otomatik yerleşir; yalnızca çakışma kalırsa `anchor: [dx,dy]` ekle.
 3. Şehri araştır ve **onay taslağı** çıkar (kod yazmadan önce):
    - Giriş kapıları (havaalanları, ana garlar) + merkeze bağlantılar
    - Merkez(ler) — çok merkezli şehirlerde ayrımı açıkla (Roma'daki
@@ -22,6 +23,9 @@ Kod değişikliği gerektiren bir eksik bulursan önce kullanıcıya bildir.
    Bu taslağı kullanıcıya sun; **onaysız yorumsal katman işleme**.
 4. Onaydan sonra `data/<sehir>/` klasörünü kur: `city.json` manifesti,
    `layers/*.geojson` (özellik sözleşmesine uy), `content/tr.json` + `en.json`.
+   **Şehre özel kapı/hub/merkez metinleri (`subKey`/`nameKey`) `content/`
+   dosyalarına yazılır** (şehir önekiyle, ör. `xx.`), global `i18n/`'e değil —
+   global dosya yalnız paylaşılan arayüz metinlerini tutar (`docs/VERI.md`).
    Hat geometrileri OpenStreetMap'ten alınır (atıf zaten altbilgide).
 5. Rehberli mod adımlarını (`intro`) Roma'daki ton ve uzunlukta yaz: 5-6 adım,
    adım başına 1-2 cümle, "sen" dili.

@@ -37,6 +37,13 @@ i18n/
 ```
 `status: "soon"` olan şehir dünya haritasında soluk görünür, tıklanamaz.
 
+**`anchor` opsiyoneldir (2026-07-12).** Verilmezse şehir etiketi dünya
+haritasında **otomatik yerleştirilir** (noktaların ve önceden yerleşmiş
+etiketlerin üstüne binmeyecek ilk konum: sağ/sol/üst/alt denenir). Yalnızca
+otomatik yerleşim kötü sonuç verirse `"anchor": [dx, dy]` ile elle sabitle
+(piksel ofseti; manuel değer her zaman kazanır). Yeni şehirlerde anchor
+koymana gerek yok.
+
 ## `data/<sehir>/city.json` (manifest)
 
 ```json
@@ -90,24 +97,38 @@ Her feature'da:
 Stil (renk/kalınlık) veriye yazılmaz; `kind` + `lineRef` üzerinden
 `docs/TASARIM.md` kurallarıyla kodda eşlenir.
 
-## `data/<sehir>/content/<dil>.json`
+## `data/<sehir>/content/<dil>.json` — şehre özel i18n (2026-07-12)
+
+Şehre özel metinler (kapı/hub/merkez alt etiketleri, `subKey`/`nameKey`
+karşılıkları) bu dosyada, **düz anahtar-değer** olarak durur. Şehir açılınca
+uygulama bunu global sözlüğün **üstüne bindirir** (`t()` önce şehir içeriğine,
+sonra global i18n'e bakar); şehirden çıkınca temizlenir. Böylece herkesin her
+açılışta indirdiği `i18n/<dil>.json` şehir sayısıyla şişmez.
 
 ```json
 {
-  "tips": { "termini.tip": "Termini ulaşımın kalbi; tarihi merkez 15 dk batıda." },
-  "intro": [
-    { "camera": { "center": [12.25, 41.8], "zoom": 9.5 },
-      "layersOn": ["varis"], "text": "Roma'ya iki havaalanından inersin..." }
-  ]
+  "pa.center": "tarihi merkez",
+  "pa.cdg.sub": "→ Gare du Nord · RER B · ~30 dk",
+  "pa.hub.chatelet": "RER A·B·D · M1·4·7·11·14"
 }
 ```
-`intro` = rehberli mod adımları (E6). Metinler kısa: 1-2 cümle.
+
+- Anahtarları **şehir önekiyle** ad'la (Roma `e3.`, İstanbul `arr.`/`hub.`,
+  Paris `pa.`) → şehirler arası çakışma olmaz.
+- Yükleme: `enterCity` içinde geçerli dil + `en` (fallback) çekilir; dil
+  değişince yeniden yüklenir. Dosya yoksa sessizce boş kabul edilir.
+- en+tr her zaman tam olmalı; eksik anahtar önce şehir `en`'ine, sonra global
+  `en`'e düşer.
+- (İleride: `intro` rehberli mod adımları da bu dosyaya eklenebilir — E6.)
 
 ## i18n arayüz dosyaları (`i18n/<dil>.json`)
 
 Düz anahtar-değer; iç içe grup için nokta kullanılır:
 `"group.varis": "Varış"`, `"action.locate": "Konumum"`.
-en+tr her zaman tam olmalı; diğer diller eksik anahtarda İngilizce'ye düşer (fallback).
+**Yalnızca paylaşılan arayüz metinleri** burada durur (grup/tema/fiyat
+etiketleri, dil adları `lang.*`, kontroller). Şehre özel kapı/hub/merkez
+metinleri artık `data/<sehir>/content/` altındadır (yukarı bak).
+en+tr her zaman tam olmalı; diğer diller eksik anahtarda İngilizce'ye düşer.
 
 ## Kayıtlı noktalar (bookmarks)
 

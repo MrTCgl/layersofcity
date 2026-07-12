@@ -27,11 +27,7 @@
       "name": "London",
       "lat": 51.51,
       "lon": -0.13,
-      "status": "soon",
-      "anchor": [
-        -88,
-        2
-      ]
+      "status": "soon"
     },
     {
       "id": "paris",
@@ -49,44 +45,28 @@
       "name": "Berlin",
       "lat": 52.52,
       "lon": 13.4,
-      "status": "soon",
-      "anchor": [
-        7,
-        -2
-      ]
+      "status": "soon"
     },
     {
       "id": "madrid",
       "name": "Madrid",
       "lat": 40.42,
       "lon": -3.7,
-      "status": "soon",
-      "anchor": [
-        -84,
-        10
-      ]
+      "status": "soon"
     },
     {
       "id": "newyork",
       "name": "New York",
       "lat": 40.71,
       "lon": -74.0,
-      "status": "soon",
-      "anchor": [
-        8,
-        4
-      ]
+      "status": "soon"
     },
     {
       "id": "tokyo",
       "name": "Tokyo",
       "lat": 35.68,
       "lon": 139.69,
-      "status": "soon",
-      "anchor": [
-        -46,
-        20
-      ]
+      "status": "soon"
     }
   ]
 }

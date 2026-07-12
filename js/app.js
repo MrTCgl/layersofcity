@@ -46,8 +46,30 @@
     return dicts[code];
   }
 
+  // City-specific strings (gate/hub/center labels) live in
+  // data/<city>/content/<lang>.json and are merged on top of the global
+  // dictionary while that city is open. Keeps i18n/<lang>.json small as
+  // cities grow, and avoids one file everyone downloads ballooning.
+  let cityContent = {};     // lang -> key/value for the active city
+  let contentCityId = null; // which city cityContent belongs to
+  async function loadCityContent(cityId, code) {
+    try {
+      const res = await fetch(`data/${cityId}/content/${code}.json?v=${BM_VER}`);
+      return res.ok ? await res.json() : {};
+    } catch { return {}; }
+  }
+  async function setCityContent(cityId) {
+    contentCityId = cityId;
+    cityContent = {};
+    for (const code of [...new Set([lang, FALLBACK_LANG])]) {
+      cityContent[code] = await loadCityContent(cityId, code);
+    }
+  }
+
   function t(key) {
-    return (dicts[lang] && dicts[lang][key]) ||
+    return (cityContent[lang] && cityContent[lang][key]) ||
+           (cityContent[FALLBACK_LANG] && cityContent[FALLBACK_LANG][key]) ||
+           (dicts[lang] && dicts[lang][key]) ||
            (dicts[FALLBACK_LANG] && dicts[FALLBACK_LANG][key]) || key;
   }
 
@@ -71,6 +93,7 @@
     lang = code;
     localStorage.setItem("loc-lang", code);
     await loadDict(code);
+    if (contentCityId) await setCityContent(contentCityId); // city labels follow language
     applyI18n();
     renderWorld(); // soon-labels use i18n
     if (typeof tickClock === "function") tickClock(); // date format follows language
@@ -102,6 +125,37 @@
     return [(lon + 180) / 360 * 1000, (90 - lat) / 180 * 500];
   }
 
+  // Auto-place a city label so it clears every dot and every already-placed
+  // label. A city may still pin its label with an explicit `anchor` [dx,dy]
+  // (manual override wins); otherwise we try positions around the dot and take
+  // the first collision-free one. Lets new cities skip hand-tuned offsets.
+  const LBL_FS = 17, LBL_CW = 9.4; // font-size + avg char width in SVG units
+  function labelBox(ax, ay, anchor, w) {
+    let x0 = ax;
+    if (anchor === "end") x0 = ax - w;
+    else if (anchor === "middle") x0 = ax - w / 2;
+    return { x0, y0: ay - LBL_FS * 0.8, x1: x0 + w, y1: ay + LBL_FS * 0.25 };
+  }
+  const boxHit = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
+  const CANDIDATES = [ // [dx, dy, text-anchor], tried in order
+    [10, 5, "start"], [-10, 5, "end"], [0, -12, "middle"], [0, 18, "middle"],
+    [11, -10, "start"], [-11, -10, "end"], [11, 18, "start"], [-11, 18, "end"]
+  ];
+
+  function placeLabel(x, y, label, anchorOverride, obstacles) {
+    const w = label.length * LBL_CW;
+    if (anchorOverride) {
+      const ax = x + anchorOverride[0], ay = y + anchorOverride[1];
+      return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w) };
+    }
+    for (const [dx, dy, anchor] of CANDIDATES) {
+      const ax = x + dx, ay = y + dy, box = labelBox(ax, ay, anchor, w);
+      if (!obstacles.some(o => boxHit(o, box))) return { ax, ay, anchor, box };
+    }
+    const ax = x + 10, ay = y + 5;
+    return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w) }; // give up: default right
+  }
+
   function renderWorld() {
     let html = "";
     for (let i = 0; i < WORLD_DOTS.length; i += 2) {
@@ -109,20 +163,32 @@
     }
     worldSvg.innerHTML = html;
 
-    cities.forEach(c => {
+    // Every city marker is an obstacle; placed labels are added as we go so
+    // later labels dodge earlier ones. Ready cities first (their labels matter
+    // most), then soon cities fill the gaps.
+    const obstacles = cities.map(c => {
       const [x, y] = project(c.lon, c.lat);
-      const ax = x + (c.anchor ? c.anchor[0] : 8);
-      const ay = y + (c.anchor ? c.anchor[1] : 4);
-      const g = document.createElementNS(SVG_NS, "g");
+      return { x0: x - 8, y0: y - 8, x1: x + 8, y1: y + 8 };
+    });
+    const ordered = [...cities].sort((a, b) =>
+      (b.status === "ready") - (a.status === "ready"));
+
+    ordered.forEach(c => {
+      const [x, y] = project(c.lon, c.lat);
       const ready = c.status === "ready";
+      const label = ready ? c.name : `${c.name} · ${t("world.soon")}`;
+      const p = placeLabel(x, y, label, c.anchor, obstacles);
+      obstacles.push(p.box);
+      const ax = p.ax, ay = p.ay;
+      const g = document.createElementNS(SVG_NS, "g");
       g.setAttribute("class", ready ? "city-ready" : "city-soon");
       g.innerHTML = ready
         ? `<circle class="hit" cx="${x}" cy="${y}" r="24" fill="transparent"/>
            <circle class="halo" cx="${x}" cy="${y}" r="14"/>
            <circle class="core" cx="${x}" cy="${y}" r="6"/>
-           <text x="${ax}" y="${ay}">${c.name}</text>`
+           <text x="${ax}" y="${ay}" text-anchor="${p.anchor}">${c.name}</text>`
         : `<circle cx="${x}" cy="${y}" r="3.4"/>
-           <text x="${ax}" y="${ay}">${c.name} · ${t("world.soon")}</text>`;
+           <text x="${ax}" y="${ay}" text-anchor="${p.anchor}">${c.name} · ${t("world.soon")}</text>`;
       if (ready) {
         g.setAttribute("role", "button");
         g.setAttribute("tabindex", "0");
@@ -278,7 +344,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260712-2"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260712-3"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
@@ -634,6 +700,7 @@
       return;
     }
     ph.hidden = true;
+    await setCityContent(city.id);   // city-specific i18n before labels resolve
 
     if (!map) {
       await loadCityData(city.id);   // fetch layer geojson before the map draws
@@ -1133,6 +1200,7 @@
     if (meMarker) { meMarker.remove(); meMarker = null; }
     if (map) { map.remove(); map = null; }
     loadedCityId = null;
+    cityContent = {}; contentCityId = null; // drop city-specific i18n
     mapFitted = false;
     // drop per-city caches + overlay state so nothing bleeds across cities
     weatherData = null; fxToUsd = null;
