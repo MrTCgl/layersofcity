@@ -1,0 +1,111 @@
+{
+  "id": "paris",
+  "center": [
+    2.3486,
+    48.8534
+  ],
+  "zoom": {
+    "start": 10.0,
+    "min": 9,
+    "max": 16
+  },
+  "home": [
+    [
+      2.18,
+      48.7
+    ],
+    [
+      2.6,
+      49.05
+    ]
+  ],
+  "maxBounds": [
+    [
+      1.95,
+      48.55
+    ],
+    [
+      2.85,
+      49.2
+    ]
+  ],
+  "timezone": "Europe/Paris",
+  "language": "fr",
+  "currency": "EUR",
+  "available": [
+    "varis",
+    "omurga"
+  ],
+  "prices": {
+    "updated": "2026-07",
+    "water05": 1.0,
+    "petrol1l": 1.9,
+    "milk1l": 1.2,
+    "meat1kg": 16.0,
+    "cheese1kg": 20.0,
+    "beer05": 6.0,
+    "bigmac": 5.7,
+    "espresso": 2.5,
+    "transitTicket": 2.15,
+    "airportTrain": 11.8
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}
