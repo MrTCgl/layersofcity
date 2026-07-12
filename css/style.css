@@ -79,8 +79,8 @@ main{flex:1; position:relative; overflow:hidden}
 #wordmark .of{color:var(--lilac)}
 #worldwrap{width:min(1320px,98%)}
 #worldmap{width:100%; height:auto; display:block}
-.worlddot{fill:var(--land)}
-:root[data-theme="dark"] .worlddot{fill:#4A4456}
+.worlddot{fill:#C4BAAC}
+:root[data-theme="dark"] .worlddot{fill:#565060}
 .city-ready{cursor:pointer}
 .city-ready .halo{
   fill:var(--lilac); opacity:.25; animation:pulse 2.6s ease-out infinite;

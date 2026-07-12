@@ -159,7 +159,7 @@
   function renderWorld() {
     let html = "";
     for (let i = 0; i < WORLD_DOTS.length; i += 2) {
-      html += `<circle class="worlddot" cx="${WORLD_DOTS[i]}" cy="${WORLD_DOTS[i + 1]}" r="2.1"/>`;
+      html += `<circle class="worlddot" cx="${WORLD_DOTS[i]}" cy="${WORLD_DOTS[i + 1]}" r="1.4"/>`;
     }
     worldSvg.innerHTML = html;
 
