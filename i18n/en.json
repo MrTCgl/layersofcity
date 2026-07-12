@@ -76,5 +76,12 @@
   "bookmark.empty": "No saved places yet. Tap a point and use the pencil to add a note.",
   "bookmark.saved": "Saved",
   "bookmark.removed": "Removed",
+  "share.point": "share",
+  "share.list": "share list",
+  "share.listTitle": "layers of city — saved places",
+  "share.copied": "Link copied",
+  "share.copyManual": "Copy the link:",
+  "share.imported": "List imported",
+  "share.importedNone": "These places are already saved",
   "lang.fr": "French"
 }

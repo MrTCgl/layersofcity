@@ -76,5 +76,12 @@
   "bookmark.empty": "Henüz kaydın yok. Bir noktaya dokun, kalem simgesiyle not ekle.",
   "bookmark.saved": "Kaydedildi",
   "bookmark.removed": "Silindi",
+  "share.point": "paylaş",
+  "share.list": "listeyi paylaş",
+  "share.listTitle": "layers of city — kayıtlı yerler",
+  "share.copied": "Bağlantı kopyalandı",
+  "share.copyManual": "Bağlantıyı kopyala:",
+  "share.imported": "Liste içe aktarıldı",
+  "share.importedNone": "Bu yerler zaten kayıtlı",
   "lang.fr": "Fransızca"
 }

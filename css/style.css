@@ -444,9 +444,9 @@ body.immersive #locbtn{display:none !important}
 .bmlist.show .bmlist-card{transform:none}
 .bmlist-head{display:flex; align-items:center; gap:8px; padding:12px 10px 12px 16px; border-bottom:1px solid var(--line)}
 .bmlist-title{font-weight:600; font-size:14px; flex:1}
-.bmlist-close{flex:none; width:28px; height:28px; display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}
-.bmlist-close:hover{background:var(--powder); color:var(--ink)}
-:root[data-theme="dark"] .bmlist-close:hover{background:var(--line)}
+.bmlist-close,.bmlist-share{flex:none; width:28px; height:28px; display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}
+.bmlist-close:hover,.bmlist-share:hover{background:var(--powder); color:var(--ink)}
+:root[data-theme="dark"] .bmlist-close:hover,:root[data-theme="dark"] .bmlist-share:hover{background:var(--line)}
 .bmlist-body{overflow-y:auto; padding:6px}
 .bmlist-empty{padding:22px 18px; color:var(--ink-soft); font-size:13px; line-height:1.5; text-align:center}
 .bmrow{display:flex; align-items:center; gap:8px; border-radius:10px; padding:2px 2px 2px 4px}

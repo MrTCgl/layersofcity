@@ -243,6 +243,7 @@
   let clockTimer = null;
   let meMarker = null;
   let mapFitted = false;    // has the map fit to home once it had real size?
+  let pendingShare = null;  // shared point/list from the URL, applied once the map is ready
   let resizeObs = null;     // ResizeObserver on the map area; torn down with the map
   let longPressFired = false; // suppress the click that follows a long-press
   let weatherData = null;   // Open-Meteo current + 5-day (keyless)
@@ -635,6 +636,11 @@
   // Saved-points list
   const bmList = document.getElementById("bmlist");
   function closeBookmarkList() { bmList.classList.remove("show"); bmList.hidden = true; }
+  function openBookmarkList() {
+    renderBookmarkList();
+    bmList.hidden = false;
+    requestAnimationFrame(() => bmList.classList.add("show"));
+  }
   function goToBookmark(b) {
     closeBookmarkList();
     if (!map) return;
@@ -670,6 +676,104 @@
   }
   document.getElementById("bmlist-close").onclick = closeBookmarkList;
   bmList.addEventListener("click", e => { if (e.target === bmList) closeBookmarkList(); });
+
+  /* ── sharing ───────────────────────────────────────────────────────────────
+     A shared point/list is a plain layersofcity.com link with the payload in the
+     hash: `#/<city>?p=lat,lng&t=name` for one point, `#/<city>?list=<b64>` for the
+     saved list. The receiver opens the link, the app parses it in route() and
+     focuses the point (or imports the list on their own device). No server, no
+     account — the whole payload rides in the URL, matching the static-site rule. */
+  function b64urlEncode(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = ""; bytes.forEach(b => bin += String.fromCharCode(b));
+    return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+  function b64urlDecode(s) {
+    try {
+      s = s.replace(/-/g, "+").replace(/_/g, "/");
+      const bin = atob(s);
+      return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+    } catch { return ""; }
+  }
+  function shareBaseURL() {
+    return location.origin + location.pathname + "#/" + (loadedCityId || "");
+  }
+  function pointShareURL(pt) {
+    const params = new URLSearchParams();
+    params.set("p", pt.lat.toFixed(6) + "," + pt.lng.toFixed(6));
+    if (pt.name) params.set("t", pt.name);
+    return shareBaseURL() + "?" + params.toString();
+  }
+  function listShareURL(arr) {
+    const compact = arr.map(b => [+b.lat.toFixed(6), +b.lng.toFixed(6), b.name || "", b.note || ""]);
+    return shareBaseURL() + "?list=" + b64urlEncode(JSON.stringify(compact));
+  }
+  // Native share sheet (mail, WhatsApp, …) when available; otherwise copy the
+  // link to the clipboard, and as a last resort show it for manual copy.
+  async function shareOrCopy(payload) {
+    if (navigator.share) {
+      try { await navigator.share(payload); return; }
+      catch (e) { if (e && e.name === "AbortError") return; }
+    }
+    try { await navigator.clipboard.writeText(payload.url); showToast(t("share.copied")); return; }
+    catch (e) { /* clipboard blocked -> manual */ }
+    window.prompt(t("share.copyManual"), payload.url);
+  }
+  document.getElementById("pc-share").onclick = () => {
+    if (!pcPoint) return;
+    const coord = pcPoint.lat.toFixed(5) + ", " + pcPoint.lng.toFixed(5);
+    const label = pcPoint.name || coord;
+    shareOrCopy({ title: label, text: label + " — layers of city", url: pointShareURL(pcPoint) });
+  };
+  document.getElementById("bmlist-share").onclick = () => {
+    const arr = loadBookmarks();
+    if (!arr.length) { showToast(t("bookmark.empty")); return; }
+    shareOrCopy({ title: t("share.listTitle"), text: t("share.listTitle"), url: listShareURL(arr) });
+  };
+
+  // Import a shared saved-list into this device (dedup by ~1 m coordinate).
+  function importSharedList(list) {
+    const arr = loadBookmarks();
+    let added = 0;
+    list.forEach(item => {
+      const dup = arr.some(b => bmRound(b.lng) === bmRound(item.lng) && bmRound(b.lat) === bmRound(item.lat));
+      if (dup) return;
+      arr.push({ id: "bm-" + Date.now() + "-" + added, lng: item.lng, lat: item.lat,
+        name: item.name || "", note: item.note || "", createdAt: Date.now() + added });
+      added++;
+    });
+    saveBookmarks(arr);
+    openBookmarkList();      // the list itself is the outcome — show it regardless of map state
+    showToast(added ? t("share.imported") : t("share.importedNone"));
+    enableSavedLayer();
+    fitToPoints(list);
+    // Adding the marker source needs a fully-loaded style; a shared link can land
+    // before tiles finish, so defer until the style is ready (addSource would
+    // otherwise throw "Style is not done loading").
+    const addMarkers = () => { try { applyBookmarks(); } catch (e) { /* style gone */ } };
+    if (map && map.isStyleLoaded()) addMarkers();
+    else if (map) map.once("idle", addMarkers);
+  }
+  function fitToPoints(list) {
+    if (!map || !list.length) return;
+    if (list.length === 1) { map.flyTo({ center: [list[0].lng, list[0].lat], zoom: 15 }); return; }
+    let w = Infinity, s = Infinity, e = -Infinity, n = -Infinity;
+    list.forEach(b => { w = Math.min(w, b.lng); e = Math.max(e, b.lng); s = Math.min(s, b.lat); n = Math.max(n, b.lat); });
+    map.fitBounds([[w, s], [e, n]], { padding: 60, maxZoom: 15 });
+  }
+  // Consumed once the map for the shared city is ready (see enterCity).
+  function applyPendingShare() {
+    if (!pendingShare || !map) return;
+    const share = pendingShare; pendingShare = null;
+    if (share.list && share.list.length) {
+      importSharedList(share.list);
+    } else if (share.focus) {
+      const { lat, lng, name } = share.focus;
+      map.flyTo({ center: [lng, lat], zoom: 16 });
+      dropCoordPin(lng, lat, true);
+      showPlaceCard(name, lng, lat);
+    }
+  }
 
   function tickClock() {
     if (!manifest) return;
@@ -811,14 +915,18 @@
       // Mobile hardening: if the container wasn't sized at init (screen still
       // transitioning), the map fits to 0×0 and over-zooms. Resize + fit once
       // the container has real dimensions, and resize on every orientation change.
-      map.on("load", () => { map.resize(); fitHome(false); });
+      map.on("load", () => { map.resize(); if (!mapFitted) fitHome(false); });
       const area = document.getElementById("maparea");
       resizeObs = new ResizeObserver(() => {
         if (!map) return;
         map.resize();
+        // Position the map once the container has real dimensions: a shared
+        // point/list focuses that instead of the default home view. Gated on
+        // size because the list's fitBounds needs a sized viewport to zoom right.
         if (!mapFitted && area.clientWidth > 0 && area.clientHeight > 0) {
           mapFitted = true;
-          fitHome(false);
+          if (pendingShare) applyPendingShare();
+          else fitHome(false);
         }
       });
       resizeObs.observe(area);
@@ -829,6 +937,9 @@
     clockTimer = setInterval(tickClock, 10000);
     tickClock();
     loadLiveData(); // weather + USD rate, best-effort (non-blocking)
+    // Map already live and positioned (re-routing to the same city with a fresh
+    // shared link): the ResizeObserver won't fire again, so apply the payload now.
+    if (map && mapFitted && pendingShare) applyPendingShare();
   }
 
   /* ── city layers (GeoJSON overlays over the basemap) ── */
@@ -1263,9 +1374,7 @@
   };
   document.getElementById("bmlist-btn").onclick = function () {
     closeBasemapMenu();
-    renderBookmarkList();
-    bmList.hidden = false;
-    requestAnimationFrame(() => bmList.classList.add("show"));
+    openBookmarkList();
   };
 
   /* coordinate box: paste "lat, lon" -> fly there + place card */
@@ -1528,8 +1637,30 @@
   const scrWorld = document.getElementById("scr-world");
   const scrCity = document.getElementById("scr-city");
 
+  function parseShare(params) {
+    const out = {};
+    const p = params.get("p");
+    if (p) {
+      const [la, lo] = p.split(",").map(Number);
+      if (isFinite(la) && isFinite(lo)) out.focus = { lat: la, lng: lo, name: params.get("t") || "" };
+    }
+    const list = params.get("list");
+    if (list) {
+      try {
+        const raw = JSON.parse(b64urlDecode(list));
+        if (Array.isArray(raw)) out.list = raw
+          .map(x => ({ lat: +x[0], lng: +x[1], name: x[2] || "", note: x[3] || "" }))
+          .filter(x => isFinite(x.lat) && isFinite(x.lng));
+      } catch { /* malformed payload -> ignored */ }
+    }
+    return (out.focus || (out.list && out.list.length)) ? out : null;
+  }
+
   function route() {
-    const id = location.hash.replace(/^#\/?/, "");
+    const raw = location.hash.replace(/^#\/?/, "");
+    const qi = raw.indexOf("?");
+    const id = qi >= 0 ? raw.slice(0, qi) : raw;
+    pendingShare = qi >= 0 ? parseShare(new URLSearchParams(raw.slice(qi + 1))) : null;
     const city = cities.find(c => c.id === id && c.status === "ready");
     if (city) {
       scrWorld.classList.remove("on");
