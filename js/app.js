@@ -836,10 +836,16 @@
     ["lyr-kesfet-poi-poi", "lyr-kesfet-poi-poi-label", "lyr-ihtiyac-poi", "lyr-ihtiyac-poi-label"].forEach(id => {
       if (map.getLayer(id)) map.moveLayer(id); // no beforeId -> move to top
     });
-    // Gate icons are larger than the old dots, so their name must sit far
-    // enough below to clear the icon's placement box (otherwise the collider
-    // drops it and only the subtitle shows); the subtitle then stacks under it.
-    if (map.getLayer("lyr-varis-label")) map.setLayoutProperty("lyr-varis-label", "text-offset", [0, 2.0]);
+    // Gate icons are larger than the old dots, so their name sits below the
+    // icon; the subtitle stacks under the name. These are the few curated
+    // arrival gates, so their names must always show — otherwise the symbol
+    // collider (dense basemap place labels always outrank an overlay label)
+    // drops the name and only the subtitle survives, which is exactly what
+    // left every ferry pier reading a nameless "vapur iskelesi".
+    if (map.getLayer("lyr-varis-label")) {
+      map.setLayoutProperty("lyr-varis-label", "text-offset", [0, 2.0]);
+      map.setLayoutProperty("lyr-varis-label", "text-allow-overlap", true);
+    }
     if (map.getLayer("lyr-varis-sub")) map.setLayoutProperty("lyr-varis-sub", "text-offset", [0, 3.2]);
     applyGroupVisibility();
     applyTransitFilter();
