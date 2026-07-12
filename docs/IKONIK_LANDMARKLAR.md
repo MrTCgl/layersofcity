@@ -19,7 +19,7 @@
 | İstanbul | ✅ uygulandı (2026-07-12) | Topkapı/Ayasofya/Sultanahmet vb. 49 nokta |
 | Roma | ✅ uygulandı (2026-07-12) | Palatino/Fori Imperiali/Campidoglio/Vittoriano vb. 42 nokta |
 | London | 🔲 şehir eklenince | aşağıdaki liste |
-| Paris | 🔲 şehir eklenince | aşağıdaki liste |
+| Paris | ✅ uygulandı (2026-07-12) | Tour Eiffel/Louvre/Notre-Dame/Sacré-Cœur vb. — kesfet-poi'ye 24 nokta elle eklendi |
 | Berlin | 🔲 şehir eklenince | aşağıdaki liste |
 | Madrid | 🔲 şehir eklenince | aşağıdaki liste |
 | New York | 🔲 şehir eklenince | aşağıdaki liste |

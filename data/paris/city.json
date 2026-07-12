@@ -34,7 +34,13 @@
   "currency": "EUR",
   "available": [
     "varis",
-    "omurga"
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
   ],
   "prices": {
     "updated": "2026-07",
