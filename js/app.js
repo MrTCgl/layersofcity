@@ -177,6 +177,7 @@
   let clockTimer = null;
   let meMarker = null;
   let mapFitted = false;    // has the map fit to home once it had real size?
+  let resizeObs = null;     // ResizeObserver on the map area; torn down with the map
   let longPressFired = false; // suppress the click that follows a long-press
   let weatherData = null;   // Open-Meteo current + 5-day (keyless)
   let fxToUsd = null;       // Frankfurter currency -> USD rate (keyless)
@@ -460,7 +461,11 @@
       new Intl.DateTimeFormat(loc, { timeZone: manifest.timezone, hour: "2-digit", minute: "2-digit" }).format(now);
   }
 
+  let loadedCityId = null;  // which city's map is currently live
   async function enterCity(city) {
+    // Switching straight from one city to another (e.g. an edited URL, without
+    // passing through the world screen) must also rebuild the map from scratch.
+    if (map && loadedCityId && loadedCityId !== city.id) leaveCity();
     document.getElementById("cb-name").textContent = city.name;
     const ph = document.getElementById("cityph");
     try {
@@ -574,7 +579,7 @@
       // the container has real dimensions, and resize on every orientation change.
       map.on("load", () => { map.resize(); fitHome(false); });
       const area = document.getElementById("maparea");
-      const ro = new ResizeObserver(() => {
+      resizeObs = new ResizeObserver(() => {
         if (!map) return;
         map.resize();
         if (!mapFitted && area.clientWidth > 0 && area.clientHeight > 0) {
@@ -582,9 +587,10 @@
           fitHome(false);
         }
       });
-      ro.observe(area);
+      resizeObs.observe(area);
     }
 
+    loadedCityId = city.id;
     clearInterval(clockTimer);
     clockTimer = setInterval(tickClock, 10000);
     tickClock();
@@ -939,6 +945,25 @@
     clockTimer = null;
     hidePlaceCard();
     if (typeof closeInfoCard === "function") closeInfoCard();
+    // Tear the map fully down so the NEXT city enters through the same full
+    // init path a page reload would take (fresh bounds, data and layers).
+    // enterCity only loads a city inside its `if (!map)` branch, so without
+    // this teardown, picking a different city keeps the old map and shows the
+    // wrong city until a manual refresh.
+    if (resizeObs) { resizeObs.disconnect(); resizeObs = null; }
+    if (meMarker) { meMarker.remove(); meMarker = null; }
+    if (map) { map.remove(); map = null; }
+    loadedCityId = null;
+    mapFitted = false;
+    // drop per-city caches + overlay state so nothing bleeds across cities
+    weatherData = null; fxToUsd = null;
+    notesData = null; walkData = null;
+    notesOn = gpsOn = walkOn = false;
+    ["tog-notes", "tog-gps", "tog-walk"].forEach(id => {
+      const b = document.getElementById(id);
+      if (b) b.setAttribute("aria-pressed", "false");
+    });
+    Object.keys(cityData).forEach(k => delete cityData[k]);
   }
 
   /* map chrome wiring (static elements, safe before map exists) */
