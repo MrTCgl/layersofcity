@@ -784,7 +784,8 @@
       // never reads as anonymous: only the landmarks that orient a newcomer.
       add("-label", { type: "symbol",
         filter: ["all", ["==", ["get", "lab"], 1],
-          ["any", ["==", ["get", "kind"], "hub"], ["==", ["get", "kind"], "center"], ["==", ["get", "kind"], "hint"]]],
+          ["any", ["==", ["get", "kind"], "hub"], ["==", ["get", "kind"], "center"],
+           ["==", ["get", "kind"], "hint"], ["==", ["get", "kind"], "gate"]]],
         layout: { "text-field": ["get", "_name"], "text-font": ["Noto Sans Regular"],
           "text-size": ["match", ["get", "kind"], "hub", 13, 11],
           "text-anchor": "top", "text-offset": [0, 0.7], "text-optional": true },
