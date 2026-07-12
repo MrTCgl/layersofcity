@@ -302,6 +302,18 @@ Bitti sayılır:
 Durum notu: Tamam. Yıldız işareti icon-only symbol (canvas görsel, glyph
 bağımsız) olduğundan sandbox'ta karo/glyph ağı kapalıyken de render edildi.
 
+Uzun-basma düzeltmesi (2026-07-12, inceleme sonucu): Var olan bir hata bulundu —
+uzun-basma oturum başına **yalnız bir kez** çalışıyordu. Sebep: uzun-basmada
+bırakılan koordinat iğnesi (`.coord-pin` maplibregl.Marker) tam parmağın altına
+düşüyor; parmak kalkınca `pointerup` iğneye gidiyor (canvas'a değil), böylece
+çoklu-dokunuş sayacı (`lpPointers`) 1'de takılıp sonraki tüm uzun-basmaları
+iptal ediyordu; ayrıca iğne bir sonraki `pointerdown`'ı da yiyordu. Çözüm:
+(1) `.coord-pin`'e `pointer-events:none` (dekoratif iğne girdi yakalamamalı),
+(2) `pointerup`/`pointercancel` sıfırlaması canvas yerine `window`'da
+dinleniyor (parmak nereye kalkarsa kalksın sayaç çözülür). Playwright ile
+tekrarlı uzun-basma (aynı nokta, pan sonrası, z15) light+dark 12 kontrol geçti;
+kayıtlı-nokta akışı 26 kontrolle regresyonsuz.
+
 ---
 
 ## E9 — Rehberli mod ⬜

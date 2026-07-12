@@ -732,8 +732,12 @@
       canvas.addEventListener("pointermove", e => {
         if (lpStart && Math.hypot(e.clientX - lpStart.x, e.clientY - lpStart.y) > 8) lpCancel();
       });
+      // Reset on WINDOW, not the canvas: a finger-lift can land on an element
+      // dropped under it mid-press (e.g. the coord pin), and a canvas-only
+      // listener would then miss the pointerup and leave lpPointers wedged > 0,
+      // which permanently disables long-press for the rest of the session.
       ["pointerup", "pointercancel"].forEach(t =>
-        canvas.addEventListener(t, () => { lpPointers = Math.max(0, lpPointers - 1); if (!lpPointers) clearTimeout(lpTimer); lpStart = null; }));
+        window.addEventListener(t, () => { lpPointers = Math.max(0, lpPointers - 1); if (!lpPointers) clearTimeout(lpTimer); lpStart = null; }));
       map.on("movestart", lpCancel);
       map.on("zoomstart", lpCancel);
 

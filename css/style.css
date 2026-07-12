@@ -347,7 +347,9 @@ body.immersive #locbtn{display:none !important}
 
 /* temporary coordinate marker (target ring) dropped by the coordinate jump box;
    centred exactly on the point, clears on the next map move */
-.coord-pin{width:22px; height:22px; position:relative}
+/* purely decorative marker: must never intercept input, or its pointerdown/up
+   steals the events the long-press handler needs (it is dropped under the finger) */
+.coord-pin{width:22px; height:22px; position:relative; pointer-events:none}
 .coord-pin::before{
   content:""; position:absolute; inset:0; border-radius:999px;
   border:2.5px solid var(--lilac); background:transparent;
