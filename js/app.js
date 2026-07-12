@@ -272,7 +272,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260711-9"; // cache-bust for the basemap style JSON files
+  const BM_VER = "20260712-2"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
@@ -464,7 +464,7 @@
     document.getElementById("cb-name").textContent = city.name;
     const ph = document.getElementById("cityph");
     try {
-      const res = await fetch(`data/${city.id}/city.json`);
+      const res = await fetch(`data/${city.id}/city.json?v=${BM_VER}`);
       if (!res.ok) throw new Error("no manifest");
       manifest = await res.json();
     } catch {
@@ -638,7 +638,7 @@
     const files = manifest.available ? all.filter(f => manifest.available.includes(f)) : all;
     await Promise.all(files.map(async f => {
       try {
-        const res = await fetch(`data/${cityId}/layers/${f}.geojson`);
+        const res = await fetch(`data/${cityId}/layers/${f}.geojson?v=${BM_VER}`);
         if (res.ok) cityData[f] = await res.json();
       } catch { /* layer not ready yet -> skip silently */ }
     }));
