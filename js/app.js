@@ -768,7 +768,8 @@
       add("-gate", { type: "symbol", filter: ["==", ["get", "kind"], "gate"],
         layout: { "icon-image": ["concat", "gate-", ["get", "mode"]],
           "icon-size": ["interpolate", ["linear"], ["zoom"], 9, 0.55, 13, 0.75],
-          "icon-allow-overlap": true } });
+          // always draw the icon AND don't let it push its own name label out
+          "icon-allow-overlap": true, "icon-ignore-placement": true } });
       // C east hint dot
       add("-hint", { type: "circle", filter: ["==", ["get", "kind"], "hint"],
         paint: { "circle-radius": 3, "circle-color": pal.inkSoft } });
@@ -835,9 +836,11 @@
     ["lyr-kesfet-poi-poi", "lyr-kesfet-poi-poi-label", "lyr-ihtiyac-poi", "lyr-ihtiyac-poi-label"].forEach(id => {
       if (map.getLayer(id)) map.moveLayer(id); // no beforeId -> move to top
     });
-    // gate icons are larger than the old dots -> push their labels down a bit
-    if (map.getLayer("lyr-varis-label")) map.setLayoutProperty("lyr-varis-label", "text-offset", [0, 1.2]);
-    if (map.getLayer("lyr-varis-sub")) map.setLayoutProperty("lyr-varis-sub", "text-offset", [0, 2.5]);
+    // Gate icons are larger than the old dots, so their name must sit far
+    // enough below to clear the icon's placement box (otherwise the collider
+    // drops it and only the subtitle shows); the subtitle then stacks under it.
+    if (map.getLayer("lyr-varis-label")) map.setLayoutProperty("lyr-varis-label", "text-offset", [0, 2.0]);
+    if (map.getLayer("lyr-varis-sub")) map.setLayoutProperty("lyr-varis-sub", "text-offset", [0, 3.2]);
     applyGroupVisibility();
     applyTransitFilter();
     applyKesfetVisibility();
