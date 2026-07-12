@@ -37,7 +37,8 @@ Kod değişikliği gerektiren bir eksik bulursan önce kullanıcıya bildir.
 - **İkonik landmark denetimi (zorunlu):** OSM boru hattı bitince şehrin
   dünyaca ünlü ilk 30-50 simgesini elle bir listeyle çakıştır; ızgara
   seyreltmesi bunları elemiş olabilir. Eksikleri `kesfet-poi.geojson`'a
-  `theme:"tarihi"` olarak ekle. Ayrıntı ve gerekçe (Topkapı örneği):
+  `theme:"tarihi"` olarak ekle. Şehir bazlı hazır kontrol listeleri:
+  `docs/IKONIK_LANDMARKLAR.md`. Ayrıntı ve gerekçe (Topkapı örneği):
   `docs/VERI.md` → "İkonik landmark güvencesi". "Nasılsa gelir" diye
   hiçbir ana simgeyi atlama.
 

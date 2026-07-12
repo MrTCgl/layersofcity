@@ -166,7 +166,8 @@ anında** üretilir (çalışma zamanı bağımlılığı yok; atıf altbilgide)
    ana camiler/katedraller, sarnıçlar/forumlar, kuleler, tarihi çarşılar,
    kaleler, ünlü meydanlar, tarihi garlar) listeye yaz; boru hattı çıktısıyla
    ada göre çakıştır, eksik olanı `theme:"tarihi"` (uygunsa `modern`) olarak
-   elle ekle. Bir simgeyi "çok bilinen, gelir zaten" diye atlamak yasak —
+   elle ekle. **Şehir bazlı hazır listeler: `docs/IKONIK_LANDMARKLAR.md`**
+   (London/Paris/Berlin/Madrid/New York/Tokyo dâhil). Bir simgeyi "çok bilinen, gelir zaten" diye atlamak yasak —
    tam da bu varsayım Topkapı'yı düşürmüştü. (İstanbul allowlist'i 2026-07-12'de
    uygulandı: Topkapı/Ayasofya/Sultanahmet vb. 49 nokta; Roma allowlist'i
    2026-07-12'de: Palatino/Fori Imperiali/Campidoglio/Vittoriano/Bocca della
