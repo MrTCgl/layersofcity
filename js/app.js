@@ -321,18 +321,21 @@
 
   /* place card: name + external Google Maps link (no key, no in-app nav) */
   const placeCard = document.getElementById("placecard");
-  function showPlaceCard(name, lng, lat) {
+  function showPlaceCard(name, lng, lat, note) {
     // Drop a Google Maps pin at the EXACT tapped coordinates (q=lat,lng), with
-    // the name as the pin label — no text search, so it never snaps to a
-    // same-named place or a nearby street. Unnamed points get a bare pin.
+    // the label as the pin text — no text search, so it never snaps to a
+    // same-named place or a nearby street. Unlabeled points get a bare pin.
+    // For a saved point the user's own note is the label (note > name > coords,
+    // same order the saved-list uses), so the card shows what they wrote.
     const ll = lat.toFixed(6) + "," + lng.toFixed(6);
+    const label = (note && note.trim()) || name || "";
     document.getElementById("pc-name").textContent =
-      name || (lat.toFixed(5) + ", " + lng.toFixed(5));
+      label || (lat.toFixed(5) + ", " + lng.toFixed(5));
     document.getElementById("pc-dir").href =
-      "https://www.google.com/maps?q=" + ll + (name ? "(" + encodeURIComponent(name) + ")" : "");
+      "https://www.google.com/maps?q=" + ll + (label ? "(" + encodeURIComponent(label) + ")" : "");
     // remember this point so the pencil can bookmark it; show a filled pencil
     // when it is already saved
-    pcPoint = { lng, lat, name: name || "" };
+    pcPoint = { lng, lat, name: name || "", note: note || "" };
     const already = loadBookmarks().some(b => bmRound(b.lng) === bmRound(lng) && bmRound(b.lat) === bmRound(lat));
     document.getElementById("pc-edit").setAttribute("aria-pressed", already ? "true" : "false");
     placeCard.hidden = false;
@@ -702,6 +705,8 @@
     const params = new URLSearchParams();
     params.set("p", pt.lat.toFixed(6) + "," + pt.lng.toFixed(6));
     if (pt.name) params.set("t", pt.name);
+    if (pt.note) params.set("n", pt.note);   // carries the note so the receiver keeps it
+    if (pt.save) params.set("s", "1");        // it was a saved point -> receiver saves it too
     return shareBaseURL() + "?" + params.toString();
   }
   function listShareURL(arr) {
@@ -721,9 +726,15 @@
   }
   document.getElementById("pc-share").onclick = () => {
     if (!pcPoint) return;
+    // Pull the saved note even if the card was opened from a POI/long-press, so
+    // sharing a point you've saved always carries your note to the receiver.
+    const saved = loadBookmarks().find(b => bmRound(b.lng) === bmRound(pcPoint.lng) && bmRound(b.lat) === bmRound(pcPoint.lat));
+    const name = pcPoint.name || "";
+    const note = pcPoint.note || (saved && saved.note) || "";
     const coord = pcPoint.lat.toFixed(5) + ", " + pcPoint.lng.toFixed(5);
-    const label = pcPoint.name || coord;
-    shareOrCopy({ title: label, text: label + " — layers of city", url: pointShareURL(pcPoint) });
+    const label = (note && note.trim()) || name || coord;
+    const url = pointShareURL({ lat: pcPoint.lat, lng: pcPoint.lng, name, note, save: !!saved });
+    shareOrCopy({ title: label, text: label + " — layers of city", url });
   };
   document.getElementById("bmlist-share").onclick = () => {
     const arr = loadBookmarks();
@@ -731,11 +742,12 @@
     shareOrCopy({ title: t("share.listTitle"), text: t("share.listTitle"), url: listShareURL(arr) });
   };
 
-  // Import a shared saved-list into this device (dedup by ~1 m coordinate).
-  function importSharedList(list) {
+  // Merge shared points into this device's saved list (dedup by ~1 m coordinate).
+  // Returns how many were newly added.
+  function mergeBookmarks(items) {
     const arr = loadBookmarks();
     let added = 0;
-    list.forEach(item => {
+    items.forEach(item => {
       const dup = arr.some(b => bmRound(b.lng) === bmRound(item.lng) && bmRound(b.lat) === bmRound(item.lat));
       if (dup) return;
       arr.push({ id: "bm-" + Date.now() + "-" + added, lng: item.lng, lat: item.lat,
@@ -743,16 +755,24 @@
       added++;
     });
     saveBookmarks(arr);
+    return added;
+  }
+  // Adding the marker source needs a fully-loaded style; a shared link can land
+  // before tiles finish, so defer until the style is ready (addSource would
+  // otherwise throw "Style is not done loading").
+  function showSavedMarkersWhenReady() {
+    const addMarkers = () => { try { applyBookmarks(); } catch (e) { /* style gone */ } };
+    if (map && map.isStyleLoaded()) addMarkers();
+    else if (map) map.once("idle", addMarkers);
+  }
+  // Import a shared saved-list into this device and open the list.
+  function importSharedList(list) {
+    const added = mergeBookmarks(list);
     openBookmarkList();      // the list itself is the outcome — show it regardless of map state
     showToast(added ? t("share.imported") : t("share.importedNone"));
     enableSavedLayer();
     fitToPoints(list);
-    // Adding the marker source needs a fully-loaded style; a shared link can land
-    // before tiles finish, so defer until the style is ready (addSource would
-    // otherwise throw "Style is not done loading").
-    const addMarkers = () => { try { applyBookmarks(); } catch (e) { /* style gone */ } };
-    if (map && map.isStyleLoaded()) addMarkers();
-    else if (map) map.once("idle", addMarkers);
+    showSavedMarkersWhenReady();
   }
   function fitToPoints(list) {
     if (!map || !list.length) return;
@@ -768,10 +788,18 @@
     if (share.list && share.list.length) {
       importSharedList(share.list);
     } else if (share.focus) {
-      const { lat, lng, name } = share.focus;
+      const { lat, lng, name, note, save } = share.focus;
+      // If the sender shared a point they had saved, it becomes the receiver's
+      // saved point too (deduped) — lands in their list and shows as a star.
+      if (save) {
+        const added = mergeBookmarks([{ lat, lng, name, note }]);
+        enableSavedLayer();
+        showSavedMarkersWhenReady();
+        if (added) showToast(t("share.imported"));
+      }
       map.flyTo({ center: [lng, lat], zoom: 16 });
       dropCoordPin(lng, lat, true);
-      showPlaceCard(name, lng, lat);
+      showPlaceCard(name, lng, lat, note);
     }
   }
 
@@ -845,13 +873,13 @@
         const [lng, lat] = f.geometry.coordinates;
         showPlaceCard(f.properties.name || "OSM note", lng, lat);
       });
-      // tap a saved marker -> the same place card as any other point (its
-      // pencil already reflects the saved state, so the note stays editable)
+      // tap a saved marker -> the same place card as any other point, titled
+      // with the note the user saved (its pencil reflects the saved state)
       map.on("click", "lyr-bm-dot", e => {
         const f = e.features && e.features[0];
         if (!f) return;
         const [lng, lat] = f.geometry.coordinates;
-        showPlaceCard(f.properties.name || "", lng, lat);
+        showPlaceCard(f.properties.name || "", lng, lat, f.properties.note || "");
       });
       map.on("mouseenter", "lyr-bm-dot", () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", "lyr-bm-dot", () => { map.getCanvas().style.cursor = ""; });
@@ -1643,7 +1671,7 @@
     const p = params.get("p");
     if (p) {
       const [la, lo] = p.split(",").map(Number);
-      if (isFinite(la) && isFinite(lo)) out.focus = { lat: la, lng: lo, name: params.get("t") || "" };
+      if (isFinite(la) && isFinite(lo)) out.focus = { lat: la, lng: lo, name: params.get("t") || "", note: params.get("n") || "", save: params.get("s") === "1" };
     }
     const list = params.get("list");
     if (list) {
