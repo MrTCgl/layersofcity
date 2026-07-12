@@ -167,9 +167,10 @@ anında** üretilir (çalışma zamanı bağımlılığı yok; atıf altbilgide)
    kaleler, ünlü meydanlar, tarihi garlar) listeye yaz; boru hattı çıktısıyla
    ada göre çakıştır, eksik olanı `theme:"tarihi"` (uygunsa `modern`) olarak
    elle ekle. Bir simgeyi "çok bilinen, gelir zaten" diye atlamak yasak —
-   tam da bu varsayım Topkapı'yı düşürmüştü. **Bilinen açık: Roma'da Vatikan
-   Müzeleri, Fori Imperiali, Piazza del Campidoglio (Musei Capitolini),
-   Palatino, Bocca della Verità hâlâ eksik → bir sonraki oturumda eklenecek.**
+   tam da bu varsayım Topkapı'yı düşürmüştü. (İstanbul allowlist'i 2026-07-12'de
+   uygulandı: Topkapı/Ayasofya/Sultanahmet vb. 49 nokta; Roma allowlist'i
+   2026-07-12'de: Palatino/Fori Imperiali/Campidoglio/Vittoriano/Bocca della
+   Verità/Santa Maria Maggiore vb. 42 nokta.)
 
 ## Ek alanlar (2026-07-10)
 
