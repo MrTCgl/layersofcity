@@ -34,6 +34,12 @@ Kod değişikliği gerektiren bir eksik bulursan önce kullanıcıya bildir.
 - GeoJSON'ları şişirme: omurga hattı için ~10m hassasiyet yeterli;
   dosya başına hedef < 200KB.
 - Yer adları çevrilmez; ipuçları i18n anahtarıdır.
+- **İkonik landmark denetimi (zorunlu):** OSM boru hattı bitince şehrin
+  dünyaca ünlü ilk 30-50 simgesini elle bir listeyle çakıştır; ızgara
+  seyreltmesi bunları elemiş olabilir. Eksikleri `kesfet-poi.geojson`'a
+  `theme:"tarihi"` olarak ekle. Ayrıntı ve gerekçe (Topkapı örneği):
+  `docs/VERI.md` → "İkonik landmark güvencesi". "Nasılsa gelir" diye
+  hiçbir ana simgeyi atlama.
 
 
 ## OSM boru hattı (2026-07-10'dan itibaren zorunlu adım)
@@ -41,4 +47,6 @@ Kod değişikliği gerektiren bir eksik bulursan önce kullanıcıya bildir.
 Yeni şehrin omurga/kesfet/ihtiyac/bolge katmanları elle çizilmez; `docs/VERI.md`
 → "OSM üretim boru hattı" bölümündeki Overpass sorguları şehrin bbox'ıyla
 çalıştırılır (kalite vekili + ızgara seyreltme + DP sadeleştirme). Kapılara
-`mode` (plane/train/bus/ship), bölgelere `btype` alanı verilir.
+`mode` (plane/train/bus/ship), bölgelere `btype` alanı verilir. Boru hattı
+bitince **ikonik landmark allowlist** adımı (VERI.md adım 5) çalıştırılır —
+seyreltmenin düşürdüğü ünlü simgeler elle geri eklenir.

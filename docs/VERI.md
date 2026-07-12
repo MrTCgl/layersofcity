@@ -157,6 +157,19 @@ anında** üretilir (çalışma zamanı bağımlılığı yok; atıf altbilgide)
    şehir geneli yayılım, yığılmasız.
 4. **Geometri:** relation way'leri uç-uca dikilir (stitch), Douglas-Peucker
    (~40 m) ile sadeleştirilir, 5 hane yuvarlanır.
+5. **İkonik landmark güvencesi — allowlist (2026-07-12):** Izgara seyreltme
+   (adım 3) ve kalite vekili, dünyaca ünlü zorunlu simgeleri eleyebilir
+   (İstanbul'da Topkapı Sarayı bu yüzden atlanmıştı). Bu yüzden her şehir için
+   elle bir **"olmazsa olmaz" tarihi/simge listesi** tutulur ve bu noktalar
+   seyreltme tavanına **bakılmaksızın** `kesfet-poi.geojson`'a girer.
+   Kural: bir turistin şehirle özdeşleştirdiği ilk 30-50 yeri (saraylar,
+   ana camiler/katedraller, sarnıçlar/forumlar, kuleler, tarihi çarşılar,
+   kaleler, ünlü meydanlar, tarihi garlar) listeye yaz; boru hattı çıktısıyla
+   ada göre çakıştır, eksik olanı `theme:"tarihi"` (uygunsa `modern`) olarak
+   elle ekle. Bir simgeyi "çok bilinen, gelir zaten" diye atlamak yasak —
+   tam da bu varsayım Topkapı'yı düşürmüştü. **Bilinen açık: Roma'da Vatikan
+   Müzeleri, Fori Imperiali, Piazza del Campidoglio (Musei Capitolini),
+   Palatino, Bocca della Verità hâlâ eksik → bir sonraki oturumda eklenecek.**
 
 ## Ek alanlar (2026-07-10)
 
