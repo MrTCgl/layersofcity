@@ -212,24 +212,62 @@
         `<span>${Math.round(weatherData.current.temperature_2m)}°</span>`;
     } else { el.innerHTML = ""; }
   }
+  /* ── live-data cache ───────────────────────
+     Small localStorage cache with TTL. Weather and FX change slowly, so we
+     serve a fresh cached copy without touching the network, and fall back to
+     the last known value (any age) when the network is unavailable. This keeps
+     the app responsive offline and holds the keyless third-party APIs well
+     under their rate limits as traffic grows. Matches the project rule:
+     "canlı veri gelmezse son bilinen değer gösterilir". */
+  const WX_TTL = 30 * 60 * 1000;      // weather: 30 min
+  const FX_TTL = 6 * 60 * 60 * 1000;  // currency: 6 h
+
+  function cacheGet(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const o = JSON.parse(raw);
+        if (o && typeof o.t === "number") return o; // { t: savedAt, v: value }
+      }
+    } catch { /* corrupt entry or storage unavailable */ }
+    return null;
+  }
+  function cacheSet(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify({ t: Date.now(), v: value }));
+    } catch { /* private mode / quota -> just skip caching */ }
+  }
+  // Return a fresh cached value, else fetch it, else fall back to a stale one.
+  // `pick` maps the parsed JSON to the value we store; null means "no value".
+  async function cachedFetch(key, ttl, url, pick) {
+    const hit = cacheGet(key);
+    if (hit && (Date.now() - hit.t) < ttl) return hit.v; // fresh -> no request
+    try {
+      const r = await fetch(url);
+      if (r.ok) {
+        const v = pick(await r.json());
+        if (v != null) { cacheSet(key, v); return v; }
+      }
+    } catch { /* offline / blocked */ }
+    return hit ? hit.v : null; // last known value, or nothing
+  }
+
   // Fetch live weather + USD rate for the current city (keyless, best-effort).
   async function loadLiveData() {
     if (!manifest || !manifest.center) return;
     const [lon, lat] = manifest.center;
     weatherData = null; fxToUsd = null;
-    try {
-      const u = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-        `&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min` +
-        `&timezone=auto&forecast_days=5`;
-      const r = await fetch(u);
-      if (r.ok) weatherData = await r.json();
-    } catch { /* offline / blocked -> section stays hidden */ }
+    const wxUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+      `&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+      `&timezone=auto&forecast_days=5`;
+    // Round coords so tiny manifest edits don't orphan the cache entry.
+    const wxCacheKey = `loc-cache-wx-${lat.toFixed(3)}-${lon.toFixed(3)}`;
+    weatherData = await cachedFetch(wxCacheKey, WX_TTL, wxUrl, (d) => d);
     updateCityBarWx();
     if (manifest.currency && manifest.currency !== "USD") {
-      try {
-        const r = await fetch(`https://api.frankfurter.dev/v1/latest?base=${manifest.currency}&symbols=USD`);
-        if (r.ok) { const d = await r.json(); fxToUsd = d.rates && d.rates.USD; }
-      } catch { /* ignore */ }
+      const fxUrl = `https://api.frankfurter.dev/v1/latest?base=${manifest.currency}&symbols=USD`;
+      const fxCacheKey = `loc-cache-fx-${manifest.currency}`;
+      fxToUsd = await cachedFetch(fxCacheKey, FX_TTL, fxUrl, (d) => d.rates && d.rates.USD);
     }
     if (infoCard && !infoCard.hidden) renderInfoCard();
   }
