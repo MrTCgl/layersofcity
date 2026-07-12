@@ -269,6 +269,41 @@ Durum notu: —
 
 ---
 
+## Kayıtlı noktalar (kullanıcı isteği) ✅ tamam (2026-07-12)
+
+**Amaç:** Kullanıcı haritada beğendiği noktaları kısa bir notla kaydedebilsin;
+sonra hem harita üzerinde hem de liste olarak görsün. Tamamen **cihazda**
+(localStorage), sunucu/üyelik yok — "tercihler cihazda kalır, gönderilmez"
+ilkesiyle uyumlu.
+
+Yapıldı:
+- **Yer kartına kalem ikonu:** POI/durak/uzun-basma ile açılan yer kartında
+  Google Haritalar düğmesinin yanında "not ekle" kalemi. Kayıtlı bir noktada
+  kalem dolu (peach) görünür.
+- **Not editörü:** kalem → küçük ortalanmış diyalog (metin alanı + Kaydet +
+  Vazgeç; kayıtlıysa Sil). Kaydedince nokta + not `loc-bm-<sehir>` altına
+  yazılır, kart kapanır, kayıt yıldız işaretiyle haritada belirir.
+- **İki ayrı komut** (sağ alt altlık menüsünde, Yaya & araç altında):
+  **Kayıtlılar** = yıldız katmanını göster/gizle; **Kayıtlılar listesi** =
+  o şehrin tüm kayıtlarını alt-sayfa olarak açar (satıra tıkla → uç + not
+  popup'ı; satırda sil). Liste her seferinde açılmaz, yalnız komutla.
+- **Not popup'ı:** haritadaki yıldıza tıklayınca not küçük popup'ta görünür.
+- **Admin görünürlüğü:** kullanıcı kararıyla **A (saf yerel)** — kayıtlar
+  cihazda kalır, merkezî toplama yok. İleride istenirse dışa aktarım/rıza ile
+  ayrı değerlendirilir.
+
+Bitti sayılır:
+- [x] Kaydet/düzenle/sil, katman aç-kapa, liste, not popup'ı iki temada ve
+      375–390px mobilde çalışıyor (Playwright ile 26 kontrol, light+dark,
+      0 hata).
+- [x] Şehir başına ayrı anahtar (`loc-bm-roma`, `loc-bm-istanbul`); şehir
+      değişince durum sıfırlanıyor.
+
+Durum notu: Tamam. Yıldız işareti icon-only symbol (canvas görsel, glyph
+bağımsız) olduğundan sandbox'ta karo/glyph ağı kapalıyken de render edildi.
+
+---
+
 ## E9 — Rehberli mod ⬜
 
 **Amaç:** İsteğe bağlı "şehri tanıt" akışı.

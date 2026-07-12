@@ -263,6 +263,11 @@
       name || (lat.toFixed(5) + ", " + lng.toFixed(5));
     document.getElementById("pc-dir").href =
       "https://www.google.com/maps?q=" + ll + (name ? "(" + encodeURIComponent(name) + ")" : "");
+    // remember this point so the pencil can bookmark it; show a filled pencil
+    // when it is already saved
+    pcPoint = { lng, lat, name: name || "" };
+    const already = loadBookmarks().some(b => bmRound(b.lng) === bmRound(lng) && bmRound(b.lat) === bmRound(lat));
+    document.getElementById("pc-edit").setAttribute("aria-pressed", already ? "true" : "false");
     placeCard.hidden = false;
     requestAnimationFrame(() => placeCard.classList.add("show"));
   }
@@ -451,6 +456,155 @@
     } catch { /* offline -> toggle just does nothing visible */ }
   }
 
+  /* ── saved points (bookmarks) ─────────────────────────────────────────────
+     On-device only (localStorage), per city — no account, no server, matching
+     the "preferences stay on the device, never sent" rule. Two independent
+     commands live under the basemap menu: a visibility toggle (Kayıtlılar) and
+     a list (Kayıtlılar listesi). A point is saved from the place-card pencil. */
+  let savedOn = false;
+  let pcPoint = null;   // {lng, lat, name} of the point currently in the place card
+  let bmPopup = null;
+  const bmRound = n => Math.round(n * 1e5);   // ~1 m match tolerance
+  function bmKey() { return "loc-bm-" + (loadedCityId || (manifest && manifest.id) || "x"); }
+  function loadBookmarks() {
+    try { return JSON.parse(localStorage.getItem(bmKey())) || []; } catch { return []; }
+  }
+  function saveBookmarks(arr) { localStorage.setItem(bmKey(), JSON.stringify(arr)); }
+  function bookmarksFC() {
+    return { type: "FeatureCollection", features: loadBookmarks().map(b => ({
+      type: "Feature", geometry: { type: "Point", coordinates: [b.lng, b.lat] },
+      properties: { id: b.id, note: b.note || "", name: b.name || "" } })) };
+  }
+  // A filled peach star marker, distinct from the outlined POI circles. Redrawn
+  // per theme (like the gate icons) so it re-registers on every style.load.
+  function makeBookmarkIcon() {
+    if (!map) return;
+    const pal = PALETTE[theme];
+    const c = document.createElement("canvas");
+    c.width = 92; c.height = 92;
+    const x = c.getContext("2d");
+    x.beginPath(); x.arc(46, 46, 40, 0, Math.PI * 2);
+    x.fillStyle = pal.peach; x.fill();
+    x.lineWidth = 4; x.strokeStyle = pal.surface; x.stroke();
+    x.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const ang = -Math.PI / 2 + i * Math.PI / 5;
+      const rad = i % 2 === 0 ? 20 : 8.2;
+      const px = 46 + rad * Math.cos(ang), py = 46 + rad * Math.sin(ang);
+      i === 0 ? x.moveTo(px, py) : x.lineTo(px, py);
+    }
+    x.closePath(); x.fillStyle = pal.surface; x.fill();
+    if (map.hasImage("bm-star")) map.removeImage("bm-star");
+    map.addImage("bm-star", x.getImageData(0, 0, 92, 92), { pixelRatio: 2 });
+  }
+  function applyBookmarks() {
+    if (!map) return;
+    const src = "lyr-bm";
+    if (map.getSource(src)) map.getSource(src).setData(bookmarksFC());
+    if (savedOn) {
+      if (!map.getSource(src)) map.addSource(src, { type: "geojson", data: bookmarksFC() });
+      if (!map.getLayer("lyr-bm-dot")) {
+        map.addLayer({ id: "lyr-bm-dot", type: "symbol", source: src,
+          layout: { "icon-image": "bm-star",
+            "icon-size": ["interpolate", ["linear"], ["zoom"], 10, 0.42, 14, 0.6],
+            "icon-allow-overlap": true } });
+      }
+    } else {
+      if (map.getLayer("lyr-bm-dot")) map.removeLayer("lyr-bm-dot");
+      if (map.getSource(src)) map.removeSource(src);
+      if (bmPopup) { bmPopup.remove(); bmPopup = null; }
+    }
+  }
+  function openBookmarkPopup(lng, lat, note, name) {
+    if (!map) return;
+    const txt = (note && note.trim()) || name || (lat.toFixed(5) + ", " + lng.toFixed(5));
+    if (bmPopup) bmPopup.remove();
+    bmPopup = new maplibregl.Popup({ offset: 14, closeButton: true, closeOnClick: true,
+      maxWidth: "240px", className: "bmpopup" }).setLngLat([lng, lat]).setText(txt).addTo(map);
+  }
+
+  // Note editor (opened from the place-card pencil for the current pcPoint)
+  const bmEdit = document.getElementById("bmedit");
+  const bmEditText = document.getElementById("bmedit-text");
+  function openBookmarkEditor() {
+    if (!pcPoint) return;
+    const ex = loadBookmarks().find(b => bmRound(b.lng) === bmRound(pcPoint.lng) && bmRound(b.lat) === bmRound(pcPoint.lat));
+    bmEditText.value = ex ? (ex.note || "") : "";
+    document.getElementById("bmedit-del").hidden = !ex;
+    bmEdit.hidden = false;
+    requestAnimationFrame(() => { bmEdit.classList.add("show"); bmEditText.focus(); });
+  }
+  function closeBookmarkEditor() { bmEdit.classList.remove("show"); bmEdit.hidden = true; }
+  function enableSavedLayer() {
+    savedOn = true;
+    document.getElementById("tog-saved").setAttribute("aria-pressed", "true");
+  }
+  document.getElementById("pc-edit").onclick = openBookmarkEditor;
+  document.getElementById("bmedit-cancel").onclick = closeBookmarkEditor;
+  bmEdit.addEventListener("click", e => { if (e.target === bmEdit) closeBookmarkEditor(); });
+  document.getElementById("bmedit-save").onclick = function () {
+    if (!pcPoint) return closeBookmarkEditor();
+    const note = bmEditText.value.trim();
+    const arr = loadBookmarks();
+    const ex = arr.find(b => bmRound(b.lng) === bmRound(pcPoint.lng) && bmRound(b.lat) === bmRound(pcPoint.lat));
+    if (ex) ex.note = note;
+    else arr.push({ id: "bm-" + Date.now(), lng: pcPoint.lng, lat: pcPoint.lat,
+      name: pcPoint.name || "", note, createdAt: Date.now() });
+    saveBookmarks(arr);
+    closeBookmarkEditor();
+    hidePlaceCard();
+    enableSavedLayer();     // surface the new marker straight away
+    applyBookmarks();
+    showToast(t("bookmark.saved"));
+  };
+  document.getElementById("bmedit-del").onclick = function () {
+    if (!pcPoint) return;
+    saveBookmarks(loadBookmarks().filter(b => !(bmRound(b.lng) === bmRound(pcPoint.lng) && bmRound(b.lat) === bmRound(pcPoint.lat))));
+    closeBookmarkEditor();
+    hidePlaceCard();
+    applyBookmarks();
+    showToast(t("bookmark.removed"));
+  };
+
+  // Saved-points list
+  const bmList = document.getElementById("bmlist");
+  function closeBookmarkList() { bmList.classList.remove("show"); bmList.hidden = true; }
+  function goToBookmark(b) {
+    closeBookmarkList();
+    if (!map) return;
+    if (!savedOn) { enableSavedLayer(); applyBookmarks(); }
+    map.flyTo({ center: [b.lng, b.lat], zoom: Math.max(map.getZoom(), 15) });
+    // open the note straight away (popup is anchored to the point, so it rides
+    // along with the camera) — avoids relying on a moveend that never fires when
+    // the target equals the current view.
+    openBookmarkPopup(b.lng, b.lat, b.note, b.name);
+  }
+  function renderBookmarkList() {
+    const body = document.getElementById("bmlist-body");
+    const arr = loadBookmarks().slice().sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    if (!arr.length) { body.innerHTML = `<div class="bmlist-empty">${t("bookmark.empty")}</div>`; return; }
+    body.innerHTML = "";
+    arr.forEach(b => {
+      const row = document.createElement("div");
+      row.className = "bmrow";
+      const go = document.createElement("button");
+      go.className = "bmrow-go";
+      const label = (b.note && b.note.trim()) || b.name || "";
+      if (label) go.textContent = label;                    // textContent -> no injection
+      else go.innerHTML = `<span class="bmrow-coord">${b.lat.toFixed(5)}, ${b.lng.toFixed(5)}</span>`;
+      go.onclick = () => goToBookmark(b);
+      const del = document.createElement("button");
+      del.className = "bmrow-del";
+      del.setAttribute("aria-label", t("bookmark.delete"));
+      del.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>`;
+      del.onclick = () => { saveBookmarks(loadBookmarks().filter(x => x.id !== b.id)); applyBookmarks(); renderBookmarkList(); };
+      row.appendChild(go); row.appendChild(del);
+      body.appendChild(row);
+    });
+  }
+  document.getElementById("bmlist-close").onclick = closeBookmarkList;
+  bmList.addEventListener("click", e => { if (e.target === bmList) closeBookmarkList(); });
+
   function tickClock() {
     if (!manifest) return;
     const now = new Date();
@@ -520,6 +674,15 @@
         const [lng, lat] = f.geometry.coordinates;
         showPlaceCard(f.properties.name || "OSM note", lng, lat);
       });
+      // tap a saved marker -> its note in a small popup
+      map.on("click", "lyr-bm-dot", e => {
+        const f = e.features && e.features[0];
+        if (!f) return;
+        const [lng, lat] = f.geometry.coordinates;
+        openBookmarkPopup(lng, lat, f.properties.note, f.properties.name);
+      });
+      map.on("mouseenter", "lyr-bm-dot", () => { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "lyr-bm-dot", () => { map.getCanvas().style.cursor = ""; });
       // hovering a note shows its text in a small tooltip (desktop)
       let notePopup = null;
       map.on("mousemove", "osmnotes-pt", e => {
@@ -539,7 +702,7 @@
       });
       map.on("click", e => {
         if (longPressFired) { longPressFired = false; return; } // keep the long-press card open
-        const live = tappable.concat(["osmnotes-pt"]).filter(id => map.getLayer(id));
+        const live = tappable.concat(["osmnotes-pt", "lyr-bm-dot"]).filter(id => map.getLayer(id));
         if (!live.length) return;
         const hits = map.queryRenderedFeatures(e.point, { layers: live });
         if (!hits.length) hidePlaceCard();
@@ -711,6 +874,7 @@
     if (!map || !manifest) return;
     const pal = PALETTE[theme];
     makeGateIcons();
+    makeBookmarkIcon();
     addSkeletonLabels();   // pale place names first, so our overlays sit on top
     Object.keys(cityData).forEach(layerId => {
       const src = "lyr-" + layerId;
@@ -853,6 +1017,7 @@
     applyIhtiyacVisibility();
     applyBolgeVisibility();
     addOverlayExtras();
+    applyBookmarks();   // re-add saved markers on top after a theme/style reload
   }
 
   // Show only the transit sub-types currently enabled. Features without a
@@ -968,8 +1133,12 @@
     // drop per-city caches + overlay state so nothing bleeds across cities
     weatherData = null; fxToUsd = null;
     notesData = null; walkData = null;
-    notesOn = gpsOn = walkOn = false;
-    ["tog-notes", "tog-gps", "tog-walk"].forEach(id => {
+    notesOn = gpsOn = walkOn = savedOn = false;
+    if (bmPopup) { bmPopup.remove(); bmPopup = null; }
+    pcPoint = null;
+    closeBookmarkEditor();
+    closeBookmarkList();
+    ["tog-notes", "tog-gps", "tog-walk", "tog-saved"].forEach(id => {
       const b = document.getElementById(id);
       if (b) b.setAttribute("aria-pressed", "false");
     });
@@ -1014,6 +1183,17 @@
     this.setAttribute("aria-pressed", walkOn);
     if (walkOn) { await fetchWalk(); showToast(t("base.walk.hint")); }
     addOverlayExtras();
+  };
+  document.getElementById("tog-saved").onclick = function () {
+    savedOn = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", savedOn);
+    applyBookmarks();
+  };
+  document.getElementById("bmlist-btn").onclick = function () {
+    closeBasemapMenu();
+    renderBookmarkList();
+    bmList.hidden = false;
+    requestAnimationFrame(() => bmList.classList.add("show"));
   };
 
   /* coordinate box: paste "lat, lon" -> fly there + place card */

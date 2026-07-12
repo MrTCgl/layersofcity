@@ -109,6 +109,14 @@ Düz anahtar-değer; iç içe grup için nokta kullanılır:
 `"group.varis": "Varış"`, `"action.locate": "Konumum"`.
 en+tr her zaman tam olmalı; diğer diller eksik anahtarda İngilizce'ye düşer (fallback).
 
+## Kayıtlı noktalar (bookmarks)
+
+- Kullanıcının kaydettiği noktalar **yalnızca cihazda** tutulur; şehir başına
+  ayrı anahtar: `localStorage["loc-bm-<sehir>"]`. Sunucu, üyelik, senkron yok.
+- Kayıt biçimi: `[{ id, lng, lat, name, note, createdAt }]`.
+- Hiçbir yere gönderilmez (konum verisi gibi). Merkezî/admin toplama **yok**
+  (kullanıcı kararı: "saf yerel"); gerekirse ileride dışa aktarım + rıza ile.
+
 ## Konum (geolocation)
 
 - Şehir ekranında "Konumum" butonu tarayıcı Geolocation API'sini kullanır

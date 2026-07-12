@@ -87,5 +87,15 @@
   "bolge.ticari": "Ticari",
   "bolge.egitim": "Eğitim",
   "bolge.dogal": "Doğal",
-  "coord.submit": "koordinata git"
+  "coord.submit": "koordinata git",
+  "bookmark.edit": "not ekle",
+  "bookmark.placeholder": "Bu yer için bir not yaz…",
+  "bookmark.save": "Kaydet",
+  "bookmark.cancel": "Vazgeç",
+  "bookmark.delete": "Sil",
+  "bookmark.layer": "Kayıtlılar",
+  "bookmark.list": "Kayıtlılar listesi",
+  "bookmark.empty": "Henüz kaydın yok. Bir noktaya dokun, kalem simgesiyle not ekle.",
+  "bookmark.saved": "Kaydedildi",
+  "bookmark.removed": "Silindi"
 }

@@ -7,7 +7,7 @@
 <meta name="description" content="Read a new city, layer by layer.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B9A6DC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L21 8 L12 13 L3 8 Z'/%3E%3Cpath d='M3 12.5 L12 17.5 L21 12.5' opacity='.55'/%3E%3Cpath d='M3 17 L12 22 L21 17' opacity='.25'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/vendor/maplibre-gl.css">
-<link rel="stylesheet" href="css/style.css?v=20260712-6">
+<link rel="stylesheet" href="css/style.css?v=20260712-7">
 </head>
 <body>
 
@@ -169,6 +169,9 @@
             <button class="bmtog" id="tog-notes" aria-pressed="false" data-i18n="base.notlar"></button>
             <button class="bmtog" id="tog-gps" aria-pressed="false" data-i18n="base.gps"></button>
             <button class="bmtog" id="tog-walk" aria-pressed="false" data-i18n="base.walk"></button>
+            <div class="bmsep"></div>
+            <button class="bmtog" id="tog-saved" aria-pressed="false" data-i18n="bookmark.layer"></button>
+            <button class="bmtog" id="bmlist-btn" data-i18n="bookmark.list"></button>
           </div>
           <button id="basemapbtn" class="cbtn" data-i18n-label="base.title"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L21 8 L12 13 L3 8 Z"/><path d="M3 12.5 L12 17.5 L21 12.5"/><path d="M3 17 L12 22 L21 17"/></svg></button>
         </div>
@@ -187,9 +190,38 @@
       <div class="placecard" id="placecard" hidden>
         <span class="pc-name" id="pc-name"></span>
         <a class="pc-dir" id="pc-dir" target="_blank" rel="noopener" data-i18n="card.maps"></a>
+        <button class="pc-edit" id="pc-edit" data-i18n-label="bookmark.edit">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L18.5 9.5a2 2 0 0 0-2.8-2.8L5 17.2V20z"/><path d="M14 6.5l3.5 3.5"/></svg>
+        </button>
         <button class="pc-close" id="pc-close" data-i18n-label="aria.close">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
+      </div>
+
+      <!-- bookmark note editor: opens from the place card pencil -->
+      <div class="bmedit" id="bmedit" hidden>
+        <div class="bmedit-card">
+          <textarea id="bmedit-text" rows="3" maxlength="280" data-i18n-ph="bookmark.placeholder"></textarea>
+          <div class="bmedit-row">
+            <button class="bmedit-del" id="bmedit-del" hidden data-i18n="bookmark.delete"></button>
+            <span class="bmedit-spacer"></span>
+            <button class="bmedit-cancel" id="bmedit-cancel" data-i18n="bookmark.cancel"></button>
+            <button class="bmedit-save" id="bmedit-save" data-i18n="bookmark.save"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- saved-points list: opens from the "Kayıtlılar listesi" menu command -->
+      <div class="bmlist" id="bmlist" hidden>
+        <div class="bmlist-card">
+          <div class="bmlist-head">
+            <span class="bmlist-title" data-i18n="bookmark.list"></span>
+            <button class="bmlist-close" id="bmlist-close" data-i18n-label="aria.close">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+          </div>
+          <div class="bmlist-body" id="bmlist-body"></div>
+        </div>
       </div>
 
       <div class="toast" id="toast"></div>
@@ -198,7 +230,7 @@
 </main>
 
 <script src="assets/vendor/maplibre-gl.js"></script>
-<script src="js/world-dots.js?v=20260712-6"></script>
-<script src="js/app.js?v=20260712-6"></script>
+<script src="js/world-dots.js?v=20260712-7"></script>
+<script src="js/app.js?v=20260712-7"></script>
 </body>
 </html>

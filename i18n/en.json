@@ -87,5 +87,15 @@
   "bolge.ticari": "Commercial",
   "bolge.egitim": "Education",
   "bolge.dogal": "Nature",
-  "coord.submit": "go"
+  "coord.submit": "go",
+  "bookmark.edit": "add note",
+  "bookmark.placeholder": "Write a note for this place…",
+  "bookmark.save": "Save",
+  "bookmark.cancel": "Cancel",
+  "bookmark.delete": "Delete",
+  "bookmark.layer": "Saved",
+  "bookmark.list": "Saved list",
+  "bookmark.empty": "No saved places yet. Tap a point and use the pencil to add a note.",
+  "bookmark.saved": "Saved",
+  "bookmark.removed": "Removed"
 }
