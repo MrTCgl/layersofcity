@@ -312,6 +312,27 @@ body.city #topchips{display:flex}
 }
 #locbtn:hover{color:var(--lilac)}
 #locbtn[aria-pressed="true"]{color:var(--lilac)}
+#immersivebtn{
+  width:44px; height:44px;
+  border-radius:999px; background:var(--surface); box-shadow:var(--shadow);
+  border:1px solid var(--line); display:grid; place-items:center; color:var(--ink-soft);
+}
+#immersivebtn:hover{color:var(--lilac)}
+#immersivebtn[aria-pressed="true"]{color:var(--lilac); border-color:var(--lilac)}
+/* immersive (clean map) mode: only the logo and the immersive toggle stay on
+   screen; every other floating control is hidden until the user taps again. */
+body.immersive #topchips,
+body.immersive .langwrap,
+body.immersive #themebtn,
+body.immersive #citybar,
+body.immersive #infocard,
+body.immersive #drawerwrap,
+body.immersive #bottombar,
+body.immersive .sheet,
+body.immersive #placecard,
+body.immersive #zoomctl,
+body.immersive .ctlwrap,
+body.immersive #locbtn{display:none !important}
 
 /* user location marker */
 .me-marker{width:18px; height:18px; position:relative}

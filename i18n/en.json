@@ -3,6 +3,8 @@
   "city.coming": "The map is on its way.",
   "aria.home": "home",
   "aria.theme": "theme",
+  "aria.immersive": "full screen",
+  "aria.exitImmersive": "exit full screen",
   "aria.close": "close",
   "card.maps": "Google Maps",
   "info.lang": "Language",
