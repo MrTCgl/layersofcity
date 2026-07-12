@@ -3,6 +3,8 @@
   "city.coming": "Harita hazırlanıyor.",
   "aria.home": "ana ekran",
   "aria.theme": "tema",
+  "aria.immersive": "tam ekran",
+  "aria.exitImmersive": "tam ekrandan çık",
   "aria.close": "kapat",
   "card.maps": "Google Haritalar",
   "info.lang": "Dil",

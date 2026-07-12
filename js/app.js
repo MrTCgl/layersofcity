@@ -1056,6 +1056,17 @@
   panbtn.addEventListener("pointerup", endPan);
   panbtn.addEventListener("pointercancel", endPan);
 
+  // immersive (clean map) mode: hide every floating control but the logo and
+  // this toggle, so the bare map can be read; tap again to restore them all.
+  document.getElementById("immersivebtn").onclick = function () {
+    const on = document.body.classList.toggle("immersive");
+    this.setAttribute("aria-pressed", on ? "true" : "false");
+    document.getElementById("ic-fs-enter").style.display = on ? "none" : "";
+    document.getElementById("ic-fs-exit").style.display = on ? "" : "none";
+    this.setAttribute("aria-label", t(on ? "aria.exitImmersive" : "aria.immersive"));
+    this.setAttribute("title", t(on ? "aria.exitImmersive" : "aria.immersive"));
+  };
+
   document.getElementById("locbtn").onclick = function () {
     if (!map || !navigator.geolocation) return;
     const btn = this;
