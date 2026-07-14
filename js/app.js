@@ -348,9 +348,12 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260714-2"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260714-3"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
-  if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
+  if (!["sade", "detay", "uydu", "detay+uydu"].includes(basemapMode)) basemapMode = "sade";
+  // OSM layer opacity while OSM Detaylı + Uydu are combined (hybrid mode)
+  let osmOpacity = parseFloat(localStorage.getItem("loc-osm-op"));
+  if (!(osmOpacity >= 0.1 && osmOpacity <= 1)) osmOpacity = 0.55;
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
   function rasterStyle(tiles, attribution) {
     // maxzoom 18: Esri has no imagery past z18 in many districts and serves
@@ -447,7 +450,7 @@
     ];
   }
   function addSkeletonLabels() {
-    if (!map || basemapMode === "detay") return; // OSM Detaylı brings its own labels
+    if (!map || basemapMode.startsWith("detay")) return; // OSM Detaylı (ve hibrit) kendi etiketlerini getirir
     if (!map.getSource("omt")) map.addSource("omt", { type: "vector", url: "https://tiles.openfreemap.org/planet" });
     const c = basemapMode === "uydu" ? SK_COLORS.sat : SK_COLORS[theme];
     skeletonLabels(c).forEach(spec => {
@@ -455,28 +458,77 @@
       map.addLayer(spec);
     });
   }
+  const ESRI_TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+  const ESRI_ATTR = "Esri, Maxar, Earthstar Geographics";
   function basemapStyle() {
     // "detay" = official OSM Shortbread vector tiles (vector.openstreetmap.org),
     // local style copy with OpenFreeMap glyphs so no key is ever needed.
     if (basemapMode === "detay") return `assets/basemap-shortbread.json?v=${BM_VER}`;
-    if (basemapMode === "uydu") return rasterStyle(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-      "Esri, Maxar, Earthstar Geographics");
+    if (basemapMode === "uydu") return rasterStyle(ESRI_TILES, ESRI_ATTR);
     return `assets/basemap-${theme}.json?v=${BM_VER}`;
   }
-  function updateBasemapMenu() {
-    document.querySelectorAll("#basemapmenu .bmopt").forEach(b =>
-      b.setAttribute("aria-pressed", b.dataset.bm === basemapMode));
+  // Hybrid mode (OSM Detaylı + Uydu together): the Shortbread style with the
+  // satellite raster slid underneath and the OSM layers faded via a slider.
+  let shortbreadJson = null;
+  async function hybridStyle() {
+    if (!shortbreadJson) {
+      const r = await fetch(`assets/basemap-shortbread.json?v=${BM_VER}`);
+      shortbreadJson = await r.json();
+    }
+    const s = JSON.parse(JSON.stringify(shortbreadJson));
+    s.sources.esri = { type: "raster", tiles: [ESRI_TILES], tileSize: 256, maxzoom: 18, attribution: ESRI_ATTR };
+    // raster sits above the flat background but below every OSM layer
+    const bgIdx = s.layers.findIndex(l => l.type === "background");
+    s.layers.splice(bgIdx + 1, 0, { id: "esri-hybrid", type: "raster", source: "esri",
+      paint: { "raster-brightness-min": 0.14, "raster-contrast": 0.05, "raster-saturation": 0.03 } });
+    return s;
   }
-  function applyBasemap(mode) {
-    basemapMode = mode;
-    localStorage.setItem("loc-basemap", mode);
-    updateBasemapMenu();
-    if (map) {
-      // style.load doesn't refire after setStyle in this build -> re-add on idle
+  // Fade the Shortbread area/line work so the imagery shows through; labels
+  // stay solid so the map keeps reading. Applied on load and from the slider.
+  function applyOsmOpacity() {
+    if (!map || basemapMode !== "detay+uydu") return;
+    const o = osmOpacity;
+    map.getStyle().layers.forEach(l => {
+      if (l.id === "esri-hybrid" || l.id.startsWith("lyr-") || l.id.startsWith("sk-") ||
+          l.id === "gpstrace" || l.id.startsWith("walk") || l.id.startsWith("osmnotes")) return;
+      try {
+        if (l.type === "fill") map.setPaintProperty(l.id, "fill-opacity", o);
+        else if (l.type === "line") map.setPaintProperty(l.id, "line-opacity", o);
+        else if (l.type === "background") map.setPaintProperty(l.id, "background-opacity", 0);
+        else if (l.type === "fill-extrusion") map.setPaintProperty(l.id, "fill-extrusion-opacity", o);
+      } catch (e) { /* per-layer paint quirks -> skip */ }
+    });
+  }
+  function updateBasemapMenu() {
+    const hybrid = basemapMode === "detay+uydu";
+    document.querySelectorAll("#basemapmenu .bmopt").forEach(b =>
+      b.setAttribute("aria-pressed",
+        b.dataset.bm === basemapMode || (hybrid && (b.dataset.bm === "detay" || b.dataset.bm === "uydu"))));
+    document.getElementById("osmoprow").hidden = !hybrid;
+  }
+  function setMapStyle() {
+    if (!map) return;
+    if (basemapMode === "detay+uydu") {
+      hybridStyle().then(s => {
+        map.setStyle(s);
+        map.once("idle", () => { applyOsmOpacity(); addCityLayers(); });
+      });
+    } else {
       map.setStyle(basemapStyle());
       map.once("idle", addCityLayers);
     }
+  }
+  function applyBasemap(mode) {
+    // OSM Detaylı and Uydu can be combined: picking one while the other is on
+    // (or while combined) toggles the pair instead of switching outright.
+    if (mode === "detay" && basemapMode === "uydu") mode = "detay+uydu";
+    else if (mode === "uydu" && basemapMode === "detay") mode = "detay+uydu";
+    else if (mode === "detay" && basemapMode === "detay+uydu") mode = "uydu";
+    else if (mode === "uydu" && basemapMode === "detay+uydu") mode = "detay";
+    basemapMode = mode;
+    localStorage.setItem("loc-basemap", mode);
+    updateBasemapMenu();
+    setMapStyle(); // style.load doesn't refire after setStyle in this build -> re-add on idle
   }
 
   /* OSM notes + GPS traces overlays (keyless), toggleable on any basemap */
@@ -872,7 +924,7 @@
       await loadCityData(city.id);   // fetch layer geojson before the map draws
       map = new maplibregl.Map({
         container: "map",
-        style: basemapStyle(),
+        style: basemapMode === "detay+uydu" ? await hybridStyle() : basemapStyle(),
         bounds: manifest.home,
         fitBoundsOptions: { padding: 24 },
         minZoom: manifest.zoom.min,
@@ -1117,6 +1169,7 @@
 
   function addCityLayers() {
     if (!map || !manifest) return;
+    applyOsmOpacity();  // hybrid basemap keeps its fade across style reloads
     const pal = PALETTE[theme];
     makeGateIcons();
     makeBookmarkIcon();
@@ -1414,6 +1467,13 @@
   };
   document.querySelectorAll("#basemapmenu .bmopt").forEach(b => {
     b.onclick = () => { applyBasemap(b.dataset.bm); };
+  });
+  const osmOpInput = document.getElementById("osmop");
+  osmOpInput.value = Math.round(osmOpacity * 100);
+  osmOpInput.addEventListener("input", function () {
+    osmOpacity = this.value / 100;
+    localStorage.setItem("loc-osm-op", osmOpacity);
+    requestAnimationFrame(applyOsmOpacity);
   });
   document.getElementById("tog-notes").onclick = async function () {
     notesOn = this.getAttribute("aria-pressed") !== "true";

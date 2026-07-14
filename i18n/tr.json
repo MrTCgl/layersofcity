@@ -91,5 +91,6 @@
   "appinfo.l3": "Şehir çubuğunda canlı saat, hava ve fiyat künyesi seni bekler.",
   "appinfo.l4": "Beğendiğin yerleri kaydet, notunla birlikte link olarak paylaş.",
   "appinfo.l5": "Yol tarifi tek dokunuşla Google Haritalar'da açılır.",
-  "appinfo.l6": "Üyelik yok; tercihlerin yalnızca cihazında kalır."
+  "appinfo.l6": "Üyelik yok; tercihlerin yalnızca cihazında kalır.",
+  "base.osmOpacity": "OSM katman şeffaflığı"
 }
