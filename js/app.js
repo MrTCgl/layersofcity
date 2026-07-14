@@ -348,10 +348,11 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260714-3"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260714-4"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
-  if (!["sade", "detay", "uydu", "detay+uydu"].includes(basemapMode)) basemapMode = "sade";
-  // OSM layer opacity while OSM Detaylı + Uydu are combined (hybrid mode)
+  if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
+  if (!["sade", "detay", "uydu", "karma"].includes(basemapMode)) basemapMode = "sade";
+  // OSM layer opacity in the Karma (OSM + satellite) basemap
   let osmOpacity = parseFloat(localStorage.getItem("loc-osm-op"));
   if (!(osmOpacity >= 0.1 && osmOpacity <= 1)) osmOpacity = 0.55;
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
@@ -450,7 +451,7 @@
     ];
   }
   function addSkeletonLabels() {
-    if (!map || basemapMode.startsWith("detay")) return; // OSM Detaylı (ve hibrit) kendi etiketlerini getirir
+    if (!map || basemapMode === "detay" || basemapMode === "karma") return; // OSM etiketleri zaten var
     if (!map.getSource("omt")) map.addSource("omt", { type: "vector", url: "https://tiles.openfreemap.org/planet" });
     const c = basemapMode === "uydu" ? SK_COLORS.sat : SK_COLORS[theme];
     skeletonLabels(c).forEach(spec => {
@@ -467,8 +468,8 @@
     if (basemapMode === "uydu") return rasterStyle(ESRI_TILES, ESRI_ATTR);
     return `assets/basemap-${theme}.json?v=${BM_VER}`;
   }
-  // Hybrid mode (OSM Detaylı + Uydu together): the Shortbread style with the
-  // satellite raster slid underneath and the OSM layers faded via a slider.
+  // "Karma" basemap: the Shortbread style with the satellite raster slid
+  // underneath and the OSM layers faded via a slider.
   let shortbreadJson = null;
   async function hybridStyle() {
     if (!shortbreadJson) {
@@ -486,7 +487,7 @@
   // Fade the Shortbread area/line work so the imagery shows through; labels
   // stay solid so the map keeps reading. Applied on load and from the slider.
   function applyOsmOpacity() {
-    if (!map || basemapMode !== "detay+uydu") return;
+    if (!map || basemapMode !== "karma") return;
     const o = osmOpacity;
     map.getStyle().layers.forEach(l => {
       if (l.id === "esri-hybrid" || l.id.startsWith("lyr-") || l.id.startsWith("sk-") ||
@@ -500,15 +501,13 @@
     });
   }
   function updateBasemapMenu() {
-    const hybrid = basemapMode === "detay+uydu";
     document.querySelectorAll("#basemapmenu .bmopt").forEach(b =>
-      b.setAttribute("aria-pressed",
-        b.dataset.bm === basemapMode || (hybrid && (b.dataset.bm === "detay" || b.dataset.bm === "uydu"))));
-    document.getElementById("osmoprow").hidden = !hybrid;
+      b.setAttribute("aria-pressed", b.dataset.bm === basemapMode));
+    document.getElementById("osmoprow").hidden = basemapMode !== "karma";
   }
   function setMapStyle() {
     if (!map) return;
-    if (basemapMode === "detay+uydu") {
+    if (basemapMode === "karma") {
       hybridStyle().then(s => {
         map.setStyle(s);
         map.once("idle", () => { applyOsmOpacity(); addCityLayers(); });
@@ -519,12 +518,6 @@
     }
   }
   function applyBasemap(mode) {
-    // OSM Detaylı and Uydu can be combined: picking one while the other is on
-    // (or while combined) toggles the pair instead of switching outright.
-    if (mode === "detay" && basemapMode === "uydu") mode = "detay+uydu";
-    else if (mode === "uydu" && basemapMode === "detay") mode = "detay+uydu";
-    else if (mode === "detay" && basemapMode === "detay+uydu") mode = "uydu";
-    else if (mode === "uydu" && basemapMode === "detay+uydu") mode = "detay";
     basemapMode = mode;
     localStorage.setItem("loc-basemap", mode);
     updateBasemapMenu();
@@ -924,7 +917,7 @@
       await loadCityData(city.id);   // fetch layer geojson before the map draws
       map = new maplibregl.Map({
         container: "map",
-        style: basemapMode === "detay+uydu" ? await hybridStyle() : basemapStyle(),
+        style: basemapMode === "karma" ? await hybridStyle() : basemapStyle(),
         bounds: manifest.home,
         fitBoundsOptions: { padding: 24 },
         minZoom: manifest.zoom.min,

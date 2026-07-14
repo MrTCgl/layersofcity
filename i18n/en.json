@@ -92,5 +92,6 @@
   "appinfo.l4": "Save the places you like and share them as a link, notes included.",
   "appinfo.l5": "Directions open in Google Maps with one tap.",
   "appinfo.l6": "No accounts; your preferences stay on your device.",
-  "base.osmOpacity": "OSM layer opacity"
+  "base.osmOpacity": "OSM layer opacity",
+  "base.karma": "Hybrid"
 }

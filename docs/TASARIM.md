@@ -71,11 +71,12 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   düzeyine kadar yaklaşılabilir.
 - **GPS izleri şeffaflığı** (2026-07-14): altlık menüsünde GPS izleri açıkken
   altında bir opaklık kaydırıcısı belirir (%10-100, `localStorage["loc-gps-op"]`).
-- **Hibrit altlık (2026-07-14):** OSM Detaylı + Uydu birlikte açılabilir —
-  menüde biri açıkken diğerine dokunmak ikisini birleştirir (`detay+uydu`).
-  Uydu altta, Shortbread katmanları üstte; dolgu/çizgiler kaydırıcıyla
-  soluklaştırılır (`base.osmOpacity`, `localStorage["loc-osm-op"]`, varsayılan
-  0.55), etiketler tam opak kalır. Tekrar dokunmak ayrıştırır.
+- **Karma altlık (2026-07-14):** dördüncü bağımsız altlık seçeneği "Karma" =
+  OSM Detaylı + Uydu karması. Uydu altta, Shortbread katmanları üstte;
+  dolgu/çizgiler menüdeki kaydırıcıyla soluklaştırılır (`base.osmOpacity`,
+  `localStorage["loc-osm-op"]`, varsayılan 0.55), etiketler tam opak kalır.
+  Dört mod da (Sade / OSM Detaylı / Uydu / Karma) birbirini dışlar; kaydırıcı
+  yalnız Karma'da görünür.
 - **Özellik popup'ı mobil:** satırlar hiç sarmaz; yazı boyutu
   `min(13.5px, 2.1vw)` ile ekrana göre küçülür (en uzun satır ~37em).
   + OSM notları / GPS izleri / **Yaya & araç** overlay (altlık menüsünde,
