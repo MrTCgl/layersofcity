@@ -54,15 +54,23 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   alır; Keşfet/İhtiyaç bottombar etiketi açık katman varken grup rengini alır
 - Bölge türü renkleri: Turistik `#B85C6E` · Ticari `#5B8FBF` · Eğitim
   `#B8863F` · Doğal `#5E9A6B` (dolgu .18, kenar 1.4px .65)
-- Altlık modları (2026-07-10): **Sade** = pastel vektör; katmanlardan
-  bağımsız, her zaman görünen soluk bir **yer adı iskeleti** var (2026-07-11):
-  şehir · kasaba/köy · semt/mahalle (z11.5+, seyrek büyük harf) · ana arter
-  (z13.5+) · nehir/park adları. Tek font "Noto Sans Regular", halkasız,
-  altlık paletiyle uyumlu soluk tonlar (`sk-*` katmanları, OpenFreeMap omt
-  vektör kaynağından). Katman açılınca üstüne biner. · **OSM Detaylı** =
-  vektör, OSM renk dili, yol/semt adları var, POI ikonu yok
-  (`assets/basemap-detail.json`) · **Uydu** = Esri World Imagery raster
-  (koyu gölgeler `raster-brightness-min .08` ile hafif açıldı).
+- Altlık modları (2026-07-14 güncel): **Sade** = pastel vektör; katmanlardan
+  bağımsız, her zaman görünen soluk bir **yer adı iskeleti** var. Yazı detayı
+  zoom'la kademeli artar (simge yok, yalnız yazı): uzakta şehir + **ilçe**
+  (z10+, büyük harf) → yaklaşınca **mahalle/semt** (z12.5+) → **ana yol
+  adları** (z13+) ve **tüm sokak adları** (z15+) → en yakında **bina/mekân
+  adları** (z16.5+, `sk-poi-fine`). Tek font "Noto Sans Regular", altlık
+  paletiyle uyumlu soluk tonlar (`sk-*` katmanları, OpenFreeMap omt vektör
+  kaynağından). Katman açılınca üstüne biner. · **OSM Detaylı** = resmi
+  **OpenStreetMap Shortbread** vektör karoları (`vector.openstreetmap.org`,
+  anahtarsız); stil yerel kopyadır (`assets/basemap-shortbread.json`, glifler
+  OpenFreeMap'ten). Yakınlaştıkça detay ve yazılar OSM.org kalitesinde ·
+  **Uydu** = Esri World Imagery raster (aydınlık ve net:
+  `raster-brightness-min .14`, `raster-contrast .05`).
+  Tüm altlıklarda maksimum zoom **19**'dur (city.json `zoom.max`) — bina
+  düzeyine kadar yaklaşılabilir.
+- **GPS izleri şeffaflığı** (2026-07-14): altlık menüsünde GPS izleri açıkken
+  altında bir opaklık kaydırıcısı belirir (%10-100, `localStorage["loc-gps-op"]`).
   + OSM notları / GPS izleri / **Yaya & araç** overlay (altlık menüsünde,
   GPS'in altında). Yaya & araç (2026-07-11): OSM'den türetilmiş sokak
   karakteri — yeşil = yaya öncelikli (`highway=pedestrian/living_street` +
@@ -90,7 +98,14 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 - **Açılış ekranında** büyük logotip **el yazısı** karakterdedir: turistik,
   uçarı his; hafif eğim (yaklaşık -2°). Font: **Ballet** (Omnibus-Type,
   OFL lisanslı — kullanıcı seçimi), `assets/fonts/` altında **yerel**
-  barındırılır (CDN yok). Prototipte woff2 gömülüdür; "of" kelimesi `--lilac`.
+  barındırılır (CDN yok). Renkler (2026-07-14): "layers" ve "city" `--peach`
+  (yavruağzı), "of" `--lilac`.
+- **Açılış ekranı ek öğeleri (2026-07-14):** en altta ortada iletişim adresi
+  `layersofcity@gmail.com` — küçük (11px), ince (300), geniş harf aralıklı
+  (`letter-spacing:.32em`), `--ink-soft`. Sağ üstte dil düğmesinin solunda
+  yuvarlak **ⓘ** butonu; tıklayınca ekran ortasında şeffaf (blur'lu) bir popup
+  açılır ve uygulamanın özellikleri alt alta tek cümlelerle listelenir
+  (`appinfo.l1..l6` i18n anahtarları). ⓘ yalnız açılış ekranında görünür.
 
 ## İkonlar
 

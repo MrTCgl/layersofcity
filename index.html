@@ -7,7 +7,7 @@
 <meta name="description" content="Read a new city, layer by layer.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B9A6DC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L21 8 L12 13 L3 8 Z'/%3E%3Cpath d='M3 12.5 L12 17.5 L21 12.5' opacity='.55'/%3E%3Cpath d='M3 17 L12 22 L21 17' opacity='.25'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/vendor/maplibre-gl.css">
-<link rel="stylesheet" href="css/style.css?v=20260712-15">
+<link rel="stylesheet" href="css/style.css?v=20260714-1">
 </head>
 <body>
 
@@ -35,6 +35,9 @@
     </div>
   </div>
   <div class="grow"></div>
+  <button class="iconbtn" id="infobtn" data-i18n-label="aria.appinfo" aria-expanded="false">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="8" r=".5" fill="currentColor"/></svg>
+  </button>
   <div class="langwrap">
     <button id="langbtn" aria-expanded="false" aria-label="language">TR</button>
     <div id="langmenu" hidden>
@@ -56,9 +59,25 @@
   <!-- ═══ WORLD SCREEN (city picker) ═══ -->
   <section class="screen" id="scr-world">
     <div id="worldzoom">
-      <h1 id="wordmark">layers <span class="of">of</span> city</h1>
+      <h1 id="wordmark"><span class="wm">layers</span> <span class="of">of</span> <span class="wm">city</span></h1>
       <div id="worldwrap">
         <svg id="worldmap" viewBox="40 16 920 400" role="img" aria-label="world map"></svg>
+      </div>
+    </div>
+    <!-- app contact — quiet, thin, letter-spaced, bottom center -->
+    <div id="contact">layersofcity@gmail.com</div>
+    <!-- app features popup: opens from the ⓘ button in the header -->
+    <div class="appinfo" id="appinfo" hidden>
+      <div class="appinfo-card">
+        <button class="ai-close" id="ai-close" data-i18n-label="aria.close">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <p data-i18n="appinfo.l1"></p>
+        <p data-i18n="appinfo.l2"></p>
+        <p data-i18n="appinfo.l3"></p>
+        <p data-i18n="appinfo.l4"></p>
+        <p data-i18n="appinfo.l5"></p>
+        <p data-i18n="appinfo.l6"></p>
       </div>
     </div>
   </section>
@@ -168,6 +187,9 @@
             <div class="bmsep"></div>
             <button class="bmtog" id="tog-notes" aria-pressed="false" data-i18n="base.notlar"></button>
             <button class="bmtog" id="tog-gps" aria-pressed="false" data-i18n="base.gps"></button>
+            <div class="bmslider" id="gpsoprow" hidden>
+              <input type="range" id="gpsop" min="10" max="100" step="5" data-i18n-label="base.gpsOpacity">
+            </div>
             <button class="bmtog" id="tog-walk" aria-pressed="false" data-i18n="base.walk"></button>
             <div class="bmsep"></div>
             <button class="bmtog" id="tog-saved" aria-pressed="false" data-i18n="bookmark.layer"></button>
@@ -238,7 +260,7 @@
 </main>
 
 <script src="assets/vendor/maplibre-gl.js"></script>
-<script src="js/world-dots.js?v=20260712-15"></script>
-<script src="js/app.js?v=20260712-15"></script>
+<script src="js/world-dots.js?v=20260714-1"></script>
+<script src="js/app.js?v=20260714-1"></script>
 </body>
 </html>

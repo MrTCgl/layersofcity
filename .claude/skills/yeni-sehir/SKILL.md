@@ -3,55 +3,130 @@ name: yeni-sehir
 description: Uygulamaya yeni bir şehir ekle — veri klasörünü, katmanları ve içerikleri kurallara uygun oluşturur. Kullanıcı "X şehrini ekleyelim" dediğinde kullan.
 ---
 
-# Yeni şehir ekle
+# Yeni şehir ekle — eksiksiz üretim rehberi
 
 İlke (CLAUDE.md): **yeni şehir = yeni veri klasörü; kod değişmez.**
 Kod değişikliği gerektiren bir eksik bulursan önce kullanıcıya bildir.
+Bu rehber, hiçbir önceki oturumu görmemiş bir modelin şehri baştan sona
+üretebilmesi için yazıldı. Referans uygulama: `data/istanbul/` (en güncel),
+`data/roma/` (ilk örnek). Şema ayrıntıları: `docs/VERI.md`.
 
-## Adımlar
+## 0. Ön hazırlık
 
-1. `docs/VERI.md`'yi oku; `data/roma/` örnek uygulamadır.
-2. `data/cities.json`'a şehri `status: "soon"` olarak ekle (dünya ekranında
-   soluk görünür). Push'la — kullanıcı vitrini erken görsün. **`anchor` koyma:**
-   etiket otomatik yerleşir; yalnızca çakışma kalırsa `anchor: [dx,dy]` ekle.
-3. Şehri araştır ve **onay taslağı** çıkar (kod yazmadan önce):
-   - Giriş kapıları (havaalanları, ana garlar) + merkeze bağlantılar
-   - Merkez(ler) — çok merkezli şehirlerde ayrımı açıkla (Roma'daki
-     Termini / tarihi merkez ayrımı gibi)
-   - Ulaşım omurgası (metro/ana hatlar; otobüs karmaşası ekleme)
-   - Yorumsal bölgeler: yoğunluk, otel, konut, alt merkezler, öğrenci bölgeleri
-   Bu taslağı kullanıcıya sun; **onaysız yorumsal katman işleme**.
-4. Onaydan sonra `data/<sehir>/` klasörünü kur: `city.json` manifesti,
-   `layers/*.geojson` (özellik sözleşmesine uy), `content/tr.json` + `en.json`.
-   **Şehre özel kapı/hub/merkez metinleri (`subKey`/`nameKey`) `content/`
-   dosyalarına yazılır** (şehir önekiyle, ör. `xx.`), global `i18n/`'e değil —
-   global dosya yalnız paylaşılan arayüz metinlerini tutar (`docs/VERI.md`).
-   Hat geometrileri OpenStreetMap'ten alınır (atıf zaten altbilgide).
-5. Rehberli mod adımlarını (`intro`) Roma'daki ton ve uzunlukta yaz: 5-6 adım,
-   adım başına 1-2 cümle, "sen" dili.
-6. `cities.json`'da şehri `"ready"` yap, iki temada/iki dilde tarayıcıda doğrula,
-   commit'le, push'la.
+1. `docs/VERI.md`, `docs/TASARIM.md` ve bu dosyayı oku.
+2. Şehrin sınır kutusunu belirle: `maxBounds = [[w,s],[e,n]]` (şehir + banliyö
+   kapıları sığsın), `home` = şehir merkez alanı (açılış fitBounds),
+   `zoom: { start: ~10, min: 8.5-9, max: 19 }` (**max her zaman 19**).
+3. `data/cities.json`'a şehri `status:"soon"` olarak ekle ve push'la
+   (vitrinde soluk görünür). `anchor` KOYMA — etiket otomatik yerleşir.
 
-## Kalite çıtası
+## 1. Onay taslağı (kod/veri üretmeden önce)
 
-- Katman menüsü Roma ile aynı 4 grupta kalır (Varış/Omurga/Keşfet/Yaşam).
-- GeoJSON'ları şişirme: omurga hattı için ~10m hassasiyet yeterli;
-  dosya başına hedef < 200KB.
-- Yer adları çevrilmez; ipuçları i18n anahtarıdır.
-- **İkonik landmark denetimi (zorunlu):** OSM boru hattı bitince şehrin
-  dünyaca ünlü ilk 30-50 simgesini elle bir listeyle çakıştır; ızgara
-  seyreltmesi bunları elemiş olabilir. Eksikleri `kesfet-poi.geojson`'a
-  `theme:"tarihi"` olarak ekle. Şehir bazlı hazır kontrol listeleri:
-  `docs/IKONIK_LANDMARKLAR.md`. Ayrıntı ve gerekçe (Topkapı örneği):
-  `docs/VERI.md` → "İkonik landmark güvencesi". "Nasılsa gelir" diye
-  hiçbir ana simgeyi atlama.
+Şehri araştır ve kullanıcıya tek mesajlık taslak sun:
+- **Giriş kapıları** (varis): havaalanları (`mode:"plane"`), ana garlar
+  (`train`), otogar (`bus`), iskeleler (`ship`). Her kapı için merkeze
+  bağlanan GERÇEK hat (ör. CDG→RER B, IST→M11) ve süre.
+- **Merkez(ler)** ve ana aktarma hub'ı (Termini/Châtelet benzeri).
+- **Omurga**: metro + tramvay + banliyö treni + (varsa) metrobüs/kilit otobüs.
+- **Bölgeler** (4 tür): turistik / ticari / eğitim / doğal.
+Onaysız yorumsal katman işleme.
 
+## 2. Veri üretimi — Overpass boru hattı
 
-## OSM boru hattı (2026-07-10'dan itibaren zorunlu adım)
+Tüm geometri OpenStreetMap Overpass API'sinden üretilir (build anında;
+çalışma zamanında değil). Sorgular Python + shapely ile işlenir
+(`pip install shapely`). Ayna uçlar: overpass-api.de, overpass.kumi.systems,
+overpass.private.coffee (504/429'da sırayla dene; User-Agent ver).
 
-Yeni şehrin omurga/kesfet/ihtiyac/bolge katmanları elle çizilmez; `docs/VERI.md`
-→ "OSM üretim boru hattı" bölümündeki Overpass sorguları şehrin bbox'ıyla
-çalıştırılır (kalite vekili + ızgara seyreltme + DP sadeleştirme). Kapılara
-`mode` (plane/train/bus/ship), bölgelere `btype` alanı verilir. Boru hattı
-bitince **ikonik landmark allowlist** adımı (VERI.md adım 5) çalıştırılır —
-seyreltmenin düşürdüğü ünlü simgeler elle geri eklenir.
+### 2a. Omurga hatları (omurga.geojson)
+
+Her hat için:
+```
+[out:json][timeout:180];
+relation["route"="subway"]["ref"="M4"](s,w,n,e);
+way(r)[!"building"];out geom;
+```
+- route değerleri: `subway` (metro), `tram`, `train` (banliyö/Marmaray/RER),
+  `funicular`, `bus` (yalnız kilit hat: metrobüs/BRT). ref yoksa `name` regex'i.
+- İşleme: way'ler `unary_union` + `linemerge` (tek LineString dönerse linemerge
+  ATLANIR — dairesel hat), `maxBounds`'a kırpılır, `simplify(0.00015)`
+  (~15 m), 5 hane yuvarlanır, <120 m kırıntılar atılır → MultiLineString.
+- Properties: `{ id:"line-m4", kind:"line", lineRef:"metro", ref:"M4",
+  color:"#E91E76" }`. `color` = hattın resmi rengi (OSM `colour` etiketi);
+  yoksa `lineRef` paleti devreye girer. `lineRef` değerleri: `metro`, `tram`,
+  `bus`, `train` (Hatlar menüsündeki 4 anahtar bunlara göre süzer; Roma'daki
+  `metro-a/b/c`, `rail` tarihseldir).
+- İstasyonlar: `kind:"node"` (metro istasyonu), `kind:"stop"` (tram/otobüs
+  durağı, z12.5+), `kind:"hub"` (ana aktarma), `kind:"badge"` + `ref`
+  (hat rozeti, hattın orta noktasına), `lab:1` = etiketi görünsün.
+
+### 2b. Gerçekçilik denetimi (ZORUNLU — 2026-07-14 kuralı)
+
+- Hiçbir hat/link'te **2 km'den uzun düz segment** kalmamalı; hat başına
+  yoğunluk genelde **>2 köşe/km** olmalı. İhlal = o hat Overpass'tan yeniden.
+- **Varis link'leri düz çizilmez.** Kapıyı merkeze bağlayan gerçek raylı
+  hattın way'lerini çek, birleştir, iki ucu hatta izdüşür, aradaki parçayı al
+  (shapely `substring`), uçlara kapı/merkez koordinatını ekle.
+- **Kapı koordinatları** gerçek istasyon/terminale otursun (Overpass'tan
+  `railway=station` adıyla doğrula; Halkalı dersi: kapı 2.5 km kayıktı).
+
+### 2c. Keşfet + İhtiyaç noktaları (kesfet-poi / ihtiyac.geojson)
+
+- Temalar ve sorgular: `docs/VERI.md` → "OSM üretim boru hattı" adım 1.
+- Kalite vekili: wikipedia/wikidata > marka > adlı; adsız elenir.
+- Izgara seyreltme: ~1 km hücrede en iyi aday + kategori tavanı.
+- **İkonik landmark allowlist (zorunlu):** `docs/IKONIK_LANDMARKLAR.md`'deki
+  şehir listesiyle çakıştır; eksik ünlü simgeleri elle geri ekle
+  (Topkapı dersi: seyreltme dünyaca ünlü yerleri eleyebilir).
+- Properties: `{ id, kind:"poi", name, theme }`; theme değerleri
+  `docs/VERI.md` tablosunda.
+
+### 2d. Bölgeler (bolge-turistik/ticari/egitim/dogal.geojson)
+
+- **turistik**: elle kutu/üçgen ÇİZME. OSM idari sınırları kullan:
+  mahalle/quartier/rione (`admin_level=9/10`) poligonlarını çek, turistik
+  alanı oluşturan bitişik mahalleleri birleştir (`unary_union`),
+  `simplify(~0.0003)` ile yumuşat. Kıyıda denize taşma olmaz (idari sınırlar
+  zaten kıyıyı izler). Her bölgeye `kind:"district"`, `btype:"turistik"`,
+  `lab:1` + ayrı `kind:"district-label"` noktası (poligon centroid'i).
+- **ticari**: `landuse=commercial|retail` (>0.04 km²) · **egitim**:
+  `amenity=university` poligonları · **dogal**: adlı `leisure=park` /
+  `boundary=national_park|protected_area` (>0.15 km²). Bunlar zaten gerçek
+  OSM geometrisidir; olduğu gibi (sadeleştirip) al.
+
+### 2e. Dosya boyutu
+
+- Hedef: katman dosyası < 200 KB (omurga yoğun şehirde < 400 KB kabul).
+- `json.dump(..., separators=(",",":"))`, koordinat 5 hane.
+
+## 3. Manifest + içerik
+
+1. `data/<sehir>/city.json`: `id, center, zoom{start,min,max:19}, home,
+   maxBounds, timezone, language, currency, prices{updated,...}, available[],
+   groups[]` — İstanbul manifestini şablon al. `prices` editoryaldir;
+   `updated` (YYYY-AA) olmadan yayınlanmaz.
+2. `content/tr.json` + `content/en.json`: kapı/hub alt etiketleri
+   (`subKey` karşılıkları), şehir önekiyle (`arr.`, `pa.` gibi). Örn:
+   `"arr.ist.sub": "→ Gayrettepe · M11 · ~35 dk"`. Yer adları çevrilmez.
+3. `walkability.geojson` (isteğe bağlı ama önerilir): yaya/arter overlay'i —
+   `highway=pedestrian|living_street` (yeşil) + `motorway|trunk|primary`
+   (arter), `k` (kind) ve `t` (tier) alanlarıyla; Roma örneğine bak.
+
+## 4. Doğrulama ve yayın
+
+1. `python3 -m json.tool` ile tüm JSON'lar geçerli mi; `node --check js/app.js`
+   dokunulmadıysa gerekmez.
+2. Yerel sunucuda (`python3 -m http.server`) aç: iki tema × iki dil × mobil
+   genişlik; üç altlıkta da (Sade/OSM Detaylı/Uydu) hatların hizasını kontrol
+   et — metro hattı Shortbread'deki demiryoluyla çakışmalı.
+3. Gerçekçilik denetimini (2b) sayısal çalıştır: en uzun segment raporu.
+4. `cities.json`'da şehri `"ready"` yap; `BM_VER`'i (js/app.js) artır
+   (önbellek), commit'le (mesaj Türkçe), push'la.
+
+## Kalite çıtası (özet)
+
+- Katman grupları sabit: Varış / Omurga (Hatlar) / Keşfet / Bölgeler / İhtiyaçlar.
+- Yer adları çevrilmez; arayüz metni i18n anahtarıdır; kod içi yorum İngilizce.
+- Hat renkleri: resmi renk `color` alanında; palet yedek.
+- Hiçbir katmanda stilize düz çizgi/kutu geometri yok — her şey gerçek OSM
+  geometrisi veya onun sadeleştirilmiş hali.

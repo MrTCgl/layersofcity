@@ -38,9 +38,12 @@ varsa kullanıcıya sor:
   ikon çipleri (Hatlar altından metro/tramvay/otobüs/tren); SOL kenardan kayan
   **Bölgeler** çekmecesi; altta `Keşfet · İhtiyaç` barı (yukarı açılan ikon
   menüleri; açık katman varken etiket grup rengini alır); sağ altta dikey
-  kontrol sütunu: koordinat kutusu, **altlık değiştirici** (Sade/OSM
-  Detaylı/Uydu + OSM notları/GPS izleri), Home (altında saklı +/−/pan yığını),
-  Konumum. Haritada uzun basma → yer kartı. Ayrıntı: `docs/TASARIM.md`.
+  kontrol sütunu: koordinat kutusu, **altlık değiştirici** (Sade / OSM Detaylı
+  [= resmi OSM **Shortbread** vektör karoları, yerel stil kopyası] / Uydu +
+  OSM notları / GPS izleri [şeffaflık kaydırıcılı]), Home (altında saklı
+  +/−/pan yığını), Konumum. Maksimum zoom 19 (bina düzeyi); Sade altlıkta yazı
+  detayı zoom'la kademeli artar (ilçe→mahalle→sokak→bina adları).
+  Haritada uzun basma → yer kartı. Ayrıntı: `docs/TASARIM.md`.
 - **Yol tarifi uygulama içinde çözülmez.** Haritada seçilen yer için küçük yer
   kartı açılır; "Yol tarifi" düğmesi Google Maps'i **anahtarsız URL şemasıyla**
   dış bağlantı olarak açar. Uygulama oryantasyon aracıdır; navigasyon Google'a
@@ -51,6 +54,9 @@ varsa kullanıcıya sor:
   editoryaldir ve güncelleme tarihi olmadan yayınlanmaz.
 - **Açılış ekranı = sade dünya haritası.** Üzerinde yalnızca hazır şehirlerin
   nokta+isimleri. Şehre tıklamak giriştir. Sol üst logo her yerden bu ekrana döndürür.
+  En altta ortada ince/harf aralıklı iletişim adresi: **layersofcity@gmail.com**.
+  Sağ üstte dil düğmesinin solunda **ⓘ** butonu → ortada şeffaf popup, uygulama
+  özellikleri tek cümlelik satırlarla (`appinfo.*` i18n anahtarları).
 - **Az yazı, sade görünüm.** Uzun paragraf yok; kısa etiket ve tek cümlelik ipuçları.
   Katman adları olabildiğince tek kelime: "Girişler" (giriş kapıları değil),
   "Oteller" (otel bölgeleri değil), "Konutlar", "Öğrenciler".

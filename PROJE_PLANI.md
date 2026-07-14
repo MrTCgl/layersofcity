@@ -158,9 +158,11 @@ Kullanıcı istekleriyle B ve I bölümlerini güncelleyen kararlar:
   yurtlar, kamu** — şehir geneli, OSM + kalite vekili (wikipedia/wikidata/marka)
   + ~1km ızgara seyreltme. Sağlık ve yoğunluk kaldırıldı.
 - **Bütçe seçici (H bölümü) iptal edildi** (kullanıcı kararı); yıldız UI kaldırıldı.
-- **Altlık modları:** Sade (yazısız pastel vektör — yazılar yalnız açılan
-  katmanlardan), OSM Detaylı (vektör, OSM renk dili, POI ikonsuz), Uydu (Esri
-  World Imagery). OSM notları + GPS izleri anahtarsız overlay olarak aç/kapa.
+- **Altlık modları (2026-07-14):** Sade (pastel vektör + zoom'la kademeli yazı
+  iskeleti: ilçe→mahalle→sokak→bina adları), OSM Detaylı (**resmi OSM
+  Shortbread vektör karoları**, vector.openstreetmap.org, yerel stil kopyası),
+  Uydu (Esri World Imagery, aydınlatılmış). OSM notları + GPS izleri
+  (şeffaflık kaydırıcılı) anahtarsız overlay olarak aç/kapa. Max zoom 19.
 - **Kapı simgeleri:** havaalanı=uçak, gar=tren, otobüs terminali=otobüs
   (liman=gemi şablonu hazır; Roma'da liman v1 dışı).
 - **Koordinat kutusu:** "enlem, boylam" yapıştır → haritaya uçuş + yer kartı.

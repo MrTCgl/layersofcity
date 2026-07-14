@@ -348,16 +348,17 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260712-3"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260714-1"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
   function rasterStyle(tiles, attribution) {
     return { version: 8, glyphs: GLYPHS,
       sources: { r: { type: "raster", tiles: [tiles], tileSize: 256, attribution } },
-      // lift the darkest pixels a touch: this imagery has heavy shadows
+      // brighter + crisper: lift shadows more and add a touch of contrast so
+      // the imagery reads clearly instead of murky (user request 2026-07-14)
       layers: [{ id: "r", type: "raster", source: "r",
-        paint: { "raster-brightness-min": 0.08, "raster-contrast": -0.06, "raster-saturation": -0.04 } }] };
+        paint: { "raster-brightness-min": 0.14, "raster-contrast": 0.05, "raster-saturation": 0.03 } }] };
   }
 
   /* ── place-name skeleton: pale OSM labels shown on Sade + Uydu, independent
@@ -380,10 +381,21 @@
         layout: { "text-field": NAME, "text-font": F, "text-max-width": 7, "text-letter-spacing": 0.03,
           "text-size": ["interpolate", ["linear"], ["zoom"], 12, 10.5, 15, 12.5], "text-optional": true },
         paint: { "text-color": c.green, "text-halo-color": c.halo, "text-halo-width": 1.3, "text-halo-blur": 0.4 } },
+      /* Text detail grows with zoom (no icons, text only):
+         far = districts (suburb) → closer = neighbourhoods (quarter/mahalle)
+         → closer = street names (majors first, then all) → closest = building
+         and landmark names. Each tier fades in at its own minzoom. */
+      // major roads first (z13+)…
       { id: "sk-road-name", type: "symbol", source: "omt", "source-layer": "transportation_name",
         filter: ["in", "class", "motorway", "trunk", "primary", "secondary"], minzoom: 13,
         layout: { "text-field": NAME, "text-font": F, "symbol-placement": "line", "text-max-angle": 38,
           "text-size": ["interpolate", ["linear"], ["zoom"], 13, 10.5, 16, 12.5], "text-optional": true },
+        paint: { "text-color": c.road, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.3 } },
+      // …then every named street once close enough to walk it (z15+)
+      { id: "sk-road-name-minor", type: "symbol", source: "omt", "source-layer": "transportation_name",
+        filter: ["in", "class", "tertiary", "minor", "service", "path", "pedestrian", "track"], minzoom: 15,
+        layout: { "text-field": NAME, "text-font": F, "symbol-placement": "line", "text-max-angle": 38,
+          "text-size": ["interpolate", ["linear"], ["zoom"], 15, 10, 18, 12.5], "text-optional": true },
         paint: { "text-color": c.road, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.3 } },
       // landmark POIs: universities, hospitals, museums, stadiums… (Sapienza et al.)
       { id: "sk-poi", type: "symbol", source: "omt", "source-layer": "poi", minzoom: 14,
@@ -395,10 +407,24 @@
           "text-max-width": 8, "symbol-sort-key": ["get", "rank"], "text-padding": 4,
           "text-size": ["interpolate", ["linear"], ["zoom"], 14, 11, 17, 13.5], "text-optional": true },
         paint: { "text-color": c.ink, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.4 } },
+      // closest tier: every named building/venue, quiet small text (z16.5+)
+      { id: "sk-poi-fine", type: "symbol", source: "omt", "source-layer": "poi", minzoom: 16.5,
+        filter: [">", ["get", "rank"], 8],
+        layout: { "text-field": NAME, "text-font": F, "text-anchor": "top", "text-offset": [0, 0.4],
+          "text-max-width": 8, "symbol-sort-key": ["get", "rank"], "text-padding": 3,
+          "text-size": ["interpolate", ["linear"], ["zoom"], 16.5, 10, 19, 12], "text-optional": true },
+        paint: { "text-color": c.ink, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.4 } },
+      // districts (ilçe) read from far away…
       { id: "sk-place-suburb", type: "symbol", source: "omt", "source-layer": "place",
-        filter: ["in", "class", "suburb", "quarter", "neighbourhood"], minzoom: 11.5,
+        filter: ["==", "class", "suburb"], minzoom: 10,
         layout: { "text-field": NAME, "text-font": F, "text-letter-spacing": 0.08, "text-transform": "uppercase",
-          "text-max-width": 8, "text-padding": 6, "text-size": ["interpolate", ["linear"], ["zoom"], 11.5, 11.5, 15, 15], "text-optional": true },
+          "text-max-width": 8, "text-padding": 6, "text-size": ["interpolate", ["linear"], ["zoom"], 10, 11, 14, 14.5], "text-optional": true },
+        paint: { "text-color": c.ink, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.4 } },
+      // …neighbourhoods (mahalle) only once the user starts reading an area
+      { id: "sk-place-hood", type: "symbol", source: "omt", "source-layer": "place",
+        filter: ["in", "class", "quarter", "neighbourhood"], minzoom: 12.5,
+        layout: { "text-field": NAME, "text-font": F, "text-letter-spacing": 0.06, "text-transform": "uppercase",
+          "text-max-width": 8, "text-padding": 6, "text-size": ["interpolate", ["linear"], ["zoom"], 12.5, 10.5, 16, 13.5], "text-optional": true },
         paint: { "text-color": c.ink, "text-halo-color": c.halo, "text-halo-width": c.hw, "text-halo-blur": 0.4 } },
       { id: "sk-place-village", type: "symbol", source: "omt", "source-layer": "place",
         filter: ["in", "class", "village", "hamlet"], minzoom: 11,
@@ -427,7 +453,9 @@
     });
   }
   function basemapStyle() {
-    if (basemapMode === "detay") return `assets/basemap-detail.json?v=${BM_VER}`;
+    // "detay" = official OSM Shortbread vector tiles (vector.openstreetmap.org),
+    // local style copy with OpenFreeMap glyphs so no key is ever needed.
+    if (basemapMode === "detay") return `assets/basemap-shortbread.json?v=${BM_VER}`;
     if (basemapMode === "uydu") return rasterStyle(
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       "Esri, Maxar, Earthstar Geographics");
@@ -450,6 +478,9 @@
 
   /* OSM notes + GPS traces overlays (keyless), toggleable on any basemap */
   let notesOn = false, gpsOn = false, notesData = null;
+  // GPS-trace overlay opacity, user-tunable from a slider under its toggle
+  let gpsOpacity = parseFloat(localStorage.getItem("loc-gps-op"));
+  if (!(gpsOpacity >= 0.1 && gpsOpacity <= 1)) gpsOpacity = 0.7;
   /* street-character overlay: pedestrian-priority vs vehicle arteries (from OSM) */
   let walkOn = false, walkData = null;
   function addOverlayExtras() {
@@ -459,7 +490,7 @@
       map.addSource("gpstrace", { type: "raster", tileSize: 256,
         tiles: ["https://gps.tile.openstreetmap.org/lines/{z}/{x}/{y}.png"] });
       map.addLayer({ id: "gpstrace", type: "raster", source: "gpstrace",
-        paint: { "raster-opacity": 0.7 } }, firstLyr);
+        paint: { "raster-opacity": gpsOpacity } }, firstLyr);
     }
     if (!gpsOn && map.getLayer("gpstrace")) { map.removeLayer("gpstrace"); map.removeSource("gpstrace"); }
     if (notesOn && notesData && !map.getSource("osmnotes")) {
@@ -1354,6 +1385,8 @@
       const b = document.getElementById(id);
       if (b) b.setAttribute("aria-pressed", "false");
     });
+    document.getElementById("gpsoprow").hidden = true; // follows its toggle
+
     Object.keys(cityData).forEach(k => delete cityData[k]);
   }
 
@@ -1385,11 +1418,20 @@
     if (notesOn) await fetchNotes();
     addOverlayExtras();
   };
+  const gpsOpRow = document.getElementById("gpsoprow");
+  const gpsOpInput = document.getElementById("gpsop");
+  gpsOpInput.value = Math.round(gpsOpacity * 100);
   document.getElementById("tog-gps").onclick = function () {
     gpsOn = this.getAttribute("aria-pressed") !== "true";
     this.setAttribute("aria-pressed", gpsOn);
+    gpsOpRow.hidden = !gpsOn;           // opacity slider only makes sense while on
     addOverlayExtras();
   };
+  gpsOpInput.addEventListener("input", function () {
+    gpsOpacity = this.value / 100;
+    localStorage.setItem("loc-gps-op", gpsOpacity);
+    if (map && map.getLayer("gpstrace")) map.setPaintProperty("gpstrace", "raster-opacity", gpsOpacity);
+  });
   document.getElementById("tog-walk").onclick = async function () {
     walkOn = this.getAttribute("aria-pressed") !== "true";
     this.setAttribute("aria-pressed", walkOn);
@@ -1661,6 +1703,24 @@
       }
     };
   });
+
+  /* app features popup (world screen ⓘ) */
+  const appInfo = document.getElementById("appinfo");
+  const infoBtn = document.getElementById("infobtn");
+  function closeAppInfo() {
+    appInfo.classList.remove("show"); appInfo.hidden = true;
+    infoBtn.setAttribute("aria-expanded", "false");
+  }
+  infoBtn.onclick = function () {
+    if (appInfo.hidden) {
+      appInfo.hidden = false;
+      requestAnimationFrame(() => appInfo.classList.add("show"));
+      this.setAttribute("aria-expanded", "true");
+      closeLangMenu();
+    } else closeAppInfo();
+  };
+  document.getElementById("ai-close").onclick = closeAppInfo;
+  appInfo.addEventListener("click", e => { if (e.target === appInfo) closeAppInfo(); });
 
   /* ── router ────────────────────────────── */
   const scrWorld = document.getElementById("scr-world");

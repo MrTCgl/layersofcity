@@ -17,7 +17,10 @@
 
 ## Açık kararlar (onayda netleşecek)
 
-- **K1 — KARAR (2026-07-10):** Kullanıcı OSM görünümünü istiyor ama rasterdeki
+- **K1 — KARAR (2026-07-10):** *(Güncelleme 2026-07-14: "OSM Detaylı" artık
+  resmi OSM Shortbread vektör karolarını kullanıyor —
+  `assets/basemap-shortbread.json`; `basemap-detail.json` kullanım dışı.)*
+  Kullanıcı OSM görünümünü istiyor ama rasterdeki
   küçük POI ikonları OLMASIN dedi → raster yerine **vektör "OSM Detaylı" stili**
   yazılır (`assets/basemap-detail.json`, OpenFreeMap kaynağı): OSM Standart renk
   dili (sarı ana yollar, beyaz sokaklar, yeşil parklar, mavi su), yol/semt adları

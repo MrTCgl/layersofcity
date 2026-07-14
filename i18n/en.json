@@ -83,5 +83,13 @@
   "share.copyManual": "Copy the link:",
   "share.imported": "List imported",
   "share.importedNone": "These places are already saved",
-  "lang.fr": "French"
+  "lang.fr": "French",
+  "aria.appinfo": "about the app",
+  "base.gpsOpacity": "GPS trace opacity",
+  "appinfo.l1": "Read a new city, layer by layer.",
+  "appinfo.l2": "Arrival gates, transit lines, districts and daily needs on one map.",
+  "appinfo.l3": "The city bar shows live local time, weather and a price snapshot.",
+  "appinfo.l4": "Save the places you like and share them as a link, notes included.",
+  "appinfo.l5": "Directions open in Google Maps with one tap.",
+  "appinfo.l6": "No accounts; your preferences stay on your device."
 }

@@ -83,5 +83,13 @@
   "share.copyManual": "Bağlantıyı kopyala:",
   "share.imported": "Liste içe aktarıldı",
   "share.importedNone": "Bu yerler zaten kayıtlı",
-  "lang.fr": "Fransızca"
+  "lang.fr": "Fransızca",
+  "aria.appinfo": "uygulama hakkında",
+  "base.gpsOpacity": "GPS izi şeffaflığı",
+  "appinfo.l1": "Yeni bir şehri katman katman oku.",
+  "appinfo.l2": "Girişler, ulaşım hatları, bölgeler ve ihtiyaç noktaları tek haritada.",
+  "appinfo.l3": "Şehir çubuğunda canlı saat, hava ve fiyat künyesi seni bekler.",
+  "appinfo.l4": "Beğendiğin yerleri kaydet, notunla birlikte link olarak paylaş.",
+  "appinfo.l5": "Yol tarifi tek dokunuşla Google Haritalar'da açılır.",
+  "appinfo.l6": "Üyelik yok; tercihlerin yalnızca cihazında kalır."
 }

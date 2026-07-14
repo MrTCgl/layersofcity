@@ -437,3 +437,35 @@ Durum notu: İkinci şehir tamam. walkability.geojson İstanbul için üretilmed
 (Roma'ya özel; yaya altlık düğmesi veri gelmeyince sessizce boş kalıyor —
 graceful). Sandbox'ta karo/glyph ağı kapalı olduğundan render mock/stub ile
 doğrulandı (E7'deki gibi); canlı tarayıcıda karolar yüklenir.
+
+---
+
+## Bakım oturumu — gerçekçilik + altlık + açılış ekranı (2026-07-14) ✅ tamam
+
+Kullanıcı istekleri toplu işlendi:
+
+- **Hat gerçekçiliği:** İstanbul'un tüm metro (M1A-M11), tramvay (T1-T5),
+  füniküler (F1-F4) ve Marmaray geometrileri Overpass'tan gerçek OSM
+  güzergâhlarıyla yenilendi; Paris metro (1-14, 3bis/7bis) + RER A-E aynı
+  şekilde. Roma tram 3/19'daki 2.7 km'lik stilize düz segment düzeltildi.
+- **Varış link'leri:** düz çizgi kalmadı — her link gerçek raylı hattı izler
+  (IST→M11, SAW→M4, Halkalı/Söğütlüçeşme→Marmaray, CDG→RER B). `gate-halkali`
+  gerçek istasyon konumuna taşındı (2.5 km kayıktı).
+- **Bölge sınırları:** İstanbul turistik bölgeleri (10 kutu) ve Paris Le Marais
+  (üçgen) OSM mahalle/quartier idari sınırlarından yeniden üretildi; Paris'in
+  nokta kalmış 7 turistik bölgesi poligona çevrildi.
+- **Altlık:** "OSM Detaylı" artık resmi OSM **Shortbread** vektör karoları
+  (`vector.openstreetmap.org`, anahtarsız; yerel stil
+  `assets/basemap-shortbread.json`, glifler OpenFreeMap). Uydu aydınlatıldı
+  (`brightness-min .14, contrast .05`). **zoom.max 19** (üç şehir).
+- **Sade altlık yazı kademeleri:** ilçe (z10) → mahalle (z12.5) → ana yol
+  (z13) / tüm sokaklar (z15) → bina/mekân adları (z16.5); simge yok.
+- **GPS izleri:** altlık menüsünde şeffaflık kaydırıcısı (%10-100, localStorage).
+- **Açılış ekranı:** wordmark'ta "layers"+"city" yavruağzı; altta ortada ince,
+  harf aralıklı `layersofcity@gmail.com`; sağ üstte ⓘ → şeffaf özellik popup'ı
+  (`appinfo.l1..l6`, tr+en).
+- **Doküman:** TASARIM/VERI/CLAUDE güncellendi; `yeni-sehir` skill'i Opus için
+  eksiksiz adım adım üretim rehberine dönüştürüldü (gerçekçilik denetimi dahil).
+
+Durum notu: Overpass anlık 504/429 verebiliyor; ayna uçlar eklendi
+(kumi.systems, private.coffee). Yeni şehirde aynı boru hattı kullanılacak.

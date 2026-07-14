@@ -50,7 +50,7 @@ koymana gerek yok.
 {
   "id": "roma",
   "center": [12.483, 41.893],
-  "zoom": { "start": 11, "min": 9, "max": 16 },
+  "zoom": { "start": 11, "min": 9, "max": 19 },
   "timezone": "Europe/Rome",
   "language": "it",
   "currency": "EUR",
@@ -177,7 +177,23 @@ anında** üretilir (çalışma zamanı bağımlılığı yok; atıf altbilgide)
 3. **Izgara seyreltme:** ~1 km hücrede en iyi aday + kategori tavanı →
    şehir geneli yayılım, yığılmasız.
 4. **Geometri:** relation way'leri uç-uca dikilir (stitch), Douglas-Peucker
-   (~40 m) ile sadeleştirilir, 5 hane yuvarlanır.
+   (~15-40 m) ile sadeleştirilir, 5 hane yuvarlanır.
+   **Gerçekçilik denetimi (2026-07-14, zorunlu):** hiçbir metro/tram/tren
+   hattında ve varış link'inde **2 km'den uzun düz segment** kalmamalı
+   (köşe sayısı / uzunluk yoğunluğu genelde > 2 köşe/km olmalı). Uzun düz
+   segment = stilize elle çizim demektir; o hat Overpass'tan yeniden çekilir.
+   Varış link'leri (kapı→merkez kesikli çizgi) düz çizilmez: kapıyı merkeze
+   bağlayan **gerçek raylı hattın güzergâhını** izler (ör. CDG→Nord = RER B,
+   IST→Gayrettepe = M11, SAW→Kadıköy = M4, Halkalı = Marmaray). Yöntem:
+   ilgili hattın way'leri birleştirilir, iki uç nokta hatta izdüşürülür,
+   aradaki parça alınır (shapely `substring`), uçlara kapı/merkez koordinatı
+   eklenir.
+   **Kapı koordinatı denetimi:** tren kapıları gerçek istasyon konumuna
+   oturmalı (Halkalı kapısı 2.5 km kayıktı → istasyona taşındı, 2026-07-14).
+   **Bölge sınırı denetimi:** `bolge-*` poligonları 3-5 köşeli kutu/üçgen
+   OLAMAZ; OSM idari sınırı (mahalle/quartier/rione, `admin_level=9/10`) veya
+   gerçek alan poligonu kullanılır; bitişik mahalleler birleştirilip (~30 m)
+   sadeleştirilebilir. Kıyı şehirlerinde bölge poligonu denize taşmamalı.
 5. **İkonik landmark güvencesi — allowlist (2026-07-12):** Izgara seyreltme
    (adım 3) ve kalite vekili, dünyaca ünlü zorunlu simgeleri eleyebilir
    (İstanbul'da Topkapı Sarayı bu yüzden atlanmıştı). Bu yüzden her şehir için
