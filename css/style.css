@@ -78,6 +78,9 @@ main{flex:1; position:relative; overflow:hidden}
 }
 #wordmark .of{color:var(--lilac)}
 #wordmark .wm{color:var(--peach)}
+/* light theme: swap — "of" in peach, the rest in lilac */
+:root[data-theme="light"] #wordmark .of{color:var(--peach)}
+:root[data-theme="light"] #wordmark .wm{color:var(--lilac)}
 /* contact line — quiet, thin, letter-spaced, fixed to the bottom center;
    a mailto link so a tap opens the user's mail app */
 #contact{
