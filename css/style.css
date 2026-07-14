@@ -99,17 +99,16 @@ body.city #infobtn{display:none}
 .appinfo.show{opacity:1; pointer-events:auto}
 .appinfo[hidden]{display:none}
 .appinfo-card{
-  position:relative; width:max-content; max-width:calc(100vw - 16px);
+  position:relative; width:min(420px, calc(100vw - 24px));
   background:color-mix(in srgb, var(--surface) 82%, transparent);
   backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
   border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow);
-  padding:min(30px, 5vw) min(24px, 5vw); display:flex; flex-direction:column; gap:12px;
+  padding:min(32px, 6vw) min(26px, 5vw); display:flex; flex-direction:column; gap:14px;
   transform:translateY(8px); transition:transform .25s;
 }
 .appinfo.show .appinfo-card{transform:none}
-/* every feature line stays on ONE line: the font shrinks with the viewport
-   instead of wrapping (longest line ≈ 29.2em; 2.85vw fits even at 360px wide) */
-.appinfo-card p{font-size:min(15px, 2.85vw); line-height:1.55; color:var(--ink); margin:0; white-space:nowrap}
+/* lines may wrap freely; readability comes first and text is centered */
+.appinfo-card p{font-size:clamp(14.5px, 3.9vw, 16px); line-height:1.5; color:var(--ink); margin:0; text-align:center}
 .appinfo-card p:first-of-type{font-weight:600}
 .ai-close{position:absolute; top:10px; right:10px; width:28px; height:28px;
   display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}
