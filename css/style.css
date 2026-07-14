@@ -78,12 +78,14 @@ main{flex:1; position:relative; overflow:hidden}
 }
 #wordmark .of{color:var(--lilac)}
 #wordmark .wm{color:var(--peach)}
-/* contact line — quiet, thin, letter-spaced, fixed to the bottom center */
+/* contact line — quiet, thin, letter-spaced, fixed to the bottom center;
+   a mailto link so a tap opens the user's mail app */
 #contact{
   position:absolute; left:0; right:0; bottom:12px; text-align:center; z-index:5;
-  font-size:11px; font-weight:300; letter-spacing:.32em; color:var(--ink-soft);
-  pointer-events:none; user-select:text;
+  font-size:11px; font-weight:300; letter-spacing:.32em;
 }
+#contact a{color:var(--ink-soft); text-decoration:none}
+#contact a:hover{color:var(--ink)}
 /* header ⓘ only belongs to the world screen */
 body.city #infobtn{display:none}
 #infobtn[aria-expanded="true"]{color:var(--lilac)}
@@ -94,7 +96,7 @@ body.city #infobtn{display:none}
 .appinfo.show{opacity:1; pointer-events:auto}
 .appinfo[hidden]{display:none}
 .appinfo-card{
-  position:relative; width:min(420px, calc(100% - 48px));
+  position:relative; width:max-content; max-width:min(720px, calc(100% - 48px));
   background:color-mix(in srgb, var(--surface) 82%, transparent);
   backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
   border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow);
@@ -102,7 +104,8 @@ body.city #infobtn{display:none}
   transform:translateY(8px); transition:transform .25s;
 }
 .appinfo.show .appinfo-card{transform:none}
-.appinfo-card p{font-size:13.5px; line-height:1.55; color:var(--ink); margin:0}
+.appinfo-card p{font-size:13.5px; line-height:1.55; color:var(--ink); margin:0; white-space:nowrap}
+@media (max-width:640px){.appinfo-card p{white-space:normal}} /* phones may wrap */
 .appinfo-card p:first-of-type{font-weight:600}
 .ai-close{position:absolute; top:10px; right:10px; width:28px; height:28px;
   display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}

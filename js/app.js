@@ -348,13 +348,16 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260714-1"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260714-2"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (!["sade", "detay", "uydu"].includes(basemapMode)) basemapMode = "sade";
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
   function rasterStyle(tiles, attribution) {
+    // maxzoom 18: Esri has no imagery past z18 in many districts and serves
+    // "Map data not yet available" placeholder tiles instead — cap requests
+    // there and let MapLibre overzoom the last real level up to z19.
     return { version: 8, glyphs: GLYPHS,
-      sources: { r: { type: "raster", tiles: [tiles], tileSize: 256, attribution } },
+      sources: { r: { type: "raster", tiles: [tiles], tileSize: 256, maxzoom: 18, attribution } },
       // brighter + crisper: lift shadows more and add a touch of contrast so
       // the imagery reads clearly instead of murky (user request 2026-07-14)
       layers: [{ id: "r", type: "raster", source: "r",
