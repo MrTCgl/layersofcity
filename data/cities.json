@@ -67,6 +67,13 @@
       "lat": 35.68,
       "lon": 139.69,
       "status": "soon"
+    },
+    {
+      "id": "izmir",
+      "name": "İzmir",
+      "lat": 38.42,
+      "lon": 27.14,
+      "status": "soon"
     }
   ]
 }
