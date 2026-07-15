@@ -1,0 +1,117 @@
+{
+  "id": "tokyo",
+  "center": [
+    139.767,
+    35.681
+  ],
+  "zoom": {
+    "start": 10.2,
+    "min": 8.5,
+    "max": 19
+  },
+  "home": [
+    [
+      139.68,
+      35.6
+    ],
+    [
+      139.86,
+      35.77
+    ]
+  ],
+  "maxBounds": [
+    [
+      139.34,
+      35.33
+    ],
+    [
+      140.55,
+      35.95
+    ]
+  ],
+  "timezone": "Asia/Tokyo",
+  "language": "ja",
+  "currency": "JPY",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-07",
+    "water05": 110,
+    "petrol1l": 175,
+    "milk1l": 230,
+    "meat1kg": 2500,
+    "cheese1kg": 2800,
+    "beer05": 350,
+    "bigmac": 480,
+    "espresso": 400,
+    "transitTicket": 180,
+    "airportTrain": 500
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}

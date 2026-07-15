@@ -1,0 +1,14 @@
+{
+  "arr.haneda.sub": "→ Hamamatsuchō · Tokyo Monorail · ~18 dk",
+  "arr.narita.sub": "→ Ueno · Keisei Skyliner · ~45 dk",
+  "arr.tokyo.sub": "Shinkansen + JR ana garı",
+  "arr.shinjuku.sub": "dünyanın en yoğun garı",
+  "arr.busta.sub": "şehirlerarası otobüs (Busta Shinjuku)",
+  "hub.tokyo": "JR · Shinkansen · Marunouchi metro",
+  "hub.shinjuku": "JR · Odakyū · Keiō · metro",
+  "hub.shibuya": "JR · Tōkyū · Keiō · metro",
+  "hub.ikebukuro": "JR · Seibu · Tōbu · metro",
+  "hub.ueno": "JR · Keisei · Ginza/Hibiya metro",
+  "hub.shinagawa": "JR · Keikyū (Haneda)",
+  "hub.otemachi": "5 metro hattı aktarma"
+}

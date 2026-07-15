@@ -23,7 +23,7 @@
 | Berlin | 🔲 şehir eklenince | aşağıdaki liste |
 | Madrid | 🔲 şehir eklenince | aşağıdaki liste |
 | New York | ✅ uygulandı (2026-07-15) | Statue of Liberty/Empire State/Chrysler/Times Sq/Central Park vb. |
-| Tokyo | 🔲 şehir eklenince | aşağıdaki liste |
+| Tokyo | ✅ uygulandı (2026-07-15) | Sensō-ji/Meiji Jingū/Tokyo Tower/Skytree/teamLab/Rainbow Bridge/Tsukiji vb. |
 | İzmir | ✅ uygulandı (2026-07-15) | Saat Kulesi/Kadifekale/Agora/Asansör/Kemeraltı vb. + Kemeraltı yeme-içme |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
