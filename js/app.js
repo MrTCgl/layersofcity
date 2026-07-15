@@ -1796,7 +1796,7 @@
   }
   function toggleAppInfo() { if (appInfo.hidden) openAppInfo(); else closeAppInfo(); }
   infoBtn.onclick = toggleAppInfo;
-  document.getElementById("ai-close").onclick = closeAppInfo;
+  // no ✕ button — tap the info toggle again or the backdrop to dismiss
   appInfo.addEventListener("click", e => { if (e.target === appInfo) closeAppInfo(); });
   // On the city screen the header ⓘ is hidden; the bottom-right map-info button
   // (MapLibre's compact attribution control) opens/closes this popup alongside
