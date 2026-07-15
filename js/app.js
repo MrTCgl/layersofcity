@@ -348,7 +348,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260715-1"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260715-2"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -1190,9 +1190,16 @@
         layout: { "line-cap": "round", "line-join": "round" },
         paint: { "line-color": lineColorExpr, "line-opacity": 0.9,
           "line-width": ["interpolate", ["linear"], ["zoom"], 10, 1.2, 14, 2.6] } });
-      // transit lines (metro/tram/bus/rail — not the FL train network)
+      // ferry routes (sea crossings) — drawn dashed so they read as water links
+      add("-ferryline", { type: "line",
+        filter: ["all", ["==", ["get", "kind"], "line"], ["==", ["get", "lineRef"], "ferry"]],
+        layout: { "line-cap": "butt", "line-join": "round" },
+        paint: { "line-color": lineColorExpr, "line-opacity": 0.85,
+          "line-dasharray": [2, 2.2],
+          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 1.6, 14, 3] } });
+      // transit lines (metro/tram/bus/rail — not the FL train nor ferry network)
       add("-line", { type: "line",
-        filter: ["all", ["==", ["get", "kind"], "line"], ["!=", ["get", "lineRef"], "train"]],
+        filter: ["all", ["==", ["get", "kind"], "line"], ["!=", ["get", "lineRef"], "train"], ["!=", ["get", "lineRef"], "ferry"]],
         layout: { "line-cap": "round", "line-join": "round" },
         paint: { "line-color": lineColorExpr,
           "line-width": ["interpolate", ["linear"], ["zoom"],
@@ -1313,18 +1320,28 @@
   }
 
   // Show only the transit sub-types currently enabled. Features without a
-  // lineRef (hubs, historic center) ride along while ANY type is on; when the
-  // user turns everything off, the whole backbone disappears — no stray dots
-  // or labels left on an otherwise empty map.
+  // lineRef ride along while ANY type is on (historic center). A hub/gate may
+  // instead carry a `modes` array (the modes it actually serves): it shows only
+  // when one of those modes is active, so an inland rail interchange doesn't
+  // linger on a ferry-only view. When the user turns everything off, the whole
+  // backbone disappears — no stray dots or labels on an otherwise empty map.
   function applyTransitFilter() {
     if (!map) return;
     const refPreds = [];
+    const modePreds = [];
     Object.keys(TRANSIT_REFS).forEach(t => {
-      if (transitState[t]) TRANSIT_REFS[t].forEach(r => refPreds.push(["==", ["get", "lineRef"], r]));
+      if (transitState[t]) {
+        TRANSIT_REFS[t].forEach(r => refPreds.push(["==", ["get", "lineRef"], r]));
+        modePreds.push(["in", t, ["coalesce", ["get", "modes"], ["literal", ""]]]);
+      }
     });
     const anyOn = refPreds.length > 0;
-    const pred = ["any", ["!", ["has", "lineRef"]], ...refPreds];
-    ["-railline", "-line", "-node", "-stop", "-stop-label", "-badge", "-badge-label",
+    // generic anchors (no lineRef, no modes) always ride along; typed features
+    // match by lineRef; multi-mode anchors match if one of their modes is on.
+    const pred = ["any",
+      ["all", ["!", ["has", "lineRef"]], ["!", ["has", "modes"]]],
+      ...refPreds, ...modePreds];
+    ["-railline", "-ferryline", "-line", "-node", "-stop", "-stop-label", "-badge", "-badge-label",
      "-label", "-node-label", "-hub", "-center", "-center-dot", "-hint", "-sub"].forEach(suf => {
       const id = "lyr-omurga" + suf;
       if (!map.getLayer(id)) return;
