@@ -5,7 +5,7 @@
 (function () {
   "use strict";
 
-  const SUPPORTED_LANGS = ["tr", "en"]; // grows to 6 in later stages
+  const SUPPORTED_LANGS = ["tr", "en", "de", "fr", "it", "es"];
   const FALLBACK_LANG = "en";
   const SVG_NS = "http://www.w3.org/2000/svg";
 

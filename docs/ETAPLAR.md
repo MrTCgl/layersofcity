@@ -341,7 +341,8 @@ Durum notu: —
 **Amaç:** Yayın öncesi kalite.
 
 Yapılacaklar:
-- i18n tamlık kontrolü (en+tr %100; diğer 4 dil dosyası iskelet olarak hazır)
+- i18n tamlık kontrolü (arayüz 6 dilde %100: en, tr, de, fr, it, es — 95 anahtar;
+  şehir içerikleri hâlâ en+tr, diğerleri en/tr'ye fallback)
 - Mobil ince ayar, dokunma hedefleri, klavye erişilebilirliği, kontrast kontrolü
 - Yazı azaltma turu: etikete gerek olmayan her yerde çizgisel simgeye geçiş
 - Performans: GeoJSON boyutları, gecikmeli yükleme, Lighthouse hızlı geçişi
