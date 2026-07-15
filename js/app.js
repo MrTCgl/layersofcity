@@ -1788,16 +1788,22 @@
     appInfo.classList.remove("show"); appInfo.hidden = true;
     infoBtn.setAttribute("aria-expanded", "false");
   }
-  infoBtn.onclick = function () {
-    if (appInfo.hidden) {
-      appInfo.hidden = false;
-      requestAnimationFrame(() => appInfo.classList.add("show"));
-      this.setAttribute("aria-expanded", "true");
-      closeLangMenu();
-    } else closeAppInfo();
-  };
+  function openAppInfo() {
+    appInfo.hidden = false;
+    requestAnimationFrame(() => appInfo.classList.add("show"));
+    infoBtn.setAttribute("aria-expanded", "true");
+    closeLangMenu();
+  }
+  function toggleAppInfo() { if (appInfo.hidden) openAppInfo(); else closeAppInfo(); }
+  infoBtn.onclick = toggleAppInfo;
   document.getElementById("ai-close").onclick = closeAppInfo;
   appInfo.addEventListener("click", e => { if (e.target === appInfo) closeAppInfo(); });
+  // On the city screen the header ⓘ is hidden; the bottom-right map-info button
+  // (MapLibre's compact attribution control) opens/closes this popup alongside
+  // the map credits, so app info stays reachable there too.
+  document.addEventListener("click", e => {
+    if (e.target.closest && e.target.closest(".maplibregl-ctrl-attrib-button")) toggleAppInfo();
+  });
 
   /* ── router ────────────────────────────── */
   const scrWorld = document.getElementById("scr-world");

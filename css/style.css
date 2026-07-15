@@ -99,17 +99,22 @@ body.city #infobtn{display:none}
 .appinfo.show{opacity:1; pointer-events:auto}
 .appinfo[hidden]{display:none}
 .appinfo-card{
-  position:relative; width:min(420px, calc(100vw - 24px));
+  position:relative; width:min(360px, calc(100vw - 32px));
   background:color-mix(in srgb, var(--surface) 82%, transparent);
   backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
   border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow);
-  padding:min(32px, 6vw) min(26px, 5vw); display:flex; flex-direction:column; gap:14px;
+  padding:min(30px, 6vw) min(26px, 5vw); display:flex; flex-direction:column; gap:13px;
   transform:translateY(8px); transition:transform .25s;
 }
 .appinfo.show .appinfo-card{transform:none}
-/* lines may wrap freely; readability comes first and text is centered */
-.appinfo-card p{font-size:clamp(14.5px, 3.9vw, 16px); line-height:1.5; color:var(--ink); margin:0; text-align:center}
-.appinfo-card p:first-of-type{font-weight:600}
+/* airy, touristy: light letter-spaced lines in lilac; lines wrap freely */
+.appinfo-card p{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  font-size:clamp(13.5px, 3.7vw, 15px); font-weight:300; letter-spacing:.015em;
+  line-height:1.5; color:var(--lilac); margin:0; text-align:center}
+/* hero tagline: light italic peach — airy & touristy, and full Turkish support
+   (the Ballet script lacks ş/ğ/ı, so it's kept to the Latin-only logotype) */
+.appinfo-card p:first-of-type{font-weight:300; font-style:italic;
+  font-size:clamp(19px, 5.2vw, 24px); line-height:1.3; color:var(--peach); letter-spacing:.01em}
 .ai-close{position:absolute; top:10px; right:10px; width:28px; height:28px;
   display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}
 .ai-close:hover{background:var(--powder); color:var(--ink)}
@@ -184,32 +189,36 @@ body.city #topchips{display:flex}
 
 /* city info card (künye) */
 .infocard{
-  position:absolute; left:14px; top:52px; z-index:20; width:min(228px, calc(100vw - 40px));
+  position:absolute; left:14px; top:52px; z-index:20; width:min(172px, calc(100vw - 40px));
   max-height:calc(100vh - 120px); overflow-y:auto;
-  background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
-  border-radius:14px; padding:12px 14px;
+  background:color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line); box-shadow:var(--shadow);
+  border-radius:16px; padding:11px 13px;
   opacity:0; transform:translateY(-6px); transition:opacity .2s, transform .2s; pointer-events:none;
 }
 .infocard.show{opacity:1; transform:translateY(0); pointer-events:auto}
 .infocard[hidden]{display:none}
-.ic-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
-.ic-city{font-weight:700; font-size:16px}
-.ic-close{width:26px; height:26px; display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}
+.ic-head{display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:6px}
+/* city name: light italic peach — airy touristy feel, full Turkish support */
+.ic-city{font-weight:300; font-style:italic; font-size:18px; line-height:1.1;
+  color:var(--peach); letter-spacing:.01em}
+.ic-close{width:24px; height:24px; flex:none; display:grid; place-items:center; color:var(--lilac); border-radius:999px}
 .ic-close:hover{background:var(--powder); color:var(--ink)}
 :root[data-theme="dark"] .ic-close:hover{background:var(--line)}
-.ic-meta{display:flex; gap:16px; font-size:13px; padding-bottom:9px; margin-bottom:9px; border-bottom:1px solid var(--line)}
-.ic-meta .ic-k{color:var(--ink-soft); margin-right:6px}
+.ic-meta{display:flex; flex-wrap:wrap; gap:4px 14px; font-size:12px; padding-bottom:8px; margin-bottom:8px; border-bottom:1px solid var(--line)}
+.ic-meta .ic-k{color:var(--lilac); margin-right:5px; font-weight:300; letter-spacing:.02em}
 .ic-prices{display:flex; flex-direction:column; gap:5px}
-.ic-price{display:flex; justify-content:space-between; gap:12px; font-size:12.5px}
-.ic-price span:first-child{color:var(--ink-soft)}
-.ic-price span:last-child{font-variant-numeric:tabular-nums; white-space:nowrap}
-.ic-weather{display:flex; flex-direction:column; gap:4px; margin-top:9px; padding-top:9px; border-top:1px solid var(--line)}
+.ic-price{display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:12px}
+.ic-price span:first-child{color:var(--lilac); font-weight:300; letter-spacing:.02em}
+.ic-price span:last-child{color:var(--ink); font-variant-numeric:tabular-nums; white-space:nowrap; text-align:right}
+.ic-weather{display:flex; flex-direction:column; gap:4px; margin-top:8px; padding-top:8px; border-top:1px solid var(--line)}
 .ic-weather:empty{display:none; margin:0; padding:0; border:0}
-.ic-wx{display:flex; align-items:center; gap:8px; font-size:12.5px}
-.ic-wx .ic-wd{width:34px; color:var(--ink-soft); text-transform:capitalize}
+.ic-wx{display:flex; align-items:center; gap:7px; font-size:12px}
+.ic-wx .ic-wd{width:30px; color:var(--lilac); font-weight:300; text-transform:capitalize}
 .ic-wx .ic-wi{color:var(--peach); display:inline-flex}
-.ic-wx .ic-wt{margin-left:auto; font-variant-numeric:tabular-nums}
-.ic-updated{margin-top:9px; font-size:11px; color:var(--ink-soft)}
+.ic-wx .ic-wt{margin-left:auto; color:var(--ink); font-variant-numeric:tabular-nums}
+.ic-updated{margin-top:8px; font-size:10.5px; color:var(--lilac); font-weight:300; letter-spacing:.02em}
 
 /* left-edge drawer (moved off the right so it clears the zoom +/- stack) */
 #drawerwrap{position:absolute; left:0; top:50%; transform:translateY(-50%); display:flex; flex-direction:row-reverse; align-items:center; z-index:15}
