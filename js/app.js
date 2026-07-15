@@ -348,7 +348,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260714-4"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260715-1"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -1053,7 +1053,8 @@
   /* ── city layers (GeoJSON overlays over the basemap) ── */
   const LINE_COLORS = {
     "metro-a": "#C9682F", "metro-b": "#3D69A8", "metro-c": "#4F8A5F",
-    "tram": "#6F6390", "rail": "#8D8272", "bus": "#A67C42", "train": "#5F7A94"
+    "tram": "#6F6390", "rail": "#8D8272", "bus": "#A67C42", "train": "#5F7A94",
+    "ferry": "#1f8aa6"
   };
   // POI marker tones: Keşfet = shades of lilac, İhtiyaç = shades of terracotta.
   // One hue per group, so the map reads as two families at a glance.
@@ -1079,8 +1080,8 @@
   // Each disclosure category maps to the lineRef values that belong to it.
   // Rome uses per-line refs (metro-a/b/c); other cities may use the generic
   // class name ("metro"/"tram"/"bus"/"train") — both are listed so either works.
-  const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c", "rail", "metro"], tram: ["tram"], bus: ["bus"], train: ["train"] };
-  const transitState = { metro: true, tram: true, bus: true, train: true };
+  const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c", "rail", "metro"], tram: ["tram"], bus: ["bus"], train: ["train"], ferry: ["ferry"] };
+  const transitState = { metro: true, tram: true, bus: true, train: true, ferry: true };
 
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
   const themeState = new Set();   // active POI themes; empty -> no POIs shown
@@ -1126,7 +1127,7 @@
     "metro-a", LINE_COLORS["metro-a"], "metro-b", LINE_COLORS["metro-b"],
     "metro-c", LINE_COLORS["metro-c"], "tram", LINE_COLORS["tram"],
     "rail", LINE_COLORS["rail"], "bus", LINE_COLORS["bus"],
-    "train", LINE_COLORS["train"], "#B5ADA0"];
+    "train", LINE_COLORS["train"], "ferry", LINE_COLORS["ferry"], "#B5ADA0"];
   const lineColorExpr = ["case",
     ["all", ["has", "color"], ["!=", ["get", "color"], ""]], ["get", "color"],
     lineRefColorExpr];

@@ -24,6 +24,7 @@
 | Madrid | 🔲 şehir eklenince | aşağıdaki liste |
 | New York | 🔲 şehir eklenince | aşağıdaki liste |
 | Tokyo | 🔲 şehir eklenince | aşağıdaki liste |
+| İzmir | ✅ uygulandı (2026-07-15) | Saat Kulesi/Kadifekale/Agora/Asansör/Kemeraltı vb. + Kemeraltı yeme-içme |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -108,4 +109,22 @@
 - **doğa:** Shinjuku Gyoen, Ueno Park, Hama-rikyū Gardens, Yoyogi Park
 - **alışveriş/gezi:** Ginza, Akihabara, Harajuku (Takeshita-dōri),
   Nakamise-dōri, Shinjuku (Golden Gai)
+
+## İzmir
+
+- **tarihi/simge:** İzmir Saat Kulesi (Konak Meydanı), Konak Meydanı, Yalı
+  (Konak) Camii, Kemeraltı Çarşısı, Kızlarağası Hanı, Smyrna Agorası (Agora
+  Ören Yeri), Kadifekale, Tarihi Asansör (Karataş), Hisar Camii, Şadırvanaltı
+  Camii, Kemeraltı Havra Sokağı sinagogları (Beth Israel), St. Polycarp
+  Kilisesi, Basmane Garı, Cumhuriyet Meydanı & Atatürk Anıtı
+- **müze:** İzmir Arkeoloji Müzesi, Etnografya Müzesi, Ahmet Piriştina Kent
+  Arşivi (APIKAM), Ödemiş dışıdır — merkez müzeleri İhtiyaç/muze'de
+- **modern:** Arkas Sanat Merkezi, Ahmed Adnan Saygun Sanat Merkezi (AASSM),
+  Konak Pier (Eiffel yapısı, alışveriş)
+- **doğa:** Kordon (Birinci/İkinci Kordon), Kültürpark, Bostanlı Sahili,
+  İnciraltı Kent Ormanı, (kuzeyde Gediz Deltası kuş cenneti — sınır dışı)
+- **yeme-içme (Kemeraltı, kullanıcı isteği):** kumru (Kumrucu Sabri), söğüş
+  (Söğüşçü Cimbom), gevrek/boyoz (İpek Gevrek), şambali (Hisarönü Şambalicisi),
+  Kemeraltı baklavası, Bolulu Hasan Usta süt tatlıları, kokoreç, Suluhan
+  tarihi han kahveleri
 - **gastronomi:** Toyosu / eski Tsukiji piyasası, Omoide Yokochō

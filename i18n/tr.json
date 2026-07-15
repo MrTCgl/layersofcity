@@ -27,6 +27,7 @@
   "transit.metro": "metro",
   "transit.tram": "tramvay",
   "transit.bus": "otobüs",
+  "transit.ferry": "vapur",
   "transit.train": "tren",
   "bb.kesfet": "Keşfet",
   "bb.ihtiyac": "İhtiyaç",

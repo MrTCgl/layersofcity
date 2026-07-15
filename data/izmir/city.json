@@ -1,0 +1,117 @@
+{
+  "id": "izmir",
+  "center": [
+    27.135,
+    38.42
+  ],
+  "zoom": {
+    "start": 11,
+    "min": 9,
+    "max": 19
+  },
+  "home": [
+    [
+      27.03,
+      38.37
+    ],
+    [
+      27.24,
+      38.49
+    ]
+  ],
+  "maxBounds": [
+    [
+      26.85,
+      38.2
+    ],
+    [
+      27.45,
+      38.7
+    ]
+  ],
+  "timezone": "Europe/Istanbul",
+  "language": "tr",
+  "currency": "TRY",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-07",
+    "water05": 9,
+    "petrol1l": 43,
+    "milk1l": 38,
+    "meat1kg": 560,
+    "cheese1kg": 380,
+    "beer05": 65,
+    "bigmac": 215,
+    "espresso": 85,
+    "transitTicket": 27,
+    "airportTrain": 30
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}

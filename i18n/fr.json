@@ -27,6 +27,7 @@
   "transit.metro": "métro",
   "transit.tram": "tram",
   "transit.bus": "bus",
+  "transit.ferry": "ferry",
   "transit.train": "train",
   "bb.kesfet": "Explorer",
   "bb.ihtiyac": "Besoins",
