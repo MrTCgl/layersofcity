@@ -348,7 +348,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260715-7"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260715-8"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -1180,10 +1180,13 @@
         map.addLayer(Object.assign({ id: src + suffix, source: src }, spec));
       };
 
-      // gate -> center connector (dashed lilac)
+      // gate -> center connector (dashed lilac) — bold + tight dash so the
+      // arrival route reads clearly over the basemap
       add("-link", { type: "line", filter: ["==", ["get", "kind"], "link"],
-        paint: { "line-color": pal.linkStrong, "line-width": 3, "line-dasharray": [1, 2.2], "line-opacity": 0.95 },
-        layout: { "line-cap": "round" } });
+        paint: { "line-color": pal.linkStrong,
+          "line-width": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 14, 4.5],
+          "line-dasharray": [1.6, 1.4], "line-opacity": 1 },
+        layout: { "line-cap": "round", "line-join": "round" } });
       // regional rail (FL trains) — drawn beneath metro/tram/bus, thin
       add("-railline", { type: "line",
         filter: ["all", ["==", ["get", "kind"], "line"], ["==", ["get", "lineRef"], "train"]],
