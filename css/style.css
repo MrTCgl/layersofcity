@@ -99,7 +99,7 @@ body.city #infobtn{display:none}
 .appinfo.show{opacity:1; pointer-events:auto}
 .appinfo[hidden]{display:none}
 .appinfo-card{
-  position:relative; width:min(360px, calc(100vw - 32px));
+  position:relative; width:min(290px, calc(100vw - 56px));
   background:color-mix(in srgb, var(--surface) 82%, transparent);
   backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
   border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow);
