@@ -184,7 +184,7 @@ body.city #topchips{display:flex}
 
 /* city info card (künye) */
 .infocard{
-  position:absolute; left:14px; top:52px; z-index:20; width:min(280px, calc(100vw - 28px));
+  position:absolute; left:14px; top:52px; z-index:20; width:min(228px, calc(100vw - 40px));
   max-height:calc(100vh - 120px); overflow-y:auto;
   background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
   border-radius:14px; padding:12px 14px;
