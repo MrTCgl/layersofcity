@@ -98,6 +98,9 @@ body.city #infobtn{display:none}
   opacity:0; pointer-events:none; transition:opacity .25s}
 .appinfo.show{opacity:1; pointer-events:auto}
 .appinfo[hidden]{display:none}
+/* on the city screen, sit the card centered between the left drawer tab and the
+   right control column (they're asymmetric ~28px), so both gaps come out equal */
+body.city .appinfo{padding-right:28px}
 .appinfo-card{
   position:relative; width:min(240px, calc(100vw - 72px));
   background:color-mix(in srgb, var(--surface) 82%, transparent);
@@ -243,7 +246,7 @@ body.city #topchips{display:flex}
 
 /* bottom bar + sheets */
 #bottombar{
-  position:absolute; left:50%; bottom:14px; transform:translateX(-50%);
+  position:absolute; left:50%; bottom:36px; transform:translateX(-50%);
   display:flex; gap:4px; z-index:16;
   background:color-mix(in srgb, var(--surface) 92%, transparent);
   border:1px solid var(--line); border-radius:999px; padding:5px; box-shadow:var(--shadow);
