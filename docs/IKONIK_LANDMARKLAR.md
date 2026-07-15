@@ -22,7 +22,7 @@
 | Paris | ✅ uygulandı (2026-07-12) | Tour Eiffel/Louvre/Notre-Dame/Sacré-Cœur vb. — kesfet-poi'ye 24 nokta elle eklendi |
 | Berlin | 🔲 şehir eklenince | aşağıdaki liste |
 | Madrid | 🔲 şehir eklenince | aşağıdaki liste |
-| New York | 🔲 şehir eklenince | aşağıdaki liste |
+| New York | ✅ uygulandı (2026-07-15) | Statue of Liberty/Empire State/Chrysler/Times Sq/Central Park vb. |
 | Tokyo | 🔲 şehir eklenince | aşağıdaki liste |
 | İzmir | ✅ uygulandı (2026-07-15) | Saat Kulesi/Kadifekale/Agora/Asansör/Kemeraltı vb. + Kemeraltı yeme-içme |
 
