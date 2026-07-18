@@ -257,7 +257,7 @@ body.city #topchips{display:flex}
 #bottombar #bb-kesfet.haslayers{background:#8A76B8; color:#fff}
 #bottombar #bb-ihtiyac.haslayers{background:#C1654B; color:#fff}
 .sheet{
-  position:absolute; left:50%; bottom:64px; transform:translateX(-50%) translateY(10px);
+  position:absolute; left:50%; bottom:92px; transform:translateX(-50%) translateY(10px);
   max-width:calc(100% - 24px); z-index:16; opacity:0; pointer-events:none; transition:all .25s;
 }
 .sheet.show{opacity:1; transform:translateX(-50%); pointer-events:auto}
