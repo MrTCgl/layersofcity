@@ -1855,7 +1855,7 @@
   async function boot() {
     applyTheme();
     await Promise.all([loadDict(FALLBACK_LANG), loadDict(lang)]);
-    const res = await fetch("data/cities.json");
+    const res = await fetch(`data/cities.json?v=${BM_VER}`);
     cities = res.ok ? (await res.json()).cities : [];
     applyI18n();
     renderWorld();
