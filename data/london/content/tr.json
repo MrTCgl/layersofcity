@@ -1,0 +1,18 @@
+{
+  "arr.lhr.sub": "→ merkez · Piccadilly · ~50 dk",
+  "arr.stp.sub": "Eurostar · uluslararası gar",
+  "arr.pad.sub": "Heathrow Express · Elizabeth",
+  "arr.wat.sub": "en yoğun gar · güneybatı",
+  "arr.liv.sub": "doğu garı · Stansted Express",
+  "arr.vcs.sub": "şehirlerarası otobüs · Victoria",
+  "hub.kingscross": "6 hat · Eurostar · ulusal",
+  "hub.bank": "5 hat · DLR · City",
+  "hub.oxford": "Bakerloo · Central · Victoria",
+  "hub.baker": "5 hat aktarma",
+  "hub.stratford": "Central · Jubilee · DLR · Eliz",
+  "hub.waterloo": "en yoğun · 4 hat",
+  "hub.victoria": "Victoria · District · Circle",
+  "hub.paddington": "Eliz · Bakerloo · havalimanı",
+  "hub.liverpool": "Central · Eliz · doğu",
+  "hub.canary": "Jubilee · DLR · Eliz · finans"
+}

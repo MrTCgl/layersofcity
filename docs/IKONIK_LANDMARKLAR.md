@@ -18,7 +18,7 @@
 |---|---|---|
 | İstanbul | ✅ uygulandı (2026-07-12) | Topkapı/Ayasofya/Sultanahmet vb. 49 nokta |
 | Roma | ✅ uygulandı (2026-07-12) | Palatino/Fori Imperiali/Campidoglio/Vittoriano vb. 42 nokta |
-| London | 🔲 şehir eklenince | aşağıdaki liste |
+| London | ✅ uygulandı (2026-07-18) | Big Ben/Tower Bridge/Buckingham/St Paul's/British Museum/Tate Modern/London Eye/Shard allowlist; doğal bölgeye Hyde Park/Regent's/Greenwich/Richmond/Hampstead elle eklendi |
 | Paris | ✅ uygulandı (2026-07-12) | Tour Eiffel/Louvre/Notre-Dame/Sacré-Cœur vb. — kesfet-poi'ye 24 nokta elle eklendi |
 | Berlin | ✅ uygulandı (2026-07-18) | Brandenburger Tor/Reichstag/Berliner Dom/Fernsehturm/Museumsinsel/East Side Gallery/Checkpoint Charlie vb. allowlist; doğal bölgeye Tiergarten/Tempelhofer Feld/Grunewald/Görlitzer/Mauerpark elle eklendi |
 | Madrid | ✅ uygulandı (2026-07-18) | Palacio Real/Prado/Reina Sofía/Thyssen/Puerta del Sol/Plaza Mayor/Cibeles/Bernabéu/Gran Vía allowlist; doğal bölgeye Retiro/Casa de Campo/Botánico/Madrid Río elle eklendi |

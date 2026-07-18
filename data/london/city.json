@@ -1,0 +1,117 @@
+{
+  "id": "london",
+  "center": [
+    -0.1276,
+    51.5074
+  ],
+  "zoom": {
+    "start": 10,
+    "min": 8.5,
+    "max": 19
+  },
+  "home": [
+    [
+      -0.21,
+      51.46
+    ],
+    [
+      0.02,
+      51.55
+    ]
+  ],
+  "maxBounds": [
+    [
+      -0.55,
+      51.28
+    ],
+    [
+      0.30,
+      51.70
+    ]
+  ],
+  "timezone": "Europe/London",
+  "language": "en",
+  "currency": "GBP",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-07",
+    "water05": 0.75,
+    "petrol1l": 1.50,
+    "milk1l": 1.30,
+    "meat1kg": 9.0,
+    "cheese1kg": 8.0,
+    "beer05": 2.20,
+    "bigmac": 4.50,
+    "espresso": 2.80,
+    "transitTicket": 2.80,
+    "airportTrain": 5.60
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}

@@ -543,3 +543,38 @@ Cercanías `route=train`, Metro Ligero `route=light_rail`; istasyon düğümleri
 metro=`station=subway`, ML=`station=light_rail`, Cercanías=`network~Cercan`.
 `cities.json` → `ready`; önbellek sürümleri **birlikte** artırıldı
 (`BM_VER` + `index.html` app.js?v= = 20260718-18).
+
+---
+
+## Yeni şehir — London ✅ tamam (2026-07-18)
+
+`yeni-sehir` skill'iyle, Madrid boru hattı uyarlanarak eklendi.
+
+- **Manifest:** merkez `[-0.1276, 51.5074]`, `Europe/London`, dil `en`,
+  para **GBP** (£; CURRENCY_SYM'de zaten var), zoom min 8.5 / max 19,
+  maxBounds Heathrow'u kapsıyor.
+- **Varış:** 6 kapı — Heathrow (Piccadilly ile merkeze link), St Pancras
+  (Eurostar), Paddington, Waterloo, Liverpool Street, Victoria Coach Station.
+  Linkler gerçek hat geometrisinden; kapıya en yakın parça seçilip merkeze
+  doğru izlenir (parçalı Tube geometrisinde snap-jump'ı önlemek için).
+- **Omurga:** OSM'deki 22 hat — Tube 11 (ref=hat adı: Bakerloo/Central/…/
+  Waterloo & City), DLR (tüm light_rail birleşik), Elizabeth line (ref=ES),
+  Overground 6 (Liberty/Lioness/Mildmay/Suffragette/Weaver/Windrush),
+  Tramlink 3 (2/3/4). Gerçek OSM geometrisi, resmî renkler; badge'ler kısa
+  kod (Bak/Cen/DLR/Eliz…). 265 Tube + 155 DLR/rail istasyonu + 39 tram
+  durağı + 10 aktarma hub'ı.
+- **Keşfet:** 1648 nokta (max yoğunluk; ikonik allowlist: Big Ben/Tower
+  Bridge/British Museum/Tate Modern/London Eye/Shard vb.).
+  **İhtiyaçlar:** 910 nokta (7 kategori). Toplam 2558 — en yüksek.
+- **Bölgeler:** turistik 5 (idari birim: City of London, Westminster, Camden,
+  Southwark, Kensington & Chelsea — London mahalleleri OSM'de
+  `boundary=administrative` değil, sadece borough/City var), ticari 7,
+  eğitim 3, doğal 17 (Hyde Park, Regent's Park, Greenwich, Richmond,
+  Hampstead Heath, Kensington Gardens ikonik allowlist'le).
+
+Durum notu: Tube hatları ref=hat adı (numara değil); DLR tek "DLR" hattı olarak
+tüm light_rail birleştirildi; Elizabeth ref=ES. Overground yeni adlı hatlar
+(Liberty/Suffragette…) ref ile çekildi. Overpass o gün çok ağır 504 verdi;
+alan sorguları için merkez bbox küçültüldü, turistik için tek toplu admin
+sorgusu (borough adları "London Borough of X"). `cities.json` → `ready`;
+önbellek sürümleri birlikte artırıldı (BM_VER + index.html app.js?v= = 20260718-19).
