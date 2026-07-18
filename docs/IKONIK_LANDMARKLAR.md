@@ -20,7 +20,7 @@
 | Roma | ✅ uygulandı (2026-07-12) | Palatino/Fori Imperiali/Campidoglio/Vittoriano vb. 42 nokta |
 | London | 🔲 şehir eklenince | aşağıdaki liste |
 | Paris | ✅ uygulandı (2026-07-12) | Tour Eiffel/Louvre/Notre-Dame/Sacré-Cœur vb. — kesfet-poi'ye 24 nokta elle eklendi |
-| Berlin | 🔲 şehir eklenince | aşağıdaki liste |
+| Berlin | ✅ uygulandı (2026-07-18) | Brandenburger Tor/Reichstag/Berliner Dom/Fernsehturm/Museumsinsel/East Side Gallery/Checkpoint Charlie vb. allowlist; doğal bölgeye Tiergarten/Tempelhofer Feld/Grunewald/Görlitzer/Mauerpark elle eklendi |
 | Madrid | 🔲 şehir eklenince | aşağıdaki liste |
 | New York | ✅ uygulandı (2026-07-15) | Statue of Liberty/Empire State/Chrysler/Times Sq/Central Park vb. |
 | Tokyo | ✅ uygulandı (2026-07-15) | Sensō-ji/Meiji Jingū/Tokyo Tower/Skytree/teamLab/Rainbow Bridge/Tsukiji vb. |

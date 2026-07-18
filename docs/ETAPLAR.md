@@ -470,3 +470,34 @@ Kullanıcı istekleri toplu işlendi:
 
 Durum notu: Overpass anlık 504/429 verebiliyor; ayna uçlar eklendi
 (kumi.systems, private.coffee). Yeni şehirde aynı boru hattı kullanılacak.
+
+---
+
+## Yeni şehir — Berlin ✅ tamam (2026-07-18)
+
+`yeni-sehir` skill'iyle, OSM Overpass boru hattı kullanılarak eklendi.
+
+- **Manifest:** merkez `[13.405, 52.52]`, `Europe/Berlin`, dil `de`, para `EUR`,
+  zoom min 8.5 / max 19, maxBounds BER havalimanını kapsıyor. Fiyat tablosu
+  editoryal (2026-07).
+- **Varış:** 6 kapı — BER havalimanı (S9 ile Hbf'a link), Hauptbahnhof,
+  Ostbahnhof, Südkreuz, Gesundbrunnen, ZOB. Linkler gerçek raylı hat
+  geometrisinden `substring` ile (BER→S9, Süd→S2, ZOB→U2 …); düz çizgi yok,
+  hepsi <1.5 km segment.
+- **Omurga:** U-Bahn U1–U9 (9), S-Bahn (Stadtbahn + Ring dâhil ~15),
+  tram M1–M17 + numaralı hatlar. Hepsi gerçek OSM geometrisi; hatların resmî
+  rengi `color` alanında. Çift-yön izleri harita ölçeğinde üst üste biner.
+  340 istasyon düğümü + ~500 tram durağı + 10 aktarma hub'ı.
+- **Keşfet:** 1196 nokta (tarihi/modern/doğa/gastronomi/alışveriş/otel/yurt/
+  kamu), ızgara seyreltmeli max yoğunluk; ikonik allowlist zorunlu eklendi.
+- **İhtiyaçlar:** 645 nokta (eczane/market/yakıt/kiralık-araç/kütüphane/müze/
+  hastane).
+- **Bölgeler:** turistik 10 (Ortsteil idari sınırları: Mitte, Tiergarten,
+  Charlottenburg, Kreuzberg, Friedrichshain, Prenzlauer Berg …), ticari 45,
+  eğitim 10, doğal 69 (Tiergarten, Tempelhofer Feld, Grunewald, Görlitzer,
+  Mauerpark ikonik allowlist'le elle eklendi).
+
+Durum notu: Berlin S-Bahn OSM'de `route=light_rail` (subway/train değil) — pipeline
+buna göre ayarlandı. Overpass o gün ağır 504/429 verdi; sorgular ayna rotasyonu
+ve boş-cevap-cache'lememe düzeltmesiyle çekildi. `cities.json` → `ready`,
+`BM_VER` = 20260718-17.

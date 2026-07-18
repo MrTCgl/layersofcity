@@ -1,0 +1,18 @@
+{
+  "arr.ber.sub": "→ merkez · FEX/S9 · ~35 dk",
+  "arr.hbf.sub": "ana gar · uzak mesafe + S-Bahn",
+  "arr.ost.sub": "doğu garı · S-Bahn · bölgesel",
+  "arr.sud.sub": "güney hub · ICE + Ring",
+  "arr.gesund.sub": "kuzey hub · ICE + Ring",
+  "arr.zob.sub": "şehirlerarası otobüs · U2",
+  "hub.alexanderplatz": "U2·5·8 · S-Bahn · tram",
+  "hub.hauptbahnhof": "ICE · S-Bahn · U5",
+  "hub.friedrichstrasse": "S-Bahn · U6 · bölgesel",
+  "hub.zoo": "S-Bahn · U2·9 · City West",
+  "hub.ostkreuz": "Ring · S-Bahn aktarma",
+  "hub.gesundbrunnen": "Ring · U8 · ICE",
+  "hub.suedkreuz": "Ring · ICE · S-Bahn",
+  "hub.potsdamer": "S-Bahn · U2 · bölgesel",
+  "hub.warschauer": "U1·3 · S-Bahn · tram",
+  "hub.nollendorf": "U1·2·3·4 aktarma"
+}

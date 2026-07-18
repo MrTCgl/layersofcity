@@ -1,0 +1,18 @@
+{
+  "arr.ber.sub": "→ center · FEX/S9 · ~35 min",
+  "arr.hbf.sub": "main station · long-distance + S-Bahn",
+  "arr.ost.sub": "east station · S-Bahn · regional",
+  "arr.sud.sub": "south hub · ICE + Ring",
+  "arr.gesund.sub": "north hub · ICE + Ring",
+  "arr.zob.sub": "intercity coaches · U2",
+  "hub.alexanderplatz": "U2·5·8 · S-Bahn · tram",
+  "hub.hauptbahnhof": "ICE · S-Bahn · U5",
+  "hub.friedrichstrasse": "S-Bahn · U6 · regional",
+  "hub.zoo": "S-Bahn · U2·9 · City West",
+  "hub.ostkreuz": "Ring · S-Bahn interchange",
+  "hub.gesundbrunnen": "Ring · U8 · ICE",
+  "hub.suedkreuz": "Ring · ICE · S-Bahn",
+  "hub.potsdamer": "S-Bahn · U2 · regional",
+  "hub.warschauer": "U1·3 · S-Bahn · tram",
+  "hub.nollendorf": "U1·2·3·4 interchange"
+}
