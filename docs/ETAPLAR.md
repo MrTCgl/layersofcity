@@ -484,9 +484,10 @@ Durum notu: Overpass anlık 504/429 verebiliyor; ayna uçlar eklendi
   Ostbahnhof, Südkreuz, Gesundbrunnen, ZOB. Linkler gerçek raylı hat
   geometrisinden `substring` ile (BER→S9, Süd→S2, ZOB→U2 …); düz çizgi yok,
   hepsi <1.5 km segment.
-- **Omurga:** U-Bahn U1–U9 (9), S-Bahn (Stadtbahn + Ring dâhil ~15),
-  tram M1–M17 + numaralı hatlar. Hepsi gerçek OSM geometrisi; hatların resmî
-  rengi `color` alanında. Çift-yön izleri harita ölçeğinde üst üste biner.
+- **Omurga:** OSM'deki **tüm mevcut hatlar (46)** — U-Bahn U1–U9 (9), S-Bahn
+  Stadtbahn+Ring (15; S45 OSM'de yok, BER sonrası kaldırılmış), tram M1–M17 +
+  numaralı hatlar (22). Hepsi gerçek OSM geometrisi; hatların resmî rengi
+  `color` alanında. Çift-yön izleri harita ölçeğinde üst üste biner.
   340 istasyon düğümü + ~500 tram durağı + 10 aktarma hub'ı.
 - **Keşfet:** 1196 nokta (tarihi/modern/doğa/gastronomi/alışveriş/otel/yurt/
   kamu), ızgara seyreltmeli max yoğunluk; ikonik allowlist zorunlu eklendi.
