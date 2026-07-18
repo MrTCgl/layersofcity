@@ -94,5 +94,10 @@
   "appinfo.l5": "Le indicazioni si aprono in Google Maps con un tocco.",
   "appinfo.l6": "Nessun account; le tue preferenze restano sul tuo dispositivo.",
   "base.osmOpacity": "opacità livello OSM",
-  "base.karma": "Ibrido"
+  "base.karma": "Ibrido",
+  "pt.hub": "interscambio",
+  "pt.air": "aeroporto",
+  "pt.rail": "stazione",
+  "pt.road": "autostazione",
+  "pt.ship": "imbarcadero"
 }

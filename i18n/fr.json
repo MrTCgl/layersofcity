@@ -94,5 +94,10 @@
   "appinfo.l5": "L'itinéraire s'ouvre dans Google Maps en un geste.",
   "appinfo.l6": "Pas de compte ; tes préférences restent sur ton appareil.",
   "base.osmOpacity": "opacité de la couche OSM",
-  "base.karma": "Hybride"
+  "base.karma": "Hybride",
+  "pt.hub": "correspondance",
+  "pt.air": "aéroport",
+  "pt.rail": "gare",
+  "pt.road": "gare routière",
+  "pt.ship": "embarcadère"
 }

@@ -41,7 +41,7 @@
 
   async function loadDict(code) {
     if (dicts[code]) return dicts[code];
-    const res = await fetch(`i18n/${code}.json`);
+    const res = await fetch(`i18n/${code}.json?v=${BM_VER}`);
     dicts[code] = res.ok ? await res.json() : {};
     return dicts[code];
   }
@@ -321,7 +321,24 @@
 
   /* place card: name + external Google Maps link (no key, no in-app nav) */
   const placeCard = document.getElementById("placecard");
-  function showPlaceCard(name, lng, lat, note) {
+  // Human label for a point's TYPE (line/mode or POI theme), reusing existing
+  // i18n labels; simple one word (transit.* / th.* / ih.* / pt.*).
+  const GATE_PT = { plane: "air", train: "rail", bus: "road", ship: "ship" };
+  function featureTypeLabel(p, layerId) {
+    const k = p.kind;
+    if (k === "node" || k === "stop") return t("transit." + (p.lineRef || "metro"));
+    if (k === "hub") return t("pt.hub");
+    if (k === "gate") return t("pt." + (GATE_PT[p.mode] || "rail"));
+    if (k === "poi") {
+      const ih = layerId && layerId.indexOf("ihtiyac") >= 0;
+      let th = p.theme;
+      if (ih && th === "kiralik-arac") th = "kiralama"; // key uses "kiralama"
+      return t((ih ? "ih." : "th.") + th);
+    }
+    return "";
+  }
+
+  function showPlaceCard(name, lng, lat, note, type) {
     // Drop a Google Maps pin at the EXACT tapped coordinates (q=lat,lng), with
     // the label as the pin text — no text search, so it never snaps to a
     // same-named place or a nearby street. Unlabeled points get a bare pin.
@@ -331,6 +348,9 @@
     const label = (note && note.trim()) || name || "";
     document.getElementById("pc-name").textContent =
       label || (lat.toFixed(5) + ", " + lng.toFixed(5));
+    const pcType = document.getElementById("pc-type");
+    pcType.textContent = type || "";
+    pcType.hidden = !type;
     document.getElementById("pc-dir").href =
       "https://www.google.com/maps?q=" + ll + (label ? "(" + encodeURIComponent(label) + ")" : "");
     // remember this point so the pencil can bookmark it; show a filled pencil
@@ -348,7 +368,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260718-19"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260718-22"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -936,15 +956,47 @@
       // working after layers are re-added on theme change.
       const tappable = ["lyr-kesfet-poi-poi", "lyr-ihtiyac-poi", "lyr-omurga-node",
                         "lyr-omurga-stop", "lyr-omurga-hub", "lyr-varis-gate"];
+      // Hover a point for a moment -> small popup with its type + name (desktop
+      // only; touch shows the same on the place card when a point is tapped).
+      const noHover = matchMedia("(hover: none)").matches;
+      let typePop = null, typeTimer = null, typeKey = null;
+      function clearHoverType() {
+        typeKey = null; clearTimeout(typeTimer);
+        if (typePop) { typePop.remove(); typePop = null; }
+      }
+      function onHoverType(e, id) {
+        const f = e.features && e.features[0];
+        if (!f) return;
+        const c = f.geometry.coordinates;
+        const key = id + ":" + c.join(",");
+        if (key === typeKey) return;      // still on the same point
+        typeKey = key;
+        clearTimeout(typeTimer);
+        if (typePop) { typePop.remove(); typePop = null; }
+        const p = f.properties;
+        typeTimer = setTimeout(() => {
+          const type = featureTypeLabel(p, id);
+          const nm = p._name || p.name || "";
+          if (!type && !nm) return;
+          const box = document.createElement("div");
+          if (type) { const a = document.createElement("div"); a.className = "tp-type"; a.textContent = type; box.appendChild(a); }
+          if (nm)   { const b = document.createElement("div"); b.className = "tp-name"; b.textContent = nm; box.appendChild(b); }
+          typePop = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 12, className: "typepop" })
+            .setLngLat(c).setDOMContent(box).addTo(map);
+        }, 450);
+      }
       tappable.forEach(id => {
         map.on("click", id, e => {
           const f = e.features && e.features[0];
           if (!f) return;
           const [lng, lat] = f.geometry.coordinates;
-          showPlaceCard(f.properties._name || f.properties.name || "", lng, lat);
+          clearHoverType();
+          showPlaceCard(f.properties._name || f.properties.name || "", lng, lat,
+                        undefined, featureTypeLabel(f.properties, id));
         });
         map.on("mouseenter", id, () => { map.getCanvas().style.cursor = "pointer"; });
-        map.on("mouseleave", id, () => { map.getCanvas().style.cursor = ""; });
+        map.on("mouseleave", id, () => { map.getCanvas().style.cursor = ""; clearHoverType(); });
+        if (!noHover) map.on("mousemove", id, e => onHoverType(e, id));
       });
       map.on("click", "osmnotes-pt", e => {
         const f = e.features && e.features[0];

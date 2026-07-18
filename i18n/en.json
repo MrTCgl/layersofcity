@@ -94,5 +94,10 @@
   "appinfo.l5": "Directions open in Google Maps with one tap.",
   "appinfo.l6": "No accounts; your preferences stay on your device.",
   "base.osmOpacity": "OSM layer opacity",
-  "base.karma": "Hybrid"
+  "base.karma": "Hybrid",
+  "pt.hub": "interchange",
+  "pt.air": "airport",
+  "pt.rail": "station",
+  "pt.road": "coach terminal",
+  "pt.ship": "ferry pier"
 }

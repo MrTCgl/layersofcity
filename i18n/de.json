@@ -94,5 +94,10 @@
   "appinfo.l5": "Routen öffnen sich mit einem Tipp in Google Maps.",
   "appinfo.l6": "Keine Konten; deine Einstellungen bleiben auf deinem Gerät.",
   "base.osmOpacity": "OSM-Ebenen-Deckkraft",
-  "base.karma": "Hybrid"
+  "base.karma": "Hybrid",
+  "pt.hub": "Umstieg",
+  "pt.air": "Flughafen",
+  "pt.rail": "Bahnhof",
+  "pt.road": "Busbahnhof",
+  "pt.ship": "Fähranleger"
 }

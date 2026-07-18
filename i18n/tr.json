@@ -94,5 +94,10 @@
   "appinfo.l5": "Yol tarifi tek dokunuşla Google Haritalar'da açılır.",
   "appinfo.l6": "Üyelik yok; tercihlerin yalnızca cihazında kalır.",
   "base.osmOpacity": "OSM katman şeffaflığı",
-  "base.karma": "Karma"
+  "base.karma": "Karma",
+  "pt.hub": "aktarma",
+  "pt.air": "havalimanı",
+  "pt.rail": "gar",
+  "pt.road": "otobüs terminali",
+  "pt.ship": "iskele"
 }
