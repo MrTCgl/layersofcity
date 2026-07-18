@@ -218,3 +218,19 @@ anında** üretilir (çalışma zamanı bağımlılığı yok; atıf altbilgide)
 | `btype` | bolge-* | `turistik/ticari/egitim/dogal` → tür rengi |
 | `kind:"stop"` | omurga | tramvay/otobüs/tren durağı (z12.5+) |
 | `kind:"district(-label)"` | bolge-* | bölge poligonu / etiket noktası |
+
+## Boru hattı & yayın tuzakları (2026-07-18, Berlin dersi)
+
+Ayrıntı: `.claude/skills/yeni-sehir/SKILL.md`. Özet:
+
+- **Overpass:** boş cevabı cache'leme (aksi halde hat sessizce kaybolur);
+  cache anahtarı `md5(query)` (Python `hash()` tuzlanır); hat-hat
+  `rel;out tags;way(r);out geom;` + ayna rotasyonu güvenilir, tüm-ağ
+  `out geom` 504 verir. Rota etiketi şehre göre değişir (Berlin S-Bahn =
+  `route=light_rail`). Sahte uzun düz segmentleri yumuşak sadeleştirme +
+  densify ile önle.
+- **Yayın önbelleği:** yeni şehir/veri push'unda `BM_VER` (js/app.js),
+  `index.html`'deki `app.js?v=` ve (değiştiyse) css sürümü **birlikte**
+  artırılmalı. `index.html`'deki app.js sürümü atlanırsa kullanıcı eski
+  app.js'i önbellekten alır ve şehir görünmez. `cities.json` artık
+  `?v=${BM_VER}` ile çekiliyor.

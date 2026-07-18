@@ -120,8 +120,52 @@ way(r)[!"building"];out geom;
    genişlik; üç altlıkta da (Sade/OSM Detaylı/Uydu) hatların hizasını kontrol
    et — metro hattı Shortbread'deki demiryoluyla çakışmalı.
 3. Gerçekçilik denetimini (2b) sayısal çalıştır: en uzun segment raporu.
-4. `cities.json`'da şehri `"ready"` yap; `BM_VER`'i (js/app.js) artır
-   (önbellek), commit'le (mesaj Türkçe), push'la.
+4. `cities.json`'da şehri `"ready"` yap; **önbellek sürümlerini birlikte artır**
+   (aşağı bak), commit'le (mesaj Türkçe), push'la.
+5. **Canlıya alma:** GitHub Pages varsayılan daldan (`claude/rome-transit-map-app-*`)
+   `layersofcity.com`'a yayınlıyor; ayrı deploy workflow'u yok. Şehir dalını
+   varsayılan dala **fast-forward** push et. Pages build'i (Actions →
+   "pages build and deployment") ~1-2 dk sürer; başarılı olunca canlı.
+
+## ⚠️ Önbellek sürümleri — HEPSİNİ birlikte artır (2026-07-18 dersi)
+
+Berlin eklendiğinde şehir canlıda görünmedi: `BM_VER` artırılmış ama
+`index.html`'deki `app.js?v=` eski kalmıştı → tarayıcı eski app.js'i (ve eski
+şehir listesini) önbellekten servis etti. Yeni şehir/veri yayınında **üçü de**
+aynı sürüme çekilmeli:
+
+- `js/app.js` → `const BM_VER = "<yeni>"` (veri/altlık/içerik fetch'lerini kırar)
+- `index.html` → `<script src="js/app.js?v=<yeni>">` (app.js'i kırar — **en kritik**,
+  atlanırsa hiçbir değişiklik kullanıcıya ulaşmaz)
+- (CSS/world-dots.js yalnızca **değiştiyse** kendi `?v=`'leri artırılır)
+
+`data/cities.json` artık `?v=${BM_VER}` ile çekiliyor (eskiden buster'sızdı,
+şehir listesi önbellekte takılıyordu — düzeltildi). Sert yenileme her zaman
+yetmez; asıl güvence sürüm sorgusudur.
+
+## ⚠️ Overpass tuzakları (2026-07-18 dersi)
+
+- **Boş cevabı ASLA cache'leme.** Aşırı yüklü ayna HTTP 200 + boş `elements`
+  dönebilir; başarı sanıp cache'lersen hat "sessizce" kaybolur. Yalnızca
+  `elements` dolu cevabı yaz; boşta aynayı çevir.
+- **Cache anahtarı stabil olmalı:** Python `hash()` süreç başına tuzlanır →
+  cache tutmaz; `hashlib.md5(query)` kullan.
+- **`out geom` (relation) tüm ağ için 504 verir;** hat-hat
+  `rel; out tags; way(r)[!building]; out geom;` formu güvenilir. Ayna rotasyonu
+  (de/kumi/private.coffee) + paralel 2-3 işçi ile cache ısıt.
+- **Hat rota etiketi şehre göre değişir:** Berlin S-Bahn `route=light_rail`
+  (subway/train değil!). Yeni şehirde bir ref 0 eleman dönüyorsa önce doğru
+  `route`/`ref` etiketini `out tags;` ile teyit et.
+- **Sahte uzun düz segment** DP sadeleştirmesinin zigzag'ı kısa devre
+  yapmasından gelir: yumuşak tolerans (~0.00006) + >1.7 km segmentleri
+  densify et (noktalar gerçek hattın üstünde). Çift-yön izleri uzunluğu ~2x
+  yapar ama harita ölçeğinde üst üste biner (kabul).
+- **Alan (bölge) sorguları** tüm `maxBounds`'ta ağırdır; merkezî bir alt-bbox
+  kullan. **İkonik parklar** (Tiergarten/Tempelhof gibi) relation'dır ve
+  ızgara/alan filtresinden kaçar → ada göre elle çek (allowlist).
+- **"Eksik" hat OSM'de olmayabilir:** Berlin S45 kaldırılmış (BER sonrası);
+  ref 0 dönüyorsa `["ref"~"^S4"];out tags;` ile hattın gerçekten var olup
+  olmadığını doğrula, boşuna bekleme.
 
 ## Kalite çıtası (özet)
 

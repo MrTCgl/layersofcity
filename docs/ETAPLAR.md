@@ -502,3 +502,13 @@ Durum notu: Berlin S-Bahn OSM'de `route=light_rail` (subway/train değil) — pi
 buna göre ayarlandı. Overpass o gün ağır 504/429 verdi; sorgular ayna rotasyonu
 ve boş-cevap-cache'lememe düzeltmesiyle çekildi. `cities.json` → `ready`,
 `BM_VER` = 20260718-17.
+
+**Yayın/önbellek olayı ve düzeltme:** Berlin canlıya çıktı ama açılış ekranında
+görünmedi. Neden: `BM_VER` artırıldı ama `index.html`'deki `app.js?v=` eski
+kaldığından tarayıcı eski app.js'i (ve eski şehir listesini) önbellekten
+servis etti; ayrıca `cities.json` cache-buster'sız çekiliyordu. Düzeltme:
+`index.html` → `app.js?v=20260718-17`; `fetch("data/cities.json")` →
+`?v=${BM_VER}`. Ders `yeni-sehir` skill'ine + `docs/VERI.md`'ye işlendi:
+yeni şehir yayınında **BM_VER + index.html app.js sürümü birlikte** artırılır.
+Yayın yolu: GitHub Pages, varsayılan daldan (`claude/rome-transit-map-app-*`)
+`layersofcity.com`'a; şehir dalı varsayılana fast-forward push'lanır.
