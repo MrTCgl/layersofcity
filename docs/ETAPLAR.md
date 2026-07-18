@@ -512,3 +512,34 @@ servis etti; ayrıca `cities.json` cache-buster'sız çekiliyordu. Düzeltme:
 yeni şehir yayınında **BM_VER + index.html app.js sürümü birlikte** artırılır.
 Yayın yolu: GitHub Pages, varsayılan daldan (`claude/rome-transit-map-app-*`)
 `layersofcity.com`'a; şehir dalı varsayılana fast-forward push'lanır.
+
+---
+
+## Yeni şehir — Madrid ✅ tamam (2026-07-18)
+
+`yeni-sehir` skill'iyle, Berlin boru hattı uyarlanarak eklendi (İspanyolca `es`
+içeriği ilk kez bir şehirle temsil edildi → 6 dilin hepsi kapsandı).
+
+- **Manifest:** merkez `[-3.703, 40.416]` (Puerta del Sol), `Europe/Madrid`,
+  dil `es`, para `EUR`, zoom min 9 / max 19, maxBounds Barajas'ı kapsıyor.
+- **Varış:** 4 kapı — MAD Barajas havalimanı (Metro L8 ile Nuevos Ministerios'a
+  link), Atocha, Chamartín, Estación Sur (otobüs). Linkler gerçek hat
+  geometrisinden `substring` ile; hepsi <1.6 km segment.
+- **Omurga:** OSM'deki tüm hatlar (24) — Metro L1–L12 + R (subway), Metro
+  Ligero ML1–ML3 (light_rail → tram), Cercanías C-1…C-10 (train; AVE/uzun
+  mesafe hariç). Gerçek OSM geometrisi, resmî renkler. 236 metro + 31 Cercanías
+  istasyonu + 34 ML durağı + 8 aktarma hub'ı.
+- **Keşfet:** 1548 nokta (max yoğunluk; kullanıcı isteğiyle popüler yerler bol
+  — wikidata/marka öncelikli). İkonik allowlist (Prado/Reina Sofía/Palacio
+  Real/Bernabéu vb.).
+- **İhtiyaçlar:** 775 nokta (7 kategori; kütüphane/müze dâhil).
+- **Bölgeler:** turistik 10 (barrio idari sınırları: Sol, Palacio, Cortes,
+  Malasaña/Universidad, Chueca/Justicia, Embajadores, Salamanca …), ticari 23,
+  eğitim 6, doğal 48 (Retiro, Casa de Campo, Real Jardín Botánico, Madrid Río
+  ikonik allowlist'le; Retiro OSM adı "Parque del Retiro").
+
+Durum notu: Madrid metro ref'leri OSM'de `L1…L12` (subway), S-Bahn benzeri
+Cercanías `route=train`, Metro Ligero `route=light_rail`; istasyon düğümleri
+metro=`station=subway`, ML=`station=light_rail`, Cercanías=`network~Cercan`.
+`cities.json` → `ready`; önbellek sürümleri **birlikte** artırıldı
+(`BM_VER` + `index.html` app.js?v= = 20260718-18).

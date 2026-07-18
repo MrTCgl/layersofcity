@@ -21,7 +21,7 @@
 | London | 🔲 şehir eklenince | aşağıdaki liste |
 | Paris | ✅ uygulandı (2026-07-12) | Tour Eiffel/Louvre/Notre-Dame/Sacré-Cœur vb. — kesfet-poi'ye 24 nokta elle eklendi |
 | Berlin | ✅ uygulandı (2026-07-18) | Brandenburger Tor/Reichstag/Berliner Dom/Fernsehturm/Museumsinsel/East Side Gallery/Checkpoint Charlie vb. allowlist; doğal bölgeye Tiergarten/Tempelhofer Feld/Grunewald/Görlitzer/Mauerpark elle eklendi |
-| Madrid | 🔲 şehir eklenince | aşağıdaki liste |
+| Madrid | ✅ uygulandı (2026-07-18) | Palacio Real/Prado/Reina Sofía/Thyssen/Puerta del Sol/Plaza Mayor/Cibeles/Bernabéu/Gran Vía allowlist; doğal bölgeye Retiro/Casa de Campo/Botánico/Madrid Río elle eklendi |
 | New York | ✅ uygulandı (2026-07-15) | Statue of Liberty/Empire State/Chrysler/Times Sq/Central Park vb. |
 | Tokyo | ✅ uygulandı (2026-07-15) | Sensō-ji/Meiji Jingū/Tokyo Tower/Skytree/teamLab/Rainbow Bridge/Tsukiji vb. |
 | İzmir | ✅ uygulandı (2026-07-15) | Saat Kulesi/Kadifekale/Agora/Asansör/Kemeraltı vb. + Kemeraltı yeme-içme |
