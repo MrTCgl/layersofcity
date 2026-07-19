@@ -200,25 +200,42 @@
     });
   }
 
-  /* ── world zoom: wordmark + map scale/pan together, full-screen; header
-        stays fixed (it lives outside #worldzoom, and page zoom is locked) ── */
-  const worldZoom = document.getElementById("worldzoom");
+  /* ── world zoom (touch only, i.e. mobile): the dotted map scales/pans behind
+        a fixed-size wordmark. Only the map (#worldwrap) is transformed, so the
+        logotype stays put at its layout size; the pan/clamp math is relative to
+        the map's own rest box. Desktop has no touch, so the map keeps identity
+        transform and the current framing is preserved untouched. ── */
+  const worldMapLayer = document.getElementById("worldwrap");
   const worldSurface = document.getElementById("scr-world");
   let wScale = 1, wX = 0, wY = 0, wMode = null, wStartDist = 0, wStartScale = 1, wMid = null, wPan = null;
+  // rest box of the map (layout size/position, unaffected by the transform)
+  let wBoxW = 0, wBoxH = 0;
   const W_MAX = 6;
-  function wApply() { worldZoom.style.transform = `translate(${wX}px,${wY}px) scale(${wScale})`; }
+  function wApply() {
+    worldMapLayer.style.transform = wScale === 1 && wX === 0 && wY === 0
+      ? "" : `translate(${wX}px,${wY}px) scale(${wScale})`;
+  }
   function wClamp() {
     wScale = Math.max(1, Math.min(W_MAX, wScale));
-    const w = worldSurface.clientWidth, h = worldSurface.clientHeight;
-    wX = Math.max(w * (1 - wScale), Math.min(0, wX));
-    wY = Math.max(h * (1 - wScale), Math.min(0, wY));
+    // keep the scaled map covering its own rest footprint (no gap creeps in)
+    wX = Math.max(wBoxW * (1 - wScale), Math.min(0, wX));
+    wY = Math.max(wBoxH * (1 - wScale), Math.min(0, wY));
     if (wScale === 1) { wX = 0; wY = 0; }
   }
   function resetWorldZoom() { wScale = 1; wX = 0; wY = 0; wApply(); }
   const wDist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
-  const wMidpoint = t => { const r = worldSurface.getBoundingClientRect(); return { x: (t[0].clientX + t[1].clientX) / 2 - r.left, y: (t[0].clientY + t[1].clientY) / 2 - r.top }; };
+  // Derive the map's rest box (top-left + size in surface coords) from the
+  // current rendered rect and the active transform, then return the pinch
+  // focal point relative to that rest top-left.
+  function wFocal(t) {
+    const r = worldMapLayer.getBoundingClientRect(), s = worldSurface.getBoundingClientRect();
+    wBoxW = r.width / wScale; wBoxH = r.height / wScale;
+    const restX = (r.left - s.left) - wX, restY = (r.top - s.top) - wY;
+    return { x: (t[0].clientX + t[1].clientX) / 2 - s.left - restX,
+             y: (t[0].clientY + t[1].clientY) / 2 - s.top - restY };
+  }
   worldSurface.addEventListener("touchstart", e => {
-    if (e.touches.length === 2) { wMode = "pinch"; wStartDist = wDist(e.touches); wStartScale = wScale; wMid = wMidpoint(e.touches); e.preventDefault(); }
+    if (e.touches.length === 2) { wMode = "pinch"; wStartDist = wDist(e.touches); wStartScale = wScale; wMid = wFocal(e.touches); e.preventDefault(); }
     else if (e.touches.length === 1) { wMode = "pan"; wPan = { x: e.touches[0].clientX - wX, y: e.touches[0].clientY - wY }; }
   }, { passive: false });
   worldSurface.addEventListener("touchmove", e => {
