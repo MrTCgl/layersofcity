@@ -572,6 +572,17 @@ metro=`station=subway`, ML=`station=light_rail`, Cercanías=`network~Cercan`.
   eğitim 3, doğal 17 (Hyde Park, Regent's Park, Greenwich, Richmond,
   Hampstead Heath, Kensington Gardens ikonik allowlist'le).
 
+**Kalite artırımı (2026-07-19):** İnce bölge katmanları güçlendirildi.
+turistik 5→11 (11 borough'luk toplu admin regex sorgusu; `_short()` "London
+Borough of" önekini kırpar, "City of London" tam bırakılır ki "London" diye
+görünmesin). eğitim 3→9: karışık/kampüs-sonekli otomatik alan taraması yerine
+küratörlü **isimli üniversite** allowlist'i (kısa etiket: UCL/Imperial/LSE/
+Queen Mary/SOAS/UAL/LBS/Greenwich Uni/Westminster Uni). Not: KCL/City/Birkbeck
+o gün Overpass 504 verdiği için önbelleğe girmedi. **ticari isimli finans/ticaret
+bölgeleri (Canary Wharf, Covent Garden, Broadgate…) Overpass tümüyle 504
+olduğundan bu oturumda çekilemedi; ticari otomatik alan taramasında (7) kaldı —
+Overpass düzelince tekrarlanacak.**
+
 Durum notu: Tube hatları ref=hat adı (numara değil); DLR tek "DLR" hattı olarak
 tüm light_rail birleştirildi; Elizabeth ref=ES. Overground yeni adlı hatlar
 (Liberty/Suffragette…) ref ile çekildi. Overpass o gün çok ağır 504 verdi;
