@@ -124,15 +124,26 @@ body.city .appinfo{padding-right:28px}
   display:grid; place-items:center; color:var(--ink-soft); border-radius:999px}
 .ai-close:hover{background:var(--powder); color:var(--ink)}
 :root[data-theme="dark"] .ai-close:hover{background:var(--line)}
+/* On desktop the clip box collapses so the layout is exactly as before. */
+#mapclip{display:contents}
 #worldwrap{width:min(1320px,98%); position:relative; z-index:1;
   transform-origin:0 0; will-change:transform}
 #worldmap{width:100%; height:auto; display:block}
-/* Mobile (touch): pin the big wordmark in the upper area of the screen and let
-   the world map sit below it, zooming/panning behind it. Desktop (hover) keeps
-   the current vertically-centered composition untouched. */
+/* Mobile (touch): a big, full-width wordmark is pinned in the upper area and
+   stays put; the world map lives in a clipped box below it and zooms/pans
+   inside that box, so it can never overflow up over the wordmark. Desktop
+   (hover) keeps the current vertically-centered composition untouched. */
 @media (hover: none) and (pointer: coarse){
-  #worldzoom{ justify-content:flex-start; padding:0 4px; gap:18px; }
-  #wordmark{ margin-top:9vh; }
+  #worldzoom{ justify-content:flex-start; padding:0; gap:0; }
+  #wordmark{
+    margin:7vh 0 0; padding:0 3vw; width:100%; text-align:center;
+    font-size:22vw; line-height:1.05; /* fill the screen width — full, plump */
+  }
+  #mapclip{
+    display:flex; justify-content:center; align-items:flex-start;
+    flex:1 1 auto; width:100%; min-height:0; overflow:hidden;
+    margin-top:4vh;
+  }
   #worldwrap{ width:100%; }
 }
 .worlddot{fill:#C4BAAC}
