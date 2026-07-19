@@ -156,19 +156,17 @@
     return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w) }; // give up: default right
   }
 
-  // Opening frame. Desktop shows the whole world; mobile (touch) lands zoomed
-  // on Africa with the European cities clustered at the top — a fuller, more
-  // inviting splash. Pinch still zooms in further from here.
-  const WORLD_VIEWBOX = "40 16 920 400";
-  const MOBILE_VIEWBOX = "408 70 260 290"; // European cities up top, Africa filling below
+  // Opening frame. Desktop shows the whole world (static). Mobile (touch) keeps
+  // the SAME whole-world map but *lands zoomed on Africa*, European cities up
+  // top — a fuller, more inviting splash. Since the full world is still there,
+  // pinching out (down to the whole world) and panning reach New York, Tokyo
+  // and every other city. The zoom is a transform, not a viewBox crop.
   const isMobileSplash = () => matchMedia("(hover: none) and (pointer: coarse)").matches;
-  function applyWorldViewBox() {
-    worldSvg.setAttribute("viewBox", isMobileSplash() ? MOBILE_VIEWBOX : WORLD_VIEWBOX);
-  }
-  // keep the frame correct if the device crosses the mobile/desktop breakpoint
+  const AFR = { x0: 408, y0: 70, w: 260 };     // Africa+Europe window in the dot-grid canvas
+  const VB = { x: 40, y: 16, w: 920, h: 400 }; // the map's SVG viewBox
+  // reset the frame if the device crosses the mobile/desktop breakpoint
   matchMedia("(hover: none) and (pointer: coarse)").addEventListener("change", () => {
     if (typeof resetWorldZoom === "function") resetWorldZoom();
-    applyWorldViewBox();
   });
 
   function renderWorld() {
@@ -177,7 +175,6 @@
       html += `<circle class="worlddot" cx="${WORLD_DOTS[i]}" cy="${WORLD_DOTS[i + 1]}" r="1.4"/>`;
     }
     worldSvg.innerHTML = html;
-    applyWorldViewBox();
 
     // Every city marker is an obstacle; placed labels are added as we go so
     // later labels dodge earlier ones. Ready cities first (their labels matter
@@ -238,7 +235,24 @@
     wY = Math.max(wBoxH * (1 - wScale), Math.min(0, wY));
     if (wScale === 1) { wX = 0; wY = 0; }
   }
-  function resetWorldZoom() { wScale = 1; wX = 0; wY = 0; wApply(); }
+  // Frame the whole-world map on Africa (mobile opening view). Computed from the
+  // map's live pixel size, so it's identical on every device. Returns false if
+  // the map has no layout size yet (retried after layout).
+  function frameAfrica() {
+    const mw = worldMapLayer.clientWidth;
+    if (!mw) return false;
+    const mh = mw * VB.h / VB.w;
+    wBoxW = mw; wBoxH = mh;
+    wScale = Math.min(VB.w / AFR.w, W_MAX);      // fit the Africa window to the width
+    wX = -wScale * (AFR.x0 - VB.x) / VB.w * mw;
+    wY = -wScale * (AFR.y0 - VB.y) / VB.h * mh;
+    wClamp(); wApply();
+    return true;
+  }
+  function resetWorldZoom() {
+    if (isMobileSplash() && frameAfrica()) return; // mobile home = Africa frame
+    wScale = 1; wX = 0; wY = 0; wBoxW = wBoxH = 0; wApply();
+  }
   const wDist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
   // Derive the map's rest box (top-left + size in surface coords) from the
   // current rendered rect and the active transform, then return the pinch
@@ -1945,6 +1959,16 @@
     applyI18n();
     renderWorld();
     route();
+    // once the map has real layout size, land the mobile Africa frame (avoids a
+    // first-paint where clientWidth was still 0)
+    requestAnimationFrame(() => {
+      if (!document.body.classList.contains("city")) resetWorldZoom();
+    });
   }
   boot();
+  // rotating the device reframes the opening view
+  window.addEventListener("orientationchange", () => {
+    if (isMobileSplash() && !document.body.classList.contains("city"))
+      requestAnimationFrame(() => requestAnimationFrame(resetWorldZoom));
+  });
 })();
