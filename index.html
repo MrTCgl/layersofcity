@@ -7,7 +7,7 @@
 <meta name="description" content="Read a new city, layer by layer.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B9A6DC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L21 8 L12 13 L3 8 Z'/%3E%3Cpath d='M3 12.5 L12 17.5 L21 12.5' opacity='.55'/%3E%3Cpath d='M3 17 L12 22 L21 17' opacity='.25'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/vendor/maplibre-gl.css">
-<link rel="stylesheet" href="css/style.css?v=20260719-2">
+<link rel="stylesheet" href="css/style.css?v=20260719-3">
 </head>
 <body>
 
@@ -61,8 +61,13 @@
   <section class="screen" id="scr-world">
     <div id="worldzoom">
       <h1 id="wordmark"><span class="wm">layers</span> <span class="of">of</span> <span class="wm">city</span></h1>
-      <div id="worldwrap">
-        <svg id="worldmap" viewBox="40 16 920 400" role="img" aria-label="world map"></svg>
+      <!-- on mobile this is the clip box: the map zooms/pans inside it and can
+           never overflow up over the fixed wordmark. On desktop it collapses
+           (display:contents) so the layout is unchanged. -->
+      <div id="mapclip">
+        <div id="worldwrap">
+          <svg id="worldmap" viewBox="40 16 920 400" role="img" aria-label="world map"></svg>
+        </div>
       </div>
     </div>
     <!-- app contact — quiet, thin, letter-spaced, bottom center -->
@@ -268,6 +273,6 @@
 
 <script src="assets/vendor/maplibre-gl.js"></script>
 <script src="js/world-dots.js?v=20260714-4"></script>
-<script src="js/app.js?v=20260719-1"></script>
+<script src="js/app.js?v=20260719-3"></script>
 </body>
 </html>
