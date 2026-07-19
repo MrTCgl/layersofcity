@@ -156,12 +156,28 @@
     return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w) }; // give up: default right
   }
 
+  // Opening frame. Desktop shows the whole world; mobile (touch) lands zoomed
+  // on Africa with the European cities clustered at the top — a fuller, more
+  // inviting splash. Pinch still zooms in further from here.
+  const WORLD_VIEWBOX = "40 16 920 400";
+  const MOBILE_VIEWBOX = "408 70 260 290"; // European cities up top, Africa filling below
+  const isMobileSplash = () => matchMedia("(hover: none) and (pointer: coarse)").matches;
+  function applyWorldViewBox() {
+    worldSvg.setAttribute("viewBox", isMobileSplash() ? MOBILE_VIEWBOX : WORLD_VIEWBOX);
+  }
+  // keep the frame correct if the device crosses the mobile/desktop breakpoint
+  matchMedia("(hover: none) and (pointer: coarse)").addEventListener("change", () => {
+    if (typeof resetWorldZoom === "function") resetWorldZoom();
+    applyWorldViewBox();
+  });
+
   function renderWorld() {
     let html = "";
     for (let i = 0; i < WORLD_DOTS.length; i += 2) {
       html += `<circle class="worlddot" cx="${WORLD_DOTS[i]}" cy="${WORLD_DOTS[i + 1]}" r="1.4"/>`;
     }
     worldSvg.innerHTML = html;
+    applyWorldViewBox();
 
     // Every city marker is an obstacle; placed labels are added as we go so
     // later labels dodge earlier ones. Ready cities first (their labels matter
