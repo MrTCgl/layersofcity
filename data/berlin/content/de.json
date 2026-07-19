@@ -1,0 +1,18 @@
+{
+  "arr.ber.sub": "→ Zentrum · FEX/S9 · ~35 min",
+  "arr.hbf.sub": "Hauptbahnhof · Fernverkehr + S-Bahn",
+  "arr.ost.sub": "Ostbahnhof · S-Bahn · Regional",
+  "arr.sud.sub": "Süd-Knoten · ICE + Ring",
+  "arr.gesund.sub": "Nord-Knoten · ICE + Ring",
+  "arr.zob.sub": "Fernbusse · U2",
+  "hub.alexanderplatz": "U2·5·8 · S-Bahn · Tram",
+  "hub.hauptbahnhof": "ICE · S-Bahn · U5",
+  "hub.friedrichstrasse": "S-Bahn · U6 · Regional",
+  "hub.zoo": "S-Bahn · U2·9 · City West",
+  "hub.ostkreuz": "Ring · S-Bahn Umstieg",
+  "hub.gesundbrunnen": "Ring · U8 · ICE",
+  "hub.suedkreuz": "Ring · ICE · S-Bahn",
+  "hub.potsdamer": "S-Bahn · U2 · Regional",
+  "hub.warschauer": "U1·3 · S-Bahn · Tram",
+  "hub.nollendorf": "U1·2·3·4 Umstieg"
+}

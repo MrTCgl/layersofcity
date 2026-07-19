@@ -336,7 +336,7 @@ Durum notu: —
 
 ---
 
-## E10 — Cila ⬜
+## E10 — Cila 🔵 devam ediyor
 
 **Amaç:** Yayın öncesi kalite.
 
@@ -350,11 +350,18 @@ Yapılacaklar:
 Bitti sayılır:
 - [ ] Lighthouse: Performance ve Accessibility ≥ 90 (mobil)
 
-Durum notu: —
+Durum notu (2026-07-19): Arayüz i18n zaten 6 dilde %100 (101 anahtar, 0 eksik/
+boş — doğrulandı). **Şehir içerikleri artık 6 dilde tam:** 9 şehrin en.json'ı
+temel alınıp de/fr/it/es üretildi (varış/hub alt-başlıkları; özel isimler —
+hat/servis/istasyon adları, "Metro-North", "City West", "Staten Island Ferry"
+— korundu). Sözlük tabanlı üretici + kalan-İngilizce taraması kullanıldı;
+anahtar paritesi 6 dilde eşit. Kalan (tarayıcı gerektiriyor, bu ortamda harita
+karoları engelli olduğundan çalıştırılamadı): mobil ince ayar/dokunma hedefleri,
+kontrast ve Lighthouse ≥90 ölçümü — kullanıcının tarayıcısında yapılacak.
 
 ---
 
-## E11 — Yayın ⬜
+## E11 — Yayın 🔵 devam ediyor
 
 **Amaç:** Canlıya çıkış.
 
@@ -367,7 +374,13 @@ Yapılacaklar:
 Bitti sayılır:
 - [ ] Site layersofcity.com'da açılıyor, analitik veri düşüyor
 
-Durum notu: —
+Durum notu (2026-07-19): Site zaten layersofcity.com'da canlı (GitHub Pages +
+CNAME) ✔. **`README.md` yazıldı** (İngilizce, kısa tanıtım). **Çerezsiz analitik
+opt-in olarak eklendi:** index.html sonunda küçük yükleyici — `umamiId` (Umami
+ücretsiz) ya da `plausibleDomain` doldurulunca script yüklenir; ikisi de boşken
+hiçbir harici istek gitmez, çerez yok. Kalan tek adım kullanıcıda: ücretsiz
+Umami hesabı açıp website id'yi (ya da Plausible alan adını) yapıştırmak — o
+zaman "analitik veri düşüyor" kriteri tamamlanır.
 
 ---
 

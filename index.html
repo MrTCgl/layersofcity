@@ -274,5 +274,28 @@
 <script src="assets/vendor/maplibre-gl.js"></script>
 <script src="js/world-dots.js?v=20260714-4"></script>
 <script src="js/app.js?v=20260719-7"></script>
+
+<!-- Cookieless, opt-in analytics. Nothing loads until you fill ONE value:
+     Umami (free tier) -> paste your website id; or Plausible -> "layersofcity.com".
+     While both are empty no external request is made. See README. -->
+<script>
+  (function () {
+    var ANALYTICS = { umamiId: "", plausibleDomain: "" };
+    var s;
+    if (ANALYTICS.umamiId) {
+      s = document.createElement("script");
+      s.defer = true;
+      s.src = "https://cloud.umami.is/script.js";
+      s.setAttribute("data-website-id", ANALYTICS.umamiId);
+      document.head.appendChild(s);
+    } else if (ANALYTICS.plausibleDomain) {
+      s = document.createElement("script");
+      s.defer = true;
+      s.src = "https://plausible.io/js/script.js";
+      s.setAttribute("data-domain", ANALYTICS.plausibleDomain);
+      document.head.appendChild(s);
+    }
+  })();
+</script>
 </body>
 </html>

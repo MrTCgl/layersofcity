@@ -1,0 +1,18 @@
+{
+  "arr.lhr.sub": "→ Zentrum · Piccadilly · ~50 min",
+  "arr.stp.sub": "Eurostar · internationaler Bahnhof",
+  "arr.pad.sub": "Heathrow Express · Elizabeth",
+  "arr.wat.sub": "verkehrsreichster Bahnhof · Südwest",
+  "arr.liv.sub": "Ostbahnhof · Stansted Express",
+  "arr.vcs.sub": "Fernbusse · Victoria",
+  "hub.kingscross": "6 Linien · Eurostar · national",
+  "hub.bank": "5 Linien · DLR · City",
+  "hub.oxford": "Bakerloo · Central · Victoria",
+  "hub.baker": "5-Linien-Umstieg",
+  "hub.stratford": "Central · Jubilee · DLR · Eliz",
+  "hub.waterloo": "verkehrsreichster · 4 Linien",
+  "hub.victoria": "Victoria · District · Circle",
+  "hub.paddington": "Eliz · Bakerloo · Flughafen",
+  "hub.liverpool": "Central · Eliz · Ost",
+  "hub.canary": "Jubilee · DLR · Eliz · Finanzen"
+}

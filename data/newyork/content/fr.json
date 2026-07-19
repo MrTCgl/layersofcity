@@ -1,0 +1,15 @@
+{
+  "arr.jfk.sub": "→ Jamaica · AirTrain → LIRR/E · ~50 min",
+  "arr.ewr.sub": "→ Penn · NJ Transit · ~30 min",
+  "arr.lga.sub": "Q70 bus → métro (pas de train direct)",
+  "arr.penn.sub": "Amtrak · LIRR · NJ Transit pôle",
+  "arr.gct.sub": "Metro-North · LIRR terminus",
+  "arr.pabt.sub": "gare routière interurbaine",
+  "hub.timessq": "1·2·3·7·N·Q·R·W·S correspondance",
+  "hub.gct": "4·5·6·7·S · Metro-North · LIRR",
+  "hub.penn": "1·2·3·A·C·E · LIRR · NJT · Amtrak",
+  "hub.fulton": "2·3·4·5·A·C·J·Z correspondance",
+  "hub.atlantic": "2·3·4·5·B·D·N·Q·R · LIRR",
+  "hub.jamaica": "E·J·Z · LIRR · JFK AirTrain",
+  "hub.whitehall": "1·R·W · Staten Island Ferry"
+}

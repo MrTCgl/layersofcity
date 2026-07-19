@@ -1,0 +1,14 @@
+{
+  "arr.mad.sub": "→ Nuevos Ministerios · métro L8 · ~25 min",
+  "arr.atocha.sub": "gare sud · AVE + Cercanías",
+  "arr.chamartin.sub": "gare nord · AVE + Cercanías",
+  "arr.sur.sub": "autocars interurbains · L6",
+  "hub.sol": "L1·2·3 · Cercanías",
+  "hub.nuevosministerios": "L6·8·10 · Cercanías · aéroport",
+  "hub.atocha": "L1 · Cercanías · AVE",
+  "hub.chamartin": "L1·10 · Cercanías · AVE",
+  "hub.principepio": "L6·10·R · Cercanías",
+  "hub.avenidaamerica": "L4·6·7·9 correspondance",
+  "hub.moncloa": "L3·6 · gare routière",
+  "hub.plazaespana": "L3·10 correspondance"
+}

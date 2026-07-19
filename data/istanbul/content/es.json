@@ -1,0 +1,15 @@
+{
+  "arr.ist.sub": "→ centro · M11 metro",
+  "arr.saw.sub": "→ Kadıköy · M4 metro",
+  "arr.halkali.sub": "→ centro · Marmaray",
+  "arr.sogutlucesme.sub": "→ Üsküdar · Marmaray/alta velocidad",
+  "arr.otogar.sub": "autobuses interurbanos · M1 metro",
+  "arr.ferry.sub": "embarcadero",
+  "hub.yenikapi": "M1 · M2 · Marmaray intercambio",
+  "hub.uskudar": "M5 · Marmaray · ferry",
+  "hub.ayrilik": "M4 ↔ Marmaray intercambio",
+  "hub.mecidiyekoy": "M2 · M7 · Metrobüs",
+  "hub.gayrettepe": "M2 ↔ M11 · aeropuerto",
+  "hub.sirkeci": "Marmaray · T1 tranvía",
+  "hub.taksim": "M2 · F1 funicular"
+}

@@ -1,0 +1,14 @@
+{
+  "arr.haneda.sub": "→ Hamamatsuchō · Tokyo Monorail · ~18 min",
+  "arr.narita.sub": "→ Ueno · Keisei Skyliner · ~45 min",
+  "arr.tokyo.sub": "Shinkansen + JR Hauptbahnhof",
+  "arr.shinjuku.sub": "verkehrsreichster Bahnhof der Welt",
+  "arr.busta.sub": "Fernbusse (Busta Shinjuku)",
+  "hub.tokyo": "JR · Shinkansen · Marunouchi Metro",
+  "hub.shinjuku": "JR · Odakyū · Keiō · Metro",
+  "hub.shibuya": "JR · Tōkyū · Keiō · Metro",
+  "hub.ikebukuro": "JR · Seibu · Tōbu · Metro",
+  "hub.ueno": "JR · Keisei · Ginza/Hibiya Metro",
+  "hub.shinagawa": "JR · Keikyū (Haneda)",
+  "hub.otemachi": "5-Linien-Metro-Umstieg"
+}
