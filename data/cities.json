@@ -7,8 +7,8 @@
       "lon": 12.483,
       "status": "ready",
       "anchor": [
-        10,
-        22
+        -10,
+        19
       ]
     },
     {
@@ -18,8 +18,8 @@
       "lon": 28.96,
       "status": "ready",
       "anchor": [
-        8,
-        4
+        9,
+        3
       ]
     },
     {
@@ -27,7 +27,11 @@
       "name": "London",
       "lat": 51.51,
       "lon": -0.13,
-      "status": "ready"
+      "status": "ready",
+      "anchor": [
+        -49,
+        -2
+      ]
     },
     {
       "id": "paris",
@@ -36,8 +40,8 @@
       "lon": 2.35,
       "status": "ready",
       "anchor": [
-        -72,
-        12
+        -49,
+        9
       ]
     },
     {
@@ -45,14 +49,22 @@
       "name": "Berlin",
       "lat": 52.52,
       "lon": 13.4,
-      "status": "ready"
+      "status": "ready",
+      "anchor": [
+        9,
+        -2
+      ]
     },
     {
       "id": "madrid",
       "name": "Madrid",
       "lat": 40.42,
       "lon": -3.7,
-      "status": "ready"
+      "status": "ready",
+      "anchor": [
+        -49,
+        3
+      ]
     },
     {
       "id": "newyork",
@@ -73,7 +85,11 @@
       "name": "İzmir",
       "lat": 38.42,
       "lon": 27.14,
-      "status": "ready"
+      "status": "ready",
+      "anchor": [
+        9,
+        13
+      ]
     }
   ]
 }

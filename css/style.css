@@ -78,6 +78,12 @@ main{flex:1; position:relative; overflow:hidden}
   transform:rotate(-2deg); margin-bottom:2px;
   position:relative; z-index:2; /* stays in front of the zooming map */
 }
+/* Desktop only: double the logotype so it fills the empty space above the map.
+   It's a visual scale (layout box unchanged) anchored to its bottom edge, so the
+   wordmark grows *upward* into the gap and the map stays exactly where it is. */
+@media (hover: hover) and (pointer: fine){
+  #wordmark{ transform:rotate(-2deg) scale(2); transform-origin:center bottom; }
+}
 #wordmark .of{color:var(--lilac)}
 #wordmark .wm{color:var(--peach)}
 /* light theme: swap — "of" in peach, the rest in lilac */
