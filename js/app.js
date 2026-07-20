@@ -129,7 +129,7 @@
   // label. A city may still pin its label with an explicit `anchor` [dx,dy]
   // (manual override wins); otherwise we try positions around the dot and take
   // the first collision-free one. Lets new cities skip hand-tuned offsets.
-  const LBL_FS = 17, LBL_CW = 9.4; // font-size + avg char width in SVG units
+  const LBL_FS = 14, LBL_CW = 7.8; // font-size + avg char width in SVG units
   function labelBox(ax, ay, anchor, w) {
     let x0 = ax;
     if (anchor === "end") x0 = ax - w;
