@@ -82,7 +82,7 @@ main{flex:1; position:relative; overflow:hidden}
    It's a visual scale (layout box unchanged) anchored to its bottom edge, so the
    wordmark grows *upward* into the gap and the map stays exactly where it is. */
 @media (hover: hover) and (pointer: fine){
-  #wordmark{ transform:rotate(-2deg) scale(1.7); transform-origin:center bottom; }
+  #wordmark{ transform:rotate(-2deg) scale(1.5); transform-origin:center bottom; }
 }
 #wordmark .of{color:var(--lilac)}
 #wordmark .wm{color:var(--peach)}
