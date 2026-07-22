@@ -1,0 +1,14 @@
+{
+  "arr.schiphol.sub": "→ Centraal · train NS · ~15 min",
+  "arr.centraal.sub": "gare principale · NS + métro + tram",
+  "arr.zuid.sub": "international · NS + métro 50/51/52",
+  "arr.sloterdijk.sub": "autocars interurbains · NS + métro",
+  "hub.centraal": "M51·52·53·54 · NS · tram",
+  "hub.zuid": "M50·51·52 · NS · tram",
+  "hub.sloterdijk": "M50 · NS · tram 12",
+  "hub.amstel": "M51·53·54 · NS · tram 12",
+  "hub.bijlmer": "M50·54 · NS",
+  "hub.weesperplein": "M51·53·54 · tram 1·7·19",
+  "hub.lelylaan": "M50 · NS · tram 1·2·17",
+  "hub.depijp": "M52 · tram 3·4"
+}

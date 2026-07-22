@@ -97,6 +97,13 @@
       "lat": 41.39,
       "lon": 2.17,
       "status": "ready"
+    },
+    {
+      "id": "amsterdam",
+      "name": "Amsterdam",
+      "lat": 52.37,
+      "lon": 4.90,
+      "status": "soon"
     }
   ]
 }

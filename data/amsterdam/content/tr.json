@@ -1,0 +1,14 @@
+{
+  "arr.schiphol.sub": "→ Centraal · NS treni · ~15 dk",
+  "arr.centraal.sub": "ana gar · NS + metro + tramvay",
+  "arr.zuid.sub": "uluslararası · NS + metro 50/51/52",
+  "arr.sloterdijk.sub": "şehirlerarası otobüs · NS + metro",
+  "hub.centraal": "M51·52·53·54 · NS · tramvay",
+  "hub.zuid": "M50·51·52 · NS · tramvay",
+  "hub.sloterdijk": "M50 · NS · tram 12",
+  "hub.amstel": "M51·53·54 · NS · tram 12",
+  "hub.bijlmer": "M50·54 · NS",
+  "hub.weesperplein": "M51·53·54 · tram 1·7·19",
+  "hub.lelylaan": "M50 · NS · tram 1·2·17",
+  "hub.depijp": "M52 · tram 3·4"
+}

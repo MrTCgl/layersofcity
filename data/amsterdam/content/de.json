@@ -1,0 +1,14 @@
+{
+  "arr.schiphol.sub": "→ Centraal · NS-Zug · ~15 Min",
+  "arr.centraal.sub": "Hauptbahnhof · NS + Metro + Tram",
+  "arr.zuid.sub": "international · NS + Metro 50/51/52",
+  "arr.sloterdijk.sub": "Fernbusse · NS + Metro",
+  "hub.centraal": "M51·52·53·54 · NS · Tram",
+  "hub.zuid": "M50·51·52 · NS · Tram",
+  "hub.sloterdijk": "M50 · NS · Tram 12",
+  "hub.amstel": "M51·53·54 · NS · Tram 12",
+  "hub.bijlmer": "M50·54 · NS",
+  "hub.weesperplein": "M51·53·54 · Tram 1·7·19",
+  "hub.lelylaan": "M50 · NS · Tram 1·2·17",
+  "hub.depijp": "M52 · Tram 3·4"
+}
