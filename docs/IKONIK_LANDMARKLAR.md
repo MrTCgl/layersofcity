@@ -25,6 +25,7 @@
 | New York | ✅ uygulandı (2026-07-15) | Statue of Liberty/Empire State/Chrysler/Times Sq/Central Park vb. |
 | Tokyo | ✅ uygulandı (2026-07-15) | Sensō-ji/Meiji Jingū/Tokyo Tower/Skytree/teamLab/Rainbow Bridge/Tsukiji vb. |
 | İzmir | ✅ uygulandı (2026-07-15) | Saat Kulesi/Kadifekale/Agora/Asansör/Kemeraltı vb. + Kemeraltı yeme-içme |
+| Barcelona | ✅ uygulandı (2026-07-22) | Sagrada Família/Park Güell/Casa Batlló-Milà/Boqueria/Camp Nou/MNAC allowlist; doğal bölgeye Ciutadella/Montjuïc/Laberint/Fòrum elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -128,3 +129,24 @@
   Kemeraltı baklavası, Bolulu Hasan Usta süt tatlıları, kokoreç, Suluhan
   tarihi han kahveleri
 - **gastronomi:** Toyosu / eski Tsukiji piyasası, Omoide Yokochō
+
+## Barcelona
+
+- **tarihi/simge:** Sagrada Família, Casa Batlló, Casa Milà (La Pedrera),
+  Casa Vicens, Park Güell, Catedral de Barcelona (La Seu), Basílica de Santa
+  Maria del Mar, Basílica de Santa Maria del Pi, Palau de la Música Catalana,
+  Hospital de Sant Pau (Recinte Modernista), Arc de Triomf, La Rambla,
+  Mercat de la Boqueria (Sant Josep), Plaça Reial, Plaça de Sant Jaume,
+  Barri Gòtic, Monument a Colom (Mirador de Colom), Font Màgica de Montjuïc,
+  Palau Nacional (MNAC), Poble Espanyol, Castell de Montjuïc, Temple del
+  Sagrat Cor (Tibidabo), Bunkers del Carmel (Turó de la Rovira)
+- **modern:** Torre Glòries (Agbar), Fundació Joan Miró, MACBA, CCCB,
+  Museu Picasso, CosmoCaixa, Camp Nou (FC Barcelona), Estadi Olímpic Lluís
+  Companys, Pavelló Mies van der Rohe, Mercat dels Encants
+- **doğa/gezi:** Parc de la Ciutadella, Parc de Montjuïc, Platja de la
+  Barceloneta, Parc del Laberint d'Horta, Jardí Botànic, Parc del Fòrum,
+  Passeig de Gràcia, Port Vell
+
+> Not: Park Güell, Casa Batlló, Casa Milà, Sagrada Família OSM'de wikidata'lı
+> olduğundan boru hattı doğal çeker; allowlist güvence içindir. Montjuïc/
+> Ciutadella dogal bölge allowlist'inde ayrıca var.

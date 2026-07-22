@@ -1,0 +1,15 @@
+{
+  "arr.bcn.sub": "→ Sants · R2 Nord · ~20 min",
+  "arr.sants.sub": "gare principale · AVE + Rodalies",
+  "arr.franca.sub": "trains régionaux · Rodalies",
+  "arr.nord.sub": "autocars interurbains · L1 Arc de Triomf",
+  "arr.port.sub": "ferries & croisières · Îles Baléares",
+  "hub.catalunya": "L1·3·6·7 · Rodalies · FGC",
+  "hub.sants": "L3·5 · Rodalies · AVE",
+  "hub.passeig": "L2·3·4 · Rodalies",
+  "hub.espanya": "L1·3·8 · FGC",
+  "hub.diagonal": "L3·5 · FGC · Provença",
+  "hub.sagrera": "L1·5·9·10 correspondance",
+  "hub.sagradafamilia": "L2·5",
+  "hub.verdaguer": "L4·5"
+}

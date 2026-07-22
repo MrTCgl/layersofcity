@@ -1,0 +1,15 @@
+{
+  "arr.bcn.sub": "→ Sants · R2 Nord · ~20 dk",
+  "arr.sants.sub": "ana gar · AVE + Rodalies",
+  "arr.franca.sub": "bölgesel trenler · Rodalies",
+  "arr.nord.sub": "şehirlerarası otobüs · L1 Arc de Triomf",
+  "arr.port.sub": "feribot & yolcu gemisi · Balear Adaları",
+  "hub.catalunya": "L1·3·6·7 · Rodalies · FGC",
+  "hub.sants": "L3·5 · Rodalies · AVE",
+  "hub.passeig": "L2·3·4 · Rodalies",
+  "hub.espanya": "L1·3·8 · FGC",
+  "hub.diagonal": "L3·5 · FGC · Provença",
+  "hub.sagrera": "L1·5·9·10 aktarma",
+  "hub.sagradafamilia": "L2·5",
+  "hub.verdaguer": "L4·5"
+}
