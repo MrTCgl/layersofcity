@@ -102,8 +102,8 @@
       "id": "amsterdam",
       "name": "Amsterdam",
       "lat": 52.37,
-      "lon": 4.90,
-      "status": "soon"
+      "lon": 4.9,
+      "status": "ready"
     }
   ]
 }

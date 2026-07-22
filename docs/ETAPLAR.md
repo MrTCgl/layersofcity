@@ -659,3 +659,54 @@ graf en-kısa-yol + boşluk köprüleme (≤70m) ile üretildi. Overpass o gün 
 Barceloneta + dogal ikinci turda çekildi); ayna failover 70s'ye düşürüldü.
 `cities.json` → `ready`; önbellek sürümleri **birlikte** artırıldı
 (`BM_VER` + `index.html` app.js?v= = 20260722-1).
+
+---
+
+## Yeni şehir — Amsterdam ✅ tamam (2026-07-22)
+
+`yeni-sehir` skill'iyle, Barselona boru hattı (parametrik build_omurga/stations/
+poi/bolgeler) uyarlanarak eklendi. Şehir dili **`nl`** (yeni `lang.nl` i18n
+anahtarı 6 dile eklendi — künyede "Felemenkçe").
+
+- **Manifest:** merkez `[4.90, 52.37]`, `Europe/Amsterdam`, para EUR, zoom
+  min 8.5 / max 19, **geniş home** (tüm metropol ağı: Schiphol yönü ↔ Noord,
+  Sloterdijk ↔ Zuidoost) — Barselona'daki "geniş görünüm" tercihi baştan
+  uygulandı. maxBounds Schiphol'ü kapsıyor. Fiyat tablosu editoryal (2026-07).
+- **Varış (4 kapı):** Schiphol Airport (Centraal'a gerçek NS güzergâhı; railway=
+  rail graf en-kısa-yol + boşluk köprüleme, 16.2km, en uzun segment 351m),
+  Amsterdam Centraal, Amsterdam Zuid, Sloterdijk (otobüs). Kapılar gerçek
+  istasyona 3-4m'de oturdu.
+- **Omurga (21 hat, 104KB):** Metro 50/51/52/53/54 (route=subway, GVB, resmî
+  renkler) + tram 1/2/4/5/6/7/12/13/14/17/19/24/25/26/27/29 (GVB; tek muted
+  GVB-mavi, rozet numara taşıyor). Tram 3 OSM'de yok (renumaralanmış → atlandı);
+  müze hatları (20/EMA) hariç. Gerçek OSM geometrisi; 49 metro/tren istasyonu +
+  188 tram durağı + 8 aktarma hub'ı (Centraal, Zuid, Sloterdijk, Amstel, Bijlmer
+  ArenA, Weesperplein, Lelylaan, De Pijp). Gerçekçilik denetimi geçti (en uzun
+  düz segment 1635m). **NS trenleri çizilmedi** — hepsi tren-numarası ref'li
+  (8100/4600…), temiz "hat" değil; Amsterdam'ın hızlı ulaşımı metro+tram
+  (Barselona'da FGC S-hatlarını atlama kararıyla aynı mantık). Schiphol
+  bağlantısı varışta gerçek NS geometrisiyle veriliyor.
+- **Keşfet (365 nokta, 63KB):** tarihi 87 / modern 50 / doğa 92 / gastronomi
+  19 / alışveriş 35 / otel 36 / yurt 17 / kamu 29. **İkonik allowlist:**
+  Rijksmuseum/Van Gogh/Stedelijk/Anne Frank Huis/Dam-Koninklijk Paleis/
+  Westerkerk/Rembrandthuis/Magere Brug/NEMO/A'DAM Toren/Eye/Concertgebouw/
+  Heineken/ARTIS/Hortus dahil 27 simge elle eklendi (`docs/IKONIK_LANDMARKLAR.md`
+  → Amsterdam).
+- **İhtiyaçlar (268 nokta, 46KB):** eczane 62 / market 79 / yakıt 38 /
+  kütüphane 35 / müze 28 / kiralık-araç 21 / hastane 5 (merkez bbox'ta az).
+- **Bölgeler:** turistik 10 (`place=quarter` mahalle poligonları: Burgwallen-
+  Oude Zijde/De Wallen, Grachtengordel, Jordaan, Nieuwmarkt/Lastage,
+  Museumkwartier, De Pijp, Oud-West, Plantage, Oostelijke Eilanden, Oud-Zuid),
+  ticari 17 (Amstel III/RAI/Teleport vb.), eğitim 4 (Science Park/VU/
+  Roeterseiland UvA/Amstelcampus), doğal 46 (Vondelpark, Westerpark, Oosterpark,
+  Amsterdamse Bos, Sarphatipark, Amstelpark, Flevopark vb.).
+
+Durum notu: Amsterdam mahalleleri OSM'de `admin_level` DEĞİL `place=quarter/
+neighbourhood` (poligon) — turistik bunu kullandı; adlar tam eşleşmeli
+(Grachtengordel tek parça, "Grachtengordel-West/Zuid" diye bölünmemiş; De Pijp
+quarter). Rota ilişkileri istasyon düğümü tutmadığından istasyonlar ayrı çekilip
+en yakın hatta atandı + isme göre tekilleştirildi (531→237). area_km2 ölçeği
+Amsterdam enlemine (cos52≈0.61) düzeltildi. Overpass o gün ağır 504/timeout
+verdi (tram 3/24 + modern/alisveris + bazı turistik ikinci turda/tek tek
+çekildi); ayna failover 70s. `cities.json` → `ready`; önbellek sürümleri
+**birlikte** artırıldı (`BM_VER` + `index.html` app.js?v= = 20260722-3).
