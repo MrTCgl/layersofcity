@@ -602,3 +602,60 @@ tüm light_rail birleştirildi; Elizabeth ref=ES. Overground yeni adlı hatlar
 alan sorguları için merkez bbox küçültüldü, turistik için tek toplu admin
 sorgusu (borough adları "London Borough of X"). `cities.json` → `ready`;
 önbellek sürümleri birlikte artırıldı (BM_VER + index.html app.js?v= = 20260718-19).
+
+---
+
+## Yeni şehir — Barcelona ✅ tamam (2026-07-22)
+
+`yeni-sehir` skill'iyle, Madrid/London boru hattı uyarlanarak eklendi
+(kullanıcı "Barselona yapalım" kararıyla; es içeriği yeniden kullanıldı,
+şehir dili `ca` = Katalanca).
+
+- **Manifest:** merkez `[2.17, 41.39]`, `Europe/Madrid`, dil **`ca`**
+  (yeni `lang.ca` i18n anahtarı 6 dile eklendi — künyede "Katalanca"),
+  para EUR, zoom min 9 / max 19, maxBounds El Prat havalimanını kapsıyor.
+  Fiyat tablosu editoryal (2026-07).
+- **Varış (5 kapı):** BCN El Prat havalimanı (R2 Nord ile Sants'a link;
+  graf en-kısa-yol, en uzun düz segment 314m), Barcelona-Sants (ana gar,
+  AVE), Estació de França (bölgesel tren), Barcelona Nord (otobüs),
+  Estació Marítima (vapur, `mode:ship`). Kapılar gerçek istasyon konumuna
+  oturtuldu.
+- **Omurga (25 hat, 136KB):** Metro L1–L12 (route=subway; L6/L7/L8/L12 FGC
+  işletmesinde ama Metro de Barcelona ağı), Tram T1–T6 (Trambaix + Trambesòs),
+  Rodalies R1/R2/R2N/R2S/R4/R7/R8 (Renfe banliyö = Madrid'deki Cercanías
+  karşılığı; FGC S-hatları atlandı çünkü şehir-içi gövdeleri zaten metro
+  L6/L7/L8/L12). Gerçek OSM geometrisi + resmî renkler; L9/L10 N-S dalları
+  tek hat olarak birleşti. 189 metro/tren istasyonu + 56 tram durağı + 25 hat
+  rozeti + 8 aktarma hub'ı (Catalunya, Sants, Passeig de Gràcia, Espanya,
+  Diagonal, La Sagrera, Sagrada Família, Verdaguer). Gerçekçilik denetimi
+  geçti (en uzun düz segment 1670m < 2km, yoğunluk >3.8 köşe/km).
+- **Keşfet (499 nokta, 92KB):** tarihi 112 / modern 42 / doğa 91 /
+  gastronomi 47 / alışveriş 53 / otel 43 / yurt 45 / kamu 66. Kalite vekili
+  (wikidata > marka > adlı) + ~1km ızgara seyreltme. **İkonik allowlist
+  zorunlu:** seyreltme Sagrada Família dışındaki 20 dünyaca ünlü simgeyi
+  elemişti — Park Güell/Casa Batlló/Casa Milà/Casa Vicens/Catedral/Santa
+  Maria del Mar-Pi/Palau de la Música/Arc de Triomf/Plaça Reial/Font Màgica/
+  Poble Espanyol/Tibidabo/Bunkers del Carmel/Torre Glòries/MACBA/Museu
+  Picasso/CosmoCaixa/Estadi Olímpic/Pavelló Mies OSM'den gerçek koordinatla
+  elle eklendi (`docs/IKONIK_LANDMARKLAR.md` → Barcelona).
+- **İhtiyaçlar (368 nokta, 68KB):** eczane 89 / market 84 / yakıt 60 /
+  kütüphane 57 / müze 37 / hastane 27 / kiralık-araç 14.
+- **Bölgeler:** turistik 10 (barrio idari sınırları admin_level=10: el Gòtic,
+  el Raval, Sant Pere-Santa Caterina-la Ribera, la Barceloneta, el Poble-sec,
+  la Dreta de l'Eixample, la Vila de Gràcia, el Poblenou, Sant Antoni, la
+  Sagrada Família), ticari 8 (Zona Franca/Mercabarna/Fira/La Maquinista vb.),
+  eğitim 12 (UB/UPC Nord-Sud/UPF Ciutadella/ESADE/La Salle vb.), doğal 48
+  (Ciutadella, Montjuïc, Parc Güell, Laberint d'Horta, Joan Miró, Espanya
+  Industrial, Barceloneta vb. — geniş park taraması + ikonik allowlist).
+
+Durum notu: Barselona metro ref'leri OSM'de `L1…L12` (route=subway, network
+"Metro de Barcelona"); FGC işletmeli L6/L7/L8/L12 de subway olarak etiketli.
+Rodalies `route=train` network "Rodalies de Catalunya". **Rota ilişkileri
+istasyon düğümü tutmadığından** (`node(r)` boş dönüyor) istasyonlar ayrı
+çekilip en yakın hatta atandı (İstanbul düzeltmesindeki yöntem); isme göre
+tekilleştirildi (412→189). R2 Nord Y-dallı olduğundan havalimanı link'i
+graf en-kısa-yol + boşluk köprüleme (≤70m) ile üretildi. Overpass o gün ağır
+504/timeout verdi (modern/doğa/kamu/kütüphane temaları + turistik el Gòtic/
+Barceloneta + dogal ikinci turda çekildi); ayna failover 70s'ye düşürüldü.
+`cities.json` → `ready`; önbellek sürümleri **birlikte** artırıldı
+(`BM_VER` + `index.html` app.js?v= = 20260722-1).
