@@ -26,6 +26,7 @@
 | Tokyo | ✅ uygulandı (2026-07-15) | Sensō-ji/Meiji Jingū/Tokyo Tower/Skytree/teamLab/Rainbow Bridge/Tsukiji vb. |
 | İzmir | ✅ uygulandı (2026-07-15) | Saat Kulesi/Kadifekale/Agora/Asansör/Kemeraltı vb. + Kemeraltı yeme-içme |
 | Barcelona | ✅ uygulandı (2026-07-22) | Sagrada Família/Park Güell/Casa Batlló-Milà/Boqueria/Camp Nou/MNAC allowlist; doğal bölgeye Ciutadella/Montjuïc/Laberint/Fòrum elle eklendi |
+| Amsterdam | ✅ uygulandı (2026-07-22) | Rijksmuseum/Van Gogh/Anne Frank Huis/Dam-Koninklijk Paleis/Westerkerk/Rembrandthuis/NEMO/A'DAM Toren/Eye/Concertgebouw allowlist; doğal bölgeye Vondelpark/Oosterpark/Westerpark/Amstelpark elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -150,3 +151,19 @@
 > Not: Park Güell, Casa Batlló, Casa Milà, Sagrada Família OSM'de wikidata'lı
 > olduğundan boru hattı doğal çeker; allowlist güvence içindir. Montjuïc/
 > Ciutadella dogal bölge allowlist'inde ayrıca var.
+
+
+## Amsterdam
+
+- **tarihi/simge:** Anne Frank Huis, Dam & Koninklijk Paleis, Nieuwe Kerk, Oude
+  Kerk, Westerkerk, Begijnhof, Museum Het Rembrandthuis, Nationaal Monument,
+  Munttoren, Magere Brug, Bloemenmarkt, De Waag (Nieuwmarkt), Portugese
+  Synagoge, Pathé Tuschinski, Centraal Station (tarihi bina)
+- **modern/müze:** Rijksmuseum, Van Gogh Museum, Stedelijk Museum, Moco Museum,
+  Het Scheepvaartmuseum, NEMO Science Museum, A'DAM Toren (Lookout), Eye
+  Filmmuseum, Concertgebouw, Heineken Experience
+- **doğa/gezi:** Vondelpark, Oosterpark, Westerpark, Sarphatipark, ARTIS,
+  Hortus Botanicus, Jordaan, De Wallen (Burgwallen), Grachtengordel (kanal halkası)
+
+> Not: Rijksmuseum/Van Gogh/Anne Frank OSM'de wikidata'lı; allowlist güvence.
+> Vondelpark/Oosterpark/Westerpark dogal bölge allowlist'inde ayrıca var.
