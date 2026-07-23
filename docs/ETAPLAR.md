@@ -787,3 +787,41 @@ alisveris ve Prater/Neubau nihayetinde eksik kaldı (kabul; POI/ticari kapsıyor
 Rota ilişkileri istasyon tutmadığından istasyonlar ayrı çekilip en yakın hatta
 atandı + isme göre tekilleştirildi (1202→531). `cities.json` → `ready`; önbellek
 sürümleri birlikte 20260722-5.
+
+---
+
+## Yeni şehir — Praha (Prag) ✅ tamam (2026-07-22)
+
+`yeni-sehir` parametrik boru hattıyla eklendi ("sırayla 4 şehir"in 3.'sü).
+Dil `cs` (yeni `lang.cs` i18n anahtarı 6 dile eklendi), para **CZK**
+(CURRENCY_SYM'e `CZK="Kč"` eklendi — tek genel dokunuş, çok-şehir güvenli).
+
+- **Manifest:** merkez `[14.42, 50.08]`, `Europe/Prague`, para CZK, geniş home.
+  Fiyat tablosu editoryal CZK (0.5L bira 35 Kč!).
+- **Varış (4 kapı):** Letiště Václava Havla (havalimanı — Prag'ın raylı bağlantısı
+  yok; bus 119 → Nádraží Veleslavín metni kapıda, **Overpass bus 119 geometrisini
+  o gün çekemediğinden link çizgisi eklenemedi**, kapı işareti olarak duruyor),
+  Praha hlavní nádraží, Praha-Holešovice, ÚAN Florenc (otobüs).
+- **Omurga (29 hat, 172KB):** Metro A/B/C (resmî renkler) + 26 gündüz tramı
+  (1-26 + 34; gece 91-99, tarihi 41/42 hariç; tek muted renk, rozet numara).
+  67 istasyon + 293 tram durağı + 8 hub. Gerçekçilik geçti (en uzun 1683m).
+- **Keşfet (320 nokta, 56KB):** tarihi 92 / doğa 69 / gastronomi 22 / alışveriş
+  20 / otel 39 / yurt 32 / kamu 43 / **modern 3** (Overpass modern temasını
+  ısrarla timeout'ladı; Prag zaten tarihi ağırlıklı — modern ikonik'ten:
+  Tančící dům, Žižkov kulesi, DOX). Pražský hrad/Karlův most/Orloj/sv. Víta/
+  Vyšehrad/Petřín dahil 26 ikonik elle eklendi.
+- **İhtiyaçlar (223 nokta):** eczane 56 / market 53 / yakıt 37 / müze 29 /
+  kütüphane 27 / hastane 11 / kiralık-araç 10.
+- **Bölgeler:** turistik 10 (`boundary=cadastral` / `place=cadastral_community`
+  katastrální území: Staré Město, Nové Město, Malá Strana, Hradčany, Josefov,
+  Vinohrady, Žižkov, Smíchov, Karlín, Holešovice), ticari 7, eğitim 5, doğal 42.
+
+Durum notu: **Prag mahalleleri OSM'de `admin_level`/`place=suburb` DEĞİL
+`boundary=cadastral` + `place=cadastral_community`** (katastrální území) — ilk
+turistik sorgusu bu yüzden 0 döndü, keşifle bulunup düzeltildi. Metro `ref`=A/B/C
+`route=subway`. **Overpass o gün olağanüstü ağırdı** — tram 16 + modern/muze +
+bus 119 + park sorgusu + turistik ilk tur timeout'ladı; kritikler ikinci turda,
+turistik cadastral ile üçüncü turda çekildi; modern ve havalimanı link'i eksik
+kaldı (kabul; POI/kapı metni kapsıyor). İstasyonlar ayrı çekilip en yakın hatta
+atandı + tekilleştirildi (835→360). area_km2 Prag enlemine düzeltildi.
+`cities.json` → `ready`; önbellek sürümleri birlikte 20260722-6.
