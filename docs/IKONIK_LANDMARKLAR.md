@@ -28,6 +28,7 @@
 | Barcelona | ✅ uygulandı (2026-07-22) | Sagrada Família/Park Güell/Casa Batlló-Milà/Boqueria/Camp Nou/MNAC allowlist; doğal bölgeye Ciutadella/Montjuïc/Laberint/Fòrum elle eklendi |
 | Amsterdam | ✅ uygulandı (2026-07-22) | Rijksmuseum/Van Gogh/Anne Frank Huis/Dam-Koninklijk Paleis/Westerkerk/Rembrandthuis/NEMO/A'DAM Toren/Eye/Concertgebouw allowlist; doğal bölgeye Vondelpark/Oosterpark/Westerpark/Amstelpark elle eklendi |
 | Lisboa | ✅ uygulandı (2026-07-22) | Torre de Belém/Jerónimos/Castelo de São Jorge/Praça do Comércio/Santa Justa/Padrão dos Descobrimentos/MAAT/Gulbenkian/Oceanário allowlist; doğal bölgeye Eduardo VII/Estrela/Monsanto elle eklendi |
+| Wien | ✅ uygulandı (2026-07-22) | Stephansdom/Schönbrunn/Hofburg/Belvedere/Staatsoper/Riesenrad/Hundertwasserhaus/Kunsthistorisches/Albertina/MuseumsQuartier allowlist; doğal bölgeye Prater/Stadtpark/Schönbrunn/Volksgarten elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -185,3 +186,18 @@
 
 > Not: Belém simgeleri ve Santa Justa OSM'de wikidata'lı; allowlist güvence.
 > Overpass o gün modern temasını timeout'ladı → modern büyük ölçüde ikonik'ten.
+
+
+## Wien (Viyana)
+
+- **tarihi/simge:** Stephansdom, Schloss Schönbrunn, Hofburg, Schloss Belvedere,
+  Karlskirche, Wiener Staatsoper, Rathaus, Parlament, Votivkirche, Peterskirche,
+  Michaelerkirche, Burgtheater, Heldenplatz, Ankeruhr, Kapuzinergruft, Wiener
+  Riesenrad (Prater)
+- **modern/müze:** Hundertwasserhaus, Secession, Kunsthistorisches Museum,
+  Naturhistorisches Museum, Albertina, MuseumsQuartier, Musikverein
+- **doğa/gezi:** Prater (Wurstelprater), Stadtpark, Volksgarten, Schlosspark
+  Schönbrunn, Naschmarkt (gastronomi)
+
+> Not: Overpass o gün alışveriş temasını timeout'ladı (Viyana alışverişi cadde
+> bazlı — Mariahilfer/Kärntner Straße; bolge-ticari zonları kapsıyor).
