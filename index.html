@@ -61,9 +61,8 @@
   <section class="screen" id="scr-world">
     <div id="worldzoom">
       <h1 id="wordmark"><span class="wm">layers</span> <span class="of">of</span> <span class="wm">city</span></h1>
-      <!-- on mobile this is the clip box: the map zooms/pans inside it and can
-           never overflow up over the fixed wordmark. On desktop it collapses
-           (display:contents) so the layout is unchanged. -->
+      <!-- clip box: the map zooms/pans inside it (desktop mouse wheel + drag,
+           mobile pinch) and can never overflow up over the fixed wordmark. -->
       <div id="mapclip">
         <div id="worldwrap">
           <svg id="worldmap" viewBox="40 16 920 400" role="img" aria-label="world map"></svg>

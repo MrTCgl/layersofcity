@@ -129,7 +129,7 @@
   // label. A city may still pin its label with an explicit `anchor` [dx,dy]
   // (manual override wins); otherwise we try positions around the dot and take
   // the first collision-free one. Lets new cities skip hand-tuned offsets.
-  const LBL_FS = 12, LBL_CW = 6.7; // font-size + avg char width in SVG units
+  const LBL_FS = 10, LBL_CW = 5.6; // font-size + avg char width in SVG units
   function labelBox(ax, ay, anchor, w) {
     let x0 = ax;
     if (anchor === "end") x0 = ax - w;
@@ -283,6 +283,42 @@
     }
   }, { passive: false });
   worldSurface.addEventListener("touchend", e => { if (e.touches.length === 0) wMode = null; });
+
+  /* Desktop (mouse): wheel zooms the map toward the cursor, drag pans once
+     zoomed in. Same transform-only model as the touch path — the wordmark
+     stays fixed, only #worldwrap scales/pans inside its clip box. Touch
+     devices keep the pinch path above and are skipped here. */
+  // recompute the map's rest box + return the cursor point relative to its top-left
+  function wCursorFocal(clientX, clientY) {
+    const r = worldMapLayer.getBoundingClientRect(), s = worldSurface.getBoundingClientRect();
+    wBoxW = r.width / wScale; wBoxH = r.height / wScale;
+    const restX = (r.left - s.left) - wX, restY = (r.top - s.top) - wY;
+    return { x: clientX - s.left - restX, y: clientY - s.top - restY };
+  }
+  worldSurface.addEventListener("wheel", e => {
+    if (isMobileSplash()) return; // touch devices use the pinch path
+    e.preventDefault();
+    const f = wCursorFocal(e.clientX, e.clientY);
+    let ns = wScale * Math.exp(-e.deltaY * 0.0015);
+    ns = Math.max(1, Math.min(W_MAX, ns));
+    wX = f.x - (f.x - wX) * (ns / wScale); // zoom around the cursor
+    wY = f.y - (f.y - wY) * (ns / wScale);
+    wScale = ns; wClamp(); wApply();
+  }, { passive: false });
+  let wMouse = null;
+  worldSurface.addEventListener("mousedown", e => {
+    if (isMobileSplash() || wScale <= 1 || e.button !== 0) return;
+    wMouse = { x: e.clientX - wX, y: e.clientY - wY };
+    worldMapLayer.style.cursor = "grabbing";
+  });
+  window.addEventListener("mousemove", e => {
+    if (!wMouse) return;
+    wX = e.clientX - wMouse.x; wY = e.clientY - wMouse.y; wClamp(); wApply();
+  });
+  window.addEventListener("mouseup", () => {
+    if (!wMouse) return;
+    wMouse = null; worldMapLayer.style.cursor = "";
+  });
 
   /* ── city screen: map + chrome ─────────── */
   let map = null;
