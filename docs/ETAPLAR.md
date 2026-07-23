@@ -750,3 +750,40 @@ en yakın hatta atandı + isme göre tekilleştirildi. area_km2 Lizbon enlemine
 modern/kamu/eczane/kiralik-arac + bölge park sorgusu + çoğu turistik ikinci/
 üçüncü turda ya da tek tek çekildi; modern nihayetinde ikonik ağırlıklı kaldı).
 `cities.json` → `ready`; önbellek sürümleri birlikte 20260722-4.
+
+---
+
+## Yeni şehir — Wien (Viyana) ✅ tamam (2026-07-22)
+
+`yeni-sehir` parametrik boru hattıyla eklendi ("sırayla 4 şehir"in 2.'si).
+Dil `de` (`lang.de` zaten vardı — Berlin).
+
+- **Manifest:** merkez `[16.37, 48.21]`, `Europe/Vienna`, para EUR, geniş home,
+  maxBounds Flughafen Wien'i kapsıyor. Fiyat tablosu editoryal (Melange 3.50€).
+- **Varış (4 kapı):** Flughafen Wien (Wien Mitte'ye gerçek S7 raylı güzergâhı,
+  19.4km), Wien Hauptbahnhof, Wien Westbahnhof, VIB (Erdberg otobüs).
+- **Omurga (34 hat, 204KB):** U-Bahn U1/U2/U3/U4/U6 (resmî renkler) + **29 Wiener
+  Linien tramı** (1/2/5/6/9/10/11/12/18/25/26/27/30/31/37/38/40/41/42/43/44/46/
+  49/52/60/62/71/D/O — Viyana'nın karakteri; OSM'de renksiz olduğundan tek muted
+  renk, rozet numara taşır). 112 istasyon + **419 tram durağı** + 8 hub. Gerçek
+  OSM geometrisi; gerçekçilik geçti (en uzun düz segment 1644m).
+- **Keşfet (474 nokta, 84KB):** tarihi 146 / modern 59 / doğa 93 / gastronomi
+  42 / otel 39 / yurt 39 / kamu 56 / **alisveris 0** (Overpass o gün alışveriş
+  temasını ısrarla timeout'ladı; Viyana alışverişi cadde bazlı — Mariahilfer/
+  Kärntner Straße; bolge-ticari zonları kapsıyor). Stephansdom/Schönbrunn/
+  Hofburg/Belvedere/Staatsoper/Riesenrad/Hundertwasserhaus/KHM/Albertina/
+  MuseumsQuartier dahil 27 ikonik elle eklendi.
+- **İhtiyaçlar (376 nokta):** eczane 90 / market 90 / yakıt 60 / kütüphane 54 /
+  müze 55 / hastane 14 / kiralık-araç 13.
+- **Bölgeler:** turistik 9 (`admin_level=9` Bezirke: Innere Stadt, Leopoldstadt,
+  Landstraße, Wieden, Margareten, Mariahilf, Josefstadt, Alsergrund, Favoriten;
+  Neubau timeout'ta düştü), ticari 12, eğitim 12, doğal 46 (Stadtpark,
+  Volksgarten, Schönbrunn, Setagayapark vb.; Wiener Prater timeout — POI'de var).
+
+Durum notu: Viyana Bezirke `admin_level=9` (numaralı ilçeler). U-Bahn `ref`=U1…U6
+`route=subway`. **Overpass o gün olağanüstü ağırdı** — U4/tram 60 + alisveris +
+bazı turistik/dogal-ikonik timeout'ladı; kritikler (U4) ikinci turda çekildi,
+alisveris ve Prater/Neubau nihayetinde eksik kaldı (kabul; POI/ticari kapsıyor).
+Rota ilişkileri istasyon tutmadığından istasyonlar ayrı çekilip en yakın hatta
+atandı + isme göre tekilleştirildi (1202→531). `cities.json` → `ready`; önbellek
+sürümleri birlikte 20260722-5.
