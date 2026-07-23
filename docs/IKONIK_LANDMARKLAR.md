@@ -27,6 +27,7 @@
 | İzmir | ✅ uygulandı (2026-07-15) | Saat Kulesi/Kadifekale/Agora/Asansör/Kemeraltı vb. + Kemeraltı yeme-içme |
 | Barcelona | ✅ uygulandı (2026-07-22) | Sagrada Família/Park Güell/Casa Batlló-Milà/Boqueria/Camp Nou/MNAC allowlist; doğal bölgeye Ciutadella/Montjuïc/Laberint/Fòrum elle eklendi |
 | Amsterdam | ✅ uygulandı (2026-07-22) | Rijksmuseum/Van Gogh/Anne Frank Huis/Dam-Koninklijk Paleis/Westerkerk/Rembrandthuis/NEMO/A'DAM Toren/Eye/Concertgebouw allowlist; doğal bölgeye Vondelpark/Oosterpark/Westerpark/Amstelpark elle eklendi |
+| Lisboa | ✅ uygulandı (2026-07-22) | Torre de Belém/Jerónimos/Castelo de São Jorge/Praça do Comércio/Santa Justa/Padrão dos Descobrimentos/MAAT/Gulbenkian/Oceanário allowlist; doğal bölgeye Eduardo VII/Estrela/Monsanto elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -167,3 +168,20 @@
 
 > Not: Rijksmuseum/Van Gogh/Anne Frank OSM'de wikidata'lı; allowlist güvence.
 > Vondelpark/Oosterpark/Westerpark dogal bölge allowlist'inde ayrıca var.
+
+
+## Lisboa
+
+- **tarihi/simge:** Torre de Belém, Mosteiro dos Jerónimos, Castelo de São
+  Jorge, Praça do Comércio (Terreiro do Paço), Arco da Rua Augusta, Elevador de
+  Santa Justa, Sé de Lisboa, Igreja de São Roque, São Vicente de Fora, Panteão
+  Nacional, Convento do Carmo, Praça do Rossio, Aqueduto das Águas Livres,
+  Miradouro de Santa Luzia, Cristo Rei (karşı yaka)
+- **modern/müze:** Padrão dos Descobrimentos, MAAT, Centro Cultural de Belém,
+  Museu Calouste Gulbenkian, Oceanário de Lisboa, Torre Vasco da Gama, Ponte 25
+  de Abril
+- **doğa/gezi:** Parque Eduardo VII, Jardim da Estrela, Jardim Botânico,
+  Miradouro da Senhora do Monte, Alfama, Bairro Alto, Parque das Nações
+
+> Not: Belém simgeleri ve Santa Justa OSM'de wikidata'lı; allowlist güvence.
+> Overpass o gün modern temasını timeout'ladı → modern büyük ölçüde ikonik'ten.
