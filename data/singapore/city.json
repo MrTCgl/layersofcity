@@ -1,0 +1,117 @@
+{
+  "id": "singapore",
+  "center": [
+    103.83,
+    1.31
+  ],
+  "zoom": {
+    "start": 11,
+    "min": 9.5,
+    "max": 19
+  },
+  "home": [
+    [
+      103.68,
+      1.24
+    ],
+    [
+      103.92,
+      1.40
+    ]
+  ],
+  "maxBounds": [
+    [
+      103.58,
+      1.20
+    ],
+    [
+      104.06,
+      1.48
+    ]
+  ],
+  "timezone": "Asia/Singapore",
+  "language": "en",
+  "currency": "SGD",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-07",
+    "water05": 1.50,
+    "petrol1l": 2.90,
+    "milk1l": 3.40,
+    "meat1kg": 20.0,
+    "cheese1kg": 30.0,
+    "beer05": 4.00,
+    "bigmac": 7.20,
+    "espresso": 4.50,
+    "transitTicket": 1.30,
+    "airportTrain": 2.50
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}

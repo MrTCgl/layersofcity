@@ -125,6 +125,13 @@
       "lat": 50.08,
       "lon": 14.42,
       "status": "ready"
+    },
+    {
+      "id": "singapore",
+      "name": "Singapore",
+      "lat": 1.3,
+      "lon": 103.82,
+      "status": "soon"
     }
   ]
 }
