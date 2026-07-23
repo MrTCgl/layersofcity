@@ -1,0 +1,14 @@
+{
+  "arr.vie.sub": "→ Wien Mitte · S7 / CAT · ~20 min",
+  "arr.hauptbahnhof.sub": "gare principale · ÖBB + U1 · S-Bahn",
+  "arr.westbahnhof.sub": "gare de l'Ouest · ÖBB + U3/U6",
+  "arr.vib.sub": "autocars interurbains (Erdberg) · U3",
+  "hub.karlsplatz": "U1·U2·U4",
+  "hub.stephansplatz": "U1·U3",
+  "hub.schwedenplatz": "U1·U4",
+  "hub.praterstern": "U1·U2 · S-Bahn",
+  "hub.westbahnhof": "U3·U6 · ÖBB",
+  "hub.wienmitte": "U3·U4 · CAT · S-Bahn",
+  "hub.schottentor": "U2 · tram",
+  "hub.hauptbahnhof": "U1 · ÖBB · S-Bahn"
+}

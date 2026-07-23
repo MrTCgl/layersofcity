@@ -111,6 +111,13 @@
       "lat": 38.72,
       "lon": -9.14,
       "status": "ready"
+    },
+    {
+      "id": "vienna",
+      "name": "Wien",
+      "lat": 48.21,
+      "lon": 16.37,
+      "status": "soon"
     }
   ]
 }
