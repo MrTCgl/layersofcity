@@ -126,9 +126,11 @@
   }
 
   // Auto-place a city label so it clears every dot and every already-placed
-  // label. A city may still pin its label with an explicit `anchor` [dx,dy]
-  // (manual override wins); otherwise we try positions around the dot and take
-  // the first collision-free one. Lets new cities skip hand-tuned offsets.
+  // label. The search fans a label *outward* from the local pack (away from the
+  // centroid of nearby dots) and takes the nearest collision-free slot, so a
+  // dense cluster (İstanbul/İzmir, or the Europe knot) reads cleanly at any
+  // zoom without hand-tuned offsets. A city may still pin its label with an
+  // explicit `anchor` [dx,dy] (manual override wins).
   const LBL_FS = 10, LBL_CW = 5.6; // font-size + avg char width in SVG units
   function labelBox(ax, ay, anchor, w) {
     let x0 = ax;
@@ -137,23 +139,42 @@
     return { x0, y0: ay - LBL_FS * 0.8, x1: x0 + w, y1: ay + LBL_FS * 0.25 };
   }
   const boxHit = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
-  const CANDIDATES = [ // [dx, dy, text-anchor], tried in order
-    [10, 5, "start"], [-10, 5, "end"], [0, -12, "middle"], [0, 18, "middle"],
-    [11, -10, "start"], [-11, -10, "end"], [11, 18, "start"], [-11, 18, "end"]
-  ];
 
+  // Direction to push a label: away from the mean pull of nearby city dots.
+  // Returns an angle (radians); 0 (straight right) when the city stands alone.
+  function outwardDir(x, y) {
+    let vx = 0, vy = 0;
+    for (const c of cities) {
+      const [ox, oy] = project(c.lon, c.lat);
+      const dx = x - ox, dy = y - oy, d2 = dx * dx + dy * dy;
+      if (d2 > 0 && d2 < 3600) { const d = Math.sqrt(d2); vx += dx / d; vy += dy / d; }
+    }
+    return (vx === 0 && vy === 0) ? 0 : Math.atan2(vy, vx);
+  }
+
+  const LBL_DIST = [13, 17, 22, 28, 35, 44, 55, 68, 82]; // rings, near → far
+  const LBL_STEP = Math.PI / 8;                           // 16 directions per ring
   function placeLabel(x, y, label, anchorOverride, obstacles) {
     const w = label.length * LBL_CW;
     if (anchorOverride) {
       const ax = x + anchorOverride[0], ay = y + anchorOverride[1];
       return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w) };
     }
-    for (const [dx, dy, anchor] of CANDIDATES) {
-      const ax = x + dx, ay = y + dy, box = labelBox(ax, ay, anchor, w);
-      if (!obstacles.some(o => boxHit(o, box))) return { ax, ay, anchor, box };
+    const base = outwardDir(x, y);
+    // angles fanned out from the outward direction: base, base±step, base±2step…
+    const angles = [];
+    for (let k = 0; k < 16; k++) angles.push(base + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * LBL_STEP);
+    for (const r of LBL_DIST) {
+      for (const a of angles) {
+        const dx = r * Math.cos(a), dy = r * Math.sin(a);
+        const anchor = dx > 5 ? "start" : dx < -5 ? "end" : "middle";
+        // nudge the baseline down a touch so side labels sit centred on the ray
+        const ax = x + dx, ay = y + dy + LBL_FS * 0.28, box = labelBox(ax, ay, anchor, w);
+        if (!obstacles.some(o => boxHit(o, box))) return { ax, ay, anchor, box };
+      }
     }
-    const ax = x + 10, ay = y + 5;
-    return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w) }; // give up: default right
+    const ax = x + 13, ay = y + 5; // last resort (rings are large enough this never hits)
+    return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w) };
   }
 
   // Opening frame. Desktop shows the whole world (static). Mobile (touch) keeps
