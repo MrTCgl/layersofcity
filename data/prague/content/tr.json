@@ -1,0 +1,14 @@
+{
+  "arr.prg.sub": "→ Nádraží Veleslavín · 119 otobüs + Metro A · ~35 dk",
+  "arr.hlavni.sub": "ana gar · Metro C + tren",
+  "arr.holesovice.sub": "tren · Metro C",
+  "arr.florenc.sub": "şehirlerarası otobüs · Metro B/C",
+  "hub.muzeum": "A · C",
+  "hub.mustek": "A · B",
+  "hub.florenc": "B · C · ÚAN",
+  "hub.namrepubliky": "B · tram",
+  "hub.karlovo": "B · tram",
+  "hub.andel": "B · tram",
+  "hub.ippavlova": "C · tram",
+  "hub.hlavni": "C · rail"
+}

@@ -1,0 +1,14 @@
+{
+  "arr.prg.sub": "→ Nádraží Veleslavín · bus 119 + Metro A · ~35 min",
+  "arr.hlavni.sub": "main station · Metro C + rail",
+  "arr.holesovice.sub": "trains · Metro C",
+  "arr.florenc.sub": "intercity coaches · Metro B/C",
+  "hub.muzeum": "A · C",
+  "hub.mustek": "A · B",
+  "hub.florenc": "B · C · ÚAN",
+  "hub.namrepubliky": "B · tram",
+  "hub.karlovo": "B · tram",
+  "hub.andel": "B · tram",
+  "hub.ippavlova": "C · tram",
+  "hub.hlavni": "C · rail"
+}

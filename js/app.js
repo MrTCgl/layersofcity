@@ -1788,7 +1788,7 @@
   const infoCard = document.getElementById("infocard");
   const PRICE_ORDER = ["water05", "petrol1l", "milk1l", "meat1kg", "cheese1kg",
     "beer05", "bigmac", "espresso", "transitTicket", "airportTrain"];
-  const CURRENCY_SYM = { EUR: "€", USD: "$", GBP: "£", TRY: "₺", JPY: "¥" };
+  const CURRENCY_SYM = { EUR: "€", USD: "$", GBP: "£", TRY: "₺", JPY: "¥", CZK: "Kč" };
   function renderInfoCard() {
     if (!manifest) return;
     document.getElementById("ic-city").textContent = document.getElementById("cb-name").textContent;

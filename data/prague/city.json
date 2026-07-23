@@ -1,0 +1,117 @@
+{
+  "id": "prague",
+  "center": [
+    14.42,
+    50.08
+  ],
+  "zoom": {
+    "start": 11.5,
+    "min": 9,
+    "max": 19
+  },
+  "home": [
+    [
+      14.35,
+      50.03
+    ],
+    [
+      14.52,
+      50.13
+    ]
+  ],
+  "maxBounds": [
+    [
+      14.22,
+      49.97
+    ],
+    [
+      14.64,
+      50.17
+    ]
+  ],
+  "timezone": "Europe/Prague",
+  "language": "cs",
+  "currency": "CZK",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-07",
+    "water05": 15.0,
+    "petrol1l": 38.0,
+    "milk1l": 25.0,
+    "meat1kg": 200.0,
+    "cheese1kg": 250.0,
+    "beer05": 35.0,
+    "bigmac": 145.0,
+    "espresso": 55.0,
+    "transitTicket": 40.0,
+    "airportTrain": 60.0
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}
