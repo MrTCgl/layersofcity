@@ -825,3 +825,53 @@ turistik cadastral ile üçüncü turda çekildi; modern ve havalimanı link'i e
 kaldı (kabul; POI/kapı metni kapsıyor). İstasyonlar ayrı çekilip en yakın hatta
 atandı + tekilleştirildi (835→360). area_km2 Prag enlemine düzeltildi.
 `cities.json` → `ready`; önbellek sürümleri birlikte 20260722-6.
+
+---
+
+## Yeni şehir — Singapore ✅ tamam (2026-07-22)
+
+`yeni-sehir` parametrik boru hattıyla eklendi ("sırayla 4 şehir"in 4.'sü —
+seri tamam). **Roster'ı ilk kez Avrupa dışına, Güneydoğu Asya'ya taşıdı.**
+Dil `en` (yeni `lang.en` anahtarı 6 dile eklendi → tüm İngilizce şehirlerin
+künyesi düzeldi), para **SGD** (CURRENCY_SYM'e `SGD="S$"`).
+
+- **Manifest:** merkez `[103.83, 1.31]`, `Asia/Singapore`, para SGD, geniş home;
+  maxBounds tüm adayı + Changi (doğu) + Jurong (batı) kapsıyor. Fiyat editoryal
+  SGD (MRT bileti 1.30 S$).
+- **Varış (3 kapı):** Changi Airport (Raffles Place'e gerçek EWL güzergâhı,
+  19.8km; Changi kolu EWL'ye dahil), Woodlands (Malezya Causeway'i, `mode:bus`),
+  Marina Bay Cruise Centre (`mode:ship`).
+- **Omurga (7 hat, 72KB):** MRT NSL/EWL/NEL/CCL/DTL/TEL (resmî renkler) + LRT
+  SKLRT (Sengkang; muted renk). CG (Changi kolu) EWL'nin parçası; BPLRT/PGLRT
+  OSM'de bu ref'lerle yok → atlandı. 154 istasyon + 8 hub. Gerçekçilik geçti
+  (en uzun düz segment 1694m).
+- **Keşfet (371 nokta, 66KB):** tarihi 68 / modern 31 / doğa 95 / gastronomi
+  35 / alışveriş 58 / otel 17 / yurt 24 / kamu 43. Merlion/Marina Bay Sands/
+  Gardens by the Bay/ArtScience/Singapore Flyer/Raffles Hotel/Sultan Mosque/
+  Chinatown/Little India/Jewel Changi/Sentosa dahil 26 ikonik elle eklendi.
+- **İhtiyaçlar (261 nokta):** eczane 42 / market 78 / yakıt 58 / müze 28 /
+  hastane 24 / kütüphane 22 / kiralık-araç 9.
+- **Bölgeler:** turistik 8 (`place=suburb/quarter`: Chinatown, Little India,
+  Kampong Glam, Orchard, Marina Centre, Bugis, Tanjong Pagar, Boat Quay;
+  Marina Bay/Clarke Quay MISS), ticari 40, eğitim 12, doğal 46 (Botanic
+  Gardens, Fort Canning, East Coast Park, Sentosa park vb.).
+
+Durum notu: Singapur MRT `ref`=NSL/EWL/NEL/CCL/DTL/TEL `route=subway`, Changi
+kolu ayrı ref değil EWL içinde; LRT yalnız SKLRT `route=light_rail` (BP/PG farklı
+etiketli/eksik). area_km2 ekvatora yakın olduğundan lon≈lat ölçeğiyle. **Overpass
+o gün ağırdı** (TEL/CG/otel/istasyon ilk turda timeout; ikinci turda çekildi).
+İstasyonlar ayrı çekilip tekilleştirildi (361→154). `cities.json` → `ready`;
+önbellek sürümleri birlikte 20260722-7.
+
+---
+
+## 4 şehirlik seri (2026-07-22) ✅ tamam
+
+Kullanıcı "sırayla bu dört şehri de yapalım" kararıyla **Lisboa → Wien → Praha →
+Singapore** tek oturumda eklendi (Barselona + Amsterdam'ın ardından). Toplam
+**15 şehir**. Parametrik boru hattı (build_omurga/stations/poi/bolgeler + şehir
+wrapper'ları) sayesinde her şehir aynı adımlarla üretildi. Yeni dil anahtarları:
+`lang.pt/de/cs/en`; yeni para sembolleri: `CZK="Kč"`, `SGD="S$"`. Overpass gün
+boyu olağanüstü ağırdı; ayna failover 70s + tema/hat başına yeniden çekim ile
+tüm katmanlar tamamlandı (birkaç ikincil eksik: Prag havalimanı link'i, bazı
+modern temaları — hepsi durum notlarında).
