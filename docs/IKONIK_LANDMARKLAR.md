@@ -30,6 +30,7 @@
 | Lisboa | ✅ uygulandı (2026-07-22) | Torre de Belém/Jerónimos/Castelo de São Jorge/Praça do Comércio/Santa Justa/Padrão dos Descobrimentos/MAAT/Gulbenkian/Oceanário allowlist; doğal bölgeye Eduardo VII/Estrela/Monsanto elle eklendi |
 | Wien | ✅ uygulandı (2026-07-22) | Stephansdom/Schönbrunn/Hofburg/Belvedere/Staatsoper/Riesenrad/Hundertwasserhaus/Kunsthistorisches/Albertina/MuseumsQuartier allowlist; doğal bölgeye Prater/Stadtpark/Schönbrunn/Volksgarten elle eklendi |
 | Praha | ✅ uygulandı (2026-07-22) | Pražský hrad/Karlův most/Staroměstské náměstí/Orloj/Katedrála sv. Víta/Vyšehrad/Tančící dům/Petřín allowlist; doğal bölgeye Petřín/Letná/Stromovka/Kampa elle eklendi |
+| Singapore | ✅ uygulandı (2026-07-22) | Merlion/Marina Bay Sands/Gardens by the Bay/Raffles Hotel/Sultan Mosque/Chinatown/Little India/Jewel Changi allowlist; doğal bölgeye Botanic Gardens/Fort Canning/Sentosa/Mount Faber elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -216,3 +217,15 @@
 
 > Not: Overpass o gün modern temasını timeout'ladı → modern büyük ölçüde
 > ikonik'ten (Prag zaten tarihi ağırlıklı bir şehir).
+
+
+## Singapore
+
+- **tarihi/simge:** Merlion (Merlion Park), Raffles Hotel, Masjid Sultan
+  (Sultan Mosque), Sri Mariamman Temple, Thian Hock Keng, Buddha Tooth Relic
+  Temple, St Andrew's Cathedral, Chinatown, Little India, Kampong Glam
+- **modern:** Marina Bay Sands, Gardens by the Bay, ArtScience Museum,
+  Singapore Flyer, Esplanade, National Gallery Singapore, Jewel Changi Airport,
+  National Stadium
+- **doğa/gezi:** Singapore Botanic Gardens, Fort Canning Park, Sentosa, Mount
+  Faber, Singapore Zoo; gastronomi: Lau Pa Sat, Clarke Quay; alışveriş: Orchard
