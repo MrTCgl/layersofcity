@@ -1,0 +1,15 @@
+{
+  "arr.aeroporto.sub": "→ Saldanha · Vermelha (Rot) · ~20 Min",
+  "arr.santaapolonia.sub": "Hauptbahnhof · CP + Azul (Blau)",
+  "arr.oriente.sub": "Hochgeschwindigkeit · Vermelha (Rot)",
+  "arr.seterios.sub": "Fernbusse · Azul/Amarela",
+  "arr.caisdosodre.sub": "Tejo-Fähre · Cascais-Linie · Verde (Grün)",
+  "hub.alameda": "Verde · Vermelha",
+  "hub.baixachiado": "Azul · Verde",
+  "hub.marques": "Azul · Amarela",
+  "hub.saosebastiao": "Azul · Vermelha",
+  "hub.campogrande": "Amarela · Verde",
+  "hub.saldanha": "Amarela · Vermelha",
+  "hub.caisdosodre": "Verde · Fähre · Cascais",
+  "hub.oriente": "Vermelha · CP · Fertagus"
+}

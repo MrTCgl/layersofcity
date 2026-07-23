@@ -1,0 +1,15 @@
+{
+  "arr.aeroporto.sub": "→ Saldanha · Metro Vermelha · ~20 dk",
+  "arr.santaapolonia.sub": "ana gar · CP + Metro Azul",
+  "arr.oriente.sub": "yüksek hızlı tren · Metro Vermelha",
+  "arr.seterios.sub": "şehirlerarası otobüs · Metro Azul/Amarela",
+  "arr.caisdosodre.sub": "Tejo vapuru · Cascais treni · Metro Verde",
+  "hub.alameda": "Verde · Vermelha",
+  "hub.baixachiado": "Azul · Verde",
+  "hub.marques": "Azul · Amarela",
+  "hub.saosebastiao": "Azul · Vermelha",
+  "hub.campogrande": "Amarela · Verde",
+  "hub.saldanha": "Amarela · Vermelha",
+  "hub.caisdosodre": "Verde · vapur · Cascais",
+  "hub.oriente": "Vermelha · CP · Fertagus"
+}

@@ -1,0 +1,15 @@
+{
+  "arr.aeroporto.sub": "→ Saldanha · Vermelha (rossa) · ~20 min",
+  "arr.santaapolonia.sub": "stazione principale · CP + Azul (blu)",
+  "arr.oriente.sub": "alta velocità · Vermelha (rossa)",
+  "arr.seterios.sub": "pullman interurbani · Azul/Amarela",
+  "arr.caisdosodre.sub": "traghetto sul Tago · linea di Cascais · Verde",
+  "hub.alameda": "Verde · Vermelha",
+  "hub.baixachiado": "Azul · Verde",
+  "hub.marques": "Azul · Amarela",
+  "hub.saosebastiao": "Azul · Vermelha",
+  "hub.campogrande": "Amarela · Verde",
+  "hub.saldanha": "Amarela · Vermelha",
+  "hub.caisdosodre": "Verde · traghetto · Cascais",
+  "hub.oriente": "Vermelha · CP · Fertagus"
+}

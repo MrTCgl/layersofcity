@@ -1,0 +1,15 @@
+{
+  "arr.aeroporto.sub": "→ Saldanha · Linha Vermelha · ~20 min",
+  "arr.santaapolonia.sub": "estação principal · CP + Linha Azul",
+  "arr.oriente.sub": "alta velocidade · Linha Vermelha",
+  "arr.seterios.sub": "autocarros interurbanos · Azul/Amarela",
+  "arr.caisdosodre.sub": "cacilheiro do Tejo · linha de Cascais · Verde",
+  "hub.alameda": "Verde · Vermelha",
+  "hub.baixachiado": "Azul · Verde",
+  "hub.marques": "Azul · Amarela",
+  "hub.saosebastiao": "Azul · Vermelha",
+  "hub.campogrande": "Amarela · Verde",
+  "hub.saldanha": "Amarela · Vermelha",
+  "hub.caisdosodre": "Verde · barco · Cascais",
+  "hub.oriente": "Vermelha · CP · Fertagus"
+}

@@ -104,6 +104,13 @@
       "lat": 52.37,
       "lon": 4.9,
       "status": "ready"
+    },
+    {
+      "id": "lisbon",
+      "name": "Lisboa",
+      "lat": 38.72,
+      "lon": -9.14,
+      "status": "soon"
     }
   ]
 }
