@@ -710,3 +710,43 @@ Amsterdam enlemine (cos52≈0.61) düzeltildi. Overpass o gün ağır 504/timeou
 verdi (tram 3/24 + modern/alisveris + bazı turistik ikinci turda/tek tek
 çekildi); ayna failover 70s. `cities.json` → `ready`; önbellek sürümleri
 **birlikte** artırıldı (`BM_VER` + `index.html` app.js?v= = 20260722-3).
+
+---
+
+## Yeni şehir — Lisboa ✅ tamam (2026-07-22)
+
+`yeni-sehir` parametrik boru hattıyla eklendi (kullanıcı "sırayla 4 şehir"
+kararının 1.'si). Dil **`pt`** (yeni `lang.pt` i18n anahtarı 6 dile eklendi).
+
+- **Manifest:** merkez `[-9.145, 38.72]`, `Europe/Lisbon`, para EUR, zoom
+  min 9 / max 19, geniş home. El Prat benzeri: maxBounds havalimanı + Belém +
+  karşı yaka (Cristo Rei). Fiyat tablosu editoryal (bica 0.85€!).
+- **Varış (5 kapı):** Aeroporto (Metro Vermelha ile Alameda'ya gerçek güzergâh,
+  9.1km), Santa Apolónia, Gare do Oriente, Sete Rios (otobüs), Cais do Sodré
+  (Tejo vapuru, `mode:ship`).
+- **Omurga (13 hat, 55KB):** Metro Azul/Amarela/Verde/Vermelha (resmî renkler)
+  + Carris tram 12E/15E/18E/24E/25E/28E + funiküler Glória/Lavra/Bica (55E Graça
+  OSM'de çok kısa/kırıntı → atlandı). 57 istasyon + 112 durak + 8 hub (Alameda,
+  Baixa-Chiado, Marquês, São Sebastião, Campo Grande, Saldanha, Cais do Sodré,
+  Oriente). Gerçekçilik geçti (en uzun düz segment 1697m).
+- **Keşfet (361 nokta, 66KB):** tarihi 88 / doğa 90 / gastronomi 32 /
+  alışveriş 45 / otel 24 / yurt 24 / kamu 51 / **modern 7** (Overpass o gün
+  modern temasını ısrarla timeout'ladı → modern büyük ölçüde ikonik'ten).
+  Torre de Belém/Jerónimos/Castelo/Praça do Comércio/Santa Justa/Padrão/MAAT/
+  Gulbenkian/Oceanário dahil 26 ikonik elle eklendi.
+- **İhtiyaçlar (318 nokta):** eczane 75 / market 69 / yakıt 55 / kütüphane 39 /
+  müze 36 / hastane 27 / kiralık-araç 17.
+- **Bölgeler:** turistik 6 (Alfama/Baixa/Bairro Alto/Madragoa `place=suburb` +
+  Belém/Estrela `admin_level=8` freguesia; Chiado/Graça/Mouraria/Príncipe Real
+  OSM'de poligon değil, atlandı), ticari 11, eğitim 12, doğal 48 (Eduardo VII,
+  Estrela, Monsanto, Torel vb.).
+
+Durum notu: Lizbon bairro'ları karışık etiketli — turistik bairrolar
+`place=suburb/neighbourhood` (poligon), bazıları yalnız nokta, Belém/Estrela
+`admin_level=8` freguesia. Metro hatları `ref` = renk adı (Azul/Verde…),
+`route=subway`. Rota ilişkileri istasyon tutmadığından istasyonlar ayrı çekilip
+en yakın hatta atandı + isme göre tekilleştirildi. area_km2 Lizbon enlemine
+(cos38.7≈0.78) düzeltildi. **Overpass o gün olağanüstü ağırdı** (Vermelha +
+modern/kamu/eczane/kiralik-arac + bölge park sorgusu + çoğu turistik ikinci/
+üçüncü turda ya da tek tek çekildi; modern nihayetinde ikonik ağırlıklı kaldı).
+`cities.json` → `ready`; önbellek sürümleri birlikte 20260722-4.
