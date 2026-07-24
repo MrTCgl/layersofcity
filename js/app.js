@@ -290,6 +290,7 @@
         transform and the current framing is preserved untouched. ── */
   const worldMapLayer = document.getElementById("worldwrap");
   const worldSurface = document.getElementById("scr-world");
+  const mapClip = document.getElementById("mapclip"); // visible (clipped) viewport
   let wScale = 1, wX = 0, wY = 0, wMode = null, wStartDist = 0, wStartScale = 1, wMid = null, wPan = null;
   // rest box of the map (layout size/position, unaffected by the transform)
   let wBoxW = 0, wBoxH = 0;
@@ -301,10 +302,17 @@
   }
   function wClamp() {
     wScale = Math.max(1, Math.min(W_MAX, wScale));
-    // keep the scaled map covering its own rest footprint (no gap creeps in)
+    // Horizontal: the map fills the clip width, so keep it covering its footprint.
     wX = Math.max(wBoxW * (1 - wScale), Math.min(0, wX));
-    wY = Math.max(wBoxH * (1 - wScale), Math.min(0, wY));
-    if (wScale === 1) { wX = 0; wY = 0; }
+    // Vertical: on mobile the clip (#mapclip) is taller than the map's rest box,
+    // so clamp against the *clip*, not the map. When the scaled map is taller
+    // than the clip it must cover it; when it is shorter (zoomed out), let it pan
+    // freely between the clip's top and bottom instead of pinning to the top edge.
+    const clipH = mapClip.clientHeight || wBoxH;
+    const spanH = wScale * wBoxH;
+    wY = spanH >= clipH
+      ? Math.max(clipH - spanH, Math.min(0, wY))     // cover the clip
+      : Math.max(0, Math.min(clipH - spanH, wY));    // free within the clip
   }
   // Frame the whole-world map on Africa (mobile opening view). Computed from the
   // map's live pixel size, so it's identical on every device. Returns false if
@@ -347,7 +355,10 @@
       wX = wMid.x - (wMid.x - wX) * (ns / wScale); // zoom around the pinch focal point
       wY = wMid.y - (wMid.y - wY) * (ns / wScale);
       wScale = ns; wClamp(); wApply();
-    } else if (wMode === "pan" && e.touches.length === 1 && wScale > 1) {
+    } else if (wMode === "pan" && e.touches.length === 1 &&
+               (wScale > 1 || mapClip.clientHeight > wScale * wBoxH + 1)) {
+      // pan when zoomed in, or when the map is shorter than the clip and can
+      // still slide vertically (so a zoomed-out map isn't stuck at the top)
       e.preventDefault();
       wX = e.touches[0].clientX - wPan.x; wY = e.touches[0].clientY - wPan.y;
       wClamp(); wApply();
