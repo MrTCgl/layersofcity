@@ -5,105 +5,225 @@
       "name": "Roma",
       "lat": 41.893,
       "lon": 12.483,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Rome",
+        "de": "Rom",
+        "fr": "Rome",
+        "it": "Roma",
+        "es": "Roma",
+        "tr": "Roma"
+      }
     },
     {
       "id": "istanbul",
       "name": "İstanbul",
       "lat": 41.01,
       "lon": 28.96,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Istanbul",
+        "de": "Istanbul",
+        "fr": "Istanbul",
+        "it": "Istanbul",
+        "es": "Estambul",
+        "tr": "İstanbul"
+      }
     },
     {
       "id": "london",
       "name": "London",
       "lat": 51.51,
       "lon": -0.13,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "London",
+        "de": "London",
+        "fr": "Londres",
+        "it": "Londra",
+        "es": "Londres",
+        "tr": "Londra"
+      }
     },
     {
       "id": "paris",
       "name": "Paris",
       "lat": 48.85,
       "lon": 2.35,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Paris",
+        "de": "Paris",
+        "fr": "Paris",
+        "it": "Parigi",
+        "es": "París",
+        "tr": "Paris"
+      }
     },
     {
       "id": "berlin",
       "name": "Berlin",
       "lat": 52.52,
       "lon": 13.4,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Berlin",
+        "de": "Berlin",
+        "fr": "Berlin",
+        "it": "Berlino",
+        "es": "Berlín",
+        "tr": "Berlin"
+      }
     },
     {
       "id": "madrid",
       "name": "Madrid",
       "lat": 40.42,
       "lon": -3.7,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Madrid",
+        "de": "Madrid",
+        "fr": "Madrid",
+        "it": "Madrid",
+        "es": "Madrid",
+        "tr": "Madrid"
+      }
     },
     {
       "id": "newyork",
       "name": "New York",
       "lat": 40.71,
       "lon": -74,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "New York",
+        "de": "New York",
+        "fr": "New York",
+        "it": "New York",
+        "es": "Nueva York",
+        "tr": "New York"
+      }
     },
     {
       "id": "tokyo",
       "name": "Tokyo",
       "lat": 35.68,
       "lon": 139.69,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Tokyo",
+        "de": "Tokio",
+        "fr": "Tokyo",
+        "it": "Tokyo",
+        "es": "Tokio",
+        "tr": "Tokyo"
+      }
     },
     {
       "id": "izmir",
       "name": "İzmir",
       "lat": 38.42,
       "lon": 27.14,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "İzmir",
+        "de": "İzmir",
+        "fr": "İzmir",
+        "it": "İzmir",
+        "es": "İzmir",
+        "tr": "İzmir"
+      }
     },
     {
       "id": "barcelona",
       "name": "Barcelona",
       "lat": 41.39,
       "lon": 2.17,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Barcelona",
+        "de": "Barcelona",
+        "fr": "Barcelone",
+        "it": "Barcellona",
+        "es": "Barcelona",
+        "tr": "Barselona"
+      }
     },
     {
       "id": "amsterdam",
       "name": "Amsterdam",
       "lat": 52.37,
       "lon": 4.9,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Amsterdam",
+        "de": "Amsterdam",
+        "fr": "Amsterdam",
+        "it": "Amsterdam",
+        "es": "Ámsterdam",
+        "tr": "Amsterdam"
+      }
     },
     {
       "id": "lisbon",
       "name": "Lisboa",
       "lat": 38.72,
       "lon": -9.14,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Lisbon",
+        "de": "Lissabon",
+        "fr": "Lisbonne",
+        "it": "Lisbona",
+        "es": "Lisboa",
+        "tr": "Lizbon"
+      }
     },
     {
       "id": "vienna",
       "name": "Wien",
       "lat": 48.21,
       "lon": 16.37,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Vienna",
+        "de": "Wien",
+        "fr": "Vienne",
+        "it": "Vienna",
+        "es": "Viena",
+        "tr": "Viyana"
+      }
     },
     {
       "id": "prague",
       "name": "Praha",
       "lat": 50.08,
       "lon": 14.42,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Prague",
+        "de": "Prag",
+        "fr": "Prague",
+        "it": "Praga",
+        "es": "Praga",
+        "tr": "Prag"
+      }
     },
     {
       "id": "singapore",
       "name": "Singapore",
       "lat": 1.3,
       "lon": 103.82,
-      "status": "ready"
+      "status": "ready",
+      "names": {
+        "en": "Singapore",
+        "de": "Singapur",
+        "fr": "Singapour",
+        "it": "Singapore",
+        "es": "Singapur",
+        "tr": "Singapur"
+      }
     }
   ]
 }

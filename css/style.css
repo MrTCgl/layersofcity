@@ -153,10 +153,6 @@ body.city .appinfo{padding-right:28px}
     margin-top:4vh;
   }
   #worldwrap{ width:100%; }
-  /* the map is zoomed ~3.5x behind the wordmark, so labels read large —
-     shrink them so the splash stays airy and legible on small screens */
-  .city-ready text{ font-size:8px; }
-  .city-soon text{ font-size:7px; }
 }
 .worlddot{fill:#C4BAAC}
 :root[data-theme="dark"] .worlddot{fill:#565060}
@@ -167,11 +163,13 @@ body.city .appinfo{padding-right:28px}
 }
 @keyframes pulse{0%{transform:scale(.6);opacity:.35}70%{transform:scale(1.5);opacity:0}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.city-ready .halo{animation:none; opacity:.2}}
-.city-ready circle.core{fill:var(--lilac); stroke:var(--surface); stroke-width:2}
-.city-ready text{fill:var(--ink); font-size:10px; font-weight:600}
+/* core stroke-width is set inline (in user units) so the white ring stays a
+   constant thickness on screen at every zoom level */
+.city-ready circle.core{fill:var(--lilac); stroke:var(--surface)}
+.city-ready text{fill:var(--ink); font-weight:600}
 .city-ready:hover circle.core{fill:var(--peach)}
 .city-soon circle{fill:var(--ink-soft); opacity:.45}
-.city-soon text{fill:var(--ink-soft); font-size:9px; opacity:0; transition:opacity .2s; pointer-events:none}
+.city-soon text{fill:var(--ink-soft); opacity:0; transition:opacity .2s; pointer-events:none}
 .city-soon:hover text{opacity:.9}
 
 /* ── city screen ── */

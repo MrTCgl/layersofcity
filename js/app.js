@@ -95,7 +95,7 @@
     await loadDict(code);
     if (contentCityId) await setCityContent(contentCityId); // city labels follow language
     applyI18n();
-    renderWorld(); // soon-labels use i18n
+    renderCities(); // names + soon-labels follow the active language
     if (typeof tickClock === "function") tickClock(); // date format follows language
     if (typeof refreshLayerLabels === "function") refreshLayerLabels(); // map labels follow language
     if (typeof renderInfoCard === "function" && !document.getElementById("infocard").hidden) renderInfoCard();
@@ -120,6 +120,18 @@
   const worldSvg = document.getElementById("worldmap");
   let cities = [];
 
+  // Delegated navigation: markers are re-rendered on every zoom, so bind the
+  // handlers to the (persistent) svg rather than to each city group.
+  worldSvg.addEventListener("click", e => {
+    const g = e.target.closest("[data-city]");
+    if (g) location.hash = "#/" + g.dataset.city;
+  });
+  worldSvg.addEventListener("keydown", e => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const g = e.target.closest("[data-city]");
+    if (g) { e.preventDefault(); location.hash = "#/" + g.dataset.city; }
+  });
+
   // Equirectangular projection matching the dot grid (1000x500 canvas)
   function project(lon, lat) {
     return [(lon + 180) / 360 * 1000, (90 - lat) / 180 * 500];
@@ -129,19 +141,20 @@
   // label. The search fans a label *outward* from the local pack (away from the
   // centroid of nearby dots) and takes the nearest collision-free slot, so a
   // dense cluster (İstanbul/İzmir, or the Europe knot) reads cleanly at any
-  // zoom without hand-tuned offsets. A city may still pin its label with an
-  // explicit `anchor` [dx,dy] (manual override wins).
-  const LBL_FS = 10, LBL_CW = 5.6; // font-size + avg char width in SVG units
-  function labelBox(ax, ay, anchor, w) {
+  // zoom without hand-tuned offsets. All sizes are in *user units* and passed in
+  // by the caller: markers keep a constant on-screen size (see renderCities), so
+  // the geometry the placer works in shrinks as the map zooms in and clusters
+  // spread apart, staying legible.
+  const boxHit = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
+  function labelBox(ax, ay, anchor, w, fs) {
     let x0 = ax;
     if (anchor === "end") x0 = ax - w;
     else if (anchor === "middle") x0 = ax - w / 2;
-    return { x0, y0: ay - LBL_FS * 0.8, x1: x0 + w, y1: ay + LBL_FS * 0.25 };
+    return { x0, y0: ay - fs * 0.8, x1: x0 + w, y1: ay + fs * 0.25 };
   }
-  const boxHit = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
 
   // Direction to push a label: away from the mean pull of nearby city dots.
-  // Returns an angle (radians); 0 (straight right) when the city stands alone.
+  // Uses fixed dot positions (independent of zoom), so the fan-out is stable.
   function outwardDir(x, y) {
     let vx = 0, vy = 0;
     for (const c of cities) {
@@ -152,29 +165,25 @@
     return (vx === 0 && vy === 0) ? 0 : Math.atan2(vy, vx);
   }
 
-  const LBL_DIST = [13, 17, 22, 28, 35, 44, 55, 68, 82]; // rings, near → far
-  const LBL_STEP = Math.PI / 8;                           // 16 directions per ring
-  function placeLabel(x, y, label, anchorOverride, obstacles) {
-    const w = label.length * LBL_CW;
-    if (anchorOverride) {
-      const ax = x + anchorOverride[0], ay = y + anchorOverride[1];
-      return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w) };
-    }
+  const LBL_RINGS = [1.3, 1.7, 2.2, 2.8, 3.5, 4.4, 5.5, 6.8, 8.2]; // × font, near → far
+  const LBL_STEP = Math.PI / 8;                                    // 16 directions/ring
+  function placeLabel(x, y, w, fs, obstacles) {
     const base = outwardDir(x, y);
     // angles fanned out from the outward direction: base, base±step, base±2step…
     const angles = [];
     for (let k = 0; k < 16; k++) angles.push(base + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * LBL_STEP);
-    for (const r of LBL_DIST) {
+    for (const m of LBL_RINGS) {
+      const r = m * fs;
       for (const a of angles) {
         const dx = r * Math.cos(a), dy = r * Math.sin(a);
-        const anchor = dx > 5 ? "start" : dx < -5 ? "end" : "middle";
+        const anchor = dx > fs * 0.5 ? "start" : dx < -fs * 0.5 ? "end" : "middle";
         // nudge the baseline down a touch so side labels sit centred on the ray
-        const ax = x + dx, ay = y + dy + LBL_FS * 0.28, box = labelBox(ax, ay, anchor, w);
+        const ax = x + dx, ay = y + dy + fs * 0.28, box = labelBox(ax, ay, anchor, w, fs);
         if (!obstacles.some(o => boxHit(o, box))) return { ax, ay, anchor, box };
       }
     }
-    const ax = x + 13, ay = y + 5; // last resort (rings are large enough this never hits)
-    return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w) };
+    const ax = x + fs * 1.3, ay = y + fs * 0.5; // last resort (rings are large enough this never hits)
+    return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w, fs) };
   }
 
   // Opening frame. Desktop shows the whole world (static). Mobile (touch) keeps
@@ -190,47 +199,87 @@
     if (typeof resetWorldZoom === "function") resetWorldZoom();
   });
 
-  function renderWorld() {
-    let html = "";
-    for (let i = 0; i < WORLD_DOTS.length; i += 2) {
-      html += `<circle class="worlddot" cx="${WORLD_DOTS[i]}" cy="${WORLD_DOTS[i + 1]}" r="1.4"/>`;
-    }
-    worldSvg.innerHTML = html;
+  // City name for the active language (falls back to English, then the raw id).
+  function cityLabel(c) {
+    return (c.names && (c.names[lang] || c.names[FALLBACK_LANG])) || c.name;
+  }
 
-    // Every city marker is an obstacle; placed labels are added as we go so
-    // later labels dodge earlier ones. Ready cities first (their labels matter
-    // most), then soon cities fill the gaps.
+  // On-screen target sizes (CSS px) for a city marker. renderCities converts
+  // these to user units for the current zoom so the marker looks the same size
+  // at every zoom level — see renderCities.
+  const CITY_TXT = 14, CITY_SOON_TXT = 12, CITY_CORE = 8.5, CITY_HALO = 20,
+        CITY_HIT = 34, CITY_SOOND = 5, CITY_STROKE = 2, CITY_CW = 0.56;
+
+  let cityLayer = null, cityRenderScale = -1, cityRenderRAF = 0;
+
+  // Grey world dots are map fabric — drawn once and left to scale with the map.
+  function renderWorldDots() {
+    let html = "";
+    for (let i = 0; i < WORLD_DOTS.length; i += 2)
+      html += `<circle class="worlddot" cx="${WORLD_DOTS[i]}" cy="${WORLD_DOTS[i + 1]}" r="1.4"/>`;
+    worldSvg.innerHTML = html;
+    cityLayer = document.createElementNS(SVG_NS, "g");
+    cityLayer.setAttribute("id", "citylayer");
+    worldSvg.appendChild(cityLayer);
+  }
+
+  // City dots + names, redrawn at a constant on-screen size. `u` is user units
+  // per on-screen pixel at the current zoom; every size/offset is multiplied by
+  // it, so the map (grey dots, land) grows on zoom-in while the city markers stay
+  // put — dots pull apart and names re-flow to keep clear of each other. Re-run
+  // on zoom, language change and layout resize.
+  function renderCities() {
+    if (!cityLayer) return;
+    const mw = worldMapLayer.clientWidth;
+    if (!mw) return; // no layout yet — retried after first frame / on zoom
+    const u = VB.w / mw / wScale;
+    cityRenderScale = wScale;
+    const fs = CITY_TXT * u, soonFs = CITY_SOON_TXT * u;
+    const coreR = CITY_CORE * u, haloR = CITY_HALO * u, hitR = CITY_HIT * u,
+          soonR = CITY_SOOND * u, stroke = CITY_STROKE * u;
+
+    // Every dot is an obstacle sized to its halo (so labels clear the ring);
+    // placed labels join the list so later labels dodge earlier ones. Ready
+    // cities first (their names matter most), then soon cities fill the gaps.
     const obstacles = cities.map(c => {
       const [x, y] = project(c.lon, c.lat);
-      return { x0: x - 8, y0: y - 8, x1: x + 8, y1: y + 8 };
+      return { x0: x - haloR, y0: y - haloR, x1: x + haloR, y1: y + haloR };
     });
-    const ordered = [...cities].sort((a, b) =>
-      (b.status === "ready") - (a.status === "ready"));
+    const ordered = [...cities].sort((a, b) => (b.status === "ready") - (a.status === "ready"));
 
+    let html = "";
     ordered.forEach(c => {
       const [x, y] = project(c.lon, c.lat);
       const ready = c.status === "ready";
-      const label = ready ? c.name : `${c.name} · ${t("world.soon")}`;
-      const p = placeLabel(x, y, label, c.anchor, obstacles);
+      const name = cityLabel(c);
+      const label = ready ? name : `${name} · ${t("world.soon")}`;
+      const f = ready ? fs : soonFs;
+      const w = label.length * CITY_CW * f;
+      const p = placeLabel(x, y, w, f, obstacles);
       obstacles.push(p.box);
-      const ax = p.ax, ay = p.ay;
-      const g = document.createElementNS(SVG_NS, "g");
-      g.setAttribute("class", ready ? "city-ready" : "city-soon");
-      g.innerHTML = ready
-        ? `<circle class="hit" cx="${x}" cy="${y}" r="24" fill="transparent"/>
-           <circle class="halo" cx="${x}" cy="${y}" r="14"/>
-           <circle class="core" cx="${x}" cy="${y}" r="6"/>
-           <text x="${ax}" y="${ay}" text-anchor="${p.anchor}">${c.name}</text>`
-        : `<circle cx="${x}" cy="${y}" r="3.4"/>
-           <text x="${ax}" y="${ay}" text-anchor="${p.anchor}">${c.name} · ${t("world.soon")}</text>`;
-      if (ready) {
-        g.setAttribute("role", "button");
-        g.setAttribute("tabindex", "0");
-        const go = () => { location.hash = "#/" + c.id; };
-        g.addEventListener("click", go);
-        g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") go(); });
-      }
-      worldSvg.appendChild(g);
+      html += ready
+        ? `<g class="city-ready" role="button" tabindex="0" data-city="${c.id}">
+             <circle class="hit" cx="${x}" cy="${y}" r="${hitR}" fill="transparent"/>
+             <circle class="halo" cx="${x}" cy="${y}" r="${haloR}"/>
+             <circle class="core" cx="${x}" cy="${y}" r="${coreR}" stroke-width="${stroke}"/>
+             <text x="${p.ax}" y="${p.ay}" text-anchor="${p.anchor}" font-size="${f}">${name}</text>
+           </g>`
+        : `<g class="city-soon">
+             <circle cx="${x}" cy="${y}" r="${soonR}"/>
+             <text x="${p.ax}" y="${p.ay}" text-anchor="${p.anchor}" font-size="${f}">${label}</text>
+           </g>`;
+    });
+    cityLayer.innerHTML = html;
+  }
+
+  // Re-render markers after a zoom change (rAF-throttled; a pan leaves the scale
+  // untouched so it is skipped). Panning moves markers with the map for free.
+  function scheduleCityRender() {
+    if (cityRenderRAF) return;
+    cityRenderRAF = requestAnimationFrame(() => {
+      cityRenderRAF = 0;
+      if (cityRenderScale < 0 || Math.abs(wScale - cityRenderScale) / cityRenderScale > 0.02)
+        renderCities();
     });
   }
 
@@ -248,6 +297,7 @@
   function wApply() {
     worldMapLayer.style.transform = wScale === 1 && wX === 0 && wY === 0
       ? "" : `translate(${wX}px,${wY}px) scale(${wScale})`;
+    scheduleCityRender(); // keep marker sizes constant as the map zooms
   }
   function wClamp() {
     wScale = Math.max(1, Math.min(W_MAX, wScale));
@@ -2014,7 +2064,8 @@
     const res = await fetch(`data/cities.json?v=${BM_VER}`);
     cities = res.ok ? (await res.json()).cities : [];
     applyI18n();
-    renderWorld();
+    renderWorldDots();
+    renderCities();
     route();
     // once the map has real layout size, land the mobile Africa frame (avoids a
     // first-paint where clientWidth was still 0)
@@ -2027,5 +2078,13 @@
   window.addEventListener("orientationchange", () => {
     if (isMobileSplash() && !document.body.classList.contains("city"))
       requestAnimationFrame(() => requestAnimationFrame(resetWorldZoom));
+  });
+  // a resize changes the map's pixel size (px-per-unit), so redraw markers at
+  // their constant on-screen size for the new layout
+  let worldResizeTimer = 0;
+  window.addEventListener("resize", () => {
+    if (document.body.classList.contains("city")) return;
+    clearTimeout(worldResizeTimer);
+    worldResizeTimer = setTimeout(() => { cityRenderScale = -1; renderCities(); }, 150);
   });
 })();
