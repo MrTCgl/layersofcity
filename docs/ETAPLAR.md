@@ -893,3 +893,48 @@ selektör-selektör çekilerek dolduruldu; 15 şehirde 322 üst-üste-binen tekr
 pin temizlendi (kural `docs/VERI.md` adım 6). Kalan tek boşluk: Prag'da
 `tourism=attraction[building][wikidata]` selektörü hâlâ Overpass timeout'u
 veriyor.
+
+---
+
+## Varış linkleri denetimi (2026-07-25) ✅ tamam
+
+Kullanıcı "Prag'da havaalanından gelen hat yarım mı kalıyor?" diye sorunca tüm
+şehirlerin varış linkleri topluca denetlendi. Prag'ın verisi sağlamdı (link ucu
+Metro A'ya 105 m, Veleslavín istasyonuna 49 m) ama **link'i hub yerine isimsiz
+bir istasyon noktasında biten tek şehirdi** — diğer 5 şehirde link Sants/
+Centraal/Wien Mitte/Alameda/Raffles gibi adı ve altyazısı olan bir aktarma
+merkezinde bitiyor. Bu yüzden görsel olarak "yarım" duruyordu.
+
+Düzeltilenler:
+
+- **Prag:** `Nádraží Veleslavín` hub olarak eklendi (+ 7 dilde `hub.veleslavin`
+  = "Metro A · havalimanı otobüsü 119"). Link artık adlandırılmış bir aktarma
+  noktasında bitiyor.
+- **London (asıl kusur):** `link-lhr` yalnız **2.1 km / 8 nokta**tı — Heathrow'un
+  hemen yanında kesiliyor, merkeze 18 km kala bitiyordu. Sebep: Piccadilly
+  geometrisi 39 ayrı parça, eski "en yakın parçayı izle" yöntemi ilk parçadan
+  sonra duruyordu. Graf + parça-ucu köprüleme + en kısa yol ile yeniden kuruldu:
+  **29.0 km, 116 nokta, en uzun segment 1135 m**, King's Cross St Pancras'ta
+  bitiyor.
+- **İstanbul:** `gate-ist` gerçek havalimanı istasyonundan **2291 m** uzaktaydı
+  (Halkalı/Prag dersinin üçüncü tekrarı) → istasyona taşındı, link M11'den
+  yeniden çizildi: en uzun segment 2116 → **1477 m** (kural altına indi).
+- **Roma:** `link-fco` **MultiLineString / 70 parça** (22'si 50 m'den kısa
+  kırıntı) idi → tek `LineString`, 108 nokta.
+- **İzmir:** `link-adb` İZBAN'dan yeniden çizildi (3210 → 2765 m).
+
+**Araç:** `relink` — omurgadaki bir hattın tüm parçalarından graf kurar,
+parça uçlarındaki boşlukları köprüler, kapı → hub en kısa yolunu alır. Parçalı
+hat geometrisi olan her şehirde kullanılabilir.
+
+### Kalan (kalıtsal, ayrı iş)
+
+4 link hâlâ 2 km kuralını aşıyor: `izmir/ADB` 2765 m, `newyork/EWR` 3372 m,
+`roma/FCO` 5168 m, `tokyo/Narita` 4072 m. **Sebep link'te değil, omurga
+hatlarının kendisinde:** eski şehirlerde (2026-07-14 densify kuralından önce
+üretilenler) hatlarda uzun düz segmentler var — Tokyo `JC` 23 km (!), New York
+8.6 km, İzmir `Vapur` 6.2 km, Roma `FL` 5.2 km, Paris `RER D` 4.6 km, İstanbul
+`Marmaray` 2.9 km. Link o hattı izlediği için sıçramayı miras alıyor.
+Kalıcı çözüm bu hatları Overpass'tan **densify'lı** boru hattıyla yeniden
+çekmek; sonradan densify işe yaramaz (noktalar düz çizginin üstüne düşer,
+gerçek güzergâhı geri getirmez).
