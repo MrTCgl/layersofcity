@@ -799,9 +799,10 @@ Dil `cs` (yeni `lang.cs` i18n anahtarı 6 dile eklendi), para **CZK**
 - **Manifest:** merkez `[14.42, 50.08]`, `Europe/Prague`, para CZK, geniş home.
   Fiyat tablosu editoryal CZK (0.5L bira 35 Kč!).
 - **Varış (4 kapı):** Letiště Václava Havla (havalimanı — Prag'ın raylı bağlantısı
-  yok; bus 119 → Nádraží Veleslavín metni kapıda, **Overpass bus 119 geometrisini
-  o gün çekemediğinden link çizgisi eklenemedi**, kapı işareti olarak duruyor),
-  Praha hlavní nádraží, Praha-Holešovice, ÚAN Florenc (otobüs).
+  yok; bus 119 → Nádraží Veleslavín, **gerçek karayolu güzergâhı 2026-07-25'te
+  tamamlandı**: Aviatická → K Letišti → Evropská, 7.3 km, 94 nokta, en uzun düz
+  segment 410 m, 12.9 köşe/km), Praha hlavní nádraží, Praha-Holešovice,
+  ÚAN Florenc (otobüs).
 - **Omurga (29 hat, 172KB):** Metro A/B/C (resmî renkler) + 26 gündüz tramı
   (1-26 + 34; gece 91-99, tarihi 41/42 hariç; tek muted renk, rozet numara).
   67 istasyon + 293 tram durağı + 8 hub. Gerçekçilik geçti (en uzun 1683m).
@@ -821,10 +822,21 @@ Durum notu: **Prag mahalleleri OSM'de `admin_level`/`place=suburb` DEĞİL
 turistik sorgusu bu yüzden 0 döndü, keşifle bulunup düzeltildi. Metro `ref`=A/B/C
 `route=subway`. **Overpass o gün olağanüstü ağırdı** — tram 16 + modern/muze +
 bus 119 + park sorgusu + turistik ilk tur timeout'ladı; kritikler ikinci turda,
-turistik cadastral ile üçüncü turda çekildi; modern ve havalimanı link'i eksik
-kaldı (kabul; POI/kapı metni kapsıyor). İstasyonlar ayrı çekilip en yakın hatta
-atandı + tekilleştirildi (835→360). area_km2 Prag enlemine düzeltildi.
+turistik cadastral ile üçüncü turda çekildi; modern eksik kaldı (kabul; ikonik
+kapsıyor). İstasyonlar ayrı çekilip en yakın hatta atandı + tekilleştirildi
+(835→360). area_km2 Prag enlemine düzeltildi.
 `cities.json` → `ready`; önbellek sürümleri birlikte 20260722-6.
+
+**Havalimanı link'i tamamlandı (2026-07-25):** `relation[route=bus][ref=119]`
+Overpass'ta ısrarla timeout verdiği için (ref-only relation taraması ağır) link
+**karayolu grafından** üretildi — koridordaki tüm sürülebilir yollar çekilip
+(2238 way) graf kuruldu, boşluklar köprülendi, Terminál 1 ↔ Nádraží Veleslavín
+en kısa yolu alındı. Çıkan güzergâh gerçek 119 koridorunu izliyor (sokak
+denetimi: Evropská 51 düğüm, K Letišti 47, Aviatická 6). **Kapı koordinatı
+düzeltmesi:** `gate-prg` gerçek terminalden ~530 m batıdaydı (Halkalı dersinin
+aynısı) → OSM `aeroway=terminal` centroid'ine taşındı, snap 575 m → 116 m.
+Ders: raylı bağlantısı olmayan şehirlerde varış link'i karayolu grafıyla da
+üretilebilir; sonuç sokak-adı denetimiyle doğrulanır. Önbellek 20260722-8.
 
 ---
 
@@ -873,5 +885,5 @@ Singapore** tek oturumda eklendi (Barselona + Amsterdam'ın ardından). Toplam
 wrapper'ları) sayesinde her şehir aynı adımlarla üretildi. Yeni dil anahtarları:
 `lang.pt/de/cs/en`; yeni para sembolleri: `CZK="Kč"`, `SGD="S$"`. Overpass gün
 boyu olağanüstü ağırdı; ayna failover 70s + tema/hat başına yeniden çekim ile
-tüm katmanlar tamamlandı (birkaç ikincil eksik: Prag havalimanı link'i, bazı
-modern temaları — hepsi durum notlarında).
+tüm katmanlar tamamlandı (birkaç ikincil eksik: bazı modern temaları — durum
+notlarında). Prag havalimanı link'i 2026-07-25'te karayolu grafıyla tamamlandı.
