@@ -209,6 +209,20 @@ anında** üretilir (çalışma zamanı bağımlılığı yok; atıf altbilgide)
    uygulandı: Topkapı/Ayasofya/Sultanahmet vb. 49 nokta; Roma allowlist'i
    2026-07-12'de: Palatino/Fori Imperiali/Campidoglio/Vittoriano/Bocca della
    Verità/Santa Maria Maggiore vb. 42 nokta.)
+6. **Tema tekilleştirme — üst üste binen pin (2026-07-25):** bazı OSM
+   selektörleri temalar arasında kesişir; en belirgini `amenity=marketplace`
+   hem **gastronomi** hem **alışveriş** sorgusunda olduğu için her pazar iki kez
+   yazılıyordu. Aynı koordinatta iki nokta = üst üste binen pin + iki kez
+   çizilen etiket. Kural: **bir yer = bir pin.** Üretim sonunda aynı
+   `(name, koordinat)` çiftleri tekilleştirilir; birden çok temada görünen yer
+   için ziyaretçiye en işlevsel tema tutulur — öncelik sırası:
+   `doga > gastronomi > tarihi > modern > otel > yurt > alisveris > kamu`.
+   İki istisna: (a) elle eklenen **ikonik** girdinin (`ke-ic-*`) teması korunur,
+   (b) `docs/IKONIK_LANDMARKLAR.md`'de **modern** olarak listelenen simgeler
+   (Fernsehturm, London Eye, Shard, Puerta de Europa, Hundertwasserhaus…)
+   `tarihi`ye düşürülmez. 2026-07-25'te 15 şehirde 322 tekrar temizlendi.
+   Yan etki (bilinçli): pazarlar artık yalnız **gastronomi** altında; alışveriş
+   filtresi AVM/mağaza ağırlıklı kaldı.
 
 ## Ek alanlar (2026-07-10)
 

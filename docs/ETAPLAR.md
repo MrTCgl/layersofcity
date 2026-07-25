@@ -729,9 +729,10 @@ kararının 1.'si). Dil **`pt`** (yeni `lang.pt` i18n anahtarı 6 dile eklendi).
   OSM'de çok kısa/kırıntı → atlandı). 57 istasyon + 112 durak + 8 hub (Alameda,
   Baixa-Chiado, Marquês, São Sebastião, Campo Grande, Saldanha, Cais do Sodré,
   Oriente). Gerçekçilik geçti (en uzun düz segment 1697m).
-- **Keşfet (361 nokta, 66KB):** tarihi 88 / doğa 90 / gastronomi 32 /
-  alışveriş 45 / otel 24 / yurt 24 / kamu 51 / **modern 7** (Overpass o gün
-  modern temasını ısrarla timeout'ladı → modern büyük ölçüde ikonik'ten).
+- **Keşfet (373 nokta):** tarihi 86 / doğa 90 / **modern 40** / gastronomi 32 /
+  alışveriş 27 / otel 23 / yurt 24 / kamu 51. (modern ilk turda Overpass
+  timeout'u yüzünden 7'de kalmıştı; 2026-07-25'te selektörler tek tek çekilerek
+  40'a tamamlandı.)
   Torre de Belém/Jerónimos/Castelo/Praça do Comércio/Santa Justa/Padrão/MAAT/
   Gulbenkian/Oceanário dahil 26 ikonik elle eklendi.
 - **İhtiyaçlar (318 nokta):** eczane 75 / market 69 / yakıt 55 / kütüphane 39 /
@@ -767,10 +768,10 @@ Dil `de` (`lang.de` zaten vardı — Berlin).
   49/52/60/62/71/D/O — Viyana'nın karakteri; OSM'de renksiz olduğundan tek muted
   renk, rozet numara taşır). 112 istasyon + **419 tram durağı** + 8 hub. Gerçek
   OSM geometrisi; gerçekçilik geçti (en uzun düz segment 1644m).
-- **Keşfet (474 nokta, 84KB):** tarihi 146 / modern 59 / doğa 93 / gastronomi
-  42 / otel 39 / yurt 39 / kamu 56 / **alisveris 0** (Overpass o gün alışveriş
-  temasını ısrarla timeout'ladı; Viyana alışverişi cadde bazlı — Mariahilfer/
-  Kärntner Straße; bolge-ticari zonları kapsıyor). Stephansdom/Schönbrunn/
+- **Keşfet (502 nokta):** tarihi 145 / doğa 93 / modern 56 / gastronomi 42 /
+  **alışveriş 32** / otel 39 / yurt 39 / kamu 56. (alışveriş ilk turda Overpass
+  timeout'u yüzünden 0'dı; 2026-07-25'te AVM + pazar selektörleriyle
+  tamamlandı.) Stephansdom/Schönbrunn/
   Hofburg/Belvedere/Staatsoper/Riesenrad/Hundertwasserhaus/KHM/Albertina/
   MuseumsQuartier dahil 27 ikonik elle eklendi.
 - **İhtiyaçlar (376 nokta):** eczane 90 / market 90 / yakıt 60 / kütüphane 54 /
@@ -806,10 +807,11 @@ Dil `cs` (yeni `lang.cs` i18n anahtarı 6 dile eklendi), para **CZK**
 - **Omurga (29 hat, 172KB):** Metro A/B/C (resmî renkler) + 26 gündüz tramı
   (1-26 + 34; gece 91-99, tarihi 41/42 hariç; tek muted renk, rozet numara).
   67 istasyon + 293 tram durağı + 8 hub. Gerçekçilik geçti (en uzun 1683m).
-- **Keşfet (320 nokta, 56KB):** tarihi 92 / doğa 69 / gastronomi 22 / alışveriş
-  20 / otel 39 / yurt 32 / kamu 43 / **modern 3** (Overpass modern temasını
-  ısrarla timeout'ladı; Prag zaten tarihi ağırlıklı — modern ikonik'ten:
-  Tančící dům, Žižkov kulesi, DOX). Pražský hrad/Karlův most/Orloj/sv. Víta/
+- **Keşfet (346 nokta):** tarihi 92 / doğa 69 / **modern 34** / gastronomi 22 /
+  alışveriş 16 / otel 39 / yurt 31 / kamu 43. (modern ilk turda 3'te kalmıştı;
+  2026-07-25'te galeri + sanat merkezi selektörleriyle 34'e tamamlandı —
+  `tourism=attraction[building][wikidata]` selektörü Prag'da hâlâ timeout
+  veriyor, o kalem eksik.) Pražský hrad/Karlův most/Orloj/sv. Víta/
   Vyšehrad/Petřín dahil 26 ikonik elle eklendi.
 - **İhtiyaçlar (223 nokta):** eczane 56 / market 53 / yakıt 37 / müze 29 /
   kütüphane 27 / hastane 11 / kiralık-araç 10.
@@ -885,5 +887,9 @@ Singapore** tek oturumda eklendi (Barselona + Amsterdam'ın ardından). Toplam
 wrapper'ları) sayesinde her şehir aynı adımlarla üretildi. Yeni dil anahtarları:
 `lang.pt/de/cs/en`; yeni para sembolleri: `CZK="Kč"`, `SGD="S$"`. Overpass gün
 boyu olağanüstü ağırdı; ayna failover 70s + tema/hat başına yeniden çekim ile
-tüm katmanlar tamamlandı (birkaç ikincil eksik: bazı modern temaları — durum
-notlarında). Prag havalimanı link'i 2026-07-25'te karayolu grafıyla tamamlandı.
+tüm katmanlar tamamlandı. **2026-07-25 toparlama turu:** Prag havalimanı link'i
+karayolu grafıyla eklendi; Lizbon/Prag modern ve Viyana alışveriş temaları
+selektör-selektör çekilerek dolduruldu; 15 şehirde 322 üst-üste-binen tekrar
+pin temizlendi (kural `docs/VERI.md` adım 6). Kalan tek boşluk: Prag'da
+`tourism=attraction[building][wikidata]` selektörü hâlâ Overpass timeout'u
+veriyor.
