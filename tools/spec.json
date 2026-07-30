@@ -1,0 +1,72 @@
+{
+  "istanbul": {
+    "line-marmaray": "[\"route\"=\"train\"][\"ref\"=\"B1\"][\"network\"=\"Marmaray\"]",
+    "line-m5": "[\"route\"=\"subway\"][\"ref\"=\"M5\"]",
+    "line-m4": "[\"route\"=\"subway\"][\"ref\"=\"M4\"]"
+  },
+  "izmir": {
+    "line-izban": "[\"route\"=\"train\"][\"ref\"=\"İZBAN\"]"
+  },
+  "roma": {
+    "line-train": {"sel": "[\"route\"=\"train\"][\"ref\"~\"^FL[1-8]$\"]", "tol": 0.00015},
+    "line-tram-3": "[\"route\"=\"tram\"][\"ref\"=\"3\"]",
+    "line-tram-19": "[\"route\"=\"tram\"][\"ref\"=\"19\"]",
+    "line-rail-metromare": "[\"route\"~\"^(train|light_rail|subway)$\"][\"name\"~\"Metromare|Roma-Lido\",i]"
+  },
+  "paris": {
+    "line-metro-1": "[\"route\"=\"subway\"][\"ref\"=\"1\"]",
+    "line-metro-7": "[\"route\"=\"subway\"][\"ref\"=\"7\"]",
+    "line-rer-a": {"sel": "[\"route\"=\"train\"][\"ref\"=\"A\"][\"network\"=\"RER\"]", "tol": 0.00012},
+    "line-rer-b": {"sel": "[\"route\"=\"train\"][\"ref\"=\"B\"][\"network\"=\"RER\"]", "tol": 0.00012},
+    "line-rer-c": {"sel": "[\"route\"=\"train\"][\"ref\"=\"C\"][\"network\"=\"RER\"]", "tol": 0.00012},
+    "line-rer-d": {"sel": "[\"route\"=\"train\"][\"ref\"=\"D\"][\"network\"=\"RER\"]", "tol": 0.00012},
+    "line-rer-e": {"sel": "[\"route\"=\"train\"][\"ref\"=\"E\"][\"network\"=\"RER\"]", "tol": 0.00012}
+  },
+  "newyork": {
+    "line-sub-red": {"sel": "[\"route\"=\"subway\"][\"colour\"~\"^#d82233$\",i]", "tol": 0.0001},
+    "line-sub-green": {"sel": "[\"route\"=\"subway\"][\"colour\"~\"^#009952$\",i]", "tol": 0.0001},
+    "line-sub-purple": {"sel": "[\"route\"=\"subway\"][\"colour\"~\"^#9a38a1$\",i]", "tol": 0.0001},
+    "line-sub-blue": {"sel": "[\"route\"=\"subway\"][\"colour\"~\"^#0062cf$\",i]", "tol": 0.0001},
+    "line-sub-orange": {"sel": "[\"route\"=\"subway\"][\"colour\"~\"^#eb6800$\",i]", "tol": 0.0001},
+    "line-sub-yellow": {"sel": "[\"route\"=\"subway\"][\"colour\"~\"^#f6bc26$\",i]", "tol": 0.0001},
+    "line-sub-gray": {"sel": "[\"route\"=\"subway\"][\"colour\"~\"^#7c858c$\",i]", "tol": 0.0001},
+    "line-sub-brown": {"sel": "[\"route\"=\"subway\"][\"colour\"~\"^#8e5c33$\",i]", "tol": 0.0001},
+    "line-path_j33": "[\"route\"=\"subway\"][\"ref\"~\"JSQ\"]",
+    "line-sir": "[\"route\"~\"^(subway|train|light_rail)$\"][\"name\"~\"Staten Island Railway\",i]",
+    "line-rail-lirr": {"sel": "[\"route\"=\"train\"][\"network\"=\"LIRR\"]", "tol": 0.00015},
+    "line-rail-metro-north": {"sel": "[\"route\"=\"train\"][\"network\"~\"Metro-North\"]", "tol": 0.00015},
+    "line-rail-nj": {"sel": "[\"route\"=\"train\"][\"network\"~\"NJ Transit\"]", "tol": 0.00015}
+  },
+  "tokyo": {
+    "line-metro-s": "[\"route\"=\"subway\"][\"ref\"=\"S\"][\"network\"~\"東京メトロ|都営地下鉄\"][\"name\"!~\"直通運転\"]",
+    "line-metro-t": "[\"route\"=\"subway\"][\"ref\"=\"T\"][\"network\"~\"東京メトロ|都営地下鉄\"][\"name\"!~\"直通運転\"]",
+    "line-metro-e": "[\"route\"=\"subway\"][\"ref\"=\"E\"][\"network\"~\"東京メトロ|都営地下鉄\"][\"name\"!~\"直通運転\"]",
+    "line-metro-h": "[\"route\"=\"subway\"][\"ref\"=\"H\"][\"network\"~\"東京メトロ|都営地下鉄\"][\"name\"!~\"直通運転\"]",
+    "line-metro-y": "[\"route\"=\"subway\"][\"ref\"=\"Y\"][\"network\"~\"東京メトロ|都営地下鉄\"][\"name\"!~\"直通運転\"]",
+    "line-metro-f": "[\"route\"=\"subway\"][\"ref\"=\"F\"][\"network\"~\"東京メトロ|都営地下鉄\"][\"name\"!~\"直通運転\"]",
+    "line-metro-i": "[\"route\"=\"subway\"][\"ref\"=\"I\"][\"network\"~\"東京メトロ|都営地下鉄\"][\"name\"!~\"直通運転\"]",
+    "line-train-jc": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JC\"]", "tol": 0.00012},
+    "line-train-jb": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JB\"]", "tol": 0.00012},
+    "line-train-jo": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JO\"]", "tol": 0.00012},
+    "line-train-jt": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JT\"]", "tol": 0.00012},
+    "line-train-js": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JS\"]", "tol": 0.00012},
+    "line-train-jk": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JK\"]", "tol": 0.00012},
+    "line-train-je": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JE\"]", "tol": 0.00012},
+    "line-train-ja": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JA\"]", "tol": 0.00012},
+    "line-train-jn": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JN\"]", "tol": 0.00012},
+    "line-train-jj": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JJ\"]", "tol": 0.00012},
+    "line-train-jy": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"JY\"]", "tol": 0.00012},
+    "line-train-ss": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"SS\"]", "tol": 0.00012},
+    "line-train-si": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"SI\"]", "tol": 0.00012},
+    "line-train-oh": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"OH\"]", "tol": 0.00012},
+    "line-train-ks": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"KS\"]", "tol": 0.00012},
+    "line-train-kk": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"KK\"]", "tol": 0.00012},
+    "line-train-ko": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"KO\"]", "tol": 0.00012},
+    "line-train-ts": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"TS\"]", "tol": 0.00012},
+    "line-train-tj": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"TJ\"]", "tol": 0.00012},
+    "line-train-tx": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"TX\"]", "tol": 0.00012},
+    "line-train-ty": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"TY\"]", "tol": 0.00012},
+    "line-train-mg": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"MG\"]", "tol": 0.00012},
+    "line-train-r": {"sel": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"R\"]", "tol": 0.00012}
+  }
+}

@@ -938,3 +938,23 @@ hatlarının kendisinde:** eski şehirlerde (2026-07-14 densify kuralından önc
 Kalıcı çözüm bu hatları Overpass'tan **densify'lı** boru hattıyla yeniden
 çekmek; sonradan densify işe yaramaz (noktalar düz çizginin üstüne düşer,
 gerçek güzergâhı geri getirmez).
+
+---
+
+## Omurga geometri onarımı — 6 eski şehir 🔵 devam ediyor
+
+**Amaç:** Yukarıdaki "kalıtsal, ayrı iş" maddesini kapatmak: 2026-07-14 densify
+kuralından önce üretilen şehirlerdeki (tokyo, newyork, izmir, roma, paris,
+istanbul) uzun düz segmentleri gerçek OSM geometrisiyle değiştirmek ve 4 varış
+link'ini yeniden kurmak.
+
+Yapılacaklar:
+- İhlal envanteri (>2 km düz segment) → hat hat Overpass'tan yeniden çekim
+  (yumuşak sadeleştirme ~6-15 m, boşluklar düz çizgiyle köprülenmez, kalan
+  gerçek düzlükler densify edilir)
+- 4 varış link'i (izmir/ADB, newyork/EWR, roma/FCO, tokyo/Narita) tazelenmiş
+  hattan graf en-kısa-yolla yeniden kurulur
+- Ferry hatları için kural istisnası netleştirilir (su üstü geçiş gerçekten düz)
+- Önbellek sürümleri birlikte artırılır; doküman + skill dersi güncellenir
+
+Durum notu: —
