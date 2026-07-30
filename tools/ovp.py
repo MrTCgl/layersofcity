@@ -6,7 +6,8 @@ MIRRORS = [
     "https://overpass.kumi.systems/api/interpreter",
     "https://overpass.private.coffee/api/interpreter",
 ]
-CACHE = os.path.join(os.path.dirname(__file__), "..", "ovpcache")
+CACHE = os.environ.get("LOC_OVPCACHE") or os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "ovpcache")
 os.makedirs(CACHE, exist_ok=True)
 UA = "layersofcity/1.0 (data build; contact layersofcity@gmail.com)"
 

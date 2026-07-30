@@ -64,6 +64,16 @@ way(r)[!"building"];out geom;
 
 - Hiçbir hat/link'te **2 km'den uzun düz segment** kalmamalı; hat başına
   yoğunluk genelde **>2 köşe/km** olmalı. İhlal = o hat Overpass'tan yeniden.
+- **Hazır araçlar (2026-07-30):** `tools/audit_omurga.py` denetler,
+  `tools/repair.py <şehir> [--varis] [--apply]` onarır. Onarım **kord kord**
+  çalışır: uzun segmentin iki ucu arasındaki gerçek OSM güzergâhı graf
+  en-kısa-yolla bulunup yerine dikilir — hattı komple yeniden çekmek kapsamı
+  şişirir (Roma FL seti 353→601 km olmuştu). Seçiciler `tools/spec.json`'da.
+- **2 km ölçütü vekildir:** gerçek soru "geometri OSM'den sapıyor mu". Kordun
+  iki ucu arasındaki gerçek yol ≈ kord ise (1.00x) o düzlük gerçektir (Roma
+  FL1'in Fiumicino ovasındaki 5.2 km'si böyleydi); belirgin uzunsa (Paris RER
+  C'de 2.27x) hat köşe kesmiş, gerçek güzergâh dikilir.
+- **Ferry hatları muaf:** su üstü geçiş gerçekten düz çizgidir.
 - **Varis link'leri düz çizilmez.** Kapıyı merkeze bağlayan gerçek raylı
   hattın way'lerini çek, birleştir, iki ucu hatta izdüşür, aradaki parçayı al
   (shapely `substring`), uçlara kapı/merkez koordinatını ekle.

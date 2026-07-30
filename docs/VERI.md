@@ -182,6 +182,16 @@ anında** üretilir (çalışma zamanı bağımlılığı yok; atıf altbilgide)
    hattında ve varış link'inde **2 km'den uzun düz segment** kalmamalı
    (köşe sayısı / uzunluk yoğunluğu genelde > 2 köşe/km olmalı). Uzun düz
    segment = stilize elle çizim demektir; o hat Overpass'tan yeniden çekilir.
+   **Kuralın anlamı netleşti (2026-07-30):** 2 km ölçütü bir *vekildir*, kanıt
+   değil. Asıl ölçüt **gerçek OSM güzergâhından sapma**: bir kordun iki ucu
+   arasındaki gerçek yol (hattın way'lerinden kurulan grafta en kısa yol) korda
+   yakınsa (~1.0x) o düzlük gerçektir; korddan belirgin sapıyorsa (>1.2x, ör.
+   Paris RER C'de 2.27x) geometri köşe kesmiş demektir. Denetim aracı:
+   `tools/audit_omurga.py`; onarım: `tools/repair.py` — hattı komple yeniden
+   çekmek yerine **kord kord** onarır (yalnız kusurlu segmentin yerine gerçek
+   güzergâhı diker), böylece hattın küratörlü kapsamı bozulmaz. **Ferry hatları
+   muaftır:** su üstü geçiş gerçekten düz çizgidir (izmir Vapur 6.2 km,
+   newyork ferry 4.9 km — kusur değil).
    Varış link'leri (kapı→merkez kesikli çizgi) düz çizilmez: kapıyı merkeze
    bağlayan **gerçek raylı hattın güzergâhını** izler (ör. CDG→Nord = RER B,
    IST→Gayrettepe = M11, SAW→Kadıköy = M4, Halkalı = Marmaray). Yöntem:
