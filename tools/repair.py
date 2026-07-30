@@ -98,16 +98,30 @@ def repair_city(city, layer="omurga", apply=False):
         if ft is None:
             print(f"  {fid:24s} FEATURE YOK")
             continue
+        bridge = 70
         if isinstance(sel, dict):
+            bridge = sel.get("bridge", bridge)
             sel = sel["sel"]
+        # a link may follow more than one line (Newark: AirTrain + NEC), so a
+        # spec entry may carry a list of selectors; "way:" pulls plain ways
+        sels = sel if isinstance(sel, list) else [sel]
         (w, s), (e, n) = bounds
-        q = f'[out:json][timeout:180];relation{sel}({s},{w},{n},{e});way(r)[!"building"];out geom;'
-        try:
-            ways = ovp.ways(q)
-        except Exception as exc:
-            print(f"  {fid:24s} OVERPASS HATA {str(exc)[:50]}")
+        ways = []
+        failed = None
+        for one in sels:
+            if one.startswith("way:"):
+                q = f'[out:json][timeout:180];way{one[4:]}({s},{w},{n},{e});out geom;'
+            else:
+                q = (f'[out:json][timeout:180];relation{one}({s},{w},{n},{e});'
+                     f'way(r)[!"building"];out geom;')
+            try:
+                ways += ovp.ways(q)
+            except Exception as exc:
+                failed = str(exc)[:50]
+        if failed and not ways:
+            print(f"  {fid:24s} OVERPASS HATA {failed}")
             continue
-        adj = graph.build_graph(ways)
+        adj = graph.build_graph(ways, bridge_m=bridge)
         old = geo.parts_of(ft["geometry"])
         ows, okm, opt = geo.worst_segment(old)
         stats = {"spliced": 0, "densified": 0, "gain": 1.0}

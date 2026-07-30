@@ -927,7 +927,7 @@ Düzeltilenler:
 parça uçlarındaki boşlukları köprüler, kapı → hub en kısa yolunu alır. Parçalı
 hat geometrisi olan her şehirde kullanılabilir.
 
-### Kalan (kalıtsal, ayrı iş)
+### Kalan (kalıtsal, ayrı iş) → ✅ kapandı 2026-07-30 (aşağıdaki onarım turu)
 
 4 link hâlâ 2 km kuralını aşıyor: `izmir/ADB` 2765 m, `newyork/EWR` 3372 m,
 `roma/FCO` 5168 m, `tokyo/Narita` 4072 m. **Sebep link'te değil, omurga
@@ -941,7 +941,7 @@ gerçek güzergâhı geri getirmez).
 
 ---
 
-## Omurga geometri onarımı — 6 eski şehir 🔵 devam ediyor
+## Omurga geometri onarımı — 6 eski şehir ✅ tamam (2026-07-30)
 
 **Amaç:** Yukarıdaki "kalıtsal, ayrı iş" maddesini kapatmak: 2026-07-14 densify
 kuralından önce üretilen şehirlerdeki (tokyo, newyork, izmir, roma, paris,
@@ -957,4 +957,63 @@ Yapılacaklar:
 - Ferry hatları için kural istisnası netleştirilir (su üstü geçiş gerçekten düz)
 - Önbellek sürümleri birlikte artırılır; doküman + skill dersi güncellenir
 
-Durum notu: —
+**Yöntem — kord kord onarım (hattı komple yeniden çekmek yerine):** ilk denemede
+hatlar Overpass'tan baştan çekildi, ama bu hattın küratörlü kapsamını bozuyordu
+(Roma FL seti 353 → **601 km**, Metromare 28 → 60 km; çift yön izleri ve ekstra
+kollar giriyor). Bunun yerine geometri korunur, yalnız **>1.7 km her segment**
+için o iki uç arasındaki gerçek OSM güzergâhı (hattın way'lerinden kurulan
+grafta en kısa yol, uç boşlukları ≤70 m köprülenir) bulunup yerine dikilir.
+Sonuç: toplam uzunluk ve kapsam neredeyse aynı, nokta sayısı hafif artıyor.
+
+**Asıl bulgu — 2 km ölçütü yanlış alarm veriyordu.** Onarılan 400+ kordun
+neredeyse tamamında gerçek güzergâh = kord (kıvrım **1.00x**): yani eski
+geometri stilize/yanlış değil, **aşırı sadeleştirilmişti** (DP toleransı gerçek
+düzlükleri tek segmente indiriyordu). Tokyo `JC`'nin 23 km'lik segmenti buna en
+uç örnek — JR Chūō hattı orada gerçekten dümdüz; onarımdan sonra uzunluk aynı
+(94.5 km), sadece gerçek ara köşeler geldi (82 → 140 nokta). Gerçek kestirme
+yalnız 4 yerde çıktı: Paris `RER C` (2.27x), Tokyo `JS` (1.10x) / `TS` (1.05x) /
+`KS` (1.04x), NY `LIRR` (1.13x) — bunlar artık gerçek güzergâhı izliyor.
+
+**Sonuçlar (en uzun düz segment, önce → sonra):**
+
+| Şehir | Onarılan | Örnekler |
+|---|---|---|
+| tokyo | 30 hat + link | `JC` 23189→1632 m, `JB` 11520→1694 m, `TJ` 8689→1670 m, `link-narita` 4076→1626 m |
+| newyork | 13 hat + link | `NJ` 8610→1699 m, `Metro-North` 6581→1644 m, `LIRR` 6423→1662 m, metro renk grupları 5968→1699 m |
+| paris | 7 hat | `RER D` 4624→1485 m, `RER C` 4274→1604 m, metro 7 3173→1290 m |
+| roma | 4 hat + link | `FL` 5164→1623 m, tram 3/19 2695→1223/1654 m, `link-fco` 5164→1209 m |
+| izmir | 1 hat + link | `İZBAN` 4574→1666 m, `link-adb` 2751→1569 m |
+| istanbul | 3 hat | `Marmaray` 2921→1595 m, `M5` 2365→1360 m, `M4` 2167→1654 m |
+
+**New York EWR — tek gerçek kusur:** `link-ewr`'in ilk bacağı havalimanından
+NEC istasyonuna **2.3 km düz kesim**di (gerçek yol 6.6 km, korddan 2.9 km sapma).
+Sebep kapı koordinatıydı: `gate-ewr` AirTrain'e 700 m uzaktaydı, snap edecek ray
+yoktu (Halkalı/Prag dersinin dördüncü tekrarı). Kapı OSM `aeroway=terminal`
+Terminal B'ye taşındı (1069 m) ve link **AirTrain monoray + NEC** birleşik
+grafından baştan kuruldu: 23.5 km, Terminal C'ye 28 m, havalimanı istasyonuna
+48 m, Penn'de bitiyor. Ders: bir link birden çok hattı izleyebilir
+(`tools/spec_varis.json`'da seçici listesi + `tools/relink.py`).
+
+**Ferry istisnası:** `izmir/line-ferry` 6254 m ve `newyork/line-ferry` 4866 m
+kural dışı bırakıldı — vapur su üstünde gerçekten düz gider; denetim aracı
+`lineRef:"ferry"`'yi ayrı raporluyor.
+
+**Araçlar artık depoda:** `tools/` (audit_omurga · repair · relink · warm · ovp ·
+geo · graph · spec\*.json). Her oturumda boru hattını yeniden türetmek yerine
+bunlar çalıştırılır; ayrıntı `tools/README.md`.
+
+Bitti sayılır:
+- [x] 15 şehirde denetim temiz (`tools/audit_omurga.py` → "TEMİZ", yalnız 2
+      ferry hattı muaf olarak raporlanıyor)
+- [x] Değişiklik yalnızca geometride: 61 feature'da geometri değişti, **0
+      feature'da properties değişti** (HEAD öncesine karşı karşılaştırıldı)
+- [x] Tüm GeoJSON'lar geçerli, dosya boyutları sınırda (en büyük tokyo 200 KB,
+      newyork 312 KB), `node --check js/app.js` tamam
+- [x] Önbellek sürümleri birlikte artırıldı (`BM_VER` + `index.html`
+      `app.js?v=` = 20260730-1)
+
+Durum notu: Tamam. Sandbox'ta harita karoları engelli olduğundan görsel
+doğrulama yapılamadı; değişiklik veri içi geometriyle sınırlı ve properties
+dokunulmadı, ama canlıda göz kontrolü kullanıcıya kalıyor — özellikle
+**New York EWR kapısının yeni yeri** ve **Paris RER C / Tokyo JS** düzeltilen
+kıvrımlar. Overpass bugün sağlıklıydı (3 ayna, 45 sorgu, paralel ısıtıcı).
