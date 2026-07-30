@@ -1012,6 +1012,13 @@ Bitti sayılır:
 - [x] Önbellek sürümleri birlikte artırıldı (`BM_VER` + `index.html`
       `app.js?v=` = 20260730-1)
 
+**Dikiş temizliği:** splice, birleşme noktalarında 1 m'lik iğnecikler
+(A→B→A) bırakabiliyor; `geo.clean_parts()` bunları ve tekrar noktaları siler,
+`repair.py`/`relink.py` çıktısına bağlı. Denetimde görüldü ki
+**amsterdam/vienna/prague/barcelona** omurgalarında da aynı türden eski
+iğnecikler var (haritada görünmez, ~1 m); bu tur 6 eski şehirle sınırlı
+tutuldu, onlara dokunulmadı — istenirse tek komutla temizlenir.
+
 Durum notu: Tamam. Sandbox'ta harita karoları engelli olduğundan görsel
 doğrulama yapılamadı; değişiklik veri içi geometriyle sınırlı ve properties
 dokunulmadı, ama canlıda göz kontrolü kullanıcıya kalıyor — özellikle
