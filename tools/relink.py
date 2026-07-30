@@ -84,7 +84,7 @@ def main(argv):
     simple = LineString(route).simplify(TOL, preserve_topology=False)
     pts = [[round(x, 5), round(y, 5)] for x, y in simple.coords]
     pts = [a] + [p for p in pts if p != a and p != b] + [b]
-    parts = densify([pts])
+    parts = geo.clean_parts(densify([pts]))
     worst, km, npt = geo.worst_segment(parts)
     print(f"  {link_id}: {km:.1f} km, {npt} nokta, en uzun düz segment {worst:.0f} m "
           f"(snap {da:.0f}/{db:.0f} m, graf yolu {length/1000:.1f} km, {len(ways)} way)")

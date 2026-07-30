@@ -83,3 +83,20 @@ def as_geometry(parts):
     if len(parts) == 1:
         return {"type": "LineString", "coordinates": parts[0]}
     return {"type": "MultiLineString", "coordinates": parts}
+
+
+def clean_parts(parts):
+    """Drop duplicate points and 1-point spikes (A -> B -> A) left by splicing."""
+    out = []
+    for p in parts:
+        q = [p[0]]
+        for c in p[1:]:
+            if c == q[-1]:
+                continue
+            if len(q) > 1 and c == q[-2]:   # spike: keep the outer point only
+                q.pop()
+                continue
+            q.append(c)
+        if len(q) > 1:
+            out.append(q)
+    return out

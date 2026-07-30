@@ -83,7 +83,7 @@ def repair_feature(ft, adj, stats):
                 np_.append(b)
                 stats["densified"] += 1
         out.append(np_)
-    return out
+    return geo.clean_parts(out)
 
 
 def repair_city(city, layer="omurga", apply=False):
