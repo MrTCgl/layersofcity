@@ -1014,10 +1014,19 @@ Bitti sayılır:
 
 **Dikiş temizliği:** splice, birleşme noktalarında 1 m'lik iğnecikler
 (A→B→A) bırakabiliyor; `geo.clean_parts()` bunları ve tekrar noktaları siler,
-`repair.py`/`relink.py` çıktısına bağlı. Denetimde görüldü ki
-**amsterdam/vienna/prague/barcelona** omurgalarında da aynı türden eski
-iğnecikler var (haritada görünmez, ~1 m); bu tur 6 eski şehirle sınırlı
-tutuldu, onlara dokunulmadı — istenirse tek komutla temizlenir.
+`repair.py`/`relink.py` çıktısına bağlı.
+
+**Çıkmaz parça temizliği (2026-07-30, kullanıcı isteği):** aynı denetim
+**amsterdam/vienna/prague/barcelona** omurgalarında 484 A→B→A deseni buldu.
+Bunlar splice artığı 1 m'lik iğnecik DEĞİL — **60-390 m (medyan 83 m) gerçek
+yan-ray parçaları**: linemerge'in dallanmada içine girip geri döndüğü kısa
+çıkmazlar (siding / kavşak kuyruğu / istasyon kolu). Hepsi **kendi başına
+3 noktalı parça** ([A,B,A]) olarak duruyordu, uzun hatların içine gömülü
+değildi; yani ana güzergâhlara dokunmadan silinebiliyorlar. Haritada rota
+bilgisi taşımayan kısa fiskeler olarak görünüyorlardı, silindi:
+amsterdam 42, vienna 262, prague 31, barcelona 149. Doğrulama: kalan her
+parça eskisinde **birebir** var, properties değişmedi, denetim TEMİZ.
+Önbellek 20260730-2.
 
 Durum notu: Tamam. Sandbox'ta harita karoları engelli olduğundan görsel
 doğrulama yapılamadı; değişiklik veri içi geometriyle sınırlı ve properties
