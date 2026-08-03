@@ -1033,3 +1033,73 @@ doğrulama yapılamadı; değişiklik veri içi geometriyle sınırlı ve proper
 dokunulmadı, ama canlıda göz kontrolü kullanıcıya kalıyor — özellikle
 **New York EWR kapısının yeni yeri** ve **Paris RER C / Tokyo JS** düzeltilen
 kıvrımlar. Overpass bugün sağlıklıydı (3 ayna, 45 sorgu, paralel ısıtıcı).
+
+---
+
+## Veri kalitesi taraması — 15 şehir ✅ tamam (2026-08-03)
+
+**Amaç:** Omurga dışındaki katmanlarda sessiz kusurları aramak (kullanıcı isteği).
+Yeni araç `tools/audit_data.py` 7 kontrol yapıyor: `id` (katman içi tekrar eden
+feature id), `dup` (aynı noktada iki pin), `orphan` (hattan uzak istasyon),
+`bounds` (maxBounds dışı), `label` (adsız etiket / bilinmeyen theme), `box`
+(kutu çizilmiş bölge poligonu), `size` (dosya boyutu).
+
+**Düzeltilenler:**
+
+- **berlin `bolge-dogal` id çakışması (36):** dosya iki ayrı numaralanmış
+  partiden birleştirilmiş, iki farklı park aynı `dogal-0` id'sini taşıyordu →
+  69 feature yeniden numaralandı, etiketler ada göre eşleştirildi.
+- **Adsız etiket (68):** `lab:1` ama adı/ref'i olmayan feature'lardan `lab`
+  kaldırıldı (roma/istanbul `bolge-ticari` ağırlıkta).
+- **maxBounds dışı (8):** silindi. Aralarında london `bolge-egitim`'deki
+  **"Greenwich Uni"** — meğer Kent'teki Medway kampüsü, Londra'nın 30 km
+  doğusunda, haritada erişilemez. Poligonlar artık temsili noktasıyla denetleniyor.
+- **Üst üste binen pin (3):** madrid'de aynı anıtın iki kaydı, berlin'de tek
+  adreste 3 Stolperstein.
+- **Bölge sliver'ları (37):** sınır ilişkisinin way'leri **tek halkaya
+  dikilmek yerine ayrı ayrı kapatılmış** — mahalle yerine ince üçgenler
+  çiziliyordu. Ölçüt: çevre²/alan (gerçek bölge ~15-60, sliver yüzlerce/binlerce).
+  Onarım: `polygonize(unary_union(way'ler))`, yani baştan yapılması gereken adım.
+  turistik 32 (vienna 9 — Innere Stadt 0.26→**2.85 km²**, Favoriten 1.62→31.61;
+  barcelona 9 — el Raval 0.08→1.35, Sagrada Família oranı 87672→21; singapore 6,
+  prague 4, amsterdam 3, lisbon 2), egitim 3 (london UCL oranı 734→43, UAL,
+  vienna MedUni), dogal 3 (**Parc de Montjuïc 0.04→4.06 km²**, Riegrovy sady,
+  My Waterway@Punggol). Etiket noktaları yeni poligonun temsili noktasına taşındı.
+
+**Yanlış alarm — kaydedilmesi gereken ders:** çevre²/alan ölçütü *bölgeler* için
+iyi bir vekil ama **parklar için değil**. İlk taramada `bolge-dogal`'da 18 sliver
+göründü; OSM'den kontrol edilince 16'sının mevcut geometrisi zaten doğru çıktı
+(Großer Tiergarten 1.78 km² — OSM 1.79; Clapham Common 0.72 — 0.74; Madrid Río
+0.68 — 0.68; East Coast Park 2.09 — 2.11). Uzun/çok parçalı bir park doğası
+gereği yüksek oran verir. Araca iki koruma eklendi: (a) OSM nesnesinin **tüm**
+halkaları korunur (önce "en büyüğün %20'sinden küçükler" atılıyordu; bu Tiergarten'ı
+1.78→1.53'e düşürüyordu), (b) yeni alan eskinin 1.5 katından küçükse ve eski oran
+<500 ise dokunulmaz. **Ölçüt kusuru işaret eder, kanıtlamaz — OSM'e sorulmadan
+geometri değiştirilmez.**
+
+**Bilerek düzeltilmeyenler (ayrı karar gerekiyor):**
+
+- **Orphan istasyonlar (208).** Körlemesine silmek yanlış olur: NY'deki ferry
+  iskeleleri meşru (hat kaba çizili), Tokyo'dakilerin bir kısmı DisneySea içi
+  duraklar (çöp), ama london Seven Kings/Gidea Park **bizim Elizabeth line
+  geometrimizin kırpık** olduğunu gösteriyor — orada silinecek nokta değil,
+  tamamlanacak hat var. Tek tek bakılmalı.
+- **Müze çift kaydı (196).** Aynı müze hem Keşfet/tarihi hem İhtiyaç/müze
+  altında. İki grup ayrı açılıp kapandığı için tasarım gereği olabilir; ikisi
+  birden açıkken aynı noktada iki pin çıkıyor. Kullanıcı kararı.
+- **Dosya boyutu (3).** berlin/london/madrid `kesfet-poi` 211-280 KB (hedef 200);
+  "popüler yerler bol olsun" kararının doğal sonucu, kırpılmadı.
+- **`box` bulguları (220).** ticari/egitim/dogal poligonlarının bir kısmı OSM'de
+  gerçekten 4-5 köşeli dikdörtgen alanlar; kural (docs/VERI.md) el çizimi
+  *turistik* bölgeler için konmuştu, oralarda ihlal kalmadı.
+
+Bitti sayılır:
+- [x] 7 kontrol 15 şehirde koşuyor, düzeltilen kategorilerde bulgu sıfır
+- [x] Değişiklikler yalnız geometri/id/etiket; poligon-etiket eşleşmesi korundu
+- [x] Önbellek sürümleri birlikte artırıldı (`BM_VER` + `index.html` = 20260803-1)
+
+Durum notu: Tamam. Araçlar: `tools/audit_data.py` (denetim), `tools/fix_data.py`
+(mekanik düzeltmeler), `tools/rebuild_districts.py` (sliver onarımı; relation+way
+dizini, kısaltma eşlemesi, id tabanlı sorgu). Görsel doğrulama kullanıcıda —
+özellikle **Viyana ve Barselona'nın Bölgeler çekmecesi**, artık ince üçgenler
+yerine gerçek mahalle alanları görünecek.

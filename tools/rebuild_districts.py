@@ -107,9 +107,10 @@ def polygon_from_ids(refs):
     polys = [p for p in polygonize(unary_union(lines)) if p.area > 0]
     if not polys:
         return None
-    polys.sort(key=lambda p: p.area, reverse=True)
-    keep = [polys[0]] + [p for p in polys[1:] if p.area > polys[0].area * 0.2]
-    return unary_union(keep) if len(keep) > 1 else polys[0]
+    # Keep every ring the matched OSM object polygonizes into: a park split by
+    # roads (Tiergarten: 0.89 + 0.40 + 0.24 km²) is still one park, and dropping
+    # the smaller pieces silently shrinks it.
+    return unary_union(polys) if len(polys) > 1 else polys[0]
 
 
 def rebuild_city(city, layer="bolge-turistik", apply=False, limit=None):
@@ -145,11 +146,21 @@ def rebuild_city(city, layer="bolge-turistik", apply=False, limit=None):
             if not ids:
                 continue
             new = polygon_from_ids(ids[:3])
-            if new is not None and ratio(new) <= BAD_RATIO:
+            # A name-matched OSM object is trustworthy by construction; a park
+            # made of disjoint pieces keeps a high ratio no matter how correct
+            # it is, so growing back to at least the old area also counts.
+            if new is not None and (ratio(new) <= BAD_RATIO or km2(new) >= km2(old)):
                 break
             new = None
         if new is None:
             print(f"  {name:38s} BULUNAMADI (elle bakılmalı)", flush=True)
+            continue
+        # An elongated or multi-part park keeps a high ratio however correct it
+        # is (Tiergarten 1.78 km² measured 1.79 in OSM), so only replace when the
+        # current shape really is a shrunken sliver, not merely a thin one.
+        if km2(new) < km2(old) * 1.5 and ratio(old) < 500:
+            print(f"  {name:38s} atlandı (mevcut geometri zaten doğru: "
+                  f"{km2(old):.2f} vs {km2(new):.2f} km²)", flush=True)
             continue
         new = new.simplify(SIMPLIFY, preserve_topology=True)
         print(f"  {name:38s} {km2(old):6.2f} -> {km2(new):6.2f} km²  "
