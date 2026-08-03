@@ -40,6 +40,13 @@ SELECTORS = {
     "lisbon": ['["place"~"suburb|neighbourhood|quarter"]', '["admin_level"="8"]'],
     "singapore": ['["place"~"suburb|quarter|neighbourhood"]', '["boundary"="administrative"]'],
 }
+ALIASES = {
+    "UCL": "University College London",
+    "UAL": "University of the Arts London",
+    "LSE": "London School of Economics and Political Science",
+    "Greenwich Uni": "University of Greenwich",
+    "Westminster Uni": "University of Westminster",
+}
 GENERIC = ['["boundary"="administrative"]', '["place"~"quarter|suburb|neighbourhood"]']
 
 
@@ -52,15 +59,16 @@ def ratio(geom):
     return geom.length ** 2 / geom.area if geom.area > 0 else 1e9
 
 
-def relation_index(sel, bounds):
-    """name -> [relation id] for one selector, fetched once per city+selector.
+def area_index(sel, bounds):
+    """name -> [(type, id)] for one selector, fetched once per city+selector.
 
-    Looking a relation up by name over a bbox makes Overpass scan the area;
-    fetching the ids once and then asking for `relation(id:N)` is indexed and
-    far faster (minutes -> seconds per district).
+    Both element types matter: administrative boundaries are relations, but a
+    park or a campus is usually a single closed way, which is why the first
+    version of this tool found neither UCL nor most of the parks.
     """
     (w, s), (e, n) = bounds
-    q = f'[out:json][timeout:180];relation{sel}({s},{w},{n},{e});out ids tags;'
+    q = (f'[out:json][timeout:180];(relation{sel}({s},{w},{n},{e});'
+         f'way{sel}({s},{w},{n},{e}););out ids tags;')
     try:
         body = ovp.fetch(q, timeout=90, tries=2, allow_empty=True)
     except Exception:
@@ -68,20 +76,32 @@ def relation_index(sel, bounds):
     idx = {}
     for el in body.get("elements", []):
         nm = (el.get("tags") or {}).get("name")
-        if nm:
-            idx.setdefault(nm, []).append(el["id"])
-            idx.setdefault(nm.casefold(), []).append(el["id"])
+        if not nm:
+            continue
+        ref = (el["type"], el["id"])
+        idx.setdefault(nm, []).append(ref)
+        idx.setdefault(nm.casefold(), []).append(ref)
     return idx
 
 
-def polygon_from_ids(rel_ids):
-    q = ('[out:json][timeout:180];relation(id:' + ",".join(str(i) for i in rel_ids) +
-         ');way(r);out geom;')
-    try:
-        ways = ovp.ways(q, timeout=90, tries=2)
-    except Exception:
-        return None
-    lines = [LineString(c) for c in ways if len(c) > 1]
+def polygon_from_ids(refs):
+    rels = [i for t, i in refs if t == "relation"]
+    ways = [i for t, i in refs if t == "way"]
+    parts = []
+    if rels:
+        q = ('[out:json][timeout:180];relation(id:' + ",".join(map(str, rels)) +
+             ');way(r);out geom;')
+        parts.append(q)
+    if ways:
+        q = '[out:json][timeout:180];way(id:' + ",".join(map(str, ways)) + ');out geom;'
+        parts.append(q)
+    coords = []
+    for q in parts:
+        try:
+            coords += ovp.ways(q, timeout=90, tries=2)
+        except Exception:
+            continue
+    lines = [LineString(c) for c in coords if len(c) > 1]
     if not lines:
         return None
     polys = [p for p in polygonize(unary_union(lines)) if p.area > 0]
@@ -118,8 +138,10 @@ def rebuild_city(city, layer="bolge-turistik", apply=False, limit=None):
         for sel in chain:
             idx = index_cache.get(sel)
             if idx is None:
-                idx = index_cache[sel] = relation_index(sel, bounds)
-            ids = idx.get(name) or idx.get((name or "").casefold())
+                idx = index_cache[sel] = area_index(sel, bounds)
+            alias = ALIASES.get(name)
+            ids = (idx.get(name) or idx.get((name or "").casefold())
+                   or (idx.get(alias) if alias else None))
             if not ids:
                 continue
             new = polygon_from_ids(ids[:3])
