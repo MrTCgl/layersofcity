@@ -11,7 +11,7 @@ its ways, which is what should have happened in the first place.
 
 Usage: rebuild_districts.py <city|all> [--apply] [--limit N]
 """
-import json, math, os, sys
+import glob, json, math, os, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ovp
@@ -21,7 +21,14 @@ from shapely.ops import polygonize, unary_union
 ROOT = os.environ.get("LOC_ROOT", os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 BAD_RATIO = 150.0      # perimeter^2/area above this = sliver, not a district
 SIMPLIFY = 0.00012     # ~12 m, keeps the boundary readable but light
-LAYER = "bolge-turistik"
+LAYERS = ["bolge-turistik", "bolge-dogal", "bolge-egitim", "bolge-ticari"]
+# what an area of this kind is tagged as in OSM, tried in order
+LAYER_SELECTORS = {
+    "bolge-dogal": ['["leisure"="park"]', '["leisure"="nature_reserve"]',
+                    '["boundary"="protected_area"]', '["landuse"="forest"]'],
+    "bolge-egitim": ['["amenity"="university"]', '["amenity"="college"]'],
+    "bolge-ticari": ['["landuse"~"commercial|retail"]', '["place"~"quarter|neighbourhood"]'],
+}
 
 # Tagging differs per city (docs/ETAPLAR.md notes this per city), so try the
 # documented form first and fall back to the generic ones.
@@ -45,11 +52,31 @@ def ratio(geom):
     return geom.length ** 2 / geom.area if geom.area > 0 else 1e9
 
 
-def fetch_polygon(name, sel, bounds):
+def relation_index(sel, bounds):
+    """name -> [relation id] for one selector, fetched once per city+selector.
+
+    Looking a relation up by name over a bbox makes Overpass scan the area;
+    fetching the ids once and then asking for `relation(id:N)` is indexed and
+    far faster (minutes -> seconds per district).
+    """
     (w, s), (e, n) = bounds
-    esc = name.replace('"', '\\"')
-    q = (f'[out:json][timeout:180];relation["name"="{esc}"]{sel}({s},{w},{n},{e});'
-         f'way(r);out geom;')
+    q = f'[out:json][timeout:180];relation{sel}({s},{w},{n},{e});out ids tags;'
+    try:
+        body = ovp.fetch(q, timeout=90, tries=2, allow_empty=True)
+    except Exception:
+        return {}
+    idx = {}
+    for el in body.get("elements", []):
+        nm = (el.get("tags") or {}).get("name")
+        if nm:
+            idx.setdefault(nm, []).append(el["id"])
+            idx.setdefault(nm.casefold(), []).append(el["id"])
+    return idx
+
+
+def polygon_from_ids(rel_ids):
+    q = ('[out:json][timeout:180];relation(id:' + ",".join(str(i) for i in rel_ids) +
+         ');way(r);out geom;')
     try:
         ways = ovp.ways(q, timeout=90, tries=2)
     except Exception:
@@ -62,19 +89,19 @@ def fetch_polygon(name, sel, bounds):
         return None
     polys.sort(key=lambda p: p.area, reverse=True)
     keep = [polys[0]] + [p for p in polys[1:] if p.area > polys[0].area * 0.2]
-    geom = unary_union(keep) if len(keep) > 1 else polys[0]
-    return geom
+    return unary_union(keep) if len(keep) > 1 else polys[0]
 
 
-def rebuild_city(city, apply=False, limit=None):
-    fn = f"{ROOT}/data/{city}/layers/{LAYER}.geojson"
+def rebuild_city(city, layer="bolge-turistik", apply=False, limit=None):
+    fn = f"{ROOT}/data/{city}/layers/{layer}.geojson"
     if not os.path.exists(fn):
         return
     bounds = json.load(open(f"{ROOT}/data/{city}/city.json"))["maxBounds"]
     fc = json.load(open(fn))
     labels = {f["properties"].get("name"): f for f in fc["features"]
               if f["properties"].get("kind") == "district-label"}
-    print(f"\n=== {city}/{LAYER} ({'YAZILDI' if apply else 'kuru çalışma'})")
+    print(f"\n=== {city}/{layer} ({'YAZILDI' if apply else 'kuru çalışma'})", flush=True)
+    index_cache = {}
     done = 0
     for ft in fc["features"]:
         g = ft["geometry"]
@@ -87,17 +114,24 @@ def rebuild_city(city, apply=False, limit=None):
         if limit and done >= limit:
             continue
         new = None
-        for sel in SELECTORS.get(city, []) + GENERIC:
-            new = fetch_polygon(name, sel, bounds)
+        chain = (LAYER_SELECTORS.get(layer) or SELECTORS.get(city, [])) + GENERIC
+        for sel in chain:
+            idx = index_cache.get(sel)
+            if idx is None:
+                idx = index_cache[sel] = relation_index(sel, bounds)
+            ids = idx.get(name) or idx.get((name or "").casefold())
+            if not ids:
+                continue
+            new = polygon_from_ids(ids[:3])
             if new is not None and ratio(new) <= BAD_RATIO:
                 break
             new = None
         if new is None:
-            print(f"  {name:38s} BULUNAMADI (elle bakılmalı)")
+            print(f"  {name:38s} BULUNAMADI (elle bakılmalı)", flush=True)
             continue
         new = new.simplify(SIMPLIFY, preserve_topology=True)
         print(f"  {name:38s} {km2(old):6.2f} -> {km2(new):6.2f} km²  "
-              f"oran {ratio(old):7.0f} -> {ratio(new):4.0f}")
+              f"oran {ratio(old):7.0f} -> {ratio(new):4.0f}", flush=True)
         done += 1
         if apply:
             rounded = json.loads(json.dumps(mapping(new)))
@@ -124,6 +158,10 @@ if __name__ == "__main__":
     limit = None
     if "--limit" in sys.argv:
         limit = int(sys.argv[sys.argv.index("--limit") + 1])
-    cities = sorted(SELECTORS) if target == "all" else [target]
+    layer = "bolge-turistik"
+    if "--layer" in sys.argv:
+        layer = sys.argv[sys.argv.index("--layer") + 1]
+    cities = sorted(p.split(os.sep)[-2] for p in glob.glob(f"{ROOT}/data/*/city.json")) \
+        if target == "all" else [target]
     for c in cities:
-        rebuild_city(c, apply, limit)
+        rebuild_city(c, layer, apply, limit)
