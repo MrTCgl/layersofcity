@@ -39,7 +39,8 @@ varsa kullanıcıya sor:
   **Bölgeler** çekmecesi; altta `Keşfet · İhtiyaç` barı (yukarı açılan ikon
   menüleri; açık katman varken etiket grup rengini alır); sağ altta dikey
   kontrol sütunu: koordinat kutusu, **altlık değiştirici** (Sade / OSM Detaylı
-  [= resmi OSM **Shortbread** vektör karoları, yerel stil kopyası] / Uydu +
+  [= resmi OSM **Shortbread** vektör karoları, yerel stil kopyası] / Uydu /
+  Uydu HD [= Esri Clarity, aynı yerin daha net çekimi] / Karma +
   OSM notları / GPS izleri [şeffaflık kaydırıcılı]), Home (altında saklı
   +/−/pan yığını), Konumum. Maksimum zoom 19 (bina düzeyi); Sade altlıkta yazı
   detayı zoom'la kademeli artar (ilçe→mahalle→sokak→bina adları).

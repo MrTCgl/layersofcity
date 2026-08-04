@@ -70,7 +70,16 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   `raster-saturation .12`. Yalnız `brightness-min` artırmak görüntüyü sütlü
   yapıyor; siyah noktayı kaldırırken kontrastı da artırmak dar sokak
   gölgelerini okunur kılıyor, yanma 8 şehirde ≤%2. Aynı değerler **Karma**
-  altlığındaki uydu katmanına da uygulanır.
+  altlığındaki uydu katmanına da uygulanır. ·
+  **Uydu HD** (2026-08-04) = **Esri World Imagery Clarity**
+  (`clarity.maptiles.arcgis.com`, anahtarsız, aynı atıf): aynı yerlerin farklı
+  ve daha net çekimi. Uydu'nun yerine geçmez, yanına eklenir — Barselona/
+  İstanbul/Tokyo'da belirgin daha net ve aydınlık, New York/Roma/Singapur/
+  İzmir'de daha karanlık. Kendi ayarı `raster-brightness-min .28`,
+  `raster-contrast .06`, `raster-saturation .10` (görüntü zaten kontrastlı
+  olduğundan daha az kontrast ister; Tokyo'da yanma %11 → %2.5).
+  Kaynak `maxzoom: 18` — Clarity z19'da yer yer 404 veriyor (Roma), bu sayede
+  hiç z19 istenmez, son gerçek seviye büyütülür.
   Tüm altlıklarda maksimum zoom **19**'dur (city.json `zoom.max`) — bina
   düzeyine kadar yaklaşılabilir.
 - **GPS izleri şeffaflığı** (2026-07-14): altlık menüsünde GPS izleri açıkken

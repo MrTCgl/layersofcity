@@ -58,6 +58,7 @@
   "base.sade": "Minimal",
   "base.detay": "OSM detailed",
   "base.uydu": "Satellite",
+  "base.uyduhd": "Satellite HD",
   "base.notlar": "OSM notes",
   "base.gps": "GPS traces",
   "base.walk": "Walk & drive",

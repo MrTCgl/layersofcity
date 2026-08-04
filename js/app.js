@@ -533,15 +533,15 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260804-1"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260804-2"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
-  if (!["sade", "detay", "uydu", "karma"].includes(basemapMode)) basemapMode = "sade";
+  if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
   // OSM layer opacity in the Karma (OSM + satellite) basemap
   let osmOpacity = parseFloat(localStorage.getItem("loc-osm-op"));
   if (!(osmOpacity >= 0.1 && osmOpacity <= 1)) osmOpacity = 0.55;
   const GLYPHS = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
-  function rasterStyle(tiles, attribution) {
+  function rasterStyle(tiles, attribution, paint) {
     // maxzoom 18: Esri has no imagery past z18 in many districts and serves
     // "Map data not yet available" placeholder tiles instead — cap requests
     // there and let MapLibre overzoom the last real level up to z19.
@@ -550,7 +550,7 @@
       // brighter + crisper: lift shadows more and add a touch of contrast so
       // the imagery reads clearly instead of murky (user request 2026-07-14)
       layers: [{ id: "r", type: "raster", source: "r",
-        paint: { "raster-brightness-min": 0.24, "raster-contrast": 0.16, "raster-saturation": 0.12 } }] };
+        paint: paint || { "raster-brightness-min": 0.24, "raster-contrast": 0.16, "raster-saturation": 0.12 } }] };
   }
 
   /* ── place-name skeleton: pale OSM labels shown on Sade + Uydu, independent
@@ -638,7 +638,7 @@
   function addSkeletonLabels() {
     if (!map || basemapMode === "detay" || basemapMode === "karma") return; // OSM etiketleri zaten var
     if (!map.getSource("omt")) map.addSource("omt", { type: "vector", url: "https://tiles.openfreemap.org/planet" });
-    const c = basemapMode === "uydu" ? SK_COLORS.sat : SK_COLORS[theme];
+    const c = (basemapMode === "uydu" || basemapMode === "uyduhd") ? SK_COLORS.sat : SK_COLORS[theme];
     skeletonLabels(c).forEach(spec => {
       if (map.getLayer(spec.id)) map.removeLayer(spec.id);
       map.addLayer(spec);
@@ -646,11 +646,19 @@
   }
   const ESRI_TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
   const ESRI_ATTR = "Esri, Maxar, Earthstar Geographics";
+  // "Uydu HD" = Esri World Imagery Clarity: a different, sharper capture of the
+  // same areas (keyless, same attribution). It is not brighter everywhere —
+  // sharper and lighter in Barcelona/Istanbul/Tokyo, darker in New York/Roma —
+  // so it sits next to the plain satellite instead of replacing it. Its own
+  // paint values: the imagery already carries contrast, so it needs less.
+  const CLARITY_TILES = "https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+  const CLARITY_PAINT = { "raster-brightness-min": 0.28, "raster-contrast": 0.06, "raster-saturation": 0.10 };
   function basemapStyle() {
     // "detay" = official OSM Shortbread vector tiles (vector.openstreetmap.org),
     // local style copy with OpenFreeMap glyphs so no key is ever needed.
     if (basemapMode === "detay") return `assets/basemap-shortbread.json?v=${BM_VER}`;
     if (basemapMode === "uydu") return rasterStyle(ESRI_TILES, ESRI_ATTR);
+    if (basemapMode === "uyduhd") return rasterStyle(CLARITY_TILES, ESRI_ATTR, CLARITY_PAINT);
     return `assets/basemap-${theme}.json?v=${BM_VER}`;
   }
   // "Karma" basemap: the Shortbread style with the satellite raster slid
