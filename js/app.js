@@ -533,7 +533,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260803-1"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260804-1"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -550,7 +550,7 @@
       // brighter + crisper: lift shadows more and add a touch of contrast so
       // the imagery reads clearly instead of murky (user request 2026-07-14)
       layers: [{ id: "r", type: "raster", source: "r",
-        paint: { "raster-brightness-min": 0.14, "raster-contrast": 0.05, "raster-saturation": 0.03 } }] };
+        paint: { "raster-brightness-min": 0.24, "raster-contrast": 0.16, "raster-saturation": 0.12 } }] };
   }
 
   /* ── place-name skeleton: pale OSM labels shown on Sade + Uydu, independent
@@ -666,7 +666,7 @@
     // raster sits above the flat background but below every OSM layer
     const bgIdx = s.layers.findIndex(l => l.type === "background");
     s.layers.splice(bgIdx + 1, 0, { id: "esri-hybrid", type: "raster", source: "esri",
-      paint: { "raster-brightness-min": 0.14, "raster-contrast": 0.05, "raster-saturation": 0.03 } });
+      paint: { "raster-brightness-min": 0.24, "raster-contrast": 0.16, "raster-saturation": 0.12 } });
     return s;
   }
   // Fade the Shortbread area/line work so the imagery shows through; labels

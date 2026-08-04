@@ -65,8 +65,12 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   **OpenStreetMap Shortbread** vektör karoları (`vector.openstreetmap.org`,
   anahtarsız); stil yerel kopyadır (`assets/basemap-shortbread.json`, glifler
   OpenFreeMap'ten). Yakınlaştıkça detay ve yazılar OSM.org kalitesinde ·
-  **Uydu** = Esri World Imagery raster (aydınlık ve net:
-  `raster-brightness-min .14`, `raster-contrast .05`).
+  **Uydu** = Esri World Imagery raster (anahtarsız). Gölge kaldırma
+  (2026-08-04): `raster-brightness-min .24`, `raster-contrast .16`,
+  `raster-saturation .12`. Yalnız `brightness-min` artırmak görüntüyü sütlü
+  yapıyor; siyah noktayı kaldırırken kontrastı da artırmak dar sokak
+  gölgelerini okunur kılıyor, yanma 8 şehirde ≤%2. Aynı değerler **Karma**
+  altlığındaki uydu katmanına da uygulanır.
   Tüm altlıklarda maksimum zoom **19**'dur (city.json `zoom.max`) — bina
   düzeyine kadar yaklaşılabilir.
 - **GPS izleri şeffaflığı** (2026-07-14): altlık menüsünde GPS izleri açıkken
