@@ -533,7 +533,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260804-2"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260804-3"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -662,7 +662,9 @@
     return `assets/basemap-${theme}.json?v=${BM_VER}`;
   }
   // "Karma" basemap: the Shortbread style with the satellite raster slid
-  // underneath and the OSM layers faded via a slider.
+  // underneath and the OSM layers faded via a slider. The imagery is Clarity
+  // (Uydu HD) — under half-transparent OSM line work the sharper capture is
+  // what carries the view.
   let shortbreadJson = null;
   async function hybridStyle() {
     if (!shortbreadJson) {
@@ -670,11 +672,11 @@
       shortbreadJson = await r.json();
     }
     const s = JSON.parse(JSON.stringify(shortbreadJson));
-    s.sources.esri = { type: "raster", tiles: [ESRI_TILES], tileSize: 256, maxzoom: 18, attribution: ESRI_ATTR };
+    s.sources.esri = { type: "raster", tiles: [CLARITY_TILES], tileSize: 256, maxzoom: 18, attribution: ESRI_ATTR };
     // raster sits above the flat background but below every OSM layer
     const bgIdx = s.layers.findIndex(l => l.type === "background");
     s.layers.splice(bgIdx + 1, 0, { id: "esri-hybrid", type: "raster", source: "esri",
-      paint: { "raster-brightness-min": 0.24, "raster-contrast": 0.16, "raster-saturation": 0.12 } });
+      paint: CLARITY_PAINT });
     return s;
   }
   // Fade the Shortbread area/line work so the imagery shows through; labels
