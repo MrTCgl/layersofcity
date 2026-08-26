@@ -1103,3 +1103,69 @@ Durum notu: Tamam. Araçlar: `tools/audit_data.py` (denetim), `tools/fix_data.py
 dizini, kısaltma eşlemesi, id tabanlı sorgu). Görsel doğrulama kullanıcıda —
 özellikle **Viyana ve Barselona'nın Bölgeler çekmecesi**, artık ince üçgenler
 yerine gerçek mahalle alanları görünecek.
+
+---
+
+## Yeni şehir — Padova ✅ tamam (2026-08-26)
+
+**Amaç:** İtalya'nın ikinci şehri; metrosuz, tramvay + bölgesel tren + otobüs
+omurgalı **küçük** bir şehirde `yeni-sehir` akışının çalıştığını göstermek.
+Kod değişmedi; yalnız `tools/ovp.py`'ye yeni bir Overpass aynası eklendi.
+
+Yapıldı (hepsi OSM Overpass boru hattı):
+- **Omurga (96 KB, 291 feature):** SIR1 tramvayı (19.8 km, resmi rengin soluk
+  tonu #B0708A, 21 durak + 4 hub), 3 bölgesel tren koridoru — R12
+  (Mestrino↔Venezia Mestre, 38 km), RV55 (Terme Euganee, 12.9 km), R230
+  (Camposampiero, 17.1 km); koridorlar rota ilişkisi yerine **rail ağından
+  graf en-kısa-yolla** çıkarıldı (relation sorguları aynada 504 veriyordu),
+  16 şehir içi otobüs hattı, 214 otobüs durağı (adla tekilleştirilip ~450 m
+  ızgarayla seyreltildi), 11 tren istasyonu, 5 hub (Padova FS, Ponti Romani,
+  Prato della Valle, Pontevigodarzere, Guizza).
+  **SIR2 (Rubano–Vigonza) ve SIR3 (Stazione–Voltabarozzo) çizilmedi:** OSM'de
+  `railway=construction`, hâlâ şantiye. Durakları haritada zaten `tram_stop`
+  olduğu için tram durakları SIR1 geometrisine 60 m yakınlıkla süzüldü.
+  Merkeze ya da gara hiç uğramayan 4/19/88 numaralı besleyici hatlar
+  haritayı kalabalıklaştırdığı için alınmadı.
+- **Varış (4):** Venezia Marco Polo (VCE) + Padova FS + Autostazione; VCE
+  link'i A4 üzerinden **gerçek yol güzergâhı** (40.9 km, graf en-kısa-yol,
+  en uzun düz segment 1435 m).
+- **Keşfet (331 nokta, 60 KB):** tarihi 140 / doğa 61 / otel 31 / gastronomi 30
+  / kamu 27 / modern 22 / alışveriş 13 / yurt 7. İkonik allowlist uygulandı
+  (`docs/IKONIK_LANDMARKLAR.md` → Padova): Scrovegni, Basilica di
+  sant'Antonio, Prato della Valle, Palazzo della Ragione, Orto Botanico,
+  Caffè Pedrocchi, Palazzo del Bo, Duomo, Battistero, La Specola, Loggia e
+  Odeo Cornaro, Torre dell'Orologio, Teatro Giuseppe Verdi, Sinagoga…
+- **İhtiyaç (186 nokta, 33 KB):** eczane 45 / market 45 / yakıt 30 / müze 24 /
+  kütüphane 24 / hastane 12 / kiralık araç 6.
+- **Bölgeler:** turistik 1 — **Centro storico**, 16. yy Venedik surlarının
+  çizdiği halka (surlar `linemerge` ile birleştirildi, aradaki boşluklar hendek
+  kanalı ağında graf en-kısa-yolla kapatıldı; 4.5 km², Scrovegni'den Prato
+  della Valle'ye kadar her simgeyi içeriyor, gar dışarıda kalıyor). Padova'da
+  `admin_level=9/10` mahalle sınırı YOK — bu yüzden idari sınır yerine surlar
+  kullanıldı. Ticari 6, eğitim 10 (üniversite kampüsleri), doğal 17 park.
+- **Manifest:** maxBounds VCE'yi içerecek şekilde 54×29 km; home 9×7 km;
+  fiyatlar editoryal (2026-08), para birimi EUR, dil `it`.
+- **İçerik:** 6 dilde `content/*.json` (kapı + hub alt etiketleri).
+
+Denetim:
+- `tools/audit_omurga.py padova` → **TEMİZ** (2 km'den uzun düz segment yok).
+  Gerçekten düz olan otoyol/ray parçalarına gerçek çizgi üzerinde ara nokta
+  eklendi (`densify`), sahte kısa devre yok.
+- `tools/audit_data.py` → padova'da yalnız bilinen iki kategori: müze çift
+  kaydı (Keşfet/tarihi + İhtiyaç/müze — 15 şehirde açık duran kullanıcı
+  kararı) ve OSM'de gerçekten dikdörtgen olan `box` poligonları.
+- Tarayıcı dumanı: açık/koyu tema × masaüstü/mobil, 8 katman da yükleniyor,
+  JS hatası yok.
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte 20260826-1
+- [x] Katman dosyaları hedefin altında (en büyüğü omurga 96 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. **Sandbox'ta harita karoları (OpenFreeMap) tarayıcıya
+kapalı** olduğundan görsel doğrulama, altlığı boşaltılmış yerel bir kopyada
+yapıldı — geometri/renk/rozet yerleşimi doğru görünüyor, ama **etiketler
+(glyph sunucusu kapalı olduğu için) canlıda ilk kez görülecek**. Kullanıcıdan
+göz kontrolü beklenen yer: Padova'nın Bölgeler çekmecesindeki *Centro storico*
+halkası ve otobüs ağının yoğunluğu (16 hat).
+
