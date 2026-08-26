@@ -1,0 +1,10 @@
+{
+  "pd.vce.sub": "→ Autostazione · Flughafenbus · ~1 Std.",
+  "pd.padovafs.sub": "Hauptbahnhof · Tram SIR1 + Regionalzüge",
+  "pd.autostazione.sub": "Fernbusse · 200 m vom Bahnhof",
+  "pd.hub.padovafs": "Zug · SIR1 · Stadtbusse",
+  "pd.hub.pontiromani": "SIR1 · Tor zur Altstadt",
+  "pd.hub.prato": "SIR1 · Bus · Prato della Valle",
+  "pd.hub.pontevigo": "SIR1 Nordendstation",
+  "pd.hub.guizza": "SIR1 Südendstation"
+}

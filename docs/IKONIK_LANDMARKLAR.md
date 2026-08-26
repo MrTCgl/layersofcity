@@ -31,6 +31,7 @@
 | Wien | ✅ uygulandı (2026-07-22) | Stephansdom/Schönbrunn/Hofburg/Belvedere/Staatsoper/Riesenrad/Hundertwasserhaus/Kunsthistorisches/Albertina/MuseumsQuartier allowlist; doğal bölgeye Prater/Stadtpark/Schönbrunn/Volksgarten elle eklendi |
 | Praha | ✅ uygulandı (2026-07-22) | Pražský hrad/Karlův most/Staroměstské náměstí/Orloj/Katedrála sv. Víta/Vyšehrad/Tančící dům/Petřín allowlist; doğal bölgeye Petřín/Letná/Stromovka/Kampa elle eklendi |
 | Singapore | ✅ uygulandı (2026-07-22) | Merlion/Marina Bay Sands/Gardens by the Bay/Raffles Hotel/Sultan Mosque/Chinatown/Little India/Jewel Changi allowlist; doğal bölgeye Botanic Gardens/Fort Canning/Sentosa/Mount Faber elle eklendi |
+| Padova | ✅ uygulandı (2026-08-26) | Scrovegni/Sant'Antonio/Prato della Valle/Palazzo della Ragione/Orto Botanico/Pedrocchi/Palazzo Bo/Duomo-Battistero allowlist; doğal bölgeye Parco Iris/Treves/Europa elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -229,3 +230,26 @@
   National Stadium
 - **doğa/gezi:** Singapore Botanic Gardens, Fort Canning Park, Sentosa, Mount
   Faber, Singapore Zoo; gastronomi: Lau Pa Sat, Clarke Quay; alışveriş: Orchard
+
+---
+
+## Padova
+
+- **tarihi/simge:** Cappella degli Scrovegni, Musei Civici agli Eremitani,
+  Chiesa degli Eremitani, Basilica di Sant'Antonio (il Santo), Monumento
+  equestre al Gattamelata, Oratorio di San Giorgio, Scoletta del Santo,
+  Prato della Valle, Basilica/Abbazia di Santa Giustina, Palazzo della Ragione
+  (il Salone), Piazza delle Erbe, Piazza della Frutta, Piazza dei Signori,
+  Torre dell'Orologio, Palazzo del Capitanio, Caffè Pedrocchi, Palazzo Bo
+  (Teatro Anatomico), Duomo (Cattedrale di Santa Maria Assunta), Battistero
+  della Cattedrale, Loggia e Odeo Cornaro, Castello Carrarese, La Specola,
+  Porta Portello, Porta Savonarola, Porta San Giovanni, Ponte San Lorenzo,
+  Ponte Molino, Teatro Verdi, Palazzo Zuckermann, Oratorio di San Michele,
+  Chiesa di Santa Maria dei Servi, Chiesa del Carmine, Palazzo Moroni,
+  Museo Diocesano, Ghetto/Sinagoga, Villa Giusti
+- **UNESCO:** Orto botanico (1997) + "Padova Urbs picta" 14. yy fresk döngüleri
+  (2021): Scrovegni, Eremitani, Palazzo della Ragione, Battistero, Oratorio di
+  San Michele, San Giorgio, Scoletta del Santo, Carmine
+- **modern:** Stadio Euganeo, Fiera di Padova
+- **doğa:** Orto botanico, Prato della Valle, Parco Treves, Giardini dell'Arena,
+  Parco Iris, Parco Milcovich, Parco d'Europa, Parco del Roncajette

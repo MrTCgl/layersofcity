@@ -224,6 +224,21 @@
         "es": "Singapur",
         "tr": "Singapur"
       }
+    },
+    {
+      "id": "padova",
+      "name": "Padova",
+      "lat": 45.407,
+      "lon": 11.876,
+      "status": "soon",
+      "names": {
+        "en": "Padua",
+        "de": "Padua",
+        "fr": "Padoue",
+        "it": "Padova",
+        "es": "Padua",
+        "tr": "Padova"
+      }
     }
   ]
 }

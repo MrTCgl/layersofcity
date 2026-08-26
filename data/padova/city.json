@@ -1,0 +1,117 @@
+{
+  "id": "padova",
+  "center": [
+    11.876,
+    45.4077
+  ],
+  "zoom": {
+    "start": 12,
+    "min": 9,
+    "max": 19
+  },
+  "home": [
+    [
+      11.828,
+      45.372
+    ],
+    [
+      11.945,
+      45.442
+    ]
+  ],
+  "maxBounds": [
+    [
+      11.72,
+      45.3
+    ],
+    [
+      12.4,
+      45.56
+    ]
+  ],
+  "timezone": "Europe/Rome",
+  "language": "it",
+  "currency": "EUR",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-08",
+    "water05": 0.4,
+    "petrol1l": 1.82,
+    "milk1l": 1.6,
+    "meat1kg": 13.0,
+    "cheese1kg": 14.5,
+    "beer05": 1.4,
+    "bigmac": 6.2,
+    "espresso": 1.2,
+    "transitTicket": 1.6,
+    "airportTrain": 10.0
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}

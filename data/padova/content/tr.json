@@ -1,0 +1,10 @@
+{
+  "pd.vce.sub": "→ Autostazione · havalimanı otobüsü · ~1 sa",
+  "pd.padovafs.sub": "ana gar · SIR1 tramvay + bölgesel tren",
+  "pd.autostazione.sub": "şehirlerarası otobüs · garın 200 m yanı",
+  "pd.hub.padovafs": "tren · SIR1 · şehir otobüsleri",
+  "pd.hub.pontiromani": "SIR1 · tarihi merkezin kapısı",
+  "pd.hub.prato": "SIR1 · otobüs · Prato della Valle",
+  "pd.hub.pontevigo": "SIR1 kuzey ucu",
+  "pd.hub.guizza": "SIR1 güney ucu"
+}

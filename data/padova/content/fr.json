@@ -1,0 +1,10 @@
+{
+  "pd.vce.sub": "→ Autostazione · navette aéroport · ~1 h",
+  "pd.padovafs.sub": "gare principale · tram SIR1 + trains régionaux",
+  "pd.autostazione.sub": "cars interurbains · à 200 m de la gare",
+  "pd.hub.padovafs": "train · SIR1 · bus urbains",
+  "pd.hub.pontiromani": "SIR1 · porte du centre historique",
+  "pd.hub.prato": "SIR1 · bus · Prato della Valle",
+  "pd.hub.pontevigo": "terminus nord SIR1",
+  "pd.hub.guizza": "terminus sud SIR1"
+}

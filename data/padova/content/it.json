@@ -1,0 +1,10 @@
+{
+  "pd.vce.sub": "→ Autostazione · bus aeroportuale · ~1 h",
+  "pd.padovafs.sub": "stazione centrale · tram SIR1 + treni regionali",
+  "pd.autostazione.sub": "bus extraurbani · a 200 m dalla stazione",
+  "pd.hub.padovafs": "treno · SIR1 · bus urbani",
+  "pd.hub.pontiromani": "SIR1 · porta del centro storico",
+  "pd.hub.prato": "SIR1 · bus · Prato della Valle",
+  "pd.hub.pontevigo": "capolinea nord SIR1",
+  "pd.hub.guizza": "capolinea sud SIR1"
+}
