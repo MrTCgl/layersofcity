@@ -1169,3 +1169,99 @@ yapıldı — geometri/renk/rozet yerleşimi doğru görünüyor, ama **etiketle
 göz kontrolü beklenen yer: Padova'nın Bölgeler çekmecesindeki *Centro storico*
 halkası ve otobüs ağının yoğunluğu (16 hat).
 
+
+---
+
+## Yeni şehir — Vancouver ✅ tamam (2026-09-10)
+
+**Amaç:** Kanada'nın ilk şehri ve New York'tan sonra ikinci Kuzey Amerika
+şehri; **çok merkezli, feribotlu, dağ eteğine yaslanmış** bir metropolde
+`yeni-sehir` akışını çalıştırmak. Kod değişmedi.
+
+Yapıldı (hepsi OSM Overpass boru hattı):
+- **Omurga (69 KB, 181 feature):** SkyTrain'in üç hattı — Expo (73.4 km),
+  Millennium (50.9 km), Canada Line (35.4 km, YVR kolu dâhil) —, West Coast
+  Express banliyö treni (91.2 km, Waterfront↔Mission City), SeaBus (3.2 km,
+  Waterfront↔Lonsdale Quay) ve **99 B-Line + R1-R6 RapidBus** hatları.
+  49 raylı istasyon, 96 otobüs durağı, 12 hub (Waterfront, Commercial–Broadway,
+  Broadway–City Hall, Bridgeport, Metrotown, Lougheed Town Centre, Production
+  Way–University, King George, Lonsdale Quay, Coquitlam Central,
+  New Westminster, UBC Exchange). Hat renkleri OSM `colour` etiketinden
+  (Expo #0060a9, Canada #009ac8); Millennium'un resmi sarısı (#ffd520) soluk
+  altına (#c9a227) çekildi — beyaz altlıkta okunmuyordu.
+  Not: **Broadway Subway (Millennium'un Arbutus uzantısı) çizilmedi** — OSM'de
+  hâlâ `construction`. SkyTrain hatları OSM'de `route=subway`, S-Bahn benzeri
+  bir sürpriz yok; WCE `route=train`, SeaBus `route=ferry`.
+  Otobüs durak adları harita için kısaltıldı ("East 41st Ave (EB) at Knight St"
+  → "E 41st Ave & Knight St"); **raylı istasyonlar resmi adıyla bırakıldı**
+  (ilk denemede kısaltma "22nd Street"i "22nd St" yapmıştı).
+- **Varış (5 kapı, 3 link):** YVR (Canada Line ile Waterfront, 15.1 km),
+  Pacific Central (gar + otogar: VIA Rail, Amtrak Cascades), Canada Place
+  (kruvaziyer), Tsawwassen feribot terminali (620 ile Bridgeport, 25.4 km),
+  Horseshoe Bay feribot terminali (257 ile Burrard, 20.3 km). Üç link de
+  graf en-kısa-yolla **gerçek OSM güzergâhı**; en uzun düz segment 1547 m.
+  257'nin uçları rotadan ~160 m uzakta olduğu için o link'te köprüleme 400 m.
+- **Keşfet (320 nokta, 58 KB):** doğa 81 / tarihi 61 / otel 50 / gastronomi 35
+  / alışveriş 30 / kamu 30 / modern 26 / yurt 7. **Kalite eşiği şart oldu:**
+  ham `historic` sorgusu "Buried Bulldozer", "Snowmobiles", "Rock Pile" gibi
+  yüzlerce plaket getiriyordu; tarihi/modern için wikipedia-wikidata-marka
+  eşiği (score≥1), doğa için score≥3 uygulandı. Alışverişten `department_store`
+  zincirleri çıkarıldı (Winners ×7, Canadian Tire ×5 aynı listede duruyordu).
+  İkonik allowlist uygulandı (`docs/IKONIK_LANDMARKLAR.md` → Vancouver):
+  Gastown Steam Clock, Marine Building, Sun Tower, Christ Church Cathedral,
+  Chinatown Millennium Gate, Doctor Sun Yat-Sen Classical Chinese Garden,
+  Science World, BC Place, Digital Orca, Museum of Anthropology, Stanley Park,
+  Queen Elizabeth Park, Capilano/Lynn Canyon asma köprüleri, Grouse Mountain,
+  Granville Island Public Market…
+- **İhtiyaç (227 nokta, 41 KB):** eczane 55 / market 55 / kütüphane 30 /
+  müze 30 / yakıt 25 / kiralık araç 18 / hastane 14.
+- **Bölgeler:** turistik 3 — **Downtown** (Downtown + West End + Chinatown
+  mahalleleri `admin_level=9/10` sınırlarından birleştirildi), **Granville
+  Island**, **Kitsilano**. Ticari 20, eğitim 12 (UBC, SFU, BCIT, Capilano,
+  KPU…), doğal 113 park/koruma alanı.
+- **Manifest:** maxBounds Horseshoe Bay–Tsawwassen–Mission'ı kapsayacak
+  şekilde ~87×52 km (kullanıcı kararı: geniş kapsam), home Vancouver
+  yarımadası, `America/Vancouver`, dil `en`, para CAD, fiyatlar editoryal
+  (2026-09).
+- **İçerik:** 6 dilde `content/*.json` (5 kapı + 12 hub alt etiketi).
+
+Boru hattında öğrenilenler (araç değişikliği değil, yöntem):
+- Bölge geometrisini **isim isim** çekmek Metro Vancouver'da binlerce Overpass
+  turu demekti (20 dakikada bitmedi). Doğrusu: kapalı way'ler için tek
+  `out geom tags;`, relation'lar için 50'lik gruplarla `relation(id:…);
+  out geom;` — üye geometrisi ilişki ilişki geri geliyor. `out tags geom;`
+  yazarsan üyeler boş döner, `out geom;` doğru form.
+- **Poligonu maxBounds'a kırpma:** çerçeveden taşan her park (Golden Ears,
+  Cypress) dikdörtgene dönüşüyordu — yani tam da kuralın yasakladığı kutu.
+  Kırpma kaldırıldı; onun yerine **ağırlık merkezi çerçeve dışında kalan**
+  alanlar atılıyor. Ayrıca `polygonize` artığı kırıntı halkalar (en büyük
+  parçanın %2'sinden küçük) siliniyor — `audit_data`'nın "kutu" bulgularının
+  çoğu bunlardı.
+- Nokta katmanlarına **maxBounds süzgeci** eklendi: `historic` etiketli bir
+  tren rotası ilişkisinin merkezi Cariboo'ya (500 km kuzeye) düşüyordu.
+
+Denetim:
+- `tools/audit_omurga.py vancouver` → **TEMİZ** (2 km'den uzun düz segment yok;
+  `repair.py` 25 kordu gerçek OSM güzergâhıyla dikti, kıvrım oranı hepsinde
+  1.00x — yani düzlükler gerçekti, geometri köşe kesmemişti).
+- `tools/audit_data.py` → 35 bulgu, hepsi bilinen iki kategori: müze çift
+  kaydı (Keşfet/tarihi + İhtiyaç/müze — 16 şehirde açık duran kullanıcı
+  kararı, 3 adet) ve OSM'de gerçekten dikdörtgen çizilmiş alanlar (iş
+  parkları, kampüsler, Brentwood AVM gibi 32 adet).
+- Tarayıcı dumanı (Playwright, yerel sunucu): 8 katman + manifest + içerik
+  200 dönüyor, `data/vancouver/*` isteklerinden hiçbiri düşmüyor, şehir
+  çubuğu "Vancouver · 9 Sept 23:42" (yerel saat doğru), hat çipleri 5
+  (metro/tramvay/otobüs/tren/vapur — SeaBus vapur çipiyle süzülüyor).
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte 20260910-1
+      (`BM_VER` + `index.html` → `app.js?v=`)
+- [x] Katman dosyaları hedefin altında (en büyüğü bolge-dogal 184 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Padova'daki gibi **harita karoları, glyph sunucusu ve
+canlı veri (Open-Meteo/Frankfurter) sandbox'ta kapalı** olduğundan etiket
+yerleşimi ve altlık hizası canlıda ilk kez görülecek. Kullanıcıdan göz
+kontrolü beklenen yer: Bölgeler çekmecesindeki **doğal 113 alanın** yoğunluğu
+(dağlardaki koruma alanları haritanın kuzeyini kaplıyor olabilir) ve
+Millennium hattının soluk sarısının koyu temada okunurluğu.
