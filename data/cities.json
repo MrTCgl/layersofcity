@@ -239,6 +239,21 @@
         "es": "Padua",
         "tr": "Padova"
       }
+    },
+    {
+      "id": "vancouver",
+      "name": "Vancouver",
+      "lat": 49.283,
+      "lon": -123.12,
+      "status": "soon",
+      "names": {
+        "en": "Vancouver",
+        "de": "Vancouver",
+        "fr": "Vancouver",
+        "it": "Vancouver",
+        "es": "Vancouver",
+        "tr": "Vancouver"
+      }
     }
   ]
 }
