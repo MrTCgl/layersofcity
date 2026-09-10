@@ -1,0 +1,117 @@
+{
+  "id": "vancouver",
+  "center": [
+    -123.115,
+    49.283
+  ],
+  "zoom": {
+    "start": 10.4,
+    "min": 8.5,
+    "max": 19
+  },
+  "home": [
+    [
+      -123.27,
+      49.19
+    ],
+    [
+      -122.93,
+      49.33
+    ]
+  ],
+  "maxBounds": [
+    [
+      -123.45,
+      48.98
+    ],
+    [
+      -122.25,
+      49.45
+    ]
+  ],
+  "timezone": "America/Vancouver",
+  "language": "en",
+  "currency": "CAD",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-09",
+    "water05": 2.0,
+    "petrol1l": 1.85,
+    "milk1l": 2.8,
+    "meat1kg": 20.0,
+    "cheese1kg": 22.0,
+    "beer05": 8.0,
+    "bigmac": 7.5,
+    "espresso": 3.5,
+    "transitTicket": 3.35,
+    "airportTrain": 8.35
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}

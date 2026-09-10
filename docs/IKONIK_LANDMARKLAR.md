@@ -253,3 +253,30 @@
 - **modern:** Stadio Euganeo, Fiera di Padova
 - **doğa:** Orto botanico, Prato della Valle, Parco Treves, Giardini dell'Arena,
   Parco Iris, Parco Milcovich, Parco d'Europa, Parco del Roncajette
+
+---
+
+## Vancouver
+
+- **tarihi/simge:** Gastown Steam Clock, Gastown (Maple Tree Square), Canada
+  Place, Marine Building, Sun Tower, Fairmont Hotel Vancouver, Christ Church
+  Cathedral, St. Paul's Anglican Church, Orpheum Theatre, Vogue Theatre,
+  Chinatown Millennium Gate, Dr. Sun Yat-Sen Classical Chinese Garden,
+  Brockton Point Totem Poles, Nine O'Clock Gun, Hollow Tree, Lions Gate
+  Bridge, Burrard Bridge, Roedde House Museum, Hastings Mill Store Museum,
+  Point Atkinson Lighthouse, Britannia Shipyards, Gulf of Georgia Cannery,
+  Steveston Village, Burnaby Village Museum, Empress of Japan Figurehead
+- **modern:** Vancouver Lookout (Harbour Centre), Science World, BC Place,
+  Rogers Arena, Vancouver Convention Centre, Vancouver Art Gallery, Museum of
+  Anthropology (UBC), Vancouver Public Library Central Branch, Digital Orca,
+  The Polygon Gallery, SFU Burnaby Academic Quadrangle, Olympic Cauldron
+- **doğa:** Stanley Park (Seawall, Prospect Point), English Bay Beach,
+  Kitsilano Beach, Jericho Beach, Spanish Banks, Queen Elizabeth Park +
+  Bloedel Conservatory, VanDusen Botanical Garden, Nitobe Memorial Garden,
+  UBC Botanical Garden, Pacific Spirit Regional Park, Capilano Suspension
+  Bridge, Lynn Canyon Suspension Bridge, Grouse Mountain, Mount Seymour
+  Provincial Park, Cypress Provincial Park, Deep Cove / Quarry Rock,
+  Ambleside Park, Lighthouse Park
+- **gastronomi:** Granville Island Public Market, Richmond Night Market
+- **alışveriş:** CF Pacific Centre, Metropolis at Metrotown, Oakridge Park,
+  Aberdeen Centre, Park Royal

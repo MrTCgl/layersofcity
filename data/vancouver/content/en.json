@@ -1,0 +1,19 @@
+{
+  "vc.yvr.sub": "→ Waterfront · Canada Line · ~26 min",
+  "vc.pacificcentral.sub": "main station + coach terminal · VIA Rail · Amtrak Cascades",
+  "vc.canadaplace.sub": "cruise terminal · next to Waterfront",
+  "vc.tsawwassen.sub": "Victoria ferry · → Bridgeport · 620 · ~45 min",
+  "vc.horseshoebay.sub": "Nanaimo ferry · → Burrard · 257 · ~35 min",
+  "vc.hub.waterfront": "Expo · Canada Line · SeaBus · WCE",
+  "vc.hub.commercial": "Expo · Millennium · 99 B-Line",
+  "vc.hub.broadway": "Canada Line · 99 B-Line · hospital",
+  "vc.hub.bridgeport": "Canada Line · southern buses · ferry connection",
+  "vc.hub.metrotown": "Expo · centre of Burnaby · R2",
+  "vc.hub.lougheed": "Expo · Millennium interchange",
+  "vc.hub.productionway": "Expo · Millennium · SFU bus",
+  "vc.hub.kinggeorge": "southern end of Expo · Surrey · R1",
+  "vc.hub.lonsdale": "SeaBus · North Shore buses",
+  "vc.hub.coquitlam": "Millennium · West Coast Express · R3",
+  "vc.hub.newwest": "where the two Expo branches split",
+  "vc.hub.ubc": "99 B-Line + R4 terminus · university"
+}
