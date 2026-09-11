@@ -254,6 +254,21 @@
         "es": "Vancouver",
         "tr": "Vancouver"
       }
+    },
+    {
+      "id": "moskova",
+      "name": "Moskva",
+      "lat": 55.752,
+      "lon": 37.618,
+      "status": "soon",
+      "names": {
+        "en": "Moscow",
+        "de": "Moskau",
+        "fr": "Moscou",
+        "it": "Mosca",
+        "es": "Moscú",
+        "tr": "Moskova"
+      }
     }
   ]
 }
