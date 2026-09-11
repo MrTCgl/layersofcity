@@ -13,7 +13,7 @@
       "id": "background",
       "type": "background",
       "paint": {
-        "background-color": "#F0EBE6"
+        "background-color": "#EDE6DB"
       }
     },
     {
@@ -29,7 +29,7 @@
         "neighbourhood"
       ],
       "paint": {
-        "fill-color": "#EAE3DB",
+        "fill-color": "#E8E0D3",
         "fill-opacity": 0.55
       }
     },
@@ -47,7 +47,7 @@
         "quarry"
       ],
       "paint": {
-        "fill-color": "#E6DED8",
+        "fill-color": "#E4DBCD",
         "fill-opacity": 0.45
       }
     },
@@ -57,7 +57,7 @@
       "source": "omt",
       "source-layer": "park",
       "paint": {
-        "fill-color": "#E6E8DA",
+        "fill-color": "#E6DFD0",
         "fill-opacity": 0.7
       }
     },
@@ -73,7 +73,7 @@
         "grass"
       ],
       "paint": {
-        "fill-color": "#E6E8DA",
+        "fill-color": "#E6DFD0",
         "fill-opacity": 0.5
       }
     },
@@ -83,7 +83,7 @@
       "source": "omt",
       "source-layer": "water",
       "paint": {
-        "fill-color": "#DDD8E3"
+        "fill-color": "#E1D8C9"
       }
     },
     {
@@ -92,7 +92,7 @@
       "source": "omt",
       "source-layer": "waterway",
       "paint": {
-        "line-color": "#DDD8E3",
+        "line-color": "#E1D8C9",
         "line-width": 1.5
       }
     },
@@ -102,7 +102,7 @@
       "source": "omt",
       "source-layer": "aeroway",
       "paint": {
-        "line-color": "#DAD1C7",
+        "line-color": "#FFFFFF",
         "line-width": [
           "interpolate",
           [
@@ -125,7 +125,7 @@
       "source-layer": "building",
       "minzoom": 13,
       "paint": {
-        "fill-color": "#E5DCD3",
+        "fill-color": "#E2D9C9",
         "fill-opacity": [
           "interpolate",
           [
@@ -153,7 +153,7 @@
       ],
       "minzoom": 11,
       "paint": {
-        "line-color": "#DCD4CC",
+        "line-color": "#DCD2C2",
         "line-width": 1,
         "line-dasharray": [
           3,
@@ -175,7 +175,7 @@
       ],
       "minzoom": 11.5,
       "paint": {
-        "line-color": "#DED5CB",
+        "line-color": "#FBF8F3",
         "line-width": [
           "interpolate",
           [
@@ -204,7 +204,7 @@
       ],
       "minzoom": 14,
       "paint": {
-        "line-color": "#E1D9D1",
+        "line-color": "#F2EDE4",
         "line-dasharray": [
           2,
           2
@@ -238,7 +238,7 @@
         "secondary"
       ],
       "paint": {
-        "line-color": "#D0C6B9",
+        "line-color": "#FFFFFF",
         "line-width": [
           "interpolate",
           [

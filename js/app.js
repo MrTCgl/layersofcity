@@ -533,7 +533,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260910-1"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260911-1"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -557,9 +557,12 @@
      of any layer toggle, so the map always "reads" as the city. One definition,
      laid over both basemaps from the live OpenFreeMap (omt) vector source. ── */
   const NAME = ["coalesce", ["get", "name:latin"], ["get", "name"]];
+  // Label palette follows the basemap: the "sade" style is single-hue (sand),
+  // so water/green/road labels are tints of that same hue, told apart by
+  // lightness only — no competing blue/green.
   const SK_COLORS = {
-    light: { ink: "#5C5348", strong: "#453E35", water: "#7A80A4", green: "#69764F", road: "#847A6C", halo: "#F2EDE7", hw: 1.5 },
-    dark:  { ink: "#CFC8D8", strong: "#E4DEEC", water: "#8E88AC", green: "#8C9578", road: "#8B849C", halo: "#26222C", hw: 1.5 },
+    light: { ink: "#5C5348", strong: "#453E35", water: "#9A9080", green: "#8A8071", road: "#847A6C", halo: "#F4F0E9", hw: 1.5 },
+    dark:  { ink: "#CFC6BA", strong: "#E6DFD4", water: "#8A8175", green: "#948B7D", road: "#A0968A", halo: "#221E1B", hw: 1.5 },
     sat:   { ink: "#FFFFFF", strong: "#FFFFFF", water: "#CFE0FF", green: "#DDEBC8", road: "#FFEEC2", halo: "#151515", hw: 1.9 }
   };
   function skeletonLabels(c) {

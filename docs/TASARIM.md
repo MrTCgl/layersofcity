@@ -54,6 +54,17 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   alır; Keşfet/İhtiyaç bottombar etiketi açık katman varken grup rengini alır
 - Bölge türü renkleri: Turistik `#B85C6E` · Ticari `#5B8FBF` · Eğitim
   `#B8863F` · Doğal `#5E9A6B` (dolgu .18, kenar 1.4px .65)
+- **Sade altlık tek hue'ya çekildi (2026-09-11):** altlıkta artık tek bir renk
+  (kum/bej, hue ~32°) ve onun tonları var; yeşil park ve mor su ayrımı kaldırıldı.
+  Açıklıktan koyuya sıralama: **yollar en açık (beyaz) → kara → su en koyu**.
+  Açık tema: zemin `#EDE6DB` · konut `#E8E0D3` · sanayi `#E4DBCD` · park/yeşil
+  `#E6DFD0` · bina `#E2D9C9` · su `#E1D8C9` · ana yol `#FFFFFF` · ara yol
+  `#FBF8F3` · patika `#F2EDE4` · demiryolu `#DCD2C2`.
+  Koyu tema aynı hue'nun koyu ucu: zemin `#262220` · su `#1C1917` · ana yol
+  `#4E443B`. Yer adı iskeleti (`SK_COLORS`) de aynı aileye çekildi — su/yeşil/yol
+  etiketleri yalnız açıklıkla ayrışır. Gerekçe: katman çizgileri (metro/tramvay,
+  bölge dolguları, POI) tek renkli zeminde belirginleşiyor; altlık okunurluğu
+  bozmadan geri plana düşüyor.
 - Altlık modları (2026-07-14 güncel): **Sade** = pastel vektör; katmanlardan
   bağımsız, her zaman görünen soluk bir **yer adı iskeleti** var. Yazı detayı
   zoom'la kademeli artar (simge yok, yalnız yazı): uzakta şehir + **ilçe**
