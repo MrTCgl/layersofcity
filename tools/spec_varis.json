@@ -1,20 +1,25 @@
 {
-  "roma": {
-    "link-fco": "[\"route\"=\"train\"][\"ref\"~\"^FL[1-8]$\"]"
-  },
-  "izmir": {
-    "link-adb": "[\"route\"=\"train\"][\"ref\"=\"İZBAN\"]"
-  },
-  "newyork": {
-    "link-ewr": {
-      "sel": [
-        "[\"route\"=\"train\"][\"network\"~\"NJ Transit\"]",
-        "way:[\"railway\"=\"monorail\"]"
-      ],
-      "bridge": 150
-    }
-  },
-  "tokyo": {
-    "link-narita": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"KS\"]"
+ "roma": {
+  "link-fco": "[\"route\"=\"train\"][\"ref\"~\"^FL[1-8]$\"]"
+ },
+ "izmir": {
+  "link-adb": "[\"route\"=\"train\"][\"ref\"=\"İZBAN\"]"
+ },
+ "newyork": {
+  "link-ewr": {
+   "sel": [
+    "[\"route\"=\"train\"][\"network\"~\"NJ Transit\"]",
+    "way:[\"railway\"=\"monorail\"]"
+   ],
+   "bridge": 150
   }
+ },
+ "tokyo": {
+  "link-narita": "[\"route\"~\"^(train|light_rail)$\"][\"ref\"=\"KS\"]"
+ },
+ "moskova": {
+  "link-svo": "[\"route\"=\"train\"][\"name\"~\"Аэроэкспресс.*Шереметьево\"]",
+  "link-dme": "[\"route\"=\"train\"][\"name\"~\"Аэроэкспресс.*Домодедово\"]",
+  "link-vko": "[\"route\"=\"subway\"][\"ref\"=\"8А\"][\"network\"~\"Москов\",i]"
+ }
 }

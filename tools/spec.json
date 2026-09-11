@@ -253,10 +253,6 @@
    "sel": "[\"route\"=\"tram\"][\"ref\"=\"1\"]",
    "bridge": 150
   },
-  "line-tram-3": {
-   "sel": "[\"route\"=\"tram\"][\"ref\"=\"3\"]",
-   "bridge": 150
-  },
   "line-tram-4": {
    "sel": "[\"route\"=\"tram\"][\"ref\"=\"4\"]",
    "bridge": 150
