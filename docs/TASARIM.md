@@ -56,9 +56,10 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   `#B8863F` · Doğal `#5E9A6B` (dolgu .18, kenar 1.4px .65)
 - **Sade altlık tek hue'ya çekildi (2026-09-11):** altlıkta artık tek bir renk
   (kum/bej, hue ~32°) ve onun tonları var; yeşil park ve mor su ayrımı kaldırıldı.
-  Açıklıktan koyuya sıralama: **yollar en açık (beyaz) → kara → su en koyu**.
+  Açık temada su karadan **açıktır** (`#F5F1EA`) — kullanıcı kararı 2026-09-11;
+  körfez/kıyı ferah okunuyor. Koyu temada tersi: su en koyu ton.
   Açık tema: zemin `#EDE6DB` · konut `#E8E0D3` · sanayi `#E4DBCD` · park/yeşil
-  `#E6DFD0` · bina `#E2D9C9` · su `#E1D8C9` · ana yol `#FFFFFF` · ara yol
+  `#E6DFD0` · bina `#E2D9C9` · su `#F5F1EA` · ana yol `#FFFFFF` · ara yol
   `#FBF8F3` · patika `#F2EDE4` · demiryolu `#DCD2C2`.
   Koyu tema aynı hue'nun koyu ucu: zemin `#262220` · su `#1C1917` · ana yol
   `#4E443B`. Yer adı iskeleti (`SK_COLORS`) de aynı aileye çekildi — su/yeşil/yol

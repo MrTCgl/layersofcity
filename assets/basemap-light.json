@@ -83,7 +83,7 @@
       "source": "omt",
       "source-layer": "water",
       "paint": {
-        "fill-color": "#E1D8C9"
+        "fill-color": "#F5F1EA"
       }
     },
     {
@@ -92,7 +92,7 @@
       "source": "omt",
       "source-layer": "waterway",
       "paint": {
-        "line-color": "#E1D8C9",
+        "line-color": "#F5F1EA",
         "line-width": 1.5
       }
     },
