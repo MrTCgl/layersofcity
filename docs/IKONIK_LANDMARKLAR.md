@@ -32,6 +32,8 @@
 | Praha | ✅ uygulandı (2026-07-22) | Pražský hrad/Karlův most/Staroměstské náměstí/Orloj/Katedrála sv. Víta/Vyšehrad/Tančící dům/Petřín allowlist; doğal bölgeye Petřín/Letná/Stromovka/Kampa elle eklendi |
 | Singapore | ✅ uygulandı (2026-07-22) | Merlion/Marina Bay Sands/Gardens by the Bay/Raffles Hotel/Sultan Mosque/Chinatown/Little India/Jewel Changi allowlist; doğal bölgeye Botanic Gardens/Fort Canning/Sentosa/Mount Faber elle eklendi |
 | Padova | ✅ uygulandı (2026-08-26) | Scrovegni/Sant'Antonio/Prato della Valle/Palazzo della Ragione/Orto Botanico/Pedrocchi/Palazzo Bo/Duomo-Battistero allowlist; doğal bölgeye Parco Iris/Treves/Europa elle eklendi |
+| Vancouver | ✅ uygulandı (2026-09-10) | Canada Place/Gastown Steam Clock/Stanley Park/Granville Island/Capilano vb. |
+| Moskova | ✅ uygulandı (2026-09-11) | Kreml/Kızıl Meydan/Aziz Vasil/ГУМ/Bolşoy/Tretyakov/Kurtarıcı İsa/Novodeviçi/Kolomenskoye/Tsaritsıno allowlist; modern: Moskva-City/Ostankino/Zaryadye/Kozmonotika/Garaj; doğal bölgeye Gorki/Vorobyovı/Sokolniki/İzmaylovskiy/Losinıy Ostrov/Serebryanıy Bor elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -280,3 +282,29 @@
 - **gastronomi:** Granville Island Public Market, Richmond Night Market
 - **alışveriş:** CF Pacific Centre, Metropolis at Metrotown, Oakridge Park,
   Aberdeen Centre, Park Royal
+
+---
+
+## Moskova (2026-09-11)
+
+**tarihi:** Московский Кремль · Красная площадь · Собор Василия Блаженного ·
+Мавзолей Ленина · ГУМ · Государственный исторический музей · Оружейная палата ·
+Храм Христа Спасителя · Большой театр · Малый театр · Третьяковская галерея ·
+ГМИИ им. Пушкина · Новодевичий монастырь · Донской · Данилов · Новоспасский ·
+Высоко-Петровский монастырь · Крутицкое подворье · Коломенское · Царицыно ·
+Кусково · Измайловский кремль · Дом Пашкова · Триумфальная арка · Парк Победы ·
+Царь-пушка · Царь-колокол · Александровский сад · Манежная площадь ·
+Петровский путевой дворец · Сандуны · Елисеевский · Патриаршие пруды ·
+Чистые пруды · МГУ (Ломоносов) · Котельническая набережная
+
+**modern:** Москва-Сити · Башня Федерация · Останкинская телебашня · Зарядье ·
+Музей космонавтики · Рабочий и колхозница · ВДНХ · Гараж · ГЭС-2 · Винзавод ·
+Красный Октябрь · Лужники · Бункер-42 · Мосфильм · ЦУМ
+
+**doga:** Парк Горького · Воробьёвы горы · Сокольники · Измайловский парк ·
+Лосиный Остров · Битцевский лес · Серебряный Бор · Главный ботанический сад ·
+Аптекарский огород · Нескучный сад · Филёвский парк · Кузьминки
+
+> Bulunamayan tek madde: **Гостиница «Украина»** (OSM'de otel adı
+> «Рэдиссон Коллекшен» olarak da eşleşmedi). Yedi Kızkardeş binaları listede
+> MGU ana binası + Котельническая набережная ile temsil ediliyor.

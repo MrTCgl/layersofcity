@@ -1265,3 +1265,80 @@ yerleşimi ve altlık hizası canlıda ilk kez görülecek. Kullanıcıdan göz
 kontrolü beklenen yer: Bölgeler çekmecesindeki **doğal 113 alanın** yoğunluğu
 (dağlardaki koruma alanları haritanın kuzeyini kaplıyor olabilir) ve
 Millennium hattının soluk sarısının koyu temada okunurluğu.
+
+---
+
+## Yeni şehir — Moskova ✅ tamam (2026-09-11)
+
+Hedef: Moskova'yı çok şehirli mimariye kod değişikliği olmadan eklemek.
+
+Üretilenler (hepsi OSM/Overpass, build anında):
+
+- **Omurga (38 hat · 689 feature):** metro 1-12 + 4A + 8A + 15 + 16
+  (Troitskaya), **MCC** (14. halka, `route=train`, ağ "Московский
+  метрополитен"), **MCD** D1-D4 (`network=МЦД`) ve 17 tramvay hattı
+  (Annuşka "А" dâhil). 270 metro/MCC/MCD istasyonu (`kind:"node"`),
+  331 tramvay durağı (`kind:"stop"`), 38 rozet, 12 hub.
+  Hat renkleri OSM `colour` etiketinden geliyor (M1 #E42313 gibi).
+- **Varış (17 kapı · 3 link):** SVO/DME/VKO/ZIA havaalanları; Leningradskiy,
+  Yaroslavskiy, Kazanskiy (Komsomolskaya üçlüsü), Kurskiy, Belorusskiy,
+  Kievskiy, Paveletskiy, Rijskiy, Savyolovskiy, Vostoçnıy garları;
+  Şçyolkovskiy + Salaryevo otogarları; Severnıy reçnoy vokzal.
+  Link'ler gerçek hat üzerinde: SVO→Belorusskiy ve DME→Paveletskiy
+  **Aeroexpress** ilişkilerinden, VKO→merkez **M8A** metro hattından
+  (Vnukovo Aeroexpress'i 2023'te durduruldu, metro devraldı).
+- **Keşfet (574) / İhtiyaç (390):** ızgara seyreltme + kalite vekili;
+  tarihi 180, doğa 102, modern 74, kamu 58, gastronomi 45, otel 40,
+  yurt 40, alışveriş 35.
+- **Bölgeler:** turistik 10 (merkez rayonlar, `admin_level=8`: Tverskoy,
+  Arbat, Hamovniki, Presnenskiy, Zamoskvoreçye, Yakimanka, Basmannıy,
+  Meşçanskiy, Taganskiy, Krasnoselskiy), ticari 45, eğitim 35, doğal 60.
+- **Manifest/künye:** maxBounds 36.90-38.30 E × 55.25-56.10 N (SVO, DME,
+  VKO ve Jukovskiy sığıyor), home merkez, `Europe/Moscow`, dil `ru`,
+  para RUB, fiyatlar editoryal (`updated: 2026-09`).
+- **İçerik:** `content/` 6 dilde, `mo.` önekiyle (kapı alt etiketleri +
+  12 hub açıklaması); tr/en tam, diğer diller en tabanlı + yerelleştirilmiş
+  merkez/havaalanı satırları.
+
+Dersler:
+
+- **OSM'de olmayan hattı arama:** `route=tram ref=3` Moskova bbox'ında
+  hiç ilişki döndürmüyor (ilk tarama listede gösterse de). Boş cevabı
+  cache'lememek sayesinde sessizce kaybolmadı; hat spec'ten çıkarıldı.
+- **`modern` teması müzeyi almamalı:** ilk üretimde `tourism=museum`
+  hem Keşfet/modern hem İhtiyaç/müze sorgusundaydı → 34 üst üste binen
+  pin. Selektör `gallery|arts_centre|theatre[wikidata]`'ya daraltıldı,
+  bulgular 63'ten 11'e indi.
+- **Bölge sadeleştirmesi tür başına:** 0.0003 (~33 m) kampüsleri
+  dikdörtgene indiriyordu (MGU 262 noktadan 4 köşeye). turistik dışındaki
+  türler 0.00012'ye çekildi; ayrıca çoklu poligonlardaki 0.02 km²'den
+  küçük halkalar atıldı (`audit_data`'nın "kutu" bulgularının çoğu buydu).
+
+Denetim:
+
+- `tools/audit_omurga.py moskova` → **TEMİZ**. Onarım öncesi 15 ihlal vardı
+  (en kötüsü MCD3'te 10.3 km); `repair.py` 95 kordu gerçek OSM güzergâhıyla
+  dikti. Kıvrım oranı MCD3'te **2.49x** çıktı — yani orada geometri
+  gerçekten köşe kesmişti; kalan hatlarda 1.00x (düzlükler gerçek).
+- `tools/audit_data.py` → moskova'da 11 bulgu: 2'si bilinen müze çift kaydı
+  (Oruzheynaya Palata + Puşkin Müzesi, Keşfet/tarihi + İhtiyaç/müze — 17
+  şehirde açık duran kullanıcı kararı), 9'u OSM'de gerçekten dikdörtgen
+  çizilmiş kampüs/iş parkı.
+- Tarayıcı dumanı (Playwright, yerel sunucu): 8 katman + manifest + içerik
+  **200**, JS hatası yok, harita merkezi 37.63/55.757 · zoom 11.15, şehir
+  çubuğu "Moskva · 11 Sept 15:41" (Moskova saati doğru).
+
+Bitti sayılır:
+
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte 20260911-2
+      (`BM_VER` + `index.html` → `app.js?v=`)
+- [x] Katman dosyaları hedefin altında (omurga 320 KB — yoğun şehir sınırı,
+      bolge-dogal 148 KB, kesfet-poi 114 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Padova/Vancouver'daki gibi **harita karoları ve glyph
+sunucusu sandbox'ta kapalı** (karşılaştırma için Vancouver da boş çiziyor),
+bu yüzden etiket yerleşimi ve altlık hizası canlıda ilk kez görülecek.
+Kullanıcıdan göz kontrolü beklenen yer: 331 tramvay durağının z12.5+ yoğunluğu
+ve MCD hatlarının (D1-D4, 120-190 km) haritayı taşra kesimlerinde ne kadar
+kapladığı.
