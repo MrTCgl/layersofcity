@@ -222,5 +222,100 @@
    "sel": "[\"route\"=\"bus\"][\"ref\"=\"R6\"][\"network\"~\"TransLink\",i]",
    "bridge": 150
   }
+ },
+ "moskova": {
+  "line-m1": "[\"route\"=\"subway\"][\"ref\"=\"1\"][\"network\"~\"Москов\",i]",
+  "line-m2": "[\"route\"=\"subway\"][\"ref\"=\"2\"][\"network\"~\"Москов\",i]",
+  "line-m3": "[\"route\"=\"subway\"][\"ref\"=\"3\"][\"network\"~\"Москов\",i]",
+  "line-m4": "[\"route\"=\"subway\"][\"ref\"=\"4\"][\"network\"~\"Москов\",i]",
+  "line-m4а": "[\"route\"=\"subway\"][\"ref\"=\"4А\"][\"network\"~\"Москов\",i]",
+  "line-m5": "[\"route\"=\"subway\"][\"ref\"=\"5\"][\"network\"~\"Москов\",i]",
+  "line-m6": "[\"route\"=\"subway\"][\"ref\"=\"6\"][\"network\"~\"Москов\",i]",
+  "line-m7": "[\"route\"=\"subway\"][\"ref\"=\"7\"][\"network\"~\"Москов\",i]",
+  "line-m8": "[\"route\"=\"subway\"][\"ref\"=\"8\"][\"network\"~\"Москов\",i]",
+  "line-m8а": "[\"route\"=\"subway\"][\"ref\"=\"8А\"][\"network\"~\"Москов\",i]",
+  "line-m9": "[\"route\"=\"subway\"][\"ref\"=\"9\"][\"network\"~\"Москов\",i]",
+  "line-m10": "[\"route\"=\"subway\"][\"ref\"=\"10\"][\"network\"~\"Москов\",i]",
+  "line-m11": "[\"route\"=\"subway\"][\"ref\"=\"11\"][\"network\"~\"Москов\",i]",
+  "line-m12": "[\"route\"=\"subway\"][\"ref\"=\"12\"][\"network\"~\"Москов\",i]",
+  "line-m15": "[\"route\"=\"subway\"][\"ref\"=\"15\"][\"network\"~\"Москов\",i]",
+  "line-m16": "[\"route\"=\"subway\"][\"ref\"=\"16\"][\"network\"~\"Москов\",i]",
+  "line-mcc": "[\"route\"=\"train\"][\"ref\"=\"14\"][\"network\"~\"Москов\",i]",
+  "line-mcd1": "[\"route\"=\"train\"][\"ref\"=\"D1\"][\"network\"~\"МЦД\"]",
+  "line-mcd2": "[\"route\"=\"train\"][\"ref\"=\"D2\"][\"network\"~\"МЦД\"]",
+  "line-mcd3": "[\"route\"=\"train\"][\"ref\"=\"D3\"][\"network\"~\"МЦД\"]",
+  "line-mcd4": "[\"route\"=\"train\"][\"ref\"=\"D4\"][\"network\"~\"МЦД\"]",
+  "line-tram-а": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"А\"]",
+   "bridge": 150
+  },
+  "line-tram-1": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"1\"]",
+   "bridge": 150
+  },
+  "line-tram-3": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"3\"]",
+   "bridge": 150
+  },
+  "line-tram-4": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"4\"]",
+   "bridge": 150
+  },
+  "line-tram-6": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"6\"]",
+   "bridge": 150
+  },
+  "line-tram-7": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"7\"]",
+   "bridge": 150
+  },
+  "line-tram-10": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"10\"]",
+   "bridge": 150
+  },
+  "line-tram-11": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"11\"]",
+   "bridge": 150
+  },
+  "line-tram-13": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"13\"]",
+   "bridge": 150
+  },
+  "line-tram-16": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"16\"]",
+   "bridge": 150
+  },
+  "line-tram-17": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"17\"]",
+   "bridge": 150
+  },
+  "line-tram-21": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"21\"]",
+   "bridge": 150
+  },
+  "line-tram-25": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"25\"]",
+   "bridge": 150
+  },
+  "line-tram-27": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"27\"]",
+   "bridge": 150
+  },
+  "line-tram-39": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"39\"]",
+   "bridge": 150
+  },
+  "line-tram-43": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"43\"]",
+   "bridge": 150
+  },
+  "line-tram-46": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"46\"]",
+   "bridge": 150
+  },
+  "line-tram-49": {
+   "sel": "[\"route\"=\"tram\"][\"ref\"=\"49\"]",
+   "bridge": 150
+  }
  }
 }
