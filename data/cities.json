@@ -269,6 +269,21 @@
         "es": "Seúl",
         "tr": "Seul"
       }
+    },
+    {
+      "id": "sydney",
+      "name": "Sydney",
+      "lat": -33.868,
+      "lon": 151.209,
+      "status": "soon",
+      "names": {
+        "en": "Sydney",
+        "de": "Sydney",
+        "fr": "Sydney",
+        "it": "Sydney",
+        "es": "Sídney",
+        "tr": "Sidney"
+      }
     }
   ]
 }
