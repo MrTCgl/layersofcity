@@ -1,0 +1,21 @@
+{
+  "sy.syd-t1.sub": "→ Central · T8 · ~13 min",
+  "sy.syd-t23.sub": "→ Central · T8 · ~10 min",
+  "sy.central.sub": "main station · NSW TrainLink · every T line · Metro",
+  "sy.coach.sub": "intercity coaches · Eddy Ave · beside Central",
+  "sy.circularquay.sub": "ferry hub · Overseas Passenger Terminal (cruise)",
+  "sy.whitebay.sub": "large cruise ships · Glebe Island",
+  "sy.hub.central": "Metro M1 · every T line · L2/L3 · coach terminal",
+  "sy.hub.townhall": "T1·T2·T3·T8 · under the QVB",
+  "sy.hub.wynyard": "T1·T2·T3 · B1 · Harbour Bridge end",
+  "sy.hub.circularquay": "T2·T3 · every ferry line · Opera House",
+  "sy.hub.martinplace": "Metro M1 · T4 · finance district",
+  "sy.hub.redfern": "all suburban lines · next to Sydney Uni",
+  "sy.hub.strathfield": "western interchange · T1·T2·T9",
+  "sy.hub.parramatta": "centre of the west · T1·T5 · L4 · river ferry",
+  "sy.hub.chatswood": "Metro M1 · T1 · northern centre",
+  "sy.hub.sydenham": "Metro M1 · T3·T8 · southern interchange",
+  "sy.hub.bondijunction": "end of T4 · buses to Bondi Beach",
+  "sy.hub.epping": "Metro M1 · T9 · north-west interchange",
+  "sy.hub.hurstville": "T4 · southern centre"
+}

@@ -1359,3 +1359,87 @@ yerleşimi ve altlık hizası canlıda ilk kez görülecek. Kullanıcıdan göz 
 beklenen yer: 488 istasyon etiketinin yoğunluğu (Tokyo 494 ile aynı ölçek,
 ama Seul'de hatlar daha iç içe) ve Hat 9'un soluk bej renginin (#A49D87) açık
 temada okunurluğu.
+
+---
+
+## Yeni şehir — Sidney ✅ tamam (2026-09-13)
+
+`yeni-sehir` parametrik boru hattıyla eklendi ("küresel denge" kümesinin
+2.'si). Dil `en`, para **AUD** (`CURRENCY_SYM`'e `AUD="A$"` — tek genel
+dokunuş). Kullanıcı kararı: **10 vapur hattının hepsi**, NSW TrainLink
+şehirlerarası hatları ve **B1 B-Line otobüsü** dahil.
+
+Yapıldı (hepsi OSM Overpass boru hattı):
+- **Manifest:** merkez `[151.2093, -33.8688]`, `Australia/Sydney`, zoom
+  min 8.6 / max 19, maxBounds `[[150.60,-34.15],[151.42,-33.55]]` (~76×67 km:
+  batıda Penrith yaklaşımı, kuzeyde Ku-ring-gai, güneyde Royal NP). Fiyatlar
+  editoryal (`updated: 2026-09`; Opal tek bilet 4.20 A$, havalimanı treni
+  22 A$ — istasyon erişim ücreti dahil).
+- **Omurga (197 KB, 360 feature, 29 hat):** Metro **M1**; Sydney Trains
+  **T1-T9**; NSW TrainLink şehirlerarası **BMT** (Blue Mountains), **CCN**
+  (Central Coast & Newcastle), **SCO** (South Coast), **SHL** (Southern
+  Highlands); hafif raylı **L1-L4**; vapur **F1-F10**; otobüs **B1 B-Line**.
+  223 istasyon + 66 durak (tramvay durakları ve vapur iskeleleri) + 13 hub
+  (Central, Town Hall, Wynyard, Circular Quay, Martin Place, Redfern,
+  Strathfield, Parramatta, Chatswood, Sydenham, Bondi Junction, Epping,
+  Hurstville). Renkler OSM `colour` etiketinden.
+- **Varış (6 kapı, 2 link):** Sydney Airport T1 (T8 ile Central, 8.3 km) ve
+  T2/T3 (6.7 km) — ikisi de graf en-kısa-yolla gerçek güzergâh; Central
+  Station, Sydney Coach Terminal (Eddy Ave), Circular Quay (vapur + OPT
+  kruvaziyer), White Bay Cruise Terminal.
+- **Keşfet (374 nokta, 67 KB):** tarihi 100 / doğa 91 / modern 54 /
+  alışveriş 37 / kamu 33 / otel 30 / gastronomi 21 / yurt 8. İkonik allowlist
+  uygulandı (`docs/IKONIK_LANDMARKLAR.md` → Sidney): Opera Evi, Harbour
+  Bridge, Sydney Tower, QVB, Strand Arcade, Hyde Park Barracks, Australian
+  Museum, St Mary's, Fort Denison, Luna Park, Powerhouse, SEA LIFE,
+  Barangaroo, Darling Harbour, SCG, Carriageworks, Royal Botanic Garden,
+  Taronga, Bondi/Bronte/Coogee, Sydney Fish Market, Chinatown — 28 nokta
+  elle geri eklendi.
+- **İhtiyaç (255 nokta, 45 KB):** eczane 55 / market 55 / kütüphane 35 /
+  müze 35 / yakıt 30 / hastane 25 / kiralık araç 20.
+- **Bölgeler:** turistik 5 — **CBD · The Rocks**, **Pyrmont · Darling
+  Harbour**, **Bondi Beach**, **Manly**, **Surry Hills · Darlinghurst** —
+  `admin_level=9` suburb sınırlarından birleştirildi. Ticari 51, eğitim 19
+  (USyd, UNSW, UTS, Macquarie, WSU kampüsleri, ACU), doğal 146 (Royal NP,
+  Blue Mountains NP, Ku-ring-gai dahil — geniş çerçeve kullanıcı kararı).
+- **İçerik:** 6 dilde `content/*.json` (6 kapı + 13 hub alt etiketi, `sy.` öneki).
+
+Boru hattında öğrenilenler:
+- **Boru hattı parametrikleşti:** `CITY=<şehir>` ortam değişkeniyle
+  `<şehir>_spec.py` okunuyor (BOUNDS/BBOX/LINES + HUBS/GATES/LINKS/TURISTIK/
+  PREFIX/ADMIN_LEVEL/STOP_SELECTORS). Seul'de elle yazılan aşamalar artık
+  şehir değiştirince kopyalanmıyor.
+- **Vapur iskelesi ≠ raylı istasyon:** `railway=station` sorgusu Sidney'in
+  vapur ağını hiç getirmiyordu; `amenity=ferry_terminal` + `railway=tram_stop`
+  ayrı seçicilerle `kind:"stop"` olarak eklendi (236 → 306 nokta).
+- **Rota çizgisinden uzak iskeleler:** Darling Harbour'ın üç rıhtımı ve Shark
+  Island rotanın kanal ortasından geçen çizgisine 256-328 m uzaktaydı
+  (`audit_data` orphan); dördü de atıldı.
+- **Gastronomi seçicisi ülkeye göre zayıf kalabilir:** Sidney'de
+  `amenity=marketplace` neredeyse yok — 12 noktada kalmıştı. `food_court`,
+  wikidata'lı `pub` ve `shop=seafood` eklenince 19'a çıktı; gerisini ikonik
+  allowlist (Fish Market, Paddy's, Chinatown, The Grounds) tamamladı.
+- **Avustralya'da mahalle = `admin_level=9`** (Seul'de dong = 8). Suburb
+  adları `name`'de Latin alfabesiyle duruyor, `name:en` gerekmiyor.
+
+Denetim:
+- `tools/audit_omurga.py sydney` → ilk turda **10 ihlal** (en kötüsü BMT
+  8399 m); `tools/repair.py sydney --apply` sonrası **TEMİZ**. Kıvrım oranı
+  hepsinde 1.00x — düzlükler gerçekti (Blue Mountains/Central Coast
+  koridorları), geometri köşe kesmemişti. Vapur hatları zaten muaf.
+- `tools/audit_data.py --city sydney` → 21 bulgu, ikisi de bilinen kategori:
+  gerçekten dikdörtgen çizilmiş OSM alanları (19) ve müze çift kaydı (2 —
+  Hyde Park Barracks, Elizabeth Bay House).
+- Tarayıcı dumanı (Playwright, yerel sunucu): 8 katman + manifest + içerik
+  200, konsol hatası yok, şehir çubuğu "Sydney · 14 Sept · 07:05" (AEST
+  = UTC+10 doğru), mobil genişlikte arayüz yerinde.
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260913-2**
+- [x] Katman dosyaları hedefin altında (omurga 197 KB, doğal 170 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Karolar sandbox'ta kapalı olduğundan hiza canlıda ilk kez
+görülecek. Göz kontrolü beklenen yer: **doğal 146 alanın** batı yakasını
+(Blue Mountains/Royal NP) kaplayıp kaplamadığı ve 10 vapur hattının Sydney
+Harbour'da üst üste binen yeşil tonlarının ayırt edilebilirliği.

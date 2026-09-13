@@ -33,6 +33,7 @@
 | Singapore | ✅ uygulandı (2026-07-22) | Merlion/Marina Bay Sands/Gardens by the Bay/Raffles Hotel/Sultan Mosque/Chinatown/Little India/Jewel Changi allowlist; doğal bölgeye Botanic Gardens/Fort Canning/Sentosa/Mount Faber elle eklendi |
 | Padova | ✅ uygulandı (2026-08-26) | Scrovegni/Sant'Antonio/Prato della Valle/Palazzo della Ragione/Orto Botanico/Pedrocchi/Palazzo Bo/Duomo-Battistero allowlist; doğal bölgeye Parco Iris/Treves/Europa elle eklendi |
 | Seul | ✅ uygulandı (2026-09-13) | 5 saray + Jongmyo/Bukchon/Insadong/DDP/N Seoul Tower/Lotte World Tower allowlist; doğal bölgeye Cheonggyecheon/Seoul Forest/Olympic Park/Bukhansan elle eklendi |
+| Sidney | ✅ uygulandı (2026-09-13) | Opera Evi/Harbour Bridge/QVB/Hyde Park Barracks/Luna Park/Powerhouse allowlist; doğal bölgeye Royal Botanic/The Domain/Taronga/Bondi-Bronte-Coogee elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -300,3 +301,25 @@
 - **gastronomi:** Gwangjang Pazarı, Namdaemun Pazarı, Noryangjin Balık Hali,
   Tongin Pazarı
 - **alışveriş:** Dongdaemun Pazarı, Starfield COEX Mall, Myeongdong caddesi
+
+---
+
+## Sidney
+
+- **tarihi/simge:** Hyde Park Barracks, Australian Museum, St Mary's Cathedral,
+  Customs House, Cadmans Cottage, Sydney Observatory, Anzac Memorial,
+  Fort Denison, Macquarie Lighthouse, Vaucluse House, Elizabeth Bay House,
+  Old Government House, The Rocks
+- **modern:** Sydney Opera House, Sydney Harbour Bridge, Sydney Tower Eye,
+  Luna Park, Powerhouse Museum, Australian National Maritime Museum,
+  SEA LIFE Sydney Aquarium, Barangaroo, Darling Harbour, Art Gallery of NSW,
+  Museum of Contemporary Art, White Rabbit Gallery, Carriageworks,
+  Sydney Cricket Ground, Accor Stadium
+- **doğa:** Royal Botanic Garden, The Domain, Hyde Park, Barangaroo Reserve,
+  Mrs Macquarie's Chair, Centennial Park, Taronga Zoo, Nielsen Park,
+  Bondi Beach, Bronte Beach, Coogee Beach, Manly Beach, Shelly Beach,
+  The Gap (Watsons Bay), Observatory Hill
+- **gastronomi:** Sydney Fish Market, Paddy's Markets, Chinatown (Dixon St),
+  The Grounds of Alexandria
+- **alışveriş:** Queen Victoria Building, The Strand Arcade, Pitt Street Mall,
+  Westfield Sydney, Paddington Markets, Westfield Bondi Junction
