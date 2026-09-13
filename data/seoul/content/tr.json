@@ -1,0 +1,21 @@
+{
+  "se.icn.sub": "→ Seoul Station · AREX Ekspres · ~43 dk",
+  "se.gmp.sub": "→ Express Bus Terminal · Hat 9 · ~30 dk",
+  "se.seoulstation.sub": "ana gar · KTX · Hat 1·4 · AREX",
+  "se.yongsan.sub": "KTX Honam/Jeolla · Hat 1 · Yongsan I'Park Mall",
+  "se.suseo.sub": "SRT yüksek hızlı · Hat 3 · GTX-A",
+  "se.expressbus.sub": "şehirlerarası otogar · Hat 3·7·9",
+  "se.dongseoul.sub": "doğu otogarı · Gangbyeon · Hat 2",
+  "se.hub.seoulstation": "Hat 1·4 · AREX · Gyeongui–Jungang · KTX",
+  "se.hub.wangsimni": "Hat 2·5 · Gyeongui–Jungang · Suin–Bundang",
+  "se.hub.gangnam": "Hat 2 · Sinbundang · Teheran-ro'nun kalbi",
+  "se.hub.jamsil": "Hat 2·8 · Lotte World Tower",
+  "se.hub.sindorim": "Hat 1·2 · batı aktarması",
+  "se.hub.gongdeok": "Hat 5·6 · AREX · Gyeongui–Jungang",
+  "se.hub.expressbus": "Hat 3·7·9 · şehirlerarası otobüs",
+  "se.hub.cheongnyangni": "Hat 1 · Gyeongchun · Suin–Bundang · doğu garı",
+  "se.hub.hongik": "Hat 2 · AREX · gece hayatı",
+  "se.hub.dmc": "Hat 6 · AREX · medya vadisi",
+  "se.hub.sadang": "Hat 2·4 · güney otobüs aktarması",
+  "se.hub.yeouido": "Hat 5·9 · finans merkezi"
+}

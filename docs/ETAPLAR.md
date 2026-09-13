@@ -1265,3 +1265,97 @@ yerleşimi ve altlık hizası canlıda ilk kez görülecek. Kullanıcıdan göz
 kontrolü beklenen yer: Bölgeler çekmecesindeki **doğal 113 alanın** yoğunluğu
 (dağlardaki koruma alanları haritanın kuzeyini kaplıyor olabilir) ve
 Millennium hattının soluk sarısının koyu temada okunurluğu.
+
+---
+
+## Yeni şehir — Seul ✅ tamam (2026-09-13)
+
+`yeni-sehir` parametrik boru hattıyla eklendi (kullanıcı "küresel denge"
+kümesinin 1.'si: Seul · Sidney · Toronto · Mexico City). Dil **`ko`**
+(yeni `lang.ko` anahtarı 6 dile eklendi), para **KRW** (`CURRENCY_SYM`'e
+`KRW="₩"` — tek genel dokunuş, çok-şehir güvenli).
+
+Kullanıcı kararları (onay taslağı, 2026-09-13): Han Nehri vapuru (Hangang
+Bus) **atlandı** (OSM verisi yeni/zayıf), çerçeve **geniş** bırakıldı
+(ICN batıda, Suseo/GTX güneydoğuda), **GTX-A dahil** edildi.
+
+Yapıldı (hepsi OSM Overpass boru hattı):
+- **Manifest:** merkez `[126.9784, 37.5665]`, `Asia/Seoul`, zoom min 8.8 /
+  max 19, maxBounds `[[126.35,37.28],[127.30,37.78]]` (~84×55 km). Fiyat
+  tablosu editoryal (`updated: 2026-09`; metro bileti 1.550 ₩, AREX duraklı
+  4.750 ₩).
+- **Omurga (213 KB, 538 feature, 19 hat):** metro 1-9 + Sinbundang + Ui-Sinseol
+  + Sillim + Gimpo Goldline; tren AREX, Gyeongui–Jungang, Gyeongchun,
+  Suin–Bundang, **GTX-A**, Seohae. 488 istasyon, 12 hub (Seoul Station,
+  Wangsimni, Gangnam, Jamsil, Sindorim, Gongdeok, Express Bus Terminal,
+  Cheongnyangni, Hongik Univ., Digital Media City, Sadang, Yeouido).
+  Renkler OSM `colour` etiketinden. **Tramvay yok** (Seul'de 1968'de
+  kaldırıldı), **otobüs katmanı yok** (metrobüs benzeri tek kilit hat yok) —
+  Hatlar menüsünde metro + tren çipi görünür.
+- **Varış (7 kapı, 3 link):** ICN Terminal 1 (AREX ile Seoul Station, 58.1 km),
+  Gimpo (Hat 9 ile Express Bus Terminal, 21.5 km), Seoul Station (KTX),
+  Yongsan (KTX Honam/Jeolla), Suseo (SRT; Hat 3 ile Express Bus Terminal,
+  11.8 km), Express Bus Terminal, Dong-Seoul (Gangbyeon). Üç link de graf
+  en-kısa-yolla gerçek OSM güzergâhı; kapı koordinatları OSM istasyon
+  düğümlerinden alındı (Halkalı dersi).
+- **Keşfet (414 nokta, 74 KB):** tarihi 103 / doğa 88 / kamu 50 / modern 49 /
+  alışveriş 35 / gastronomi 34 / otel 30 / yurt 25. İkonik allowlist
+  uygulandı (`docs/IKONIK_LANDMARKLAR.md` → Seul): 5 saray, Jongmyo,
+  Bukchon/Namsangol hanok köyleri, Insa-dong, Ikseon-dong, Sungnyemun, DDP,
+  63 Square, Sejong Center, Seoullo 7017, Banpo Köprüsü, Cheonggyecheon,
+  Seoul Forest, Olimpiyat Parkı, Bukhansan, Gwangjang/Namdaemun/Noryangjin
+  pazarları — 25 nokta elle geri eklendi.
+- **İhtiyaç (255 nokta, 46 KB):** eczane 55 / market 55 / kütüphane 35 /
+  müze 35 / yakıt 30 / hastane 25 / kiralık araç 20.
+- **Bölgeler:** turistik 4 — **Jongno · Bukchon** (종로1·2·3·4가동 + 삼청동 +
+  가회동 + 사직동), **Myeongdong** (명동 + 소공동), **Hongdae** (서교동 +
+  연남동), **Itaewon** (이태원1·2동) — hepsi `admin_level=8` dong sınırlarından
+  birleştirildi. Ticari 32, eğitim 64, doğal 69.
+- **İçerik:** 6 dilde `content/*.json` (7 kapı + 12 hub alt etiketi, `se.` öneki).
+
+Boru hattında öğrenilenler:
+- **`network` etiketi tuzağı:** Seul hatlarında `network` Korece (수도권 전철),
+  İngilizcesi `network:en`'de. Seçiciye `["network"="Seoul Metropolitan
+  Subway"]` yazınca Overpass **200 + boş `elements`** döndürdü; ovp.py boş
+  cevabı cache'lemediği için hata "yavaşlık" gibi göründü. Doğrusu: ref
+  benzersizse (1-9, 신분당, GTX-A…) network filtresi hiç kullanılma.
+- **İsim dedupe zincirleri eziyor:** market 2504 adaydan 19'a düşmüştü —
+  Emart/GS25 gibi zincirlerin her şubesi aynı ada sahip. Izgara seyreltmesi
+  zaten hücre başına bir aday bıraktığı için **ad bazlı tekilleştirme yalnız
+  kültür temalarında** (tarihi/modern/doğa/gastronomi/kamu/müze/kütüphane/
+  hastane) uygulanıyor; market/eczane/yakıt/otel/alışverişte kapalı.
+- **Geniş çerçeve + bölge sorgusu = başka şehirler:** Songdo/Paju/Bucheon iş
+  parkları ve kampüsleri listeye giriyordu. Harita çerçevesi geniş kaldı
+  (kullanıcı kararı) ama **bölge katmanları Seul çekirdeğine** süzüldü
+  (`126.72–127.22 / 37.40–37.72`): ticari 58→32, eğitim 107→64, doğal 112→69.
+- Hat uzunlukları çift yön + paralel izler yüzünden şişkin görünür (Hat 1
+  çerçeve içinde 353 km): harita ölçeğinde üst üste biner, kabul.
+
+Denetim:
+- `tools/audit_omurga.py seoul` → ilk turda **15 ihlal** (en kötüsü GTX-A
+  7661 m); `tools/repair.py seoul --apply` kord kord diktikten sonra
+  **TEMİZ**. Kıvrım oranı 19 hatta da 1.00x — yani düzlükler gerçekti
+  (yeraltı/viyadük düz koşuları), geometri köşe kesmemişti; onarım gerçek ara
+  düğümleri geri getirdi. Seçiciler `tools/spec.json` → `seoul`.
+- `tools/audit_data.py --city seoul` → 27 bulgu, ikisi de bilinen kategori:
+  OSM'de gerçekten dikdörtgen çizilmiş alanlar (22) ve müze çift kaydı
+  (Keşfet/tarihi + İhtiyaç/müze — 16 şehirde açık duran kullanıcı kararı, 5).
+  İlk turdaki 1 orphan (Uijeongbu LRT istasyonu, çizilmeyen ağa ait) ve
+  katman içi 3 çift kayıt silindi.
+- Tarayıcı dumanı (Playwright, yerel sunucu): 8 katman + manifest + içerik
+  200 dönüyor, `data/seoul/*` isteklerinden hiçbiri düşmüyor, konsol hatası
+  yok, şehir çubuğu "Seoul · 14 Sept · 03:49" (KST = UTC+9 doğru), mobil
+  genişlikte (390px) arayüz yerinde.
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260913-1**
+      (`BM_VER` + `index.html` → `app.js?v=`)
+- [x] Katman dosyaları hedefin altında (omurga 213 KB < 400 KB, diğerleri < 200 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Padova/Vancouver'daki gibi **harita karoları, glyph sunucusu
+ve canlı veri (Open-Meteo/Frankfurter) sandbox'ta kapalı** olduğundan etiket
+yerleşimi ve altlık hizası canlıda ilk kez görülecek. Kullanıcıdan göz kontrolü
+beklenen yer: 488 istasyon etiketinin yoğunluğu (Tokyo 494 ile aynı ölçek,
+ama Seul'de hatlar daha iç içe) ve Hat 9'un soluk bej renginin (#A49D87) açık
+temada okunurluğu.

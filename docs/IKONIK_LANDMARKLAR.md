@@ -32,6 +32,7 @@
 | Praha | ✅ uygulandı (2026-07-22) | Pražský hrad/Karlův most/Staroměstské náměstí/Orloj/Katedrála sv. Víta/Vyšehrad/Tančící dům/Petřín allowlist; doğal bölgeye Petřín/Letná/Stromovka/Kampa elle eklendi |
 | Singapore | ✅ uygulandı (2026-07-22) | Merlion/Marina Bay Sands/Gardens by the Bay/Raffles Hotel/Sultan Mosque/Chinatown/Little India/Jewel Changi allowlist; doğal bölgeye Botanic Gardens/Fort Canning/Sentosa/Mount Faber elle eklendi |
 | Padova | ✅ uygulandı (2026-08-26) | Scrovegni/Sant'Antonio/Prato della Valle/Palazzo della Ragione/Orto Botanico/Pedrocchi/Palazzo Bo/Duomo-Battistero allowlist; doğal bölgeye Parco Iris/Treves/Europa elle eklendi |
+| Seul | ✅ uygulandı (2026-09-13) | 5 saray + Jongmyo/Bukchon/Insadong/DDP/N Seoul Tower/Lotte World Tower allowlist; doğal bölgeye Cheonggyecheon/Seoul Forest/Olympic Park/Bukhansan elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -280,3 +281,22 @@
 - **gastronomi:** Granville Island Public Market, Richmond Night Market
 - **alışveriş:** CF Pacific Centre, Metropolis at Metrotown, Oakridge Park,
   Aberdeen Centre, Park Royal
+
+---
+
+## Seul
+
+- **tarihi/simge:** Gyeongbokgung, Changdeokgung (+ Huwon), Changgyeonggung,
+  Deoksugung, Gyeonghuigung, Jongmyo Türbesi, Unhyeongung, Sungnyemun
+  (Namdaemun), Heunginjimun (Dongdaemun), Bukchon Hanok Köyü, Namsangol Hanok
+  Köyü, Insa-dong, Ikseon-dong, Gwanghwamun Meydanı, Cheong Wa Dae (Mavi Ev),
+  Myeongdong Katedrali, Jogyesa, Bongeunsa, Bosingak, Seodaemun Hapishane
+  Müzesi, Savaş Anıtı (War Memorial of Korea), Kore Ulusal Müzesi
+- **modern:** N Seoul Tower, Lotte World Tower, Dongdaemun Design Plaza (DDP),
+  63 Square, Sejong Center, Leeum Müzesi, Seoullo 7017, Starfield Kütüphanesi
+  (COEX), Banpo Köprüsü, Lotte World
+- **doğa:** Cheonggyecheon, Namsan, Seoul Forest, Olimpiyat Parkı, Bukhansan
+  Milli Parkı, Inwangsan, Naksan Parkı, Yeouido/Banpo Hangang parkları
+- **gastronomi:** Gwangjang Pazarı, Namdaemun Pazarı, Noryangjin Balık Hali,
+  Tongin Pazarı
+- **alışveriş:** Dongdaemun Pazarı, Starfield COEX Mall, Myeongdong caddesi

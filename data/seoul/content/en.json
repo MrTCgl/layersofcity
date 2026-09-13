@@ -1,0 +1,21 @@
+{
+  "se.icn.sub": "→ Seoul Station · AREX Express · ~43 min",
+  "se.gmp.sub": "→ Express Bus Terminal · Line 9 · ~30 min",
+  "se.seoulstation.sub": "main station · KTX · Line 1·4 · AREX",
+  "se.yongsan.sub": "KTX Honam/Jeolla · Line 1 · Yongsan I'Park Mall",
+  "se.suseo.sub": "SRT high-speed · Line 3 · GTX-A",
+  "se.expressbus.sub": "intercity coaches · Line 3·7·9",
+  "se.dongseoul.sub": "east coach terminal · Gangbyeon · Line 2",
+  "se.hub.seoulstation": "Line 1·4 · AREX · Gyeongui–Jungang · KTX",
+  "se.hub.wangsimni": "Line 2·5 · Gyeongui–Jungang · Suin–Bundang",
+  "se.hub.gangnam": "Line 2 · Sinbundang · heart of Teheran-ro",
+  "se.hub.jamsil": "Line 2·8 · Lotte World Tower",
+  "se.hub.sindorim": "Line 1·2 · western interchange",
+  "se.hub.gongdeok": "Line 5·6 · AREX · Gyeongui–Jungang",
+  "se.hub.expressbus": "Line 3·7·9 · intercity coaches",
+  "se.hub.cheongnyangni": "Line 1 · Gyeongchun · Suin–Bundang · eastern station",
+  "se.hub.hongik": "Line 2 · AREX · nightlife",
+  "se.hub.dmc": "Line 6 · AREX · media valley",
+  "se.hub.sadang": "Line 2·4 · southern bus interchange",
+  "se.hub.yeouido": "Line 5·9 · finance district"
+}

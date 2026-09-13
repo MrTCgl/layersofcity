@@ -1,0 +1,117 @@
+{
+  "id": "seoul",
+  "center": [
+    126.9784,
+    37.5665
+  ],
+  "zoom": {
+    "start": 10.4,
+    "min": 8.8,
+    "max": 19
+  },
+  "home": [
+    [
+      126.86,
+      37.46
+    ],
+    [
+      127.12,
+      37.61
+    ]
+  ],
+  "maxBounds": [
+    [
+      126.35,
+      37.28
+    ],
+    [
+      127.3,
+      37.78
+    ]
+  ],
+  "timezone": "Asia/Seoul",
+  "language": "ko",
+  "currency": "KRW",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-09",
+    "water05": 900,
+    "petrol1l": 1700,
+    "milk1l": 3000,
+    "meat1kg": 28000,
+    "cheese1kg": 25000,
+    "beer05": 5000,
+    "bigmac": 5500,
+    "espresso": 4500,
+    "transitTicket": 1550,
+    "airportTrain": 4750
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}

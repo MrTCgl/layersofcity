@@ -222,5 +222,26 @@
    "sel": "[\"route\"=\"bus\"][\"ref\"=\"R6\"][\"network\"~\"TransLink\",i]",
    "bridge": 150
   }
+ },
+ "seoul": {
+  "line-1": "[\"route\"=\"subway\"][\"ref\"=\"1\"]",
+  "line-2": "[\"route\"=\"subway\"][\"ref\"=\"2\"]",
+  "line-3": "[\"route\"=\"subway\"][\"ref\"=\"3\"]",
+  "line-4": "[\"route\"=\"subway\"][\"ref\"=\"4\"]",
+  "line-5": "[\"route\"=\"subway\"][\"ref\"=\"5\"]",
+  "line-6": "[\"route\"=\"subway\"][\"ref\"=\"6\"]",
+  "line-7": "[\"route\"=\"subway\"][\"ref\"=\"7\"]",
+  "line-8": "[\"route\"=\"subway\"][\"ref\"=\"8\"]",
+  "line-9": "[\"route\"=\"subway\"][\"ref\"=\"9\"]",
+  "line-sinbundang": "[\"route\"=\"subway\"][\"ref\"=\"신분당\"]",
+  "line-ui": "[\"route\"=\"light_rail\"][\"ref\"=\"W\"]",
+  "line-sillim": "[\"route\"=\"light_rail\"][\"ref\"=\"Silim\"]",
+  "line-gimpo": "[\"route\"=\"light_rail\"][\"ref\"=\"김포 골드라인\"]",
+  "line-arex": "[\"route\"=\"train\"][\"ref\"~\"^(AREX|공항철도)$\"]",
+  "line-gyeongui": "[\"route\"=\"train\"][\"ref\"=\"경의·중앙\"]",
+  "line-gyeongchun": "[\"route\"=\"train\"][\"ref\"=\"경춘\"]",
+  "line-suinbundang": "[\"route\"=\"train\"][\"ref\"=\"수인·분당\"]",
+  "line-gtxa": "[\"route\"=\"train\"][\"ref\"=\"GTX-A\"]",
+  "line-seohae": "[\"route\"=\"train\"][\"ref\"=\"서해\"]"
  }
 }
