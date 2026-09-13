@@ -254,6 +254,21 @@
         "es": "Vancouver",
         "tr": "Vancouver"
       }
+    },
+    {
+      "id": "seoul",
+      "name": "Seoul",
+      "lat": 37.5665,
+      "lon": 126.978,
+      "status": "soon",
+      "names": {
+        "en": "Seoul",
+        "de": "Seoul",
+        "fr": "Séoul",
+        "it": "Seul",
+        "es": "Seúl",
+        "tr": "Seul"
+      }
     }
   ]
 }
