@@ -1553,9 +1553,12 @@ Yapıldı (hepsi OSM Overpass boru hattı):
   bak). 191 istasyon + 117 durak (Metrobús/teleferik) + 13 hub (Pantitlán, Tacubaya, Hidalgo, Bellas Artes,
   Balderas, Chabacano, Centro Médico, La Raza, Indios Verdes, Universidad,
   Mixcoac, Buenavista, San Lázaro).
-  **Cablebús `lineRef:"tram"` çipinde:** sabit güzergâhlı, metro değil,
-  otobüs değil; app'in çip anahtarları (metro/tram/bus/train/ferry) sabit
-  olduğu için yeni bir anahtar eklemek kod değişikliği demekti.
+  **Cablebús `lineRef:"metro"` çipinde** (kullanıcı kararı, 2026-09-14): ilk
+  denemede tramvay çipine konmuştu (sabit güzergâh, metro değil, otobüs değil),
+  ama teleferik CDMX'te Metro ağının bileti ve markasıyla işletiliyor; kullanıcı
+  da öyle düşünüyor. App'in çip anahtarları (metro/tram/bus/train/ferry) sabit
+  olduğundan ayrı bir "teleferik" anahtarı kod değişikliği demekti; taşıma
+  yalnız veride yapıldı (3 hat + 3 rozet + 10 durak).
 - **Varış (7 kapı, 1 link):** AICM T1 (Metrobús L4 ile Buenavista, 9.1 km
   gerçek güzergâh) ve T2, Buenavista (Tren Suburbano), Terminal del Norte,
   TAPO, Taxqueña, Observatorio.
@@ -1620,12 +1623,11 @@ Denetim:
   şehir çubuğu "Ciudad de México · 14 Sept · 05:43" (CST = UTC-6 doğru).
 
 Bitti sayılır:
-- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260914-3**
-      (L5 tamamlandıktan sonra tekrar artırıldı)
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260914-4**
+      (L5 tamamlanınca -3, Cablebús metro çipine alınınca -4)
 - [x] Katman dosyaları hedefin altında (en büyüğü omurga 99 KB)
 - [x] Denetim araçları temiz
 
 Durum notu: Tamam; **Metrobús L5 de 2026-09-14'te tamamlandı** (yukarı bak),
-eksik hat kalmadı. Göz kontrolü beklenen yer: Cablebús'ün tramvay çipinde görünmesi
-mantıklı mı, ve Centro Histórico'daki nokta yoğunluğu (tarihi 97 nokta
-merkezde toplanıyor).
+eksik hat kalmadı. Göz kontrolü beklenen yer: Centro Histórico'daki nokta
+yoğunluğu (tarihi 97 nokta merkezde toplanıyor).
