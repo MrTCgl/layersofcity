@@ -314,6 +314,21 @@
         "es": "Ciudad de México",
         "tr": "Meksiko"
       }
+    },
+    {
+      "id": "moscow",
+      "name": "Москва",
+      "lat": 55.7558,
+      "lon": 37.6173,
+      "status": "soon",
+      "names": {
+        "en": "Moscow",
+        "de": "Moskau",
+        "fr": "Moscou",
+        "it": "Mosca",
+        "es": "Moscú",
+        "tr": "Moskova"
+      }
     }
   ]
 }
