@@ -36,6 +36,7 @@
 | Sidney | ✅ uygulandı (2026-09-13) | Opera Evi/Harbour Bridge/QVB/Hyde Park Barracks/Luna Park/Powerhouse allowlist; doğal bölgeye Royal Botanic/The Domain/Taronga/Bondi-Bronte-Coogee elle eklendi |
 | Toronto | ✅ uygulandı (2026-09-14) | CN Tower/Casa Loma/ROM/AGO/Nathan Phillips/Distillery/St. Lawrence Market allowlist; doğal bölgeye High Park/Toronto Islands/Brick Works/Tommy Thompson elle eklendi |
 | Ciudad de México | ✅ uygulandı (2026-09-14) | Zócalo/Catedral/Templo Mayor/Bellas Artes/Castillo de Chapultepec/Casa Azul/Antropología allowlist; doğal bölgeye Viveros/Tlalpan/Desierto de los Leones/Alameda elle eklendi |
+| Москва (Moskova) | ✅ uygulandı (2026-09-14) | Kızıl Meydan/Kremlin/Vasili Blajenni/Bolşoy/Tretyakov/Ostankino allowlist; doğal bölgeye Zaryadye/Gorki/Sokolniki/Vorobyovi Gori elle eklendi; ГУМ, Афимолл ve İzmaylovski kremlin Overpass kesintisinde alınamadı |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -365,3 +366,21 @@
 - **gastronomi:** Mercado de La Merced, Mercado de San Juan, Mercado de
   Coyoacán, Mercado Medellín, Central de Abasto
 - **alışveriş:** Zona Rosa, Centro Comercial Santa Fe, Polanco (Masaryk)
+
+---
+
+## Москва (Moskova)
+
+- **tarihi/simge:** Красная площадь, Московский Кремль, Собор Василия
+  Блаженного, Большой театр, Исторический музей, Храм Христа Спасителя,
+  Новодевичий монастырь, Донской монастырь, Коломенское, Царицыно,
+  Измайловский кремль *(Overpass'ta alınamadı, sonraki turda)*
+- **modern:** Останкинская телебашня, Третьяковская галерея, ГМИИ им.
+  Пушкина, Музей космонавтики, ВДНХ, Москва-Сити
+- **doğa:** Зарядье, Парк Горького, Сокольники, Измайловский парк,
+  Воробьёвы горы, Ботанический сад РАН, Парк Победы (Поклонная гора),
+  Лосиный Остров, Патриаршие пруды
+- **gastronomi:** Даниловский рынок, Центральный рынок, Усачёвский рынок,
+  Депо.Москва
+- **alışveriş:** ГУМ *(Overpass'ta alınamadı)*, ЦУМ, Старый Арбат,
+  Афимолл Сити *(alınamadı)*

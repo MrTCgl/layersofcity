@@ -1631,3 +1631,88 @@ Bitti sayılır:
 Durum notu: Tamam; **Metrobús L5 de 2026-09-14'te tamamlandı** (yukarı bak),
 eksik hat kalmadı. Göz kontrolü beklenen yer: Centro Histórico'daki nokta
 yoğunluğu (tarihi 97 nokta merkezde toplanıyor).
+
+---
+
+## Yeni şehir — Москва (Moskova) ✅ tamam (2026-09-14)
+
+`yeni-sehir` parametrik boru hattıyla eklendi. Dil **`ru`** (yeni `lang.ru`
+anahtarı 6 dile eklendi), para **RUB** (`CURRENCY_SYM`'e `RUB="₽"`).
+Kullanıcı kararları: **üç havalimanı da çerçeve içinde**, **tramvayda
+merkeze değen seçilmiş set**, **monoray + nehir hattı atlandı**.
+
+Yapıldı (hepsi OSM Overpass boru hattı):
+- **Manifest:** merkez `[37.6173, 55.7558]`, `Europe/Moscow`, zoom min 8.6 /
+  max 19, maxBounds `[[37.20,55.38],[37.95,56.00]]` (~47×69 km; Şeremetyevo
+  kuzeyde, Domodedovo güneyde, Vnukovo batıda). Fiyatlar editoryal
+  (`updated: 2026-09`; metro bileti 65 ₽, Aeroexpress 550 ₽).
+- **Omurga (281 KB, 723 feature, 32 hat, 2036 km):** metro **1-12, 15, 16, 17**
+  + **4А/8А** kolları, **МЦК (14)** halkası, **МЦД D1-D4**, ve merkeze değen
+  **10 tramvay** (А, 7, 13, 26, 38, 39, 47, 50, т1, т2 — 38 hattın tamamı
+  haritayı boğuyordu, Kremlin'e uzaklığa göre seçildi). 369 istasyon +
+  277 durak + 13 hub (Komsomolskaya, Kurskaya, Kitay-gorod, Park Kultury,
+  Taganskaya, Kiyevskaya, Belorusskaya, Paveletskaya, Oktyabrskaya,
+  Savyolovskaya, Nizhegorodskaya, Prospekt Mira, Chistye Prudy).
+- **Varış (9 kapı, 2 link):** SVO (Aeroexpress ile Belorussky, **33.7 km**),
+  DME (Aeroexpress ile Paveletsky, **46.3 km**), VKO, üç gar meydanı
+  (Leningradsky+Yaroslavsky+Kazansky), Belorussky, Kievsky, Paveletsky,
+  Şçolkovski ve Salaryevo otogarları.
+- **Keşfet (421 nokta, 83 KB):** tarihi 101 / doğa 86 / modern 51 / kamu 50 /
+  gastronomi 43 / alışveriş 35 / otel 30 / yurt 25. İkonik allowlist
+  uygulandı — 28 nokta elle geri eklendi.
+- **İhtiyaç (255 nokta, 49 KB):** eczane 55 / market 55 / kütüphane 35 /
+  müze 35 / yakıt 30 / hastane 25 / kiralık araç 20.
+- **Bölgeler:** turistik 7 rayon birleşimi (Tverskoy·Kitay-gorod, Arbat·
+  Khamovniki, Zamoskvorechye·Yakimanka, Presnensky·Moscow City,
+  Ostankino·VDNH, Krasnoselsky, Tagansky). Ticari 67, eğitim 61, doğal 149.
+- **İçerik:** 6 dilde `content/*.json` (9 kapı + 13 hub alt etiketi, `mo.` öneki).
+
+Boru hattında öğrenilenler:
+- **`tools/audit_data.py`'de ölçüm hatası düzeltildi:** orphan kontrolü
+  dereceyi `× 111000` ile metreye çeviriyordu, boylam kısalmasını (cos φ)
+  hesaba katmadan. 55.8°N'de bu **~1.8x şişirme** demek: Moskova'da 20 sahte
+  orphan çıktı. Ölçüm artık enleme göre ölçekleniyor; düzeltmeden sonra
+  gerçek ihlal 8'e indi (hepsi çizilmeyen komşu hatların durakları, atıldı).
+  Düzeltme yalnız mesafeyi küçülttüğü için diğer 21 şehirde yeni bulgu
+  üretmiyor.
+- **Vnukovo'nun Aeroexpress'i yok artık:** 2023'te metro **8А** uzatıldı.
+  `relink` "yol bulunamadı" dedi çünkü 8А ile hat 3/4 ayrı tüneller; kapı
+  link'siz bırakıldı (içerik metninde metro 8А yazıyor) — düz çizgi
+  çizilmedi.
+- **Kapı koordinatı yine kritikti:** SVO ve DME kapıları havalimanı
+  merkezine konunca Aeroexpress rayına 957/909 m uzaktaydı; ikisi de OSM'deki
+  gerçek Aeroexpress istasyonuna taşındı (snap 5 m / 13 m).
+- **Rayon = `admin_level=8`** (ilk denemede 9 yazılmıştı, turistik 0 alan
+  döndü). Rayon adları `name:en`'de Latin harfli.
+- **Kiril/Latin karışık adlar:** istasyonların 342/667'si yalnız Kiril adlı
+  (name:en yok). Tokyo/Seul'deki gibi olduğu gibi bırakıldı — yer adları
+  çevrilmez.
+- **Künye kartında dolar karşılığı RUB'da boş kalıyor:** Frankfurter (ECB
+  kaynaklı, 30 para birimi) rubleyi taşımıyor. Uygulama bozulmuyor, satır
+  kursuz görünüyor; fiyat tablosu ₽ olarak editoryal. Anahtarlı kur servisi
+  eklemek proje kararına aykırı olduğu için böyle bırakıldı.
+
+Denetim:
+- `tools/audit_omurga.py moscow` → ilk turda **16 ihlal**; `repair.py` sonrası
+  **TEMİZ**. МЦД D1 (1.70x) ve D3 (1.46x) kıvrım oranları hattın köşe kestiğini
+  gösterdi; gerçek güzergâh dikildi.
+- `tools/audit_data.py --city moscow` → **19 bulgu**, hepsi bilinen kategori:
+  OSM'de gerçekten dikdörtgen çizilmiş alanlar. Dup ve orphan sıfır.
+- Tarayıcı dumanı: 8 katman + manifest + içerik 200, `data/moscow/*`
+  isteklerinden hiçbiri düşmüyor, şehir çubuğu "Москва · 14 Sept · 22:01"
+  (MSK = UTC+3 doğru).
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260914-5**
+- [x] Katman dosyaları hedefin altında (omurga 281 KB < 400 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Üç ikonik nokta (**ГУМ**, **Афимолл Сити**, **Измайловский
+кремль**) o günkü Overpass kesintisinde alınamadı; allowlist'te işaretli,
+sonraki turda tek sorguyla eklenir. Göz kontrolü beklenen yer: 10 tramvay
+hattının metro ağıyla üst üste bindiği merkez, ve 149 doğal alanın kuzeydeki
+Losiny Ostrov ile haritayı ne kadar kapladığı.
+
+**Ayrıca (bu şehirden bağımsız, önceden var olan bulgu):** `audit_data` üç
+şehirde `kesfet-poi` dosyasını hedefin üstünde buluyor — London 284 KB,
+Madrid 264 KB, Berlin 212 KB (hedef 200 KB). Bu oturumda dokunulmadı.

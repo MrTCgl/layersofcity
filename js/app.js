@@ -533,7 +533,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260914-4"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260914-5"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -1919,7 +1919,7 @@
   const infoCard = document.getElementById("infocard");
   const PRICE_ORDER = ["water05", "petrol1l", "milk1l", "meat1kg", "cheese1kg",
     "beer05", "bigmac", "espresso", "transitTicket", "airportTrain"];
-  const CURRENCY_SYM = { EUR: "€", USD: "$", GBP: "£", TRY: "₺", JPY: "¥", CZK: "Kč", SGD: "S$", KRW: "₩", AUD: "A$", MXN: "MX$" };
+  const CURRENCY_SYM = { EUR: "€", USD: "$", GBP: "£", TRY: "₺", JPY: "¥", CZK: "Kč", SGD: "S$", KRW: "₩", AUD: "A$", MXN: "MX$", RUB: "₽" };
   function renderInfoCard() {
     if (!manifest) return;
     document.getElementById("ic-city").textContent = document.getElementById("cb-name").textContent;

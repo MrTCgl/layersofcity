@@ -84,14 +84,19 @@ def check_orphan(city, out):
     if not lines:
         return
     from shapely.geometry import LineString, MultiLineString, Point
-    net = MultiLineString([LineString(p) for p in lines if len(p) > 1])
+    # degrees are not metres: a degree of longitude shrinks with latitude, so scale
+    # x by cos(lat) before measuring (without this, Moscow at 55.8°N reads ~1.8x too far)
+    lat0 = sum(p[0][1] for p in lines if p) / max(1, len([p for p in lines if p]))
+    kx = math.cos(math.radians(lat0))
+    net = MultiLineString([LineString([(x * kx, y) for x, y in p])
+                           for p in lines if len(p) > 1])
     limits = {"node": 250, "stop": 250, "hub": 400, "badge": 150}
     for ft in fc["features"]:
         kind = ft["properties"].get("kind")
         if kind not in limits:
             continue
         for c in points_of(ft):
-            d = Point(c).distance(net) * 111000
+            d = Point(c[0] * kx, c[1]).distance(net) * 111000
             if d > limits[kind]:
                 out.append(("orphan", f"omurga/{ft['properties'].get('id')} "
                                       f"({kind} {ft['properties'].get('name') or ft['properties'].get('ref')}) "
