@@ -274,5 +274,30 @@
   "line-f9": "[\"route\"=\"ferry\"][\"ref\"=\"F9\"]",
   "line-f10": "[\"route\"=\"ferry\"][\"ref\"=\"F10\"]",
   "line-b1": "[\"route\"=\"bus\"][\"ref\"=\"B1\"]"
+ },
+ "toronto": {
+  "line-1": "[\"route\"=\"subway\"][\"ref\"=\"1\"][\"network\"=\"TTC\"]",
+  "line-2": "[\"route\"=\"subway\"][\"ref\"=\"2\"][\"network\"=\"TTC\"]",
+  "line-4": "[\"route\"=\"subway\"][\"ref\"=\"4\"][\"network\"=\"TTC\"]",
+  "line-5": "[\"route\"=\"light_rail\"][\"ref\"=\"5\"][\"network\"=\"TTC\"]",
+  "line-6": "[\"route\"=\"light_rail\"][\"ref\"=\"6\"][\"network\"=\"TTC\"]",
+  "line-501": "[\"route\"=\"tram\"][\"ref\"~\"^501\"][\"network\"=\"TTC\"]",
+  "line-503": "[\"route\"=\"tram\"][\"ref\"~\"^503\"][\"network\"=\"TTC\"]",
+  "line-504": "[\"route\"=\"tram\"][\"ref\"~\"^504\"][\"network\"=\"TTC\"]",
+  "line-505": "[\"route\"=\"tram\"][\"ref\"~\"^505\"][\"network\"=\"TTC\"]",
+  "line-506": "[\"route\"=\"tram\"][\"ref\"~\"^506\"][\"network\"=\"TTC\"]",
+  "line-507": "[\"route\"=\"tram\"][\"ref\"~\"^507\"][\"network\"=\"TTC\"]",
+  "line-509": "[\"route\"=\"tram\"][\"ref\"~\"^509\"][\"network\"=\"TTC\"]",
+  "line-510": "[\"route\"=\"tram\"][\"ref\"~\"^510\"][\"network\"=\"TTC\"]",
+  "line-511": "[\"route\"=\"tram\"][\"ref\"~\"^511\"][\"network\"=\"TTC\"]",
+  "line-512": "[\"route\"=\"tram\"][\"ref\"~\"^512\"][\"network\"=\"TTC\"]",
+  "line-up": "[\"route\"=\"train\"][\"ref\"=\"UP Express\"]",
+  "line-lw": "[\"route\"=\"train\"][\"ref\"=\"LW\"][\"network\"=\"GO Transit\"]",
+  "line-le": "[\"route\"=\"train\"][\"ref\"=\"LE\"][\"network\"=\"GO Transit\"]",
+  "line-ki": "[\"route\"=\"train\"][\"ref\"=\"KI\"][\"network\"=\"GO Transit\"]",
+  "line-br": "[\"route\"=\"train\"][\"ref\"=\"BR\"][\"network\"=\"GO Transit\"]",
+  "line-mi": "[\"route\"=\"train\"][\"ref\"=\"MI\"][\"network\"=\"GO Transit\"]",
+  "line-rh": "[\"route\"=\"train\"][\"ref\"=\"RH\"][\"network\"=\"GO Transit\"]",
+  "line-st": "[\"route\"=\"train\"][\"ref\"=\"ST\"][\"network\"=\"GO Transit\"]"
  }
 }

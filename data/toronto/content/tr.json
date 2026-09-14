@@ -1,0 +1,19 @@
+{
+  "to.yyz.sub": "→ Union Station · UP Express · ~25 dk",
+  "to.ytz.sub": "yaya tüneli · 509/510 ile Union · ~15 dk",
+  "to.union.sub": "ana gar · VIA Rail · tüm GO hatları · Line 1",
+  "to.coach.sub": "şehirlerarası otobüs · Union'ın yanı",
+  "to.hub.union": "Line 1 · UP Express · tüm GO hatları · VIA Rail",
+  "to.hub.blooryonge": "Line 1 ↔ Line 2 · şehrin en yoğun aktarması",
+  "to.hub.stgeorge": "Line 1 ↔ Line 2 · U of T kampüsü",
+  "to.hub.spadina": "Line 1 ↔ Line 2 · 510 streetcar",
+  "to.hub.sheppardyonge": "Line 1 ↔ Line 4 · North York'un merkezi",
+  "to.hub.kennedy": "Line 2'nin doğu ucu · Stouffville GO",
+  "to.hub.kipling": "Line 2'nin batı ucu · Milton GO",
+  "to.hub.dundaswest": "Line 2 · 504/505 · Bloor GO + UP Express",
+  "to.hub.eglinton": "Line 1 ↔ Line 5 Crosstown",
+  "to.hub.finch": "Line 1'in kuzey ucu · banliyö otobüsleri",
+  "to.hub.vmc": "Line 1'in kuzeybatı ucu · Vaughan",
+  "to.hub.mountdennis": "Line 5'in batı ucu · Kitchener GO + UP Express",
+  "to.hub.donmills": "Line 4'ün doğu ucu · Fairview"
+}

@@ -1,0 +1,19 @@
+{
+  "to.yyz.sub": "→ Union Station · UP Express · ~25 min",
+  "to.ytz.sub": "pedestrian tunnel · 509/510 to Union · ~15 min",
+  "to.union.sub": "main station · VIA Rail · every GO line · Line 1",
+  "to.coach.sub": "intercity coaches · beside Union",
+  "to.hub.union": "Line 1 · UP Express · every GO line · VIA Rail",
+  "to.hub.blooryonge": "Line 1 ↔ Line 2 · the city's busiest interchange",
+  "to.hub.stgeorge": "Line 1 ↔ Line 2 · U of T campus",
+  "to.hub.spadina": "Line 1 ↔ Line 2 · 510 streetcar",
+  "to.hub.sheppardyonge": "Line 1 ↔ Line 4 · North York centre",
+  "to.hub.kennedy": "east end of Line 2 · Stouffville GO",
+  "to.hub.kipling": "west end of Line 2 · Milton GO",
+  "to.hub.dundaswest": "Line 2 · 504/505 · Bloor GO + UP Express",
+  "to.hub.eglinton": "Line 1 ↔ Line 5 Crosstown",
+  "to.hub.finch": "north end of Line 1 · suburban buses",
+  "to.hub.vmc": "north-west end of Line 1 · Vaughan",
+  "to.hub.mountdennis": "west end of Line 5 · Kitchener GO + UP Express",
+  "to.hub.donmills": "east end of Line 4 · Fairview"
+}

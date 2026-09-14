@@ -1443,3 +1443,90 @@ Durum notu: Tamam. Karolar sandbox'ta kapalı olduğundan hiza canlıda ilk kez
 görülecek. Göz kontrolü beklenen yer: **doğal 146 alanın** batı yakasını
 (Blue Mountains/Royal NP) kaplayıp kaplamadığı ve 10 vapur hattının Sydney
 Harbour'da üst üste binen yeşil tonlarının ayırt edilebilirliği.
+
+---
+
+## Yeni şehir — Toronto ✅ tamam (2026-09-14)
+
+`yeni-sehir` parametrik boru hattıyla eklendi ("küresel denge" kümesinin
+3.'sü). Dil `en`, para CAD (Vancouver'dan zaten vardı). Kullanıcı kararı:
+**VIA Rail şehirlerarası hatları ve gece streetcar'ları (301/306) atlandı** —
+VIA, GO koridorlarıyla aynı rayda gidip üst üste biniyor.
+
+Yapıldı (hepsi OSM Overpass boru hattı):
+- **Manifest:** merkez `[-79.3832, 43.6532]`, `America/Toronto`, zoom
+  min 8.8 / max 19, maxBounds `[[-79.80,43.45],[-79.10,43.92]]` (~56×52 km:
+  batıda Pearson + Mississauga kenarı, doğuda Rouge, kuzeyde Vaughan/Richmond
+  Hill, güneyde göl + Adalar). Fiyatlar editoryal (`updated: 2026-09`;
+  TTC bileti 3.35 CAD, UP Express 12.85 CAD).
+- **Omurga (135 KB, 518 feature, 23 hat):** TTC metro **Line 1/2/4** +
+  **Line 5 Eglinton** ve **Line 6 Finch West** (OSM'de `light_rail`, TTC
+  bunları hat numarasıyla işletiyor → metro çipinde); streetcar **501, 503,
+  504, 505, 506, 507, 509, 510, 511, 512**; **UP Express** + GO Transit
+  **LW/LE/KI/BR/MI/RH/ST**. 133 istasyon + 326 streetcar durağı + 13 hub
+  (Union, Bloor-Yonge, St. George, Spadina, Sheppard-Yonge, Kennedy, Kipling,
+  Dundas West, Eglinton, Finch, Vaughan Metropolitan Centre, Mount Dennis,
+  Don Mills). Toplam 893 km.
+- **Varış (4 kapı, 1 link):** Pearson (YYZ) T1 — UP Express ile Union
+  **24.6 km** gerçek güzergâh —, Billy Bishop (YTZ, ada havalimanı),
+  Union Station, Union Station Bus Terminal.
+- **Keşfet (371 nokta, 67 KB):** tarihi 100 / doğa 91 / modern 56 /
+  alışveriş 35 / otel 30 / gastronomi 25 / kamu 20 / yurt 14. İkonik allowlist
+  uygulandı: CN Tower, Rogers Centre, ROM, Ontario Science Centre, Aga Khan,
+  Hockey Hall of Fame, Nathan Phillips Square, Scotiabank Arena, BMO Field,
+  Roy Thomson Hall, Ontario Place, Casa Loma, Old City Hall, Osgoode Hall,
+  Gooderham, Spadina Museum, St. Lawrence Market, Evergreen Brick Works,
+  Toronto Islands, Tommy Thompson, Woodbine Beach, Chinatown — 24 nokta
+  elle geri eklendi.
+- **İhtiyaç (255 nokta, 46 KB):** eczane 55 / market 55 / kütüphane 35 /
+  müze 35 / yakıt 30 / hastane 25 / kiralık araç 20.
+- **Bölgeler:** turistik 6 — **Downtown · Financial District**,
+  **Kensington · Chinatown**, **Distillery District**, **Harbourfront ·
+  CityPlace**, **Liberty Village · Fort York**, **The Annex · Casa Loma**.
+  Ticari 53, eğitim 10 (U of T'nin üç kampüsü, York'un ikisi, TMU, Victoria/
+  Trinity/St. Michael's), doğal 129.
+- **İçerik:** 6 dilde `content/*.json` (4 kapı + 13 hub alt etiketi, `to.` öneki).
+
+Boru hattında öğrenilenler:
+- **UP Express grafı iki parçaydı:** havalimanı kolu ile Weston koridoru
+  arasında **931 m'lik boşluk** vardı (ilişkinin way üyeliği eksik), bu yüzden
+  `relink.py` "yol bulunamadı" dedi. Boşluğu düz çizgiyle köprülemek yerine
+  grafa `way:["railway"="rail"]["usage"="main"]` eklendi; gerçek koridordan
+  24.6 km'lik güzergâh çıktı (gerçek UP Express ~25 km).
+- **Mahalle geometrisi Toronto'da karışık:** `admin_level=9` = seçim bölgesi
+  (çok büyük), `admin_level=10` = mahalle, ama Kensington Market/Distillery/
+  Liberty Village gibi turistik olanlar `place=neighbourhood` relation ya da
+  way. Bölge toplayıcısına `DISTRICT_SELECTORS` eklendi (Amsterdam'daki
+  `place=quarter` dersinin tekrarı).
+- **"Kutu" bulgusu her zaman kusur değil:** Kensington·Chinatown (5 köşe) ve
+  Distillery (6 köşe) OSM'de **gerçekten** dört-beş düz sokakla sınırlı.
+  Sadeleştirme toleransı 0.0003 → 0.00012'ye çekilip gerçek kırıklar
+  korundu; şekiller yine dikdörtgen kaldı çünkü sokak dokusu öyle.
+- **Aynı durak üç isimle:** "Union", "Union Station", "Toronto Union Station"
+  ayrı kayıtlardı. İstasyon tekilleştirmesi artık ad-normalize + **600 m**
+  mesafe ikilisiyle çalışıyor (salt ada göre tekilleştirme zincir durakları
+  eziyordu).
+- **Toronto her strip plaza'yı `landuse=commercial` çiziyor:** eşik 0.04 →
+  **0.09 km²** yapıldı, ticari 143 → 53'e indi; `audit_data`'nın kutu bulgusu
+  60 → 13.
+
+Denetim:
+- `tools/audit_omurga.py toronto` → ilk turda **18 ihlal** (en kötüsü LW
+  8075 m); `tools/repair.py toronto --apply` sonrası **TEMİZ**, kıvrım oranı
+  hepsinde 1.00x.
+- `tools/audit_data.py --city toronto` → 16 bulgu: 13 kutu (gerçekten
+  dikdörtgen OSM alanları) + 3 müze çift kaydı (ROM, Spadina Museum,
+  Aga Khan — bilinen açık karar).
+- Tarayıcı dumanı: 8 katman + manifest + içerik 200, konsol hatası yok,
+  şehir çubuğu "Toronto · 14 Sept · 04:24" (EDT = UTC-4 doğru).
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260914-1**
+- [x] Katman dosyaları hedefin altında (omurga 135 KB, doğal 116 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Göz kontrolü beklenen yer: **326 streetcar durağı** z15+'ta
+etiketleniyor ve Toronto bunları kavşak adıyla ("Spadina Avenue") tekrar tekrar
+adlandırıyor — yoğunluk rahatsız ederse durak etiketleri seyreltilebilir.
+Ayrıca renksiz bırakılan streetcar hatları (OSM'de `colour` yok) palet
+renginde çiziliyor; TTC'nin kırmızısı istenirse `spec`'e elle yazılır.

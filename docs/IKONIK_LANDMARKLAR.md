@@ -34,6 +34,7 @@
 | Padova | ✅ uygulandı (2026-08-26) | Scrovegni/Sant'Antonio/Prato della Valle/Palazzo della Ragione/Orto Botanico/Pedrocchi/Palazzo Bo/Duomo-Battistero allowlist; doğal bölgeye Parco Iris/Treves/Europa elle eklendi |
 | Seul | ✅ uygulandı (2026-09-13) | 5 saray + Jongmyo/Bukchon/Insadong/DDP/N Seoul Tower/Lotte World Tower allowlist; doğal bölgeye Cheonggyecheon/Seoul Forest/Olympic Park/Bukhansan elle eklendi |
 | Sidney | ✅ uygulandı (2026-09-13) | Opera Evi/Harbour Bridge/QVB/Hyde Park Barracks/Luna Park/Powerhouse allowlist; doğal bölgeye Royal Botanic/The Domain/Taronga/Bondi-Bronte-Coogee elle eklendi |
+| Toronto | ✅ uygulandı (2026-09-14) | CN Tower/Casa Loma/ROM/AGO/Nathan Phillips/Distillery/St. Lawrence Market allowlist; doğal bölgeye High Park/Toronto Islands/Brick Works/Tommy Thompson elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -323,3 +324,22 @@
   The Grounds of Alexandria
 - **alışveriş:** Queen Victoria Building, The Strand Arcade, Pitt Street Mall,
   Westfield Sydney, Paddington Markets, Westfield Bondi Junction
+
+---
+
+## Toronto
+
+- **tarihi/simge:** Casa Loma, Old City Hall, Osgoode Hall, Gooderham
+  (Flatiron) Building, St. James Cathedral, Fort York, Spadina Museum,
+  Mackenzie House, Union Station, Distillery District
+- **modern:** CN Tower, Rogers Centre, Ripley's Aquarium, Royal Ontario
+  Museum, Art Gallery of Ontario, Ontario Science Centre, Aga Khan Museum,
+  Hockey Hall of Fame, Nathan Phillips Square, Scotiabank Arena, BMO Field,
+  Roy Thomson Hall, TIFF Lightbox, Ontario Place
+- **doğa:** High Park, Toronto Islands, Trinity Bellwoods, Riverdale Park,
+  Allan Gardens, Edwards Gardens, Evergreen Brick Works, Tommy Thompson Park,
+  Woodbine Beach, Scarborough Bluffs, Rouge National Urban Park
+- **gastronomi:** St. Lawrence Market, Kensington Market, Chinatown (Spadina),
+  Distillery District
+- **alışveriş:** CF Toronto Eaton Centre, Yorkdale, Queen Street West,
+  Yorkville (Mink Mile)
