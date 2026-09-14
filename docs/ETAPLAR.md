@@ -1530,3 +1530,93 @@ etiketleniyor ve Toronto bunları kavşak adıyla ("Spadina Avenue") tekrar tekr
 adlandırıyor — yoğunluk rahatsız ederse durak etiketleri seyreltilebilir.
 Ayrıca renksiz bırakılan streetcar hatları (OSM'de `colour` yok) palet
 renginde çiziliyor; TTC'nin kırmızısı istenirse `spec`'e elle yazılır.
+
+---
+
+## Yeni şehir — Ciudad de México ✅ tamam (2026-09-14)
+
+`yeni-sehir` parametrik boru hattıyla eklendi ("küresel denge" kümesinin
+4.'sü ve sonuncusu). Dil `es`, para **MXN** (`CURRENCY_SYM`'e `MXN="MX$"`).
+Kullanıcı kararları: **AIFA çerçeve dışı bırakıldı** (AICM şehrin asıl
+kapısı), **trolebüs alınmadı** (Metrobús BRT omurgayı veriyor), **Cablebús
+düzgün etiketliyse alınsın** → üç hattı da girdi, **Xochimilco dahil**.
+
+Yapıldı (hepsi OSM Overpass boru hattı):
+- **Manifest:** merkez `[-99.1332, 19.4326]`, `America/Mexico_City`, zoom
+  min 9 / max 19, maxBounds `[[-99.36,19.24],[-98.93,19.60]]` (~45×40 km —
+  Toronto/Sidney'den bilinçli olarak dar: CDMX metropolü 60 km'yi aşıyor,
+  geniş kare merkezi küçültüyordu). Fiyatlar editoryal (`updated: 2026-09`;
+  Metro bileti 5 MXN, havalimanı Metrobús'ü 30 MXN).
+- **Omurga (90 KB, 334 feature, 23 hat, 526 km):** STC Metro **1-9, 12, A, B**
+  (resmî renkleriyle), **Tren Ligero** (Tasqueña–Xochimilco), **Cablebús 1/2/3**,
+  **Tren Suburbano**, **Metrobús L1-L4, L6, L7**. 191 istasyon + 84 durak
+  (Metrobús/teleferik) + 13 hub (Pantitlán, Tacubaya, Hidalgo, Bellas Artes,
+  Balderas, Chabacano, Centro Médico, La Raza, Indios Verdes, Universidad,
+  Mixcoac, Buenavista, San Lázaro).
+  **Cablebús `lineRef:"tram"` çipinde:** sabit güzergâhlı, metro değil,
+  otobüs değil; app'in çip anahtarları (metro/tram/bus/train/ferry) sabit
+  olduğu için yeni bir anahtar eklemek kod değişikliği demekti.
+- **Varış (7 kapı, 1 link):** AICM T1 (Metrobús L4 ile Buenavista, 9.1 km
+  gerçek güzergâh) ve T2, Buenavista (Tren Suburbano), Terminal del Norte,
+  TAPO, Taxqueña, Observatorio.
+- **Keşfet (395 nokta, 70 KB):** tarihi 97 / doğa 85 / kamu 50 / modern 49 /
+  gastronomi 45 / alışveriş 36 / otel 30 / yurt 3. İkonik allowlist uygulandı:
+  Zócalo, Catedral, Templo Mayor, Palacio Nacional, Bellas Artes, Castillo de
+  Chapultepec, Casa Azul, Antropología, Torre Latinoamericana, Soumaya,
+  Tamayo, Papalote, Estadio Azteca, La Merced/San Juan/Coyoacán/Medellín
+  pazarları — 24 nokta elle geri eklendi.
+- **İhtiyaç (252 nokta, 45 KB):** eczane 55 / market 55 / kütüphane 35 /
+  müze 35 / yakıt 30 / hastane 25 / kiralık araç 17.
+- **Bölgeler:** turistik 4 — **Centro Histórico**, **Roma · Condesa**,
+  **Polanco**, **San Ángel** (`admin_level=10` colonia birleşimi). Ticari 33,
+  eğitim 64, doğal 62.
+- **İçerik:** 6 dilde `content/*.json` (7 kapı + 13 hub alt etiketi, `mx.` öneki).
+
+Boru hattında öğrenilenler:
+- **`tools/geo.py`'de gerçek bir hata düzeltildi:** way'leri tek bir şeride
+  birleşen hat (Metrobús L4, Cablebús) `unary_union`'dan `LineString` olarak
+  dönüyor ve `linemerge()` bunda **istisna fırlatıyordu** — `docs/VERI.md`
+  "tek LineString dönerse linemerge atlanır" diyordu ama kod atlamıyordu.
+  Artık geometri tipine bakılıyor. (Bu hata Seul/Sidney/Toronto'da patlamadı
+  çünkü oralarda her hat çok parçalıydı.)
+- **Metrobús L5'in OSM'de `ref` etiketi yok** (9 ilişkisi de yalnız
+  `name="Línea 5 (…)"`). Berlin S45 dersinin tersi: hat var, etiketi yok.
+  Ada göre seçici yazıldı ama **o gün Overpass'ın üç aynası da 504/boş cevap
+  döndürdü** (id bazlı tek tek çekme dahil ~12 deneme). Diğer 23 hat sağlam;
+  L5 sonraki oturumda tek sorguyla eklenebilir (`tools/spec.json` →
+  `mexicocity.line-mb5` seçicisi hazır duruyor).
+- **Coyoacán ve Xochimilco'nun colonia poligonları OSM'de yok** (489
+  colonia'nın hiçbiri o adlarla değil) → turistik bölge 4'te kaldı. İkisi de
+  Keşfet noktalarıyla temsil ediliyor (Jardín Centenario, Casa Azul, Mercado
+  de Coyoacán; Xochimilco embarcaderos + Ejidos/Parque Ecológico doğal
+  alanları).
+- **Bosque de Chapultepec OSM'de tek poligon değil:** `leisure=park`,
+  `nature_reserve`, `landuse=forest` ve `boundary=protected_area` sorgularının
+  hiçbiri bütün parkı getirmiyor (yalnız içindeki küçük bahçeler). Doğal
+  bölgede yok; Keşfet'te Castillo/Tamayo/Papalote/Auditorio ile temsil
+  ediliyor.
+- **Ad bazlı tekilleştirme gastronomide de kapatıldı:** CDMX'te 594 aday
+  13'e düşmüştü (aynı adlı mercado'lar ve zincir kafeler). Izgara zaten hücre
+  başına bir aday bıraktığı için kural artık yalnız kültür temalarında.
+
+Denetim:
+- `tools/audit_omurga.py mexicocity` → ilk turda **16 ihlal**; `repair.py`
+  sonrası **TEMİZ**. Cablebús hatları da onarıldı: teleferik açıklığı gerçekten
+  düz olduğu için kord = gerçek güzergâh (1.00x), onarım yalnız gerçek ara
+  düğümleri geri getirdi.
+- `tools/audit_data.py --city mexicocity` → **2 bulgu**, ikisi de bilinen müze
+  çift kaydı (Biblioteca Vasconcelos, Museo Indígena). Kutu bulgusu yok.
+  İlk turdaki 1 orphan (hattan 306 m uzaktaki Metrobús durağı) ve katman içi
+  2 çift kayıt silindi.
+- Tarayıcı dumanı: 8 katman + manifest + içerik 200, konsol hatası yok,
+  şehir çubuğu "Ciudad de México · 14 Sept · 05:43" (CST = UTC-6 doğru).
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260914-2**
+- [x] Katman dosyaları hedefin altında (en büyüğü omurga 90 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam — **tek eksik Metrobús L5** (Overpass kesintisi; seçicisi
+hazır). Göz kontrolü beklenen yer: Cablebús'ün tramvay çipinde görünmesi
+mantıklı mı, ve Centro Histórico'daki nokta yoğunluğu (tarihi 97 nokta
+merkezde toplanıyor).

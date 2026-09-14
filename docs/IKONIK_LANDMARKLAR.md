@@ -35,6 +35,7 @@
 | Seul | ✅ uygulandı (2026-09-13) | 5 saray + Jongmyo/Bukchon/Insadong/DDP/N Seoul Tower/Lotte World Tower allowlist; doğal bölgeye Cheonggyecheon/Seoul Forest/Olympic Park/Bukhansan elle eklendi |
 | Sidney | ✅ uygulandı (2026-09-13) | Opera Evi/Harbour Bridge/QVB/Hyde Park Barracks/Luna Park/Powerhouse allowlist; doğal bölgeye Royal Botanic/The Domain/Taronga/Bondi-Bronte-Coogee elle eklendi |
 | Toronto | ✅ uygulandı (2026-09-14) | CN Tower/Casa Loma/ROM/AGO/Nathan Phillips/Distillery/St. Lawrence Market allowlist; doğal bölgeye High Park/Toronto Islands/Brick Works/Tommy Thompson elle eklendi |
+| Ciudad de México | ✅ uygulandı (2026-09-14) | Zócalo/Catedral/Templo Mayor/Bellas Artes/Castillo de Chapultepec/Casa Azul/Antropología allowlist; doğal bölgeye Viveros/Tlalpan/Desierto de los Leones/Alameda elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -343,3 +344,24 @@
   Distillery District
 - **alışveriş:** CF Toronto Eaton Centre, Yorkdale, Queen Street West,
   Yorkville (Mink Mile)
+
+---
+
+## Ciudad de México
+
+- **tarihi/simge:** Zócalo (Plaza de la Constitución), Catedral Metropolitana,
+  Templo Mayor, Palacio Nacional, Palacio de Bellas Artes, Castillo de
+  Chapultepec, Basílica de Guadalupe, Monumento a la Revolución, Ángel de la
+  Independencia, Casa Azul (Museo Frida Kahlo), Museo Nacional de
+  Antropología, Ciudad Universitaria (UNAM), Jardín Centenario (Coyoacán),
+  Plaza de San Jacinto (San Ángel), Xochimilco embarcaderos
+- **modern:** Torre Latinoamericana, Museo Soumaya, Museo Jumex, Museo Tamayo,
+  Papalote Museo del Niño, Estadio Azteca, Torre Reforma, Auditorio Nacional,
+  Arena México
+- **doğa:** Bosque de Chapultepec (OSM'de tek poligon yok — Keşfet noktalarıyla
+  temsil ediliyor), Alameda Central, Parque México, Parque España, Viveros de
+  Coyoacán, Bosque de Tlalpan, Desierto de los Leones, Cerro de la Estrella,
+  Ejidos de Xochimilco, Parque Ecológico de Xochimilco
+- **gastronomi:** Mercado de La Merced, Mercado de San Juan, Mercado de
+  Coyoacán, Mercado Medellín, Central de Abasto
+- **alışveriş:** Zona Rosa, Centro Comercial Santa Fe, Polanco (Masaryk)

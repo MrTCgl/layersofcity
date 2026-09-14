@@ -305,7 +305,7 @@
       "name": "Ciudad de México",
       "lat": 19.4326,
       "lon": -99.1332,
-      "status": "soon",
+      "status": "ready",
       "names": {
         "en": "Mexico City",
         "de": "Mexiko-Stadt",

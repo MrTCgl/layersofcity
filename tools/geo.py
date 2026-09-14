@@ -56,7 +56,10 @@ def build(way_coords, bounds, tol=0.00008, min_len_m=120, round_to=5):
     lines = [LineString(c) for c in way_coords if len(c) > 1]
     if not lines:
         return []
-    merged = linemerge(unary_union(lines))
+    union = unary_union(lines)
+    # a route whose ways already form one strand comes back as a LineString, and
+    # linemerge() raises on that (docs/VERI.md: "tek LineString dönerse linemerge atlanır")
+    merged = union if union.geom_type == "LineString" else linemerge(union)
     parts = to_parts(merged)
     (w, s), (e, n) = bounds
     clip = box(w, s, e, n)

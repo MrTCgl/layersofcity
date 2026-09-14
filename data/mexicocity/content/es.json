@@ -1,0 +1,22 @@
+{
+  "mx.mex-t1.sub": "→ Buenavista · Metrobús L4 · ~40 min · Metro L5 Terminal Aérea",
+  "mx.mex-t2.sub": "Metrobús L4 · AICM Terminal 2",
+  "mx.buenavista.sub": "Tren Suburbano · Metro B · Metrobús",
+  "mx.norte.sub": "central de autobuses del norte · Metro L5",
+  "mx.tapo.sub": "central de oriente (TAPO) · Metro L1 San Lázaro",
+  "mx.taxquena.sub": "central del sur · Metro L2 · Tren Ligero",
+  "mx.observatorio.sub": "central del poniente · Metro L1",
+  "mx.hub.pantitlan": "Metro 1·5·9·A · el transbordo más concurrido",
+  "mx.hub.tacubaya": "Metro 1·7·9 · Metrobús · puerta poniente",
+  "mx.hub.hidalgo": "Metro 2·3 · borde del Centro Histórico",
+  "mx.hub.bellasartes": "Metro 2·8 · Palacio de Bellas Artes",
+  "mx.hub.balderas": "Metro 1·3 · Metrobús L3",
+  "mx.hub.chabacano": "Metro 2·8·9 · triple transbordo",
+  "mx.hub.centromedico": "Metro 3·9 · zona de hospitales",
+  "mx.hub.laraza": "Metro 3·5 · túnel de transbordo largo",
+  "mx.hub.indiosverdes": "extremo norte de la Línea 3 · Metrobús L1",
+  "mx.hub.universidad": "extremo sur de la Línea 3 · CU de la UNAM",
+  "mx.hub.mixcoac": "Metro 7·12 · transbordo del sur",
+  "mx.hub.buenavista": "Metro B · Tren Suburbano · Metrobús",
+  "mx.hub.sanlazaro": "Metro 1·B · central TAPO"
+}

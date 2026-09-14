@@ -299,5 +299,30 @@
   "line-mi": "[\"route\"=\"train\"][\"ref\"=\"MI\"][\"network\"=\"GO Transit\"]",
   "line-rh": "[\"route\"=\"train\"][\"ref\"=\"RH\"][\"network\"=\"GO Transit\"]",
   "line-st": "[\"route\"=\"train\"][\"ref\"=\"ST\"][\"network\"=\"GO Transit\"]"
+ },
+ "mexicocity": {
+  "line-1": "[\"route\"=\"subway\"][\"ref\"=\"1\"][\"network\"=\"STC Metro\"]",
+  "line-2": "[\"route\"=\"subway\"][\"ref\"=\"2\"][\"network\"=\"STC Metro\"]",
+  "line-3": "[\"route\"=\"subway\"][\"ref\"=\"3\"][\"network\"=\"STC Metro\"]",
+  "line-4": "[\"route\"=\"subway\"][\"ref\"=\"4\"][\"network\"=\"STC Metro\"]",
+  "line-5": "[\"route\"=\"subway\"][\"ref\"=\"5\"][\"network\"=\"STC Metro\"]",
+  "line-6": "[\"route\"=\"subway\"][\"ref\"=\"6\"][\"network\"=\"STC Metro\"]",
+  "line-7": "[\"route\"=\"subway\"][\"ref\"=\"7\"][\"network\"=\"STC Metro\"]",
+  "line-8": "[\"route\"=\"subway\"][\"ref\"=\"8\"][\"network\"=\"STC Metro\"]",
+  "line-9": "[\"route\"=\"subway\"][\"ref\"=\"9\"][\"network\"=\"STC Metro\"]",
+  "line-12": "[\"route\"=\"subway\"][\"ref\"=\"12\"][\"network\"=\"STC Metro\"]",
+  "line-a": "[\"route\"=\"subway\"][\"ref\"=\"A\"][\"network\"=\"STC Metro\"]",
+  "line-b": "[\"route\"=\"subway\"][\"ref\"=\"B\"][\"network\"=\"STC Metro\"]",
+  "line-tl": "[\"route\"=\"light_rail\"][\"ref\"=\"L1\"][\"network\"=\"STE Tren Ligero\"]",
+  "line-cb1": "[\"route\"=\"aerialway\"][\"ref\"=\"1\"][\"network\"=\"Cablebús\"]",
+  "line-cb2": "[\"route\"=\"aerialway\"][\"ref\"=\"2\"][\"network\"=\"Cablebús\"]",
+  "line-cb3": "[\"route\"=\"aerialway\"][\"ref\"=\"3\"][\"network\"=\"Cablebús\"]",
+  "line-sub": "[\"route\"=\"train\"][\"ref\"=\"S\"]",
+  "line-mb1": "[\"route\"=\"bus\"][\"ref\"~\"^L?1$\"][\"network\"=\"Metrobús\"]",
+  "line-mb2": "[\"route\"=\"bus\"][\"ref\"~\"^L?2$\"][\"network\"=\"Metrobús\"]",
+  "line-mb3": "[\"route\"=\"bus\"][\"ref\"~\"^L?3$\"][\"network\"=\"Metrobús\"]",
+  "line-mb4": "[\"route\"=\"bus\"][\"ref\"~\"^L?4$\"][\"network\"=\"Metrobús\"]",
+  "line-mb6": "[\"route\"=\"bus\"][\"ref\"~\"^L?6$\"][\"network\"=\"Metrobús\"]",
+  "line-mb7": "[\"route\"=\"bus\"][\"ref\"~\"^L?7$\"][\"network\"=\"Metrobús\"]"
  }
 }

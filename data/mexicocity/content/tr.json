@@ -1,0 +1,22 @@
+{
+  "mx.mex-t1.sub": "→ Buenavista · Metrobús L4 · ~40 dk · Metro L5 Terminal Aérea",
+  "mx.mex-t2.sub": "Metrobús L4 · AICM 2. Terminal",
+  "mx.buenavista.sub": "Tren Suburbano · Metro B · Metrobús",
+  "mx.norte.sub": "kuzey otogarı · Metro L5",
+  "mx.tapo.sub": "doğu otogarı · Metro L1 San Lázaro",
+  "mx.taxquena.sub": "güney otogarı · Metro L2 · Tren Ligero",
+  "mx.observatorio.sub": "batı otogarı · Metro L1",
+  "mx.hub.pantitlan": "Metro 1·5·9·A · ağın en yoğun aktarması",
+  "mx.hub.tacubaya": "Metro 1·7·9 · Metrobús · batı kapısı",
+  "mx.hub.hidalgo": "Metro 2·3 · Centro Histórico'nun kenarı",
+  "mx.hub.bellasartes": "Metro 2·8 · Palacio de Bellas Artes",
+  "mx.hub.balderas": "Metro 1·3 · Metrobús L3",
+  "mx.hub.chabacano": "Metro 2·8·9 · üçlü aktarma",
+  "mx.hub.centromedico": "Metro 3·9 · hastaneler bölgesi",
+  "mx.hub.laraza": "Metro 3·5 · uzun aktarma tüneli",
+  "mx.hub.indiosverdes": "Metro 3'ün kuzey ucu · Metrobús L1",
+  "mx.hub.universidad": "Metro 3'ün güney ucu · UNAM kampüsü",
+  "mx.hub.mixcoac": "Metro 7·12 · güney aktarması",
+  "mx.hub.buenavista": "Metro B · Tren Suburbano · Metrobús",
+  "mx.hub.sanlazaro": "Metro 1·B · TAPO otogarı"
+}
