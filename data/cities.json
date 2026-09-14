@@ -299,6 +299,21 @@
         "es": "Toronto",
         "tr": "Toronto"
       }
+    },
+    {
+      "id": "mexicocity",
+      "name": "Ciudad de México",
+      "lat": 19.4326,
+      "lon": -99.1332,
+      "status": "soon",
+      "names": {
+        "en": "Mexico City",
+        "de": "Mexiko-Stadt",
+        "fr": "Mexico",
+        "it": "Città del Messico",
+        "es": "Ciudad de México",
+        "tr": "Meksiko"
+      }
     }
   ]
 }
