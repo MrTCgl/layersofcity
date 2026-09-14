@@ -1547,10 +1547,10 @@ Yapıldı (hepsi OSM Overpass boru hattı):
   Toronto/Sidney'den bilinçli olarak dar: CDMX metropolü 60 km'yi aşıyor,
   geniş kare merkezi küçültüyordu). Fiyatlar editoryal (`updated: 2026-09`;
   Metro bileti 5 MXN, havalimanı Metrobús'ü 30 MXN).
-- **Omurga (90 KB, 334 feature, 23 hat, 526 km):** STC Metro **1-9, 12, A, B**
+- **Omurga (96 KB, 369 feature, 24 hat, 554 km):** STC Metro **1-9, 12, A, B**
   (resmî renkleriyle), **Tren Ligero** (Tasqueña–Xochimilco), **Cablebús 1/2/3**,
-  **Tren Suburbano**, **Metrobús L1-L4, L6, L7**. 191 istasyon + 84 durak
-  (Metrobús/teleferik) + 13 hub (Pantitlán, Tacubaya, Hidalgo, Bellas Artes,
+  **Tren Suburbano**, **Metrobús L1-L7** (L5 2026-09-14'te tamamlandı, aşağı
+  bak). 191 istasyon + 117 durak (Metrobús/teleferik) + 13 hub (Pantitlán, Tacubaya, Hidalgo, Bellas Artes,
   Balderas, Chabacano, Centro Médico, La Raza, Indios Verdes, Universidad,
   Mixcoac, Buenavista, San Lázaro).
   **Cablebús `lineRef:"tram"` çipinde:** sabit güzergâhlı, metro değil,
@@ -1580,11 +1580,16 @@ Boru hattında öğrenilenler:
   Artık geometri tipine bakılıyor. (Bu hata Seul/Sidney/Toronto'da patlamadı
   çünkü oralarda her hat çok parçalıydı.)
 - **Metrobús L5'in OSM'de `ref` etiketi yok** (9 ilişkisi de yalnız
-  `name="Línea 5 (…)"`). Berlin S45 dersinin tersi: hat var, etiketi yok.
-  Ada göre seçici yazıldı ama **o gün Overpass'ın üç aynası da 504/boş cevap
-  döndürdü** (id bazlı tek tek çekme dahil ~12 deneme). Diğer 23 hat sağlam;
-  L5 sonraki oturumda tek sorguyla eklenebilir (`tools/spec.json` →
-  `mexicocity.line-mb5` seçicisi hazır duruyor).
+  `name="Línea 5 (…)"`) **ve rota ilişkilerinde hiç yol üyesi yok** — üyelerin
+  tamamı peron (48 düğüm + 2 peron way'i). Yani Overpass'ın "boş elements"
+  cevabı ayna arızası değil, dürüst cevaptı; ilk teşhisim ("Overpass kesintisi")
+  yalnız bbox sorguları için doğruydu. Çözüm (2026-09-14): duraklar OSM
+  API'sinden (`/api/0.6/relation/<id>/full.json`) alındı, koridorun **gerçek
+  yol way'leri** Overpass'tan çekildi ve iki durak arası güzergâh **graf
+  en-kısa-yolla** dikildi — varış link'lerinde kullanılan yöntemin aynısı.
+  Sonuç: 27.9 km, 2 parça, en uzun düz segment 1265 m, 33 yeni durak.
+  49 bacaktan 1'i dolambaç eşiğini aştığı için boşluk bırakıldı (düz çizgiyle
+  köprülenmedi).
 - **Coyoacán ve Xochimilco'nun colonia poligonları OSM'de yok** (489
   colonia'nın hiçbiri o adlarla değil) → turistik bölge 4'te kaldı. İkisi de
   Keşfet noktalarıyla temsil ediliyor (Jardín Centenario, Casa Azul, Mercado
@@ -1604,19 +1609,23 @@ Denetim:
   sonrası **TEMİZ**. Cablebús hatları da onarıldı: teleferik açıklığı gerçekten
   düz olduğu için kord = gerçek güzergâh (1.00x), onarım yalnız gerçek ara
   düğümleri geri getirdi.
-- `tools/audit_data.py --city mexicocity` → **2 bulgu**, ikisi de bilinen müze
-  çift kaydı (Biblioteca Vasconcelos, Museo Indígena). Kutu bulgusu yok.
-  İlk turdaki 1 orphan (hattan 306 m uzaktaki Metrobús durağı) ve katman içi
-  2 çift kayıt silindi.
+- `tools/audit_data.py --city mexicocity` → **45 bulgu**, hepsi bilinen iki
+  kategori: OSM'de gerçekten dikdörtgen çizilmiş alanlar (42 — eğitim 21,
+  ticari 16, doğal 5) ve müze çift kaydı (3: Biblioteca Vasconcelos, Museo
+  Indígena, Frida Kahlo). İlk turdaki 1 orphan (hattan 306 m uzaktaki Metrobús
+  durağı) ve katman içi 2 çift kayıt silindi.
+  (**Düzeltme:** ilk yayında bu satır "2 bulgu, kutu yok" diyordu; o ölçüm
+  bölge katmanları `data/mexicocity/layers/`'a kopyalanmadan önce alınmıştı.)
 - Tarayıcı dumanı: 8 katman + manifest + içerik 200, konsol hatası yok,
   şehir çubuğu "Ciudad de México · 14 Sept · 05:43" (CST = UTC-6 doğru).
 
 Bitti sayılır:
-- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260914-2**
-- [x] Katman dosyaları hedefin altında (en büyüğü omurga 90 KB)
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260914-3**
+      (L5 tamamlandıktan sonra tekrar artırıldı)
+- [x] Katman dosyaları hedefin altında (en büyüğü omurga 99 KB)
 - [x] Denetim araçları temiz
 
-Durum notu: Tamam — **tek eksik Metrobús L5** (Overpass kesintisi; seçicisi
-hazır). Göz kontrolü beklenen yer: Cablebús'ün tramvay çipinde görünmesi
+Durum notu: Tamam; **Metrobús L5 de 2026-09-14'te tamamlandı** (yukarı bak),
+eksik hat kalmadı. Göz kontrolü beklenen yer: Cablebús'ün tramvay çipinde görünmesi
 mantıklı mı, ve Centro Histórico'daki nokta yoğunluğu (tarihi 97 nokta
 merkezde toplanıyor).
