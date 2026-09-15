@@ -1707,12 +1707,32 @@ Bitti sayılır:
 - [x] Katman dosyaları hedefin altında (omurga 281 KB < 400 KB)
 - [x] Denetim araçları temiz
 
-Durum notu: Tamam. Üç ikonik nokta (**ГУМ**, **Афимолл Сити**, **Измайловский
-кремль**) o günkü Overpass kesintisinde alınamadı; allowlist'te işaretli,
-sonraki turda tek sorguyla eklenir. Göz kontrolü beklenen yer: 10 tramvay
+Durum notu: Tamam. Üç ikonik nokta (**ГУМ**, **Афимолл Сити**, **Кремль в
+Измайлово**) 2026-09-15'te tamamlandı — ayrıntı aşağıdaki ek kayıtta.
+Göz kontrolü beklenen yer: 10 tramvay
 hattının metro ağıyla üst üste bindiği merkez, ve 149 doğal alanın kuzeydeki
 Losiny Ostrov ile haritayı ne kadar kapladığı.
 
 **Ayrıca (bu şehirden bağımsız, önceden var olan bulgu):** `audit_data` üç
 şehirde `kesfet-poi` dosyasını hedefin üstünde buluyor — London 284 KB,
 Madrid 264 KB, Berlin 212 KB (hedef 200 KB). Bu oturumda dokunulmadı.
+
+### Ek — Moskova'nın üç ikonik noktası (2026-09-15)
+
+Overpass'ın ad sorguları yine düştü, ama sebep bu kez netleşti: ajan
+vekilinin tüneli **6 saniyede** kapanıyor (`ws_closed_mid_exchange`,
+39 bayt alınmış), yani yavaş yanıt veren her sorgu kesiliyor — aynanın
+yükü değil, aradaki tünel. Dar bbox denemesi de kurtarmadı.
+
+Çözüm: **Nominatim** (openstreetmap.org, anahtarsız, build anında) ile ada
+göre arama; koordinatlar oradan alınıp elle eklendi:
+- **ГУМ** `[37.62144, 55.75470]` (alışveriş) — en yakın kayda 131 m
+- **Афимолл Сити** `[37.53977, 55.74915]` (alışveriş) — 730 m
+- **Кремль в Измайлово** `[37.75052, 55.79432]` (tarihi) — 120 m'lik
+  tekilleştirme eşiği bunu önce eledi; 27 m ötedeki kayıt **kompleksin
+  içindeki kilise** (Храм свт. Николая Мирликийского), aranan simge değil.
+  Eşik mekanik: yakın komşu her zaman aynı yer demiyor.
+
+Keşfet 421 → **424 nokta**. `audit_data --city moscow` yine 19 bulgu
+(hepsi gerçekten dikdörtgen OSM alanı), `audit_omurga` TEMİZ. Önbellek
+sürümleri birlikte **20260915-1**.
