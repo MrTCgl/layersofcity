@@ -37,6 +37,7 @@
 | Toronto | ✅ uygulandı (2026-09-14) | CN Tower/Casa Loma/ROM/AGO/Nathan Phillips/Distillery/St. Lawrence Market allowlist; doğal bölgeye High Park/Toronto Islands/Brick Works/Tommy Thompson elle eklendi |
 | Ciudad de México | ✅ uygulandı (2026-09-14) | Zócalo/Catedral/Templo Mayor/Bellas Artes/Castillo de Chapultepec/Casa Azul/Antropología allowlist; doğal bölgeye Viveros/Tlalpan/Desierto de los Leones/Alameda elle eklendi |
 | Москва (Moskova) | ✅ uygulandı (2026-09-15) | Kızıl Meydan/Kremlin/Vasili Blajenni/Bolşoy/Tretyakov/Ostankino allowlist; doğal bölgeye Zaryadye/Gorki/Sokolniki/Vorobyovi Gori elle eklendi; ГУМ · Афимолл Сити · Кремль в Измайлово 2026-09-15'te Nominatim'den tamamlandı |
+| Buenos Aires | ✅ uygulandı (2026-09-15) | Obelisco/Casa Rosada/Plaza de Mayo/Teatro Colón/Recoleta mezarlığı/Caminito/Bombonera allowlist; doğal bölgeye Costanera Sur/Bosques de Palermo/Centenario elle eklendi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -383,3 +384,20 @@
 - **gastronomi:** Даниловский рынок, Центральный рынок, Усачёвский рынок,
   Депо.Москва
 - **alışveriş:** ГУМ, ЦУМ, Старый Арбат, Афимолл Сити
+
+---
+
+## Buenos Aires
+
+- **tarihi/simge:** Obelisco, Casa Rosada, Plaza de Mayo, Catedral
+  Metropolitana, Cabildo, Congreso de la Nación, Teatro Colón, Cementerio de
+  la Recoleta, Caminito (La Boca), Manzana de las Luces
+- **modern:** La Bombonera, El Monumental, Puente de la Mujer, MALBA, Museo
+  Nacional de Bellas Artes, Centro Cultural Kirchner, Floralis Genérica,
+  Planetario Galileo Galilei
+- **doğa:** Reserva Ecológica Costanera Sur, Bosques de Palermo (Parque Tres
+  de Febrero), Jardín Japonés, Jardín Botánico Carlos Thays, Parque
+  Centenario, Parque Lezama
+- **gastronomi:** Mercado de San Telmo, Feria de Mataderos, Mercado de
+  Belgrano
+- **alışveriş:** Galerías Pacífico, Alto Palermo, Calle Florida

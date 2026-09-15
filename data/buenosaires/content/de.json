@@ -1,0 +1,17 @@
+{
+  "ba.eze.sub": "keine Bahnanbindung · Bus/Taxi ~45 Min",
+  "ba.aep.sub": "Stadtflughafen · Busse 33/45/160",
+  "ba.retiro.sub": "Mitre + San Martín + Belgrano Norte · Subte C/E",
+  "ba.omnibus.sub": "Fernbusbahnhof · neben Retiro",
+  "ba.constitucion.sub": "Roca-Linie · Subte C",
+  "ba.once.sub": "Sarmiento-Linie · Subte A/H",
+  "ba.buquebus.sub": "Fähren nach Colonia und Montevideo",
+  "ba.hub.retiro": "Subte C/E · drei Bahnlinien · Busbahnhof",
+  "ba.hub.constitucion": "Subte C · Roca-Linie · Tor zum Süden",
+  "ba.hub.once": "Subte A/H · Sarmiento-Linie · Plaza Miserere",
+  "ba.hub.pellegrini": "Subte B/C/D · der Obelisco",
+  "ba.hub.diagonalnorte": "Subte C/D · Microcentro",
+  "ba.hub.catedral": "Subte D · Plaza de Mayo",
+  "ba.hub.lacroze": "Subte B · Urquiza-Linie · Chacarita",
+  "ba.hub.plazaitalia": "Subte D · Wälder von Palermo"
+}

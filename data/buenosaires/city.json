@@ -1,0 +1,116 @@
+{
+  "id": "buenosaires",
+  "center": [
+    -58.3816,
+    -34.6037
+  ],
+  "zoom": {
+    "start": 10.6,
+    "min": 8.8,
+    "max": 19
+  },
+  "home": [
+    [
+      -58.46,
+      -34.66
+    ],
+    [
+      -58.34,
+      -34.56
+    ]
+  ],
+  "maxBounds": [
+    [
+      -58.75,
+      -34.87
+    ],
+    [
+      -58.28,
+      -34.45
+    ]
+  ],
+  "timezone": "America/Argentina/Buenos_Aires",
+  "language": "es",
+  "currency": "ARS",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-09",
+    "water05": 1200.0,
+    "petrol1l": 1450.0,
+    "milk1l": 1800.0,
+    "meat1kg": 12000.0,
+    "cheese1kg": 16000.0,
+    "beer05": 4500.0,
+    "bigmac": 9500.0,
+    "espresso": 3500.0,
+    "transitTicket": 900.0
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}

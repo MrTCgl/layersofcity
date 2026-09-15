@@ -1,0 +1,17 @@
+{
+  "ba.eze.sub": "sin tren · colectivo o taxi ~45 min",
+  "ba.aep.sub": "aeropuerto urbano · colectivos 33/45/160",
+  "ba.retiro.sub": "Mitre + San Martín + Belgrano Norte · Subte C/E",
+  "ba.omnibus.sub": "terminal de larga distancia · junto a Retiro",
+  "ba.constitucion.sub": "línea Roca · Subte C",
+  "ba.once.sub": "línea Sarmiento · Subte A/H",
+  "ba.buquebus.sub": "ferries a Colonia y Montevideo",
+  "ba.hub.retiro": "Subte C/E · tres líneas de tren · terminal de ómnibus",
+  "ba.hub.constitucion": "Subte C · línea Roca · puerta del sur",
+  "ba.hub.once": "Subte A/H · línea Sarmiento · Plaza Miserere",
+  "ba.hub.pellegrini": "Subte B/C/D · el Obelisco",
+  "ba.hub.diagonalnorte": "Subte C/D · microcentro",
+  "ba.hub.catedral": "Subte D · Plaza de Mayo",
+  "ba.hub.lacroze": "Subte B · línea Urquiza · Chacarita",
+  "ba.hub.plazaitalia": "Subte D · Bosques de Palermo"
+}

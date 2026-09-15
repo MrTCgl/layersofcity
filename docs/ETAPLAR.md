@@ -1736,3 +1736,72 @@ göre arama; koordinatlar oradan alınıp elle eklendi:
 Keşfet 421 → **424 nokta**. `audit_data --city moscow` yine 19 bulgu
 (hepsi gerçekten dikdörtgen OSM alanı), `audit_omurga` TEMİZ. Önbellek
 sürümleri birlikte **20260915-1**.
+
+---
+
+## Yeni şehir — Buenos Aires ✅ tamam (2026-09-15)
+
+`yeni-sehir` parametrik boru hattıyla eklendi (kullanıcının "sırayla 4 şehir"
+kararının 1.'si: Buenos Aires → Hong Kong → Milano → Kahire). Dil `es`,
+para **ARS** (`CURRENCY_SYM`'e `ARS="AR$"`). Kullanıcı kararı: **Ezeiza
+çerçeve içinde**.
+
+Yapıldı (hepsi OSM Overpass boru hattı):
+- **Manifest:** merkez `[-58.3816, -34.6037]`, `America/Argentina/Buenos_Aires`,
+  maxBounds `[[-58.75,-34.87],[-58.28,-34.45]]` (~43×47 km). Fiyatlar
+  editoryal (`updated: 2026-09`); **`airportTrain` satırı hiç yazılmadı** —
+  şehirde havalimanı treni yok, sıfır göstermek yanlış olurdu.
+- **Omurga (90 KB, 290 feature, 15 hat, 758 km):** Subte **A/B/C/D/E/H**
+  (resmî renkleriyle), **Premetro P**, **Tren de la Costa**, ve yedi banliyö
+  hattı: Mitre, Sarmiento, Roca, San Martín, Belgrano Norte, Belgrano Sur,
+  Urquiza. 236 istasyon + 16 durak + 8 hub (Retiro, Constitución, Once,
+  Carlos Pellegrini, Diagonal Norte, Catedral, Federico Lacroze, Plaza Italia).
+- **Varış (7 kapı, 0 link):** Ezeiza, Aeroparque, Retiro, Terminal de Ómnibus,
+  Constitución, Once, Buquebus. **Hiçbir havalimanının raylı bağlantısı yok**
+  (kullanıcı onayıyla): kapılar link'siz duruyor, düz çizgi çizilmedi, otobüs
+  bilgisi içerik metninde.
+- **Keşfet (386 nokta, 70 KB):** tarihi 92 / doğa 87 / modern 52 / kamu 49 /
+  gastronomi 41 / alışveriş 35 / otel 30. **Yurt teması boş** — OSM'de
+  Buenos Aires'te `building=dormitory` etiketi yok (sorgu boş döndü).
+  İkonik allowlist uygulandı: 16 nokta elle geri eklendi.
+- **İhtiyaç (248 nokta, 44 KB):** eczane 55 / market 55 / kütüphane 35 /
+  müze 35 / yakıt 30 / hastane 25 / kiralık araç 13.
+- **Bölgeler:** turistik 6 barrio birleşimi (Centro·Monserrat, San Telmo,
+  La Boca, Puerto Madero, Recoleta, Palermo — `admin_level=9`, altısı da
+  eksiksiz bulundu). Ticari 24, eğitim 18, doğal 28.
+- **İçerik:** 6 dilde `content/*.json` (7 kapı + 8 hub alt etiketi, `ba.` öneki).
+
+Boru hattında öğrenilenler:
+- **Boş liste ≠ tanımsız:** `assemble.py`'de `getattr(_spec,'LINKS',None) or
+  [varsayılan]` yazıyordu; Buenos Aires'in **bilinçli boş** `LINKS = []`
+  listesi falsy olduğu için Seul'ün link'lerine düşüyordu (`KeyError:
+  gate-icn`). Artık `is None` kontrolü var.
+- **İkonik arama için Nominatim yolu açıldı** (`iconic_nom.py`): Overpass'ın
+  ad sorguları bu ortamda vekil tünelinde ölüyor (6 sn), Nominatim aynı OSM
+  verisini saniyenin altında döndürüyor. Overpass'ta düşen 3 noktadan
+  CCK bununla eklendi; diğer ikisi zaten sette çıktı (0-1 m).
+- **Yardımcının id sayacı çakıştı:** `ke-ikonik-0` iki kez üretildi
+  (`audit_data` yakaladı). Artık `ke-nom-*` ve kullanılmış id kontrolü var.
+- **Banliyö hatlarının rengi OSM'de aynı** (#37BBED, Trenes Argentinos mavisi)
+  — beş hat aynı renkte çiziliyor, ayrım rozetlerden (LM/LS/LR/LSM/LBS).
+
+Denetim:
+- `tools/audit_omurga.py buenosaires` → ilk turda **10 ihlal** (en kötüsü
+  Belgrano Sur'da 15.136 m); `repair.py` sonrası **TEMİZ**, kıvrım oranları
+  1.00-1.03x.
+- `tools/audit_data.py --city buenosaires` → **18 bulgu**: 17 kutu (gerçekten
+  dikdörtgen OSM alanı) + 1 müze çift kaydı (Bellas Artes). İlk turdaki
+  katman içi çift kayıt (Jardín Botánico) ve id çakışması düzeltildi.
+- Tarayıcı dumanı: 8 katman + manifest + içerik 200, konsol hatası yok,
+  şehir çubuğu "Buenos Aires · 15 Sept · 12:11" (ART = UTC-3 doğru).
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260915-2**
+- [x] Katman dosyaları hedefin altında (en büyüğü omurga 90 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Künye kartında **dolar karşılığı ARS'de boş kalıyor**
+(Frankfurter'ın 30 para biriminde peso yok, ruble gibi) ve Arjantin
+enflasyonunda editoryal fiyat tablosu hızlı eskir — `updated: 2026-09`
+etiketiyle bilerek yayınlandı. Göz kontrolü beklenen yer: beş banliyö
+hattının aynı mavi tonu ve doğal bölgenin yalnız 28 alanla kalması.

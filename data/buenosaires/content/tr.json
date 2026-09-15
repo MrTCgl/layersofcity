@@ -1,0 +1,17 @@
+{
+  "ba.eze.sub": "raylı bağlantı yok · otobüs/taksi ~45 dk",
+  "ba.aep.sub": "şehir içi havalimanı · 33/45/160 otobüsleri",
+  "ba.retiro.sub": "Mitre + San Martín + Belgrano Norte · Subte C/E",
+  "ba.omnibus.sub": "şehirlerarası otogar · Retiro'nun yanı",
+  "ba.constitucion.sub": "Roca hattı · Subte C",
+  "ba.once.sub": "Sarmiento hattı · Subte A/H",
+  "ba.buquebus.sub": "Colonia ve Montevideo feribotları",
+  "ba.hub.retiro": "Subte C/E · üç tren hattı · otogar",
+  "ba.hub.constitucion": "Subte C · Roca hattı · güneyin kapısı",
+  "ba.hub.once": "Subte A/H · Sarmiento hattı · Plaza Miserere",
+  "ba.hub.pellegrini": "Subte B/C/D · Obelisco",
+  "ba.hub.diagonalnorte": "Subte C/D · microcentro",
+  "ba.hub.catedral": "Subte D · Plaza de Mayo",
+  "ba.hub.lacroze": "Subte B · Urquiza hattı · Chacarita",
+  "ba.hub.plazaitalia": "Subte D · Palermo ormanları"
+}

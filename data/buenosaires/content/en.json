@@ -1,0 +1,17 @@
+{
+  "ba.eze.sub": "no rail link · bus or taxi ~45 min",
+  "ba.aep.sub": "city airport · buses 33/45/160",
+  "ba.retiro.sub": "Mitre + San Martín + Belgrano Norte · Subte C/E",
+  "ba.omnibus.sub": "long-distance coach terminal · beside Retiro",
+  "ba.constitucion.sub": "Roca line · Subte C",
+  "ba.once.sub": "Sarmiento line · Subte A/H",
+  "ba.buquebus.sub": "ferries to Colonia and Montevideo",
+  "ba.hub.retiro": "Subte C/E · three rail lines · coach terminal",
+  "ba.hub.constitucion": "Subte C · Roca line · gateway to the south",
+  "ba.hub.once": "Subte A/H · Sarmiento line · Plaza Miserere",
+  "ba.hub.pellegrini": "Subte B/C/D · the Obelisco",
+  "ba.hub.diagonalnorte": "Subte C/D · microcentro",
+  "ba.hub.catedral": "Subte D · Plaza de Mayo",
+  "ba.hub.lacroze": "Subte B · Urquiza line · Chacarita",
+  "ba.hub.plazaitalia": "Subte D · Palermo woods"
+}

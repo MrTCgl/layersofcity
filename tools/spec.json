@@ -358,5 +358,22 @@
   "line-tram-50": "[\"route\"=\"tram\"][\"ref\"=\"50\"]",
   "line-tram-38": "[\"route\"=\"tram\"][\"ref\"=\"38\"]",
   "line-tram-13": "[\"route\"=\"tram\"][\"ref\"=\"13\"]"
+ },
+ "buenosaires": {
+  "line-a": "[\"route\"=\"subway\"][\"ref\"=\"A\"][\"network\"=\"Subte de Buenos Aires\"]",
+  "line-b": "[\"route\"=\"subway\"][\"ref\"=\"B\"][\"network\"=\"Subte de Buenos Aires\"]",
+  "line-c": "[\"route\"=\"subway\"][\"ref\"=\"C\"][\"network\"=\"Subte de Buenos Aires\"]",
+  "line-d": "[\"route\"=\"subway\"][\"ref\"=\"D\"][\"network\"=\"Subte de Buenos Aires\"]",
+  "line-e": "[\"route\"=\"subway\"][\"ref\"=\"E\"][\"network\"=\"Subte de Buenos Aires\"]",
+  "line-h": "[\"route\"=\"subway\"][\"ref\"=\"H\"][\"network\"=\"Subte de Buenos Aires\"]",
+  "line-p": "[\"route\"=\"tram\"][\"ref\"=\"P\"]",
+  "line-tc": "[\"route\"=\"light_rail\"][\"ref\"=\"TC\"]",
+  "line-lm": "[\"route\"=\"train\"][\"ref\"=\"LM\"][\"network\"=\"Mitre\"]",
+  "line-ls": "[\"route\"=\"train\"][\"ref\"=\"LS\"][\"network\"=\"Sarmiento\"]",
+  "line-lr": "[\"route\"=\"train\"][\"ref\"=\"LR\"][\"network\"=\"Roca\"]",
+  "line-lsm": "[\"route\"=\"train\"][\"ref\"=\"LSM\"][\"network\"=\"San Martín\"]",
+  "line-lbn": "[\"route\"=\"train\"][\"ref\"=\"LBN\"][\"network\"=\"Belgrano\"]",
+  "line-lbs": "[\"route\"=\"train\"][\"ref\"=\"LBS\"][\"network\"=\"Belgrano\"]",
+  "line-lu": "[\"route\"=\"train\"][\"ref\"=\"LU\"][\"network\"=\"Urquiza\"]"
  }
 }
