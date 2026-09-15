@@ -329,6 +329,21 @@
         "es": "Moscú",
         "tr": "Moskova"
       }
+    },
+    {
+      "id": "buenosaires",
+      "name": "Buenos Aires",
+      "lat": -34.6037,
+      "lon": -58.3816,
+      "status": "soon",
+      "names": {
+        "en": "Buenos Aires",
+        "de": "Buenos Aires",
+        "fr": "Buenos Aires",
+        "it": "Buenos Aires",
+        "es": "Buenos Aires",
+        "tr": "Buenos Aires"
+      }
     }
   ]
 }
