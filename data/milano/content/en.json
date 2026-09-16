@@ -1,0 +1,18 @@
+{
+  "mi.mxp.sub": "→ Cadorna · Malpensa Express · ~37 min",
+  "mi.lin.sub": "metro M4 → San Babila · ~15 min",
+  "mi.centrale.sub": "Frecciarossa & Italo · M2/M3 · S lines",
+  "mi.cadorna.sub": "Malpensa Express terminus · M1/M2",
+  "mi.garibaldi.sub": "heart of the S network · M2/M5",
+  "mi.lampugnano.sub": "intercity coaches · M1",
+  "mi.hub.duomo": "M1 ↔ M3 · the cathedral square",
+  "mi.hub.cadorna": "M1 ↔ M2 · Malpensa Express",
+  "mi.hub.centrale": "M2 ↔ M3 · high-speed trains",
+  "mi.hub.garibaldi": "M2 ↔ M5 · S lines · Porta Nuova",
+  "mi.hub.loreto": "M1 ↔ M2 · Corso Buenos Aires",
+  "mi.hub.lambrate": "M2 · S lines · eastern gateway",
+  "mi.hub.rogoredo": "M3 · S lines · southern gateway",
+  "mi.hub.sanbabila": "M1 ↔ M4 · Quadrilatero della Moda",
+  "mi.hub.santambrogio": "M2 ↔ M4 · the basilica",
+  "mi.hub.lotto": "M1 ↔ M5 · San Siro & CityLife"
+}

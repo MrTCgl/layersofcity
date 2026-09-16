@@ -1,0 +1,18 @@
+{
+  "mi.mxp.sub": "→ Cadorna · Malpensa Express · ~37 min",
+  "mi.lin.sub": "metro M4 → San Babila · ~15 min",
+  "mi.centrale.sub": "Frecciarossa e Italo · M2/M3 · linee S",
+  "mi.cadorna.sub": "capolinea del Malpensa Express · M1/M2",
+  "mi.garibaldi.sub": "cuore del passante · M2/M5",
+  "mi.lampugnano.sub": "autobus a lunga percorrenza · M1",
+  "mi.hub.duomo": "M1 ↔ M3 · la piazza del Duomo",
+  "mi.hub.cadorna": "M1 ↔ M2 · Malpensa Express",
+  "mi.hub.centrale": "M2 ↔ M3 · alta velocità",
+  "mi.hub.garibaldi": "M2 ↔ M5 · linee S · Porta Nuova",
+  "mi.hub.loreto": "M1 ↔ M2 · Corso Buenos Aires",
+  "mi.hub.lambrate": "M2 · linee S · porta est",
+  "mi.hub.rogoredo": "M3 · linee S · porta sud",
+  "mi.hub.sanbabila": "M1 ↔ M4 · Quadrilatero della Moda",
+  "mi.hub.santambrogio": "M2 ↔ M4 · la basilica",
+  "mi.hub.lotto": "M1 ↔ M5 · San Siro e CityLife"
+}

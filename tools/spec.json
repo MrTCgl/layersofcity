@@ -403,5 +403,32 @@
   "line-ferry-pc": "[\"route\"=\"ferry\"][\"ref\"=\"Peng Chau - Central\"]",
   "line-ferry-db": "[\"route\"=\"ferry\"][\"ref\"=\"Discovery Bay - Central\"]",
   "line-ferry-pi": "[\"route\"=\"ferry\"][\"ref\"=\"Park Island - Central\"]"
+ },
+ "milano": {
+  "line-m1": "[\"route\"=\"subway\"][\"ref\"=\"M1\"]",
+  "line-m2": "[\"route\"=\"subway\"][\"ref\"=\"M2\"]",
+  "line-m3": "[\"route\"=\"subway\"][\"ref\"=\"M3\"]",
+  "line-m4": "[\"route\"=\"subway\"][\"ref\"=\"M4\"]",
+  "line-m5": "[\"route\"=\"subway\"][\"ref\"=\"M5\"]",
+  "line-s1": "[\"route\"=\"train\"][\"ref\"=\"S1\"][\"network\"=\"STIBM\"]",
+  "line-s2": "[\"route\"=\"train\"][\"ref\"=\"S2\"][\"network\"=\"STIBM\"]",
+  "line-s3": "[\"route\"=\"train\"][\"ref\"=\"S3\"][\"network\"=\"STIBM\"]",
+  "line-s4": "[\"route\"=\"train\"][\"ref\"=\"S4\"][\"network\"=\"STIBM\"]",
+  "line-s5": "[\"route\"=\"train\"][\"ref\"=\"S5\"][\"network\"=\"STIBM\"]",
+  "line-s6": "[\"route\"=\"train\"][\"ref\"=\"S6\"][\"network\"=\"STIBM\"]",
+  "line-s7": "[\"route\"=\"train\"][\"ref\"=\"S7\"][\"network\"=\"STIBM\"]",
+  "line-s8": "[\"route\"=\"train\"][\"ref\"=\"S8\"][\"network\"=\"STIBM\"]",
+  "line-s9": "[\"route\"=\"train\"][\"ref\"=\"S9\"][\"network\"=\"STIBM\"]",
+  "line-s11": "[\"route\"=\"train\"][\"ref\"=\"S11\"][\"network\"=\"STIBM\"]",
+  "line-s12": "[\"route\"=\"train\"][\"ref\"=\"S12\"][\"network\"=\"STIBM\"]",
+  "line-s13": "[\"route\"=\"train\"][\"ref\"=\"S13\"][\"network\"=\"STIBM\"]",
+  "line-tram-1": "[\"route\"=\"tram\"][\"ref\"=\"1\"]",
+  "line-tram-2": "[\"route\"=\"tram\"][\"ref\"=\"2\"]",
+  "line-tram-3": "[\"route\"=\"tram\"][\"ref\"=\"3\"]",
+  "line-tram-12": "[\"route\"=\"tram\"][\"ref\"=\"12\"]",
+  "line-tram-14": "[\"route\"=\"tram\"][\"ref\"=\"14\"]",
+  "line-tram-15": "[\"route\"=\"tram\"][\"ref\"=\"15\"]",
+  "line-tram-16": "[\"route\"=\"tram\"][\"ref\"=\"16\"]",
+  "line-tram-19": "[\"route\"=\"tram\"][\"ref\"=\"19\"]"
  }
 }

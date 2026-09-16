@@ -1,0 +1,18 @@
+{
+  "mi.mxp.sub": "→ Cadorna · Malpensa Express · ~37 dk",
+  "mi.lin.sub": "metro M4 → San Babila · ~15 dk",
+  "mi.centrale.sub": "Frecciarossa ve Italo · M2/M3 · S hatları",
+  "mi.cadorna.sub": "Malpensa Express'in ucu · M1/M2",
+  "mi.garibaldi.sub": "S ağının kalbi · M2/M5",
+  "mi.lampugnano.sub": "şehirlerarası otogar · M1",
+  "mi.hub.duomo": "M1 ↔ M3 · katedral meydanı",
+  "mi.hub.cadorna": "M1 ↔ M2 · Malpensa Express",
+  "mi.hub.centrale": "M2 ↔ M3 · yüksek hızlı trenler",
+  "mi.hub.garibaldi": "M2 ↔ M5 · S hatları · Porta Nuova",
+  "mi.hub.loreto": "M1 ↔ M2 · Corso Buenos Aires",
+  "mi.hub.lambrate": "M2 · S hatları · doğu kapısı",
+  "mi.hub.rogoredo": "M3 · S hatları · güney kapısı",
+  "mi.hub.sanbabila": "M1 ↔ M4 · Moda Dörtgeni",
+  "mi.hub.santambrogio": "M2 ↔ M4 · bazilika",
+  "mi.hub.lotto": "M1 ↔ M5 · San Siro ve CityLife"
+}

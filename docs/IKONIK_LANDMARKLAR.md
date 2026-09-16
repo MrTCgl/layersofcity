@@ -39,6 +39,7 @@
 | Москва (Moskova) | ✅ uygulandı (2026-09-15) | Kızıl Meydan/Kremlin/Vasili Blajenni/Bolşoy/Tretyakov/Ostankino allowlist; doğal bölgeye Zaryadye/Gorki/Sokolniki/Vorobyovi Gori elle eklendi; ГУМ · Афимолл Сити · Кремль в Измайлово 2026-09-15'te Nominatim'den tamamlandı |
 | Buenos Aires | ✅ uygulandı (2026-09-15) | Obelisco/Casa Rosada/Plaza de Mayo/Teatro Colón/Recoleta mezarlığı/Caminito/Bombonera allowlist; doğal bölgeye Costanera Sur/Bosques de Palermo/Centenario elle eklendi |
 | Hong Kong | ✅ uygulandı (2026-09-16) | Victoria Peak/Tian Tan Buddha/Wong Tai Sin/Tai Kwun/M+/ICC-IFC allowlist; doğal bölgeye Dragon's Back/Repulse Bay/Nan Lian elle eklendi (tamamı Nominatim yoluyla) |
+| Milano | ✅ uygulandı (2026-09-16) | Duomo/Galleria/Scala/Sforzesco/Cenacolo/San Siro/Bosco Verticale allowlist; doğal bölgeye Sempione/Montanelli/Parco Nord/Idroscalo elle eklendi (Nominatim) |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -416,3 +417,18 @@
   Hong Kong Park, Kowloon Park, Victoria Park, Nan Lian Garden
 - **gastronomi:** Temple Street gece pazarı, Graham Street pazarı
 - **alışveriş:** Ladies' Market, Times Square, Harbour City, Stanley Market
+
+---
+
+## Milano
+
+- **tarihi/simge:** Duomo, Teatro alla Scala, Castello Sforzesco, Santa Maria
+  delle Grazie (Son Akşam Yemeği), Sant'Ambrogio, Palazzo Reale, Pinacoteca
+  di Brera, Arco della Pace, Cimitero Monumentale
+- **modern:** Bosco Verticale, Torre Unicredit, CityLife (Tre Torri), Torre
+  Velasca, San Siro, Fondazione Prada, Triennale, Museo Scienza e Tecnologia
+- **doğa:** Parco Sempione, Giardini Indro Montanelli, Parco Nord,
+  Boscoincittà, Parco Lambro, Idroscalo, Darsena (Navigli)
+- **gastronomi:** Mercato Centrale, Porta Romana pazarı, Eataly Smeraldo
+- **alışveriş:** Galleria Vittorio Emanuele II, Quadrilatero della Moda,
+  Corso Buenos Aires

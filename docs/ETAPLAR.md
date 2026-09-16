@@ -1876,3 +1876,68 @@ Bitti sayılır:
 Durum notu: Tamam. Göz kontrolü beklenen yer: Light Rail'in 12 hattının
 Tuen Mun–Yuen Long üçgeninde ne kadar iç içe göründüğü ve Ding Ding'in tek
 yeşil hat olarak Hong Kong Adası'nın kuzey kıyısında okunurluğu.
+
+---
+
+## Yeni şehir — Milano ✅ tamam (2026-09-16)
+
+"Sırayla 4 şehir"in 3.'sü. Dil `it`, para EUR — **yeni sembol/dil gerekmedi**
+(projenin ilk şehri Roma'dan beri var). Kullanıcı kararları: **merkeze değen
+8 tramvay** (18'in hepsi değil), **Bergamo Orio al Serio çerçeve dışı**.
+
+Yapıldı (hepsi OSM Overpass + OSM API boru hattı):
+- **Manifest:** merkez `[9.19, 45.4642]`, `Europe/Rome`, maxBounds
+  `[[8.66,45.34],[9.35,45.66]]` (~54×36 km; Malpensa kuzeybatıda, Linate
+  doğuda). Fiyatlar editoryal (`updated: 2026-09`; ATM bileti 2.30 €,
+  Malpensa Express 13 €).
+- **Omurga (172 KB, 569 feature, 25 hat, 1280 km):** metro **M1-M5** (resmî
+  renkleriyle), STIBM **S1-S13** banliyö ağı (12 hat, her biri kendi renginde),
+  ve merkeze değen **8 tramvay** (1, 2, 3, 12, 14, 15, 16, 19 — tarihi 1
+  numara dahil; hepsi Duomo'nun ~700 m yakınından geçiyor). 190 istasyon +
+  319 durak + 10 hub.
+- **Varış (6 kapı, 1 link):** Malpensa (Malpensa Express ile Cadorna,
+  **48.9 km** gerçek güzergâh), Linate (M4 ile San Babila — hat zaten çizili,
+  ayrı link'e gerek yok), Centrale, Cadorna, Porta Garibaldi, Lampugnano.
+- **Keşfet (408 nokta, 72 KB):** tarihi 98 / doğa 91 / modern 48 / kamu 48 /
+  gastronomi 41 / alışveriş 37 / otel 30 / yurt 15. İkonik allowlist
+  Nominatim'le uygulandı: 23 nokta elle geri eklendi.
+- **İhtiyaç (255 nokta, 44 KB):** yedi kategori tam.
+- **Bölgeler:** turistik 6 (Duomo·Centro, Navigli·Ticinese, Isola·Porta Nuova,
+  Sempione·Castello, Porta Venezia, Città Studi). Ticari 25, eğitim 14,
+  doğal 55.
+- **İçerik:** 6 dilde `content/*.json` (6 kapı + 10 hub alt etiketi, `mi.` öneki).
+
+Boru hattında öğrenilenler:
+- **Tramvay geometrisi Overpass'tan gelmedi, OSM API'sinden geldi.** 17 hattın
+  `way(r)` sorgusu 40 dakikada tek satır üretmedi (vekil tüneli 6 sn'de
+  kapanıyor); ilişki **id**'leri ucuz `out tags` sorgusuyla alınıp geometri
+  `/api/0.6/relation/<id>/full.json`'dan çekilince **10 dakikada 17 hat**
+  tamamlandı (`milano_trams_api.py`). Meksiko'daki L5 çözümünün genelleştirilmiş
+  hali.
+- **Milano'da mahalle poligonu `admin_level`'da yok:** seviye 9/10 yalnız
+  **9 Municipio**. Gerçek mahalleler (NIL) `place=quarter` **way**'leri —
+  turistik gruplar onlardan kuruldu (Toronto'daki `DISTRICT_SELECTORS`
+  mekanizması).
+- **Tramvaylarda renk etiketi yok:** ATM hatlarının OSM'de `colour`'u yok,
+  hepsi palet rengine düşüyor. Ayrım rozetlerden (1/2/3/12/14/15/16/19) —
+  Toronto streetcar'larındaki durumun aynısı.
+- **Çizilmeyen hattın durağı orphan üretir:** 9 tramvay hattını almayınca
+  onların 11 durağı hattan 250 m'den uzak kaldı; silindi.
+
+Denetim:
+- `tools/audit_omurga.py milano` → ilk turda **18 ihlal**; `repair.py` sonrası
+  **TEMİZ** (kıvrım oranları 1.00x).
+- `tools/audit_data.py --city milano` → **5 bulgu**, hepsi kutu (gerçekten
+  dikdörtgen çizilmiş OSM alanı) — dup ve orphan sıfır. Projede şimdiye kadarki
+  en temiz sonuç.
+- Tarayıcı dumanı: 8 katman + manifest + içerik 200, konsol hatası yok,
+  şehir çubuğu "Milano · 16 Sept · 21:13" (CEST = UTC+2 doğru).
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260916-3**
+- [x] Katman dosyaları hedefin altında (omurga 172 KB, doğal 102 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Göz kontrolü beklenen yer: 8 tramvayın hepsi palet renginde
+olduğu için merkezde birbirinden ayırt edilebiliyor mu, ve S hatlarının
+12'sinin Passante koridorunda üst üste binmesi.
