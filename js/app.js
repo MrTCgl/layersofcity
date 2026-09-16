@@ -234,6 +234,10 @@
   // at every zoom level — see renderCities.
   const CITY_TXT = 14, CITY_SOON_TXT = 12, CITY_CORE = 8.5, CITY_HALO = 20,
         CITY_HIT = 34, CITY_SOOND = 5, CITY_STROKE = 2, CITY_CW = 0.56;
+  // Marker/name sizes are scaled by (on-screen world width)/CITY_FULL_W, never
+  // below CITY_MIN_K, so a whole world squeezed into a phone-width window stays
+  // readable instead of collapsing into overlapping names.
+  const CITY_FULL_W = 1700, CITY_MIN_K = 0.62;
 
   let cityLayer = null, cityRenderScale = -1, cityRenderRAF = 0;
 
@@ -259,9 +263,15 @@
     if (!mw) return; // no layout yet — retried after first frame / on zoom
     const u = VB.w / mw / wScale;
     cityRenderScale = wScale;
-    const fs = CITY_TXT * u, soonFs = CITY_SOON_TXT * u;
-    const coreR = CITY_CORE * u, haloR = CITY_HALO * u, hitR = CITY_HIT * u,
-          soonR = CITY_SOOND * u, stroke = CITY_STROKE * u;
+    // How wide the whole world is on screen right now (map width × zoom).
+    // When that is small — a phone-width window showing the whole world — the
+    // same 23 names fight over a fraction of the space, so names and markers
+    // step down to give the placer room; zooming in brings them back to full
+    // size. Touch targets don't shrink.
+    const k = Math.min(1, Math.max(CITY_MIN_K, mw * wScale / CITY_FULL_W));
+    const fs = CITY_TXT * k * u, soonFs = CITY_SOON_TXT * k * u;
+    const coreR = CITY_CORE * k * u, haloR = CITY_HALO * k * u, hitR = CITY_HIT * u,
+          soonR = CITY_SOOND * k * u, stroke = CITY_STROKE * k * u;
 
     // Every dot is an obstacle sized to its halo (so labels clear the ring);
     // placed labels join the list so later labels dodge earlier ones. Ready
