@@ -1,0 +1,21 @@
+{
+  "hk.hkia.sub": "→ Hong Kong / Kowloon · Airport Express · ~24 min",
+  "hk.westkowloon.sub": "high-speed rail to Guangzhou & Beijing · AEL Kowloon",
+  "hk.hunghom.sub": "East Rail + Tuen Ma interchange",
+  "hk.lowu.sub": "Shenzhen border · northern end of East Rail",
+  "hk.lokmachau.sub": "Shenzhen border (Futian) · East Rail branch",
+  "hk.macauferry.sub": "ferries to Macau · Island Line Sheung Wan",
+  "hk.chinaferry.sub": "ferries to the mainland · Tsim Sha Tsui",
+  "hk.hub.central": "Island + Tsuen Wan lines · Star Ferry piers",
+  "hk.hub.admiralty": "four MTR lines meet · gateway to the Peak",
+  "hk.hub.kowloon": "Airport Express · Tung Chung · ICC",
+  "hk.hub.kowloontong": "East Rail ↔ Kwun Tong · university district",
+  "hk.hub.namcheong": "Tung Chung ↔ Tuen Ma",
+  "hk.hub.hunghom": "East Rail ↔ Tuen Ma · cross-harbour buses",
+  "hk.hub.mongkok": "Kwun Tong ↔ Tsuen Wan · street markets",
+  "hk.hub.tsimshatsui": "Tsuen Wan line · Star Ferry · harbour front",
+  "hk.hub.quarrybay": "Island ↔ Tseung Kwan O",
+  "hk.hub.tiukengleng": "Kwun Tong ↔ Tseung Kwan O",
+  "hk.hub.laiking": "Tsuen Wan ↔ Tung Chung",
+  "hk.hub.tuenmun": "Tuen Ma line · Light Rail network · ferry pier"
+}

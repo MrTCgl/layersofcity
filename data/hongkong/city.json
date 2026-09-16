@@ -1,0 +1,117 @@
+{
+  "id": "hongkong",
+  "center": [
+    114.1694,
+    22.3193
+  ],
+  "zoom": {
+    "start": 10.6,
+    "min": 9.0,
+    "max": 19
+  },
+  "home": [
+    [
+      114.12,
+      22.26
+    ],
+    [
+      114.24,
+      22.34
+    ]
+  ],
+  "maxBounds": [
+    [
+      113.83,
+      22.15
+    ],
+    [
+      114.44,
+      22.58
+    ]
+  ],
+  "timezone": "Asia/Hong_Kong",
+  "language": "zh",
+  "currency": "HKD",
+  "available": [
+    "varis",
+    "omurga",
+    "kesfet-poi",
+    "ihtiyac",
+    "bolge-turistik",
+    "bolge-ticari",
+    "bolge-egitim",
+    "bolge-dogal"
+  ],
+  "prices": {
+    "updated": "2026-09",
+    "water05": 9.0,
+    "petrol1l": 19.5,
+    "milk1l": 24.0,
+    "meat1kg": 160.0,
+    "cheese1kg": 180.0,
+    "beer05": 65.0,
+    "bigmac": 25.0,
+    "espresso": 38.0,
+    "transitTicket": 12.0,
+    "airportTrain": 115.0
+  },
+  "groups": [
+    {
+      "id": "varis",
+      "layers": [
+        "varis"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "omurga",
+      "layers": [
+        "omurga"
+      ],
+      "defaultOn": true
+    },
+    {
+      "id": "kesfet",
+      "layers": [
+        "kesfet-poi"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "tarihi",
+        "modern",
+        "doga",
+        "gastronomi",
+        "alisveris",
+        "otel",
+        "yurt",
+        "kamu"
+      ]
+    },
+    {
+      "id": "bolgeler",
+      "layers": [
+        "bolge-turistik",
+        "bolge-ticari",
+        "bolge-egitim",
+        "bolge-dogal"
+      ],
+      "defaultOn": false
+    },
+    {
+      "id": "ihtiyaclar",
+      "layers": [
+        "ihtiyac"
+      ],
+      "defaultOn": false,
+      "filters": [
+        "kiralik-arac",
+        "market",
+        "muze",
+        "kutuphane",
+        "hastane",
+        "eczane",
+        "yakit"
+      ]
+    }
+  ]
+}

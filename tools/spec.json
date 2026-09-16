@@ -375,5 +375,33 @@
   "line-lbn": "[\"route\"=\"train\"][\"ref\"=\"LBN\"][\"network\"=\"Belgrano\"]",
   "line-lbs": "[\"route\"=\"train\"][\"ref\"=\"LBS\"][\"network\"=\"Belgrano\"]",
   "line-lu": "[\"route\"=\"train\"][\"ref\"=\"LU\"][\"network\"=\"Urquiza\"]"
+ },
+ "hongkong": {
+  "line-isl": "[\"route\"=\"subway\"][\"ref\"=\"ISL\"][\"network\"~\"MTR\",i]",
+  "line-twl": "[\"route\"=\"subway\"][\"ref\"=\"TWL\"][\"network\"~\"MTR\",i]",
+  "line-ktl": "[\"route\"=\"subway\"][\"ref\"=\"KTL\"][\"network\"~\"MTR\",i]",
+  "line-tkl": "[\"route\"=\"subway\"][\"ref\"=\"TKL\"][\"network\"~\"MTR\",i]",
+  "line-tcl": "[\"route\"=\"subway\"][\"ref\"=\"TCL\"][\"network\"~\"MTR\",i]",
+  "line-ael": "[\"route\"=\"subway\"][\"ref\"=\"AEL\"][\"network\"~\"MTR\",i]",
+  "line-eal": "[\"route\"=\"subway\"][\"ref\"=\"EAL\"][\"network\"~\"MTR\",i]",
+  "line-tml": "[\"route\"=\"subway\"][\"ref\"=\"TML\"][\"network\"~\"MTR\",i]",
+  "line-sil": "[\"route\"=\"subway\"][\"ref\"=\"SIL\"][\"network\"~\"MTR\",i]",
+  "line-drl": "[\"route\"=\"subway\"][\"ref\"=\"DRL\"][\"network\"~\"MTR\",i]",
+  "line-dingding": "[\"route\"=\"tram\"]",
+  "line-peaktram": "[\"route\"=\"funicular\"][\"name\"~\"Peak Tram\"]",
+  "line-lrt-505": "[\"route\"=\"light_rail\"][\"ref\"=\"505\"]",
+  "line-lrt-507": "[\"route\"=\"light_rail\"][\"ref\"=\"507\"]",
+  "line-lrt-610": "[\"route\"=\"light_rail\"][\"ref\"=\"610\"]",
+  "line-lrt-614": "[\"route\"=\"light_rail\"][\"ref\"~\"^614P?$\"]",
+  "line-lrt-615": "[\"route\"=\"light_rail\"][\"ref\"~\"^615P?$\"]",
+  "line-lrt-705": "[\"route\"=\"light_rail\"][\"ref\"=\"705\"]",
+  "line-lrt-706": "[\"route\"=\"light_rail\"][\"ref\"=\"706\"]",
+  "line-lrt-751": "[\"route\"=\"light_rail\"][\"ref\"~\"^751P?$\"]",
+  "line-lrt-761": "[\"route\"=\"light_rail\"][\"ref\"=\"761P\"]",
+  "line-ferry-cc": "[\"route\"=\"ferry\"][\"ref\"=\"Cheung Chau - Central\"]",
+  "line-ferry-mw": "[\"route\"=\"ferry\"][\"ref\"=\"Mui Wo - Central\"]",
+  "line-ferry-pc": "[\"route\"=\"ferry\"][\"ref\"=\"Peng Chau - Central\"]",
+  "line-ferry-db": "[\"route\"=\"ferry\"][\"ref\"=\"Discovery Bay - Central\"]",
+  "line-ferry-pi": "[\"route\"=\"ferry\"][\"ref\"=\"Park Island - Central\"]"
  }
 }

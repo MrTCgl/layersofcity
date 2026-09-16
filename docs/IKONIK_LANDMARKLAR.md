@@ -38,6 +38,7 @@
 | Ciudad de México | ✅ uygulandı (2026-09-14) | Zócalo/Catedral/Templo Mayor/Bellas Artes/Castillo de Chapultepec/Casa Azul/Antropología allowlist; doğal bölgeye Viveros/Tlalpan/Desierto de los Leones/Alameda elle eklendi |
 | Москва (Moskova) | ✅ uygulandı (2026-09-15) | Kızıl Meydan/Kremlin/Vasili Blajenni/Bolşoy/Tretyakov/Ostankino allowlist; doğal bölgeye Zaryadye/Gorki/Sokolniki/Vorobyovi Gori elle eklendi; ГУМ · Афимолл Сити · Кремль в Измайлово 2026-09-15'te Nominatim'den tamamlandı |
 | Buenos Aires | ✅ uygulandı (2026-09-15) | Obelisco/Casa Rosada/Plaza de Mayo/Teatro Colón/Recoleta mezarlığı/Caminito/Bombonera allowlist; doğal bölgeye Costanera Sur/Bosques de Palermo/Centenario elle eklendi |
+| Hong Kong | ✅ uygulandı (2026-09-16) | Victoria Peak/Tian Tan Buddha/Wong Tai Sin/Tai Kwun/M+/ICC-IFC allowlist; doğal bölgeye Dragon's Back/Repulse Bay/Nan Lian elle eklendi (tamamı Nominatim yoluyla) |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -401,3 +402,17 @@
 - **gastronomi:** Mercado de San Telmo, Feria de Mataderos, Mercado de
   Belgrano
 - **alışveriş:** Galerías Pacífico, Alto Palermo, Calle Florida
+
+---
+
+## Hong Kong
+
+- **tarihi/simge:** Tian Tan Buddha (Ngong Ping), Po Lin Manastırı, Wong Tai
+  Sin Tapınağı, Man Mo Tapınağı, Chi Lin Nunnery, Tsz Shan Manastırı,
+  Tai Kwun, Western Market, Hong Kong Museum of History
+- **modern:** The Peak Tower, M+, Hong Kong Palace Museum, ICC, IFC, Bank of
+  China Tower, Avenue of Stars, Space Museum, Ocean Park, Disneyland
+- **doğa:** Victoria Peak, Dragon's Back, Repulse Bay, Big Wave Bay,
+  Hong Kong Park, Kowloon Park, Victoria Park, Nan Lian Garden
+- **gastronomi:** Temple Street gece pazarı, Graham Street pazarı
+- **alışveriş:** Ladies' Market, Times Square, Harbour City, Stanley Market

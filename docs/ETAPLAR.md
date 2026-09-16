@@ -1805,3 +1805,72 @@ Durum notu: Tamam. Künye kartında **dolar karşılığı ARS'de boş kalıyor*
 enflasyonunda editoryal fiyat tablosu hızlı eskir — `updated: 2026-09`
 etiketiyle bilerek yayınlandı. Göz kontrolü beklenen yer: beş banliyö
 hattının aynı mavi tonu ve doğal bölgenin yalnız 28 alanla kalması.
+
+---
+
+## Yeni şehir — Hong Kong ✅ tamam (2026-09-16)
+
+"Sırayla 4 şehir"in 2.'si. Dil **`zh`** (yeni `lang.zh` anahtarı 6 dile
+eklendi), para **HKD** (`CURRENCY_SYM`'e `HKD="HK$"`). Kullanıcı kararları:
+**Ding Ding tek hat**, **Light Rail'in 12 hattı da**, **Makao/Çin feribotları
+kapı olarak var ama hat çizilmedi**, **Şenzhen metrosu alınmadı**.
+
+Yapıldı (hepsi OSM Overpass boru hattı):
+- **Manifest:** merkez `[114.1694, 22.3193]`, `Asia/Hong_Kong`, maxBounds
+  `[[113.83,22.15],[114.44,22.58]]` (~63×48 km). Fiyatlar editoryal
+  (`updated: 2026-09`; MTR ~12 HK$, Airport Express 115 HK$).
+- **Omurga (119 KB, 313 feature, 26 hat, 768 km):** MTR **ISL, TWL, KTL, TKL,
+  TCL, AEL, EAL, TML, SIL, DRL** (resmî renkleriyle); **Ding Ding** (altı
+  servis varyantı tek hatta birleştirildi — hepsi aynı rayda); **Peak Tram**;
+  NT batısındaki **Light Rail** ağının 12 hattı; Central'a giden **beş ada
+  vapuru**. 157 istasyon + 92 durak/iskele + 12 hub.
+- **Varış (7 kapı, 1 link):** HKIA (Airport Express ile West Kowloon, 31.5 km
+  gerçek güzergâh), West Kowloon (yüksek hızlı tren), Hung Hom, Lo Wu,
+  Lok Ma Chau, Macau Ferry Terminal, China Ferry Terminal.
+- **Keşfet (421 nokta, 76 KB):** tarihi 94 / doğa 90 / modern 52 / kamu 50 /
+  gastronomi 42 / alışveriş 38 / otel 30 / yurt 25. İkonik allowlist
+  **tamamen Nominatim üzerinden** uygulandı: 23 nokta elle geri eklendi.
+- **İhtiyaç (238 nokta, 42 KB):** eczane 55 / market 55 / kütüphane 35 /
+  müze 35 / yakıt 30 / hastane 25 / **kiralık araç 3** (Hong Kong'da araç
+  kiralama neredeyse yok — OSM'de yalnız 9 aday vardı).
+- **Bölgeler:** turistik 6 ilçe (Central·Sheung Wan, Tsim Sha Tsui·Mong Kok,
+  Wan Chai·Causeway Bay, Stanley·Aberdeen, Sha Tin, Lantau·Ngong Ping).
+  Ticari 60, eğitim 14, doğal 87 (country park'lar).
+- **İçerik:** 6 dilde `content/*.json` (7 kapı + 12 hub alt etiketi, `hk.` öneki).
+
+Boru hattında öğrenilenler:
+- **Star Ferry OSM'de rota ilişkisi olarak yok** — yalnız iskeleleri haritada.
+  Liman geçişi bu yüzden **hat olarak çizilmedi**; iskeleler `kind:"stop"`
+  olarak duruyor. (Chapultepec dersinin tekrarı: ünlü olması haritada
+  poligon/rota olduğu anlamına gelmiyor.)
+- **İdari seviye ülkeye göre sürpriz yapıyor:** Hong Kong'da `admin_level=7`
+  yalnız **9 dağınık alan** içeriyor (Diamond Hill, Ma On Shan…), turistik
+  bölgeler 0 çıktı. Gerçek birim **seviye 6'daki 18 ilçe**; turistik gruplar
+  onlara çevrildi.
+- **İkonik adım artık Nominatim'le** (`iconic_nom.py`): 33 noktalık liste
+  ~2 dakikada bitti; Overpass'ın ad sorguları aynı işte 20+ dakika sürüp
+  yarısını düşürüyordu.
+- **Kapı ile hat arasındaki mesafe:** Airport Express'in şehir ucu
+  "Hong Kong West Kowloon" değil; yüksek hızlı tren garı AEL rayına **364 m**
+  uzakta (ikisi kapalı geçitle bağlı). Link o mesafeyi taşıyor — 2 km kuralının
+  altında ve gerçekte de yürünen bir bağlantı.
+
+Denetim:
+- `tools/audit_omurga.py hongkong` → ilk turda 6 ihlal; `repair.py` sonrası
+  **TEMİZ**. Beş ada vapuru **muaf** olarak raporlanıyor (su üstü geçiş
+  gerçekten düz).
+- `tools/audit_data.py --city hongkong` → **28 bulgu**: 23 kutu (gerçekten
+  dikdörtgen OSM alanı) + 5 müze çift kaydı. İlk turdaki 3 orphan
+  (Disneyland'in kendi treni, havalimanı yürüyen bandı, çizilmeyen bir vapur
+  hattının iskelesi) ve 1 katman içi çift kayıt silindi.
+- Tarayıcı dumanı: 8 katman + manifest + içerik 200, konsol hatası yok,
+  şehir çubuğu "Hong Kong · 16 Sept · 18:14" (HKT = UTC+8 doğru).
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260916-1**
+- [x] Katman dosyaları hedefin altında (doğal 165 KB, omurga 119 KB)
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Göz kontrolü beklenen yer: Light Rail'in 12 hattının
+Tuen Mun–Yuen Long üçgeninde ne kadar iç içe göründüğü ve Ding Ding'in tek
+yeşil hat olarak Hong Kong Adası'nın kuzey kıyısında okunurluğu.
