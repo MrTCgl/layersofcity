@@ -1867,7 +1867,9 @@ Denetim:
   şehir çubuğu "Hong Kong · 16 Sept · 18:14" (HKT = UTC+8 doğru).
 
 Bitti sayılır:
-- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260916-1**
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260916-2**
+      (yayın dalındaki etiket yerleşim çalışması 20260916-1'i zaten kullanmıştı;
+      birleştirmeden sonra ikisi birden yeni sürüme çekildi)
 - [x] Katman dosyaları hedefin altında (doğal 165 KB, omurga 119 KB)
 - [x] Denetim araçları temiz
 
