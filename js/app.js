@@ -170,35 +170,45 @@
   const LBL_PAD = 4;                                               // user units kept free at the frame edge
 
   // A label must stay inside the map's viewBox, otherwise it is clipped away
-  // (Sydney/Tokyo sit close to the right edge, Seoul to it as well).
-  const inFrame = b => b.x0 >= VB.x + LBL_PAD && b.x1 <= VB.x + VB.w - LBL_PAD &&
-                       b.y0 >= VB.y + LBL_PAD && b.y1 <= VB.y + VB.h - LBL_PAD;
+  // (Sydney and Tokyo sit close to the right edge). Overlap area of two boxes (0 when clear) — used to rank fallback slots.
+  const boxOverlap = (a, b) => Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) *
+                               Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
 
   function placeLabel(x, y, w, fs, obstacles) {
     const base = outwardDir(x, y);
     // angles fanned out from the outward direction: base, base±step, base±2step…
     const angles = [];
     for (let k = 0; k < 16; k++) angles.push(base + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * LBL_STEP);
+    let best = null, bestCost = Infinity;
     for (const m of LBL_RINGS) {
       const r = m * fs;
       for (const a of angles) {
         const dx = r * Math.cos(a), dy = r * Math.sin(a);
         const anchor = dx > fs * 0.5 ? "start" : dx < -fs * 0.5 ? "end" : "middle";
         // nudge the baseline down a touch so side labels sit centred on the ray
-        const ax = x + dx, ay = y + dy + fs * 0.28, box = labelBox(ax, ay, anchor, w, fs);
-        if (inFrame(box) && !obstacles.some(o => boxHit(o, box))) return { ax, ay, anchor, box };
+        let ax = x + dx;
+        const ay = y + dy + fs * 0.28;
+        let box = labelBox(ax, ay, anchor, w, fs);
+        if (box.y0 < VB.y + LBL_PAD || box.y1 > VB.y + VB.h - LBL_PAD) continue; // off the top/bottom
+        // slide a slot that overhangs the left/right edge back inside the frame
+        const shift = box.x0 < VB.x + LBL_PAD ? VB.x + LBL_PAD - box.x0
+                    : box.x1 > VB.x + VB.w - LBL_PAD ? VB.x + VB.w - LBL_PAD - box.x1 : 0;
+        if (shift) { ax += shift; box = labelBox(ax, ay, anchor, w, fs); }
+        if (box.x0 < VB.x + LBL_PAD || box.x1 > VB.x + VB.w - LBL_PAD) continue; // wider than the frame
+        let hit = 0;
+        for (const o of obstacles) hit += boxOverlap(o, box);
+        if (hit === 0) return { ax, ay, anchor, box };
+        // keep the least-crowded in-frame slot in case nothing is ever clear
+        const cost = hit + m * fs * fs * 0.01; // prefer near rings among equally crowded slots
+        if (cost < bestCost) { bestCost = cost; best = { ax, ay, anchor, box }; }
       }
     }
-    // Last resort: place beside the dot on whichever side has room, then slide
-    // the whole label back inside the frame so no name is ever cut off.
-    const right = x + fs * 1.3 + w <= VB.x + VB.w - LBL_PAD;
-    let anchor = right ? "start" : "end";
-    let ax = x + (right ? fs * 1.3 : -fs * 1.3);
+    if (best) return best;
+    // Nothing fits the frame at all (very small map): clamp beside the dot.
+    const anchor = "start";
+    let ax = Math.min(Math.max(x + fs * 1.3, VB.x + LBL_PAD), VB.x + VB.w - LBL_PAD - w);
     const ay = y + fs * 0.5;
-    let box = labelBox(ax, ay, anchor, w, fs);
-    if (box.x0 < VB.x + LBL_PAD) { ax += VB.x + LBL_PAD - box.x0; box = labelBox(ax, ay, anchor, w, fs); }
-    if (box.x1 > VB.x + VB.w - LBL_PAD) { ax -= box.x1 - (VB.x + VB.w - LBL_PAD); box = labelBox(ax, ay, anchor, w, fs); }
-    return { ax, ay, anchor, box };
+    return { ax, ay, anchor, box: labelBox(ax, ay, anchor, w, fs) };
   }
 
   // Opening frame. Desktop shows the whole world (static). Mobile (touch) keeps
