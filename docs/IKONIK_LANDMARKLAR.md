@@ -40,6 +40,7 @@
 | Buenos Aires | ✅ uygulandı (2026-09-15) | Obelisco/Casa Rosada/Plaza de Mayo/Teatro Colón/Recoleta mezarlığı/Caminito/Bombonera allowlist; doğal bölgeye Costanera Sur/Bosques de Palermo/Centenario elle eklendi |
 | Hong Kong | ✅ uygulandı (2026-09-16) | Victoria Peak/Tian Tan Buddha/Wong Tai Sin/Tai Kwun/M+/ICC-IFC allowlist; doğal bölgeye Dragon's Back/Repulse Bay/Nan Lian elle eklendi (tamamı Nominatim yoluyla) |
 | Milano | ✅ uygulandı (2026-09-16) | Duomo/Galleria/Scala/Sforzesco/Cenacolo/San Siro/Bosco Verticale allowlist; doğal bölgeye Sempione/Montanelli/Parco Nord/Idroscalo elle eklendi (Nominatim) |
+| Kahire | ✅ uygulandı (2026-09-16) | Giza piramitleri/Sfenks/GEM/Mısır Müzesi/Kale/Han el-Halili/İbn Tulun/Asılı Kilise allowlist'i; Nominatim önce İngilizce, bulunamayanlar Arapça adla çözüldü. Abu Serga kilisesi OSM'de adlandırılmamış — eklenmedi |
 
 > Liste kapalı değildir; şehri araştırırken eksik gördüğün ana simgeyi ekle.
 > Amaç: bir turistin şehirle özdeşleştirdiği ilk ~30-50 yer eksiksiz olsun.
@@ -432,3 +433,20 @@
 - **gastronomi:** Mercato Centrale, Porta Romana pazarı, Eataly Smeraldo
 - **alışveriş:** Galleria Vittorio Emanuele II, Quadrilatero della Moda,
   Corso Buenos Aires
+
+---
+
+## Kahire
+
+- **tarihi/simge:** Giza piramitleri (Keops · Kefren · Mikerinos), Büyük Sfenks,
+  Salahaddin Kalesi, Muhammed Ali Camii, Sultan Hasan Camii, İbn Tulun Camii,
+  El-Ezher Camii, Bab Zuveyle, Bab el-Fütuh, El-Muiz Sokağı, Vekalet el-Guri,
+  Asılı Kilise (El-Muallaka), Ben Ezra Sinagogu, Babil Kalesi, Nilometre,
+  Manial Sarayı, Abdin Sarayı, Baron Empain Sarayı, Mağara Kilisesi,
+  Ölüler Şehri, Sakkara Basamaklı Piramidi, Memfis
+- **modern:** Büyük Mısır Müzesi (GEM), Mısır Müzesi (Tahrir), Mısır Medeniyeti
+  Müzesi (NMEC), İslam Sanatları Müzesi, Kıpti Müze, Kahire Kulesi,
+  Kahire Opera Binası, Tahrir Meydanı
+- **doğa:** El-Ezher Parkı, Giza Hayvanat Bahçesi, Orman Botanik Bahçesi,
+  Vadi Degla Koruma Alanı
+- **alışveriş:** Han el-Halili

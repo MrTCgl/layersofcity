@@ -374,6 +374,21 @@
         "es": "Milán",
         "tr": "Milano"
       }
+    },
+    {
+      "id": "kahire",
+      "name": "Kahire",
+      "lat": 30.0444,
+      "lon": 31.2357,
+      "status": "ready",
+      "names": {
+        "en": "Cairo",
+        "de": "Kairo",
+        "fr": "Le Caire",
+        "it": "Il Cairo",
+        "es": "El Cairo",
+        "tr": "Kahire"
+      }
     }
   ]
 }

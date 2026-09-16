@@ -1941,3 +1941,86 @@ Bitti sayılır:
 Durum notu: Tamam. Göz kontrolü beklenen yer: 8 tramvayın hepsi palet renginde
 olduğu için merkezde birbirinden ayırt edilebiliyor mu, ve S hatlarının
 12'sinin Passante koridorunda üst üste binmesi.
+
+---
+
+## Yeni şehir — Kahire ✅ tamam (2026-09-16)
+
+"Sırayla 4 şehir"in 4.'sü ve sonuncusu. Dil `ar` (**yeni**: altı i18n dosyasına
+`lang.ar` eklendi), para **EGP** (`CURRENCY_SYM`'e `E£` eklendi). Projenin
+Afrika'daki ilk şehri; 26. şehir.
+
+Yapıldı (hepsi OSM Overpass + Nominatim boru hattı):
+- **Manifest:** merkez `[31.2357, 30.0444]`, `Africa/Cairo`, maxBounds
+  `[[31.02,29.80],[31.85,30.28]]` (~80×58 km; batıda Giza platosu ve Sakkara,
+  doğuda Yeni İdari Başkent). Fiyatlar editoryal (`updated: 2026-09`; metro
+  bileti 12 E£). `airportTrain` **yok** — Kahire'de havalimanı treni yok,
+  alan boş bırakıldığı için künyede hiç görünmüyor.
+- **Omurga (44 KB, 136 feature, 6 hat):** metro **1 · 2 · 3**, **Doğu Nil
+  monorayı** (Stadyum → Yeni İdari Başkent, 54 km), **LRT**'nin iki kolu
+  (Adly Mansour → 10. Ramazan ve → Yeni Başkent, ~67 km) ve havalimanının
+  terminaller arası **APM**'i (2.4 km). 114 istasyon + 10 hub. Hat uzunlukları
+  gerçek değerlerle birebir örtüşüyor (L1 44 km, L2 21.6 km, L3 ~41 km).
+- **Varış (5 kapı, 0 link):** Cairo (CAI) T3, Ramses, Giza, Adly Mansour,
+  Torgoman. **Link yok** — havalimanını merkeze bağlayan raylı hat henüz
+  yok (M3'ün havalimanı kolu yapım aşamasında), o yüzden düz çizgi uydurmak
+  yerine varış katmanı yalnız kapılardan oluşuyor.
+- **Keşfet (66 KB, 361 nokta):** tarihi 104 / doğa 85 / kamu 49 /
+  gastronomi 40 / alışveriş 36 / otel 30 / modern 16 / yurt 1. İkonik
+  allowlist Nominatim'le uygulandı: 18 nokta elle geri eklendi.
+- **İhtiyaç (40 KB, 224 nokta):** eczane 55 / market 55 / müze 31 / yakıt 30 /
+  hastane 25 / kütüphane 24 / kiralık araç 4.
+- **Bölgeler:** turistik 8 (Tahrir·Downtown, İslami Kahire·Han el-Halili,
+  Kale·El Halife, Kıpti Kahire·Fustat, Zamalek·Gezira, Manial·Roda,
+  Giza Piramitleri·Nazlet El-Semman, Heliopolis·Korba). Ticari 39,
+  eğitim 21, doğal 12 (Kahire park bakımından fakir — gerçek durum).
+- **İçerik:** 6 dilde `content/*.json` (5 kapı + 10 hub alt etiketi, `ka.` öneki).
+
+Boru hattında öğrenilenler:
+- **Kahire'de `admin_level` 8/9/10 hiç yok.** Merkez kutuda yalnız L2 (Mısır)
+  ve L4 (Kahire/Giza/Kalyubiye) sınırı var. Mahalle karşılığı *şiyaha*
+  birimleri `place=neighbourhood` **way**'leri olarak ve `name:en` ile
+  haritalanmış (merkezde 242 alan) — turistik gruplar onlardan kuruldu,
+  Milano'daki NIL çözümünün aynısı. 8 grubun 8'i de eksiksiz eşleşti.
+- **Geniş kutuda alan sorgusu pahalı olduğu için seçicilere ad süzgeci
+  konuldu:** `DISTRICT_SELECTORS` istenen mahalle adlarından üretilen bir
+  regex taşıyor (`name` ve `name:en` için ayrı ayrı), böylece 80×58 km'lik
+  kutuda bile sorgu saniyeler içinde dönüyor.
+- **Metro 1'in OSM'de `colour` etiketi yok** (2 turuncu #FF7000, 3 yeşil
+  #00AF23 var). Uydurmak yerine boş bırakıldı; `lineRef` metro paleti
+  devreye giriyor. Monorayın da resmî `ref`'i yok — rozet için proje kendi
+  kısaltmasını (`MON`) kullanıyor, `APM` de öyle.
+- **Nominatim ortak çıkış IP'sinde 429 yiyor.** `iconic_nom.py`'ye
+  **429 geri çekilmesi** (4 deneme, 4/8/12 sn) ve `NOM_SLEEP` çevre değişkeni
+  eklendi. İngilizceyle bulunamayan 13 simge **Arapça adıyla** arandı; 8'i
+  böyle çözüldü, 4'ü zaten yakında kayıtlıydı. Yalnız **Abu Serga kilisesi**
+  OSM'de adlandırılmamış — uydurulmadı, belgelendi.
+- **Kahire'de tramvay yok** (Heliopolis ağı kapalı) ve **ferry/BRT rotası
+  OSM'de haritalanmamış**; `route=tram`/`route=ferry` sorguları sıfır döndü.
+  Omurga bu yüzden 6 hat — şehrin gerçeği bu.
+
+Denetim:
+- `tools/audit_omurga.py kahire` → ilk turda **4 ihlal** (en uzunu LRT'de
+  7572 m); `repair.py --apply` sonrası **TEMİZ**. Kıvrım oranlarının hepsi
+  1.00x: çöldeki viyadükler gerçekten düz, onarım yalnız gerçek OSM
+  güzergâhından ara nokta dikti (uzunluklar değişmedi).
+- `tools/audit_data.py --city kahire` → ilk turda 25 bulgu; `muze` teması
+  Keşfet'e ait olmadığı için `tarihi`ye çevrildi, iki çift kayıt (Cairo Tower,
+  Agricultural Museum) temizlendi → **21 bulgu, hepsi kutu** (gerçekten
+  dikdörtgen çizilmiş OSM alanı: AVM'ler, kampüsler). dup/orphan/bounds/size
+  sıfır.
+- İstasyon listesinden yapım aşamasındaki ve yalnız Arapça adlı 4 kayıt
+  ayıklandı; "Wadi El Nil"/"Wadi El Nile" 253 m arayla aynı istasyondu, biri
+  kaldı.
+- Tarayıcı dumanı: `data/kahire` isteklerinde **0 hata**, şehir çubuğu
+  "Kahire · 16 Sept · 22:47" (EEST = UTC+3 doğru), konsol hatası yok
+  (dış servisler sandbox'ın sertifikası yüzünden düşüyor, uygulama değil).
+
+Bitti sayılır:
+- [x] `data/cities.json`'da `ready`, önbellek sürümleri birlikte **20260916-4**
+- [x] Katman dosyalarının hepsi 70 KB'ın altında
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Göz kontrolü beklenen yer: metro 1'in palet rengi 2 ve 3'ten
+ayırt edilebiliyor mu, ve monoray + LRT'nin Yeni İdari Başkent'e giden
+kollarının haritanın doğu kenarında kalabalık yapıp yapmadığı.

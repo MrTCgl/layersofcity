@@ -1,0 +1,17 @@
+{
+  "ka.cai.sub": "nessun collegamento ferroviario · taxi ~45 min",
+  "ka.ramses.sub": "treni per tutto il paese · M1/M2 a Shuhada",
+  "ka.giza.sub": "treni per Luxor e Assuan · M2",
+  "ka.adly.sub": "capolinea della M3 · LRT · autostazione est",
+  "ka.torgoman.sub": "pullman interurbani · a piedi fino a Orabi",
+  "ka.hub.shuhada": "M1 ↔ M2 · stazione di Ramses",
+  "ka.hub.sadat": "M1 ↔ M2 · piazza Tahrir",
+  "ka.hub.attaba": "M2 ↔ M3 · la piazza del bazar",
+  "ka.hub.nasser": "M1 ↔ M3 · centro città",
+  "ka.hub.cairouni": "M2 ↔ M3 · l'università e Dokki",
+  "ka.hub.kitkat": "biforcazione ovest della M3 · passaggio a Zamalek",
+  "ka.hub.adlymansour": "M3 ↔ LRT · porta orientale",
+  "ka.hub.giza": "M2 · stazione di Giza · verso le piramidi",
+  "ka.hub.stadium": "M3 ↔ monorotaia · Nasr City",
+  "ka.hub.mounib": "capolinea sud della M2 · autostazione di Giza"
+}

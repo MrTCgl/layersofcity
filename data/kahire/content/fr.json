@@ -1,0 +1,17 @@
+{
+  "ka.cai.sub": "pas de liaison ferrée · taxi ~45 min",
+  "ka.ramses.sub": "trains nationaux · M1/M2 à Shuhada",
+  "ka.giza.sub": "trains pour Louxor et Assouan · M2",
+  "ka.adly.sub": "terminus de la M3 · LRT · gare routière est",
+  "ka.torgoman.sub": "autocars interurbains · à pied jusqu'à Orabi",
+  "ka.hub.shuhada": "M1 ↔ M2 · gare de Ramses",
+  "ka.hub.sadat": "M1 ↔ M2 · place Tahrir",
+  "ka.hub.attaba": "M2 ↔ M3 · la place du bazar",
+  "ka.hub.nasser": "M1 ↔ M3 · centre-ville",
+  "ka.hub.cairouni": "M2 ↔ M3 · l'université et Dokki",
+  "ka.hub.kitkat": "fourche ouest de la M3 · passage vers Zamalek",
+  "ka.hub.adlymansour": "M3 ↔ LRT · porte est",
+  "ka.hub.giza": "M2 · gare de Giza · vers les pyramides",
+  "ka.hub.stadium": "M3 ↔ monorail · Nasr City",
+  "ka.hub.mounib": "terminus sud de la M2 · gare routière de Giza"
+}

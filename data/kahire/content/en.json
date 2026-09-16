@@ -1,0 +1,17 @@
+{
+  "ka.cai.sub": "no rail link · taxi ~45 min",
+  "ka.ramses.sub": "trains nationwide · M1/M2 at Shuhada",
+  "ka.giza.sub": "Luxor & Aswan trains · M2",
+  "ka.adly.sub": "end of M3 · LRT · eastern coach hub",
+  "ka.torgoman.sub": "intercity coaches · walk to Orabi",
+  "ka.hub.shuhada": "M1 ↔ M2 · Ramses station",
+  "ka.hub.sadat": "M1 ↔ M2 · Tahrir Square",
+  "ka.hub.attaba": "M2 ↔ M3 · the bazaar square",
+  "ka.hub.nasser": "M1 ↔ M3 · downtown",
+  "ka.hub.cairouni": "M2 ↔ M3 · the university & Dokki",
+  "ka.hub.kitkat": "M3 western fork · crossing to Zamalek",
+  "ka.hub.adlymansour": "M3 ↔ LRT · eastern gateway",
+  "ka.hub.giza": "M2 · Giza station · towards the pyramids",
+  "ka.hub.stadium": "M3 ↔ monorail · Nasr City",
+  "ka.hub.mounib": "southern end of M2 · Giza coach station"
+}

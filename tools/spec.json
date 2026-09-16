@@ -430,5 +430,13 @@
   "line-tram-15": "[\"route\"=\"tram\"][\"ref\"=\"15\"]",
   "line-tram-16": "[\"route\"=\"tram\"][\"ref\"=\"16\"]",
   "line-tram-19": "[\"route\"=\"tram\"][\"ref\"=\"19\"]"
+ },
+ "kahire": {
+  "line-m1": "[\"route\"=\"subway\"][\"ref\"=\"1\"]",
+  "line-m2": "[\"route\"=\"subway\"][\"ref\"=\"2\"]",
+  "line-m3": "[\"route\"=\"subway\"][\"ref\"=\"3\"]",
+  "line-mono": "[\"route\"=\"monorail\"][\"wikidata\"=\"Q138807842\"]",
+  "line-apm": "[\"route\"=\"monorail\"][\"wikidata\"=\"Q125142832\"]",
+  "line-lrt": "[\"route\"=\"train\"][\"ref\"=\"LRT\"]"
  }
 }
