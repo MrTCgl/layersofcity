@@ -167,6 +167,13 @@
 
   const LBL_RINGS = [1.3, 1.7, 2.2, 2.8, 3.5, 4.4, 5.5, 6.8, 8.2]; // × font, near → far
   const LBL_STEP = Math.PI / 8;                                    // 16 directions/ring
+  const LBL_PAD = 4;                                               // user units kept free at the frame edge
+
+  // A label must stay inside the map's viewBox, otherwise it is clipped away
+  // (Sydney/Tokyo sit close to the right edge, Seoul to it as well).
+  const inFrame = b => b.x0 >= VB.x + LBL_PAD && b.x1 <= VB.x + VB.w - LBL_PAD &&
+                       b.y0 >= VB.y + LBL_PAD && b.y1 <= VB.y + VB.h - LBL_PAD;
+
   function placeLabel(x, y, w, fs, obstacles) {
     const base = outwardDir(x, y);
     // angles fanned out from the outward direction: base, base±step, base±2step…
@@ -179,11 +186,19 @@
         const anchor = dx > fs * 0.5 ? "start" : dx < -fs * 0.5 ? "end" : "middle";
         // nudge the baseline down a touch so side labels sit centred on the ray
         const ax = x + dx, ay = y + dy + fs * 0.28, box = labelBox(ax, ay, anchor, w, fs);
-        if (!obstacles.some(o => boxHit(o, box))) return { ax, ay, anchor, box };
+        if (inFrame(box) && !obstacles.some(o => boxHit(o, box))) return { ax, ay, anchor, box };
       }
     }
-    const ax = x + fs * 1.3, ay = y + fs * 0.5; // last resort (rings are large enough this never hits)
-    return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w, fs) };
+    // Last resort: place beside the dot on whichever side has room, then slide
+    // the whole label back inside the frame so no name is ever cut off.
+    const right = x + fs * 1.3 + w <= VB.x + VB.w - LBL_PAD;
+    let anchor = right ? "start" : "end";
+    let ax = x + (right ? fs * 1.3 : -fs * 1.3);
+    const ay = y + fs * 0.5;
+    let box = labelBox(ax, ay, anchor, w, fs);
+    if (box.x0 < VB.x + LBL_PAD) { ax += VB.x + LBL_PAD - box.x0; box = labelBox(ax, ay, anchor, w, fs); }
+    if (box.x1 > VB.x + VB.w - LBL_PAD) { ax -= box.x1 - (VB.x + VB.w - LBL_PAD); box = labelBox(ax, ay, anchor, w, fs); }
+    return { ax, ay, anchor, box };
   }
 
   // Opening frame. Desktop shows the whole world (static). Mobile (touch) keeps
