@@ -160,12 +160,22 @@
     return { x0: x0 - g, y0: ay - fs * 0.95, x1: x0 + w + g, y1: ay + fs * 0.26 };
   }
 
+  // Projected dot positions, cached: the layout runs several ordering passes and
+  // each one asks for them thousands of times, while they only change when the
+  // city list itself does.
+  let dotXY = null, dotXYFor = null;
+  function cityDots() {
+    if (dotXY && dotXYFor === cities) return dotXY;
+    dotXYFor = cities;
+    dotXY = cities.map(c => project(c.lon, c.lat));
+    return dotXY;
+  }
+
   // Direction to push a label: away from the mean pull of nearby city dots.
   // Uses fixed dot positions (independent of zoom), so the fan-out is stable.
   function outwardDir(x, y) {
     let vx = 0, vy = 0;
-    for (const c of cities) {
-      const [ox, oy] = project(c.lon, c.lat);
+    for (const [ox, oy] of cityDots()) {
       const dx = x - ox, dy = y - oy, d2 = dx * dx + dy * dy;
       if (d2 > 0 && d2 < 3600) { const d = Math.sqrt(d2); vx += dx / d; vy += dy / d; }
     }
@@ -204,10 +214,10 @@
         if (box.x0 < VB.x + LBL_PAD || box.x1 > VB.x + VB.w - LBL_PAD) continue; // wider than the frame
         let hit = 0;
         for (const o of obstacles) hit += boxOverlap(o, box);
-        if (hit === 0) return { ax, ay, anchor, box, hit: 0 };
+        if (hit === 0) return { ax, ay, anchor, box, hit: 0, ring: r };
         // keep the least-crowded in-frame slot in case nothing is ever clear
         const cost = hit + m * fs * fs * 0.01; // prefer near rings among equally crowded slots
-        if (cost < bestCost) { bestCost = cost; best = { ax, ay, anchor, box, hit }; }
+        if (cost < bestCost) { bestCost = cost; best = { ax, ay, anchor, box, hit, ring: r }; }
       }
     }
     if (best) return best;
@@ -215,7 +225,8 @@
     const anchor = "start";
     let ax = Math.min(Math.max(x + fs * 1.3, VB.x + LBL_PAD), VB.x + VB.w - LBL_PAD - w);
     const ay = y + fs * 0.5;
-    return { ax, ay, anchor, box: labelBox(ax, ay, anchor, w, fs), hit: Infinity };
+    return { ax, ay, anchor, box: labelBox(ax, ay, anchor, w, fs), hit: Infinity,
+             ring: LBL_RINGS[LBL_RINGS.length - 1] * fs };
   }
 
   // One greedy layout: labels are placed in `order`, each dodging the dots and
@@ -223,15 +234,18 @@
   // whole arrangement ended up with (0 = every name is clear).
   function layoutPass(items, dots, order) {
     const obstacles = dots.slice(), slots = new Array(items.length);
-    let cost = 0;
+    let cost = 0, far = 0;
     for (const i of order) {
       const it = items[i];
       const p = placeLabel(it.x, it.y, it.w, it.f, obstacles);
       cost += p.hit;
+      // how far the name drifted from its own dot, in font sizes: a name that
+      // lands next to someone else's dot reads as that city's name
+      far += (p.ring / it.f) ** 2;
       obstacles.push(p.box);
       slots[i] = p;
     }
-    return { slots, cost };
+    return { slots, cost, far };
   }
 
   // Who gets first pick changes what is left for everyone else, and one bad
@@ -255,8 +269,10 @@
       const order = idx.slice().sort((i, j) =>
         (items[j].ready - items[i].ready) || cmp(items[i], items[j]) || (i - j));
       const r = layoutPass(items, dots, order);
-      if (r.cost === 0) return r.slots;
-      if (!best || r.cost < best.cost) best = r;
+      // a clean arrangement always beats an overlapping one; between two clean
+      // ones take the one that keeps names closest to their own dots, so a
+      // crowded pair like Milano/Padova is not flung across the map
+      if (!best || r.cost < best.cost || (r.cost === best.cost && r.far < best.far)) best = r;
     }
     return best.slots;
   }
@@ -282,7 +298,7 @@
   // On-screen target sizes (CSS px) for a city marker. renderCities converts
   // these to user units for the current zoom so the marker looks the same size
   // at every zoom level — see renderCities.
-  const CITY_TXT = 14, CITY_SOON_TXT = 12, CITY_CORE = 8.5, CITY_HALO = 20,
+  const CITY_TXT = 12, CITY_SOON_TXT = 10.5, CITY_CORE = 7.5, CITY_HALO = 16,
         CITY_HIT = 34, CITY_SOOND = 5, CITY_STROKE = 2, CITY_CW = 0.56;
 
   // Real width of a label, so the placer reserves exactly the room the browser
@@ -342,21 +358,19 @@
     // Every dot is an obstacle sized to its halo (so labels clear the ring);
     // placed labels join the list so later labels dodge earlier ones. Ready
     // cities first (their names matter most), then soon cities fill the gaps.
-    const obstacles = cities.map(c => {
-      const [x, y] = project(c.lon, c.lat);
-      return { x0: x - haloR, y0: y - haloR, x1: x + haloR, y1: y + haloR };
-    });
+    const dots = cityDots();
+    const obstacles = dots.map(([x, y]) =>
+      ({ x0: x - haloR, y0: y - haloR, x1: x + haloR, y1: y + haloR }));
     // Everything the placer needs about a label, plus `near` (how many other
     // cities sit close by) so the crowded ones can be served first.
-    const items = cities.map(c => {
-      const [x, y] = project(c.lon, c.lat);
+    const items = cities.map((c, ci) => {
+      const [x, y] = dots[ci];
       const ready = c.status === "ready";
       const name = cityLabel(c);
       const label = ready ? name : `${name} · ${t("world.soon")}`;
       const f = ready ? fs : soonFs;
       let near = 0;
-      for (const o of cities) {
-        const [ox, oy] = project(o.lon, o.lat);
+      for (const [ox, oy] of dots) {
         if ((ox - x) ** 2 + (oy - y) ** 2 < 3600) near++;
       }
       // .city-ready names are semibold, "soon" ones regular — see style.css
@@ -643,7 +657,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260916-4"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260916-5"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
