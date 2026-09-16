@@ -145,6 +145,7 @@
   // by the caller: markers keep a constant on-screen size (see renderCities), so
   // the geometry the placer works in shrinks as the map zooms in and clusters
   // spread apart, staying legible.
+  const LBL_GAP = 0.3; // × font: side padding that keeps neighbouring names apart
   const boxHit = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
   function labelBox(ax, ay, anchor, w, fs) {
     let x0 = ax;
@@ -152,8 +153,11 @@
     else if (anchor === "middle") x0 = ax - w / 2;
     // The browser reserves 0.92em above the baseline and 0.23em below it for a
     // line of text; the box matches that (plus a hair) so two names the placer
-    // calls clear really are clear on screen.
-    return { x0, y0: ay - fs * 0.95, x1: x0 + w, y1: ay + fs * 0.26 };
+    // calls clear really are clear on screen. LBL_GAP adds breathing room on
+    // the sides — without it two cleared names can still end up touching and
+    // read as one word.
+    const g = fs * LBL_GAP;
+    return { x0: x0 - g, y0: ay - fs * 0.95, x1: x0 + w + g, y1: ay + fs * 0.26 };
   }
 
   // Direction to push a label: away from the mean pull of nearby city dots.
