@@ -359,6 +359,21 @@
         "es": "Hong Kong",
         "tr": "Hong Kong"
       }
+    },
+    {
+      "id": "milano",
+      "name": "Milano",
+      "lat": 45.4642,
+      "lon": 9.19,
+      "status": "soon",
+      "names": {
+        "en": "Milan",
+        "de": "Mailand",
+        "fr": "Milan",
+        "it": "Milano",
+        "es": "Milán",
+        "tr": "Milano"
+      }
     }
   ]
 }
