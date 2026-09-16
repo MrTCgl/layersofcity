@@ -145,12 +145,19 @@
   // by the caller: markers keep a constant on-screen size (see renderCities), so
   // the geometry the placer works in shrinks as the map zooms in and clusters
   // spread apart, staying legible.
+  const LBL_GAP = 0.3; // × font: side padding that keeps neighbouring names apart
   const boxHit = (a, b) => a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
   function labelBox(ax, ay, anchor, w, fs) {
     let x0 = ax;
     if (anchor === "end") x0 = ax - w;
     else if (anchor === "middle") x0 = ax - w / 2;
-    return { x0, y0: ay - fs * 0.8, x1: x0 + w, y1: ay + fs * 0.25 };
+    // The browser reserves 0.92em above the baseline and 0.23em below it for a
+    // line of text; the box matches that (plus a hair) so two names the placer
+    // calls clear really are clear on screen. LBL_GAP adds breathing room on
+    // the sides — without it two cleared names can still end up touching and
+    // read as one word.
+    const g = fs * LBL_GAP;
+    return { x0: x0 - g, y0: ay - fs * 0.95, x1: x0 + w + g, y1: ay + fs * 0.26 };
   }
 
   // Direction to push a label: away from the mean pull of nearby city dots.
@@ -167,23 +174,91 @@
 
   const LBL_RINGS = [1.3, 1.7, 2.2, 2.8, 3.5, 4.4, 5.5, 6.8, 8.2]; // × font, near → far
   const LBL_STEP = Math.PI / 8;                                    // 16 directions/ring
+  const LBL_PAD = 4;                                               // user units kept free at the frame edge
+
+  // A label must stay inside the map's viewBox, otherwise it is clipped away
+  // (Sydney and Tokyo sit close to the right edge). Overlap area of two boxes (0 when clear) — used to rank fallback slots.
+  const boxOverlap = (a, b) => Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) *
+                               Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
+
   function placeLabel(x, y, w, fs, obstacles) {
     const base = outwardDir(x, y);
     // angles fanned out from the outward direction: base, base±step, base±2step…
     const angles = [];
     for (let k = 0; k < 16; k++) angles.push(base + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * LBL_STEP);
+    let best = null, bestCost = Infinity;
     for (const m of LBL_RINGS) {
       const r = m * fs;
       for (const a of angles) {
         const dx = r * Math.cos(a), dy = r * Math.sin(a);
         const anchor = dx > fs * 0.5 ? "start" : dx < -fs * 0.5 ? "end" : "middle";
         // nudge the baseline down a touch so side labels sit centred on the ray
-        const ax = x + dx, ay = y + dy + fs * 0.28, box = labelBox(ax, ay, anchor, w, fs);
-        if (!obstacles.some(o => boxHit(o, box))) return { ax, ay, anchor, box };
+        let ax = x + dx;
+        const ay = y + dy + fs * 0.28;
+        let box = labelBox(ax, ay, anchor, w, fs);
+        if (box.y0 < VB.y + LBL_PAD || box.y1 > VB.y + VB.h - LBL_PAD) continue; // off the top/bottom
+        // slide a slot that overhangs the left/right edge back inside the frame
+        const shift = box.x0 < VB.x + LBL_PAD ? VB.x + LBL_PAD - box.x0
+                    : box.x1 > VB.x + VB.w - LBL_PAD ? VB.x + VB.w - LBL_PAD - box.x1 : 0;
+        if (shift) { ax += shift; box = labelBox(ax, ay, anchor, w, fs); }
+        if (box.x0 < VB.x + LBL_PAD || box.x1 > VB.x + VB.w - LBL_PAD) continue; // wider than the frame
+        let hit = 0;
+        for (const o of obstacles) hit += boxOverlap(o, box);
+        if (hit === 0) return { ax, ay, anchor, box, hit: 0 };
+        // keep the least-crowded in-frame slot in case nothing is ever clear
+        const cost = hit + m * fs * fs * 0.01; // prefer near rings among equally crowded slots
+        if (cost < bestCost) { bestCost = cost; best = { ax, ay, anchor, box, hit }; }
       }
     }
-    const ax = x + fs * 1.3, ay = y + fs * 0.5; // last resort (rings are large enough this never hits)
-    return { ax, ay, anchor: "start", box: labelBox(ax, ay, "start", w, fs) };
+    if (best) return best;
+    // Nothing fits the frame at all (very small map): clamp beside the dot.
+    const anchor = "start";
+    let ax = Math.min(Math.max(x + fs * 1.3, VB.x + LBL_PAD), VB.x + VB.w - LBL_PAD - w);
+    const ay = y + fs * 0.5;
+    return { ax, ay, anchor, box: labelBox(ax, ay, anchor, w, fs), hit: Infinity };
+  }
+
+  // One greedy layout: labels are placed in `order`, each dodging the dots and
+  // everything placed before it. Returns the slots plus how much overlap the
+  // whole arrangement ended up with (0 = every name is clear).
+  function layoutPass(items, dots, order) {
+    const obstacles = dots.slice(), slots = new Array(items.length);
+    let cost = 0;
+    for (const i of order) {
+      const it = items[i];
+      const p = placeLabel(it.x, it.y, it.w, it.f, obstacles);
+      cost += p.hit;
+      obstacles.push(p.box);
+      slots[i] = p;
+    }
+    return { slots, cost };
+  }
+
+  // Who gets first pick changes what is left for everyone else, and one bad
+  // early choice can wedge two names on top of each other. So the layout is
+  // retried in a few fixed orders until one comes out clean; the cheapest
+  // arrangement wins. Ready cities always outrank "soon" ones inside an order.
+  const LBL_ORDERS = [
+    (a, b) => 0,                                  // data order (Europe first)
+    (a, b) => b.w - a.w,                          // longest names first
+    (a, b) => a.x - b.x,                          // west → east
+    (a, b) => b.x - a.x,                          // east → west
+    (a, b) => a.y - b.y,                          // north → south
+    (a, b) => b.near - a.near,                    // most crowded first
+  ];
+
+  // Lay out every label, trying the orders above and keeping the best result.
+  function layoutLabels(items, dots) {
+    const idx = items.map((_, i) => i);
+    let best = null;
+    for (const cmp of LBL_ORDERS) {
+      const order = idx.slice().sort((i, j) =>
+        (items[j].ready - items[i].ready) || cmp(items[i], items[j]) || (i - j));
+      const r = layoutPass(items, dots, order);
+      if (r.cost === 0) return r.slots;
+      if (!best || r.cost < best.cost) best = r;
+    }
+    return best.slots;
   }
 
   // Opening frame. Desktop shows the whole world (static). Mobile (touch) keeps
@@ -210,6 +285,26 @@
   const CITY_TXT = 14, CITY_SOON_TXT = 12, CITY_CORE = 8.5, CITY_HALO = 20,
         CITY_HIT = 34, CITY_SOOND = 5, CITY_STROKE = 2, CITY_CW = 0.56;
 
+  // Real width of a label, so the placer reserves exactly the room the browser
+  // will use — an average-character estimate is off by enough on names like
+  // "İzmir" or "Mexico City" to let two names it thinks are clear collide.
+  // Canvas widths scale linearly with the font size, so measuring in user units
+  // works at every zoom. Falls back to the estimate if canvas is unavailable.
+  const measureCtx = (() => {
+    try { return document.createElement("canvas").getContext("2d"); } catch (e) { return null; }
+  })();
+  let labelFontStack = "";
+  function textWidth(str, fs, weight) {
+    if (!measureCtx) return str.length * CITY_CW * fs;
+    if (!labelFontStack) labelFontStack = getComputedStyle(document.body).fontFamily || "sans-serif";
+    measureCtx.font = `${weight} ${fs}px ${labelFontStack}`;
+    return measureCtx.measureText(str).width;
+  }
+  // Marker/name sizes are scaled by (on-screen world width)/CITY_FULL_W, never
+  // below CITY_MIN_K, so a whole world squeezed into a phone-width window stays
+  // readable instead of collapsing into overlapping names.
+  const CITY_FULL_W = 1100, CITY_MIN_K = 0.75;
+
   let cityLayer = null, cityRenderScale = -1, cityRenderRAF = 0;
 
   // Grey world dots are map fabric — drawn once and left to scale with the map.
@@ -234,9 +329,15 @@
     if (!mw) return; // no layout yet — retried after first frame / on zoom
     const u = VB.w / mw / wScale;
     cityRenderScale = wScale;
-    const fs = CITY_TXT * u, soonFs = CITY_SOON_TXT * u;
-    const coreR = CITY_CORE * u, haloR = CITY_HALO * u, hitR = CITY_HIT * u,
-          soonR = CITY_SOOND * u, stroke = CITY_STROKE * u;
+    // How wide the whole world is on screen right now (map width × zoom).
+    // When that is small — a phone-width window showing the whole world — the
+    // same 23 names fight over a fraction of the space, so names and markers
+    // step down to give the placer room; zooming in brings them back to full
+    // size. Touch targets don't shrink.
+    const k = Math.min(1, Math.max(CITY_MIN_K, mw * wScale / CITY_FULL_W));
+    const fs = CITY_TXT * k * u, soonFs = CITY_SOON_TXT * k * u;
+    const coreR = CITY_CORE * k * u, haloR = CITY_HALO * k * u, hitR = CITY_HIT * u,
+          soonR = CITY_SOOND * k * u, stroke = CITY_STROKE * k * u;
 
     // Every dot is an obstacle sized to its halo (so labels clear the ring);
     // placed labels join the list so later labels dodge earlier ones. Ready
@@ -245,18 +346,27 @@
       const [x, y] = project(c.lon, c.lat);
       return { x0: x - haloR, y0: y - haloR, x1: x + haloR, y1: y + haloR };
     });
-    const ordered = [...cities].sort((a, b) => (b.status === "ready") - (a.status === "ready"));
-
-    let html = "";
-    ordered.forEach(c => {
+    // Everything the placer needs about a label, plus `near` (how many other
+    // cities sit close by) so the crowded ones can be served first.
+    const items = cities.map(c => {
       const [x, y] = project(c.lon, c.lat);
       const ready = c.status === "ready";
       const name = cityLabel(c);
       const label = ready ? name : `${name} · ${t("world.soon")}`;
       const f = ready ? fs : soonFs;
-      const w = label.length * CITY_CW * f;
-      const p = placeLabel(x, y, w, f, obstacles);
-      obstacles.push(p.box);
+      let near = 0;
+      for (const o of cities) {
+        const [ox, oy] = project(o.lon, o.lat);
+        if ((ox - x) ** 2 + (oy - y) ** 2 < 3600) near++;
+      }
+      // .city-ready names are semibold, "soon" ones regular — see style.css
+      return { c, x, y, ready, name, label, f, w: textWidth(label, f, ready ? 600 : 400), near };
+    });
+    const slots = layoutLabels(items, obstacles);
+
+    let html = "";
+    items.forEach((it, i) => {
+      const { x, y, ready, name, label, f, c } = it, p = slots[i];
       html += ready
         ? `<g class="city-ready" role="button" tabindex="0" data-city="${c.id}">
              <circle class="hit" cx="${x}" cy="${y}" r="${hitR}" fill="transparent"/>
