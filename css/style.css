@@ -89,6 +89,36 @@ main{flex:1; position:relative; overflow:hidden}
 /* light theme: swap — "of" in peach, the rest in lilac */
 :root[data-theme="light"] #wordmark .of{color:var(--peach)}
 :root[data-theme="light"] #wordmark .wm{color:var(--lilac)}
+/* world map controls: round, line-drawn, on the right edge and vertically
+   centred. Same three actions as the city screen's +/−/pan stack, but loose
+   circles instead of a joined column — the world screen carries no other
+   chrome, so a stack would read as heavy. */
+#worldctl{
+  position:absolute; right:16px; top:50%; transform:translateY(-50%);
+  display:flex; flex-direction:column; gap:8px; z-index:6;
+}
+#worldctl button{
+  width:38px; height:38px; border-radius:999px;
+  background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
+  display:grid; place-items:center; color:var(--ink-soft);
+}
+#worldctl button:hover{color:var(--lilac)}
+/* zoom-out is dead at the whole-world view; say so instead of doing nothing */
+#worldctl button:disabled{opacity:.3; cursor:default; box-shadow:none}
+#worldctl button:disabled:hover{color:var(--ink-soft)}
+/* grab-pan: press and drag this to move the map (mouse-free) */
+#w-pan{touch-action:none; cursor:grab}
+#w-pan.active{color:var(--lilac); cursor:grabbing; background:var(--powder)}
+:root[data-theme="dark"] #w-pan.active{background:var(--line)}
+/* the map only offers a grab cursor once there is somewhere to pan to */
+body.wzoomed #worldwrap{cursor:grab}
+body.wzoomed #worldwrap:active{cursor:grabbing}
+/* a double-click zooms, so don't let it select the wordmark/labels instead */
+#scr-world{user-select:none; -webkit-user-select:none}
+@media (max-width:520px){
+  #worldctl{right:10px; gap:6px}
+  #worldctl button{width:34px; height:34px}
+}
 /* contact line — quiet, thin, letter-spaced, fixed to the bottom center;
    a mailto link so a tap opens the user's mail app */
 #contact{
@@ -96,6 +126,9 @@ main{flex:1; position:relative; overflow:hidden}
   font-size:11px; font-weight:300; letter-spacing:.32em;
 }
 #contact a{color:var(--ink-soft); text-decoration:none}
+/* the world screen blocks selection for the double-click zoom; the address is
+   the one thing people may want to copy, so let it through */
+#contact{user-select:text; -webkit-user-select:text}
 #contact a:hover{color:var(--ink)}
 /* header ⓘ only belongs to the world screen */
 body.city #infobtn{display:none}
@@ -161,6 +194,10 @@ body.city .appinfo{padding-right:28px}
   fill:var(--lilac); opacity:.25; animation:pulse 2.6s ease-out infinite;
   transform-origin:center; transform-box:fill-box;
 }
+/* only the transparent .hit circle is a target. The halo is filled and pulses
+   out to 1.5×, so it used to intercept clicks well beyond its own dot — in the
+   Europe cluster that meant a click on Paris opened Milano. */
+.city-ready .halo, .city-ready circle.core, .city-soon circle{pointer-events:none}
 @keyframes pulse{0%{transform:scale(.6);opacity:.35}70%{transform:scale(1.5);opacity:0}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.city-ready .halo{animation:none; opacity:.2}}
 /* core stroke-width is set inline (in user units) so the white ring stays a

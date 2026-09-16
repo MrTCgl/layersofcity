@@ -361,6 +361,20 @@
     const dots = cityDots();
     const obstacles = dots.map(([x, y]) =>
       ({ x0: x - haloR, y0: y - haloR, x1: x + haloR, y1: y + haloR }));
+    // A touch target must not swallow its neighbour. Milano and Padova sit ~10
+    // screen px apart on the whole-world view, so one 34 px circle covered the
+    // other's centre and a click on Paris opened Milano. Cap each target at half
+    // the gap to the nearest dot; isolated cities keep the full-size target, and
+    // zooming in (dots pull apart, markers keep their size) restores it for all.
+    const hitCap = dots.map(([x, y], i) => {
+      let nd = Infinity;
+      for (let j = 0; j < dots.length; j++) {
+        if (j === i) continue;
+        const d = Math.hypot(dots[j][0] - x, dots[j][1] - y);
+        if (d < nd) nd = d;
+      }
+      return nd / 2;
+    });
     // Everything the placer needs about a label, plus `near` (how many other
     // cities sit close by) so the crowded ones can be served first.
     const items = cities.map((c, ci) => {
@@ -381,9 +395,10 @@
     let html = "";
     items.forEach((it, i) => {
       const { x, y, ready, name, label, f, c } = it, p = slots[i];
+      const hr = Math.max(coreR * 0.5, Math.min(hitR, hitCap[i]));
       html += ready
         ? `<g class="city-ready" role="button" tabindex="0" data-city="${c.id}">
-             <circle class="hit" cx="${x}" cy="${y}" r="${hitR}" fill="transparent"/>
+             <circle class="hit" cx="${x}" cy="${y}" r="${hr}" fill="transparent"/>
              <circle class="halo" cx="${x}" cy="${y}" r="${haloR}"/>
              <circle class="core" cx="${x}" cy="${y}" r="${coreR}" stroke-width="${stroke}"/>
              <text x="${p.ax}" y="${p.ay}" text-anchor="${p.anchor}" font-size="${f}">${name}</text>
@@ -422,10 +437,18 @@
   function wApply() {
     worldMapLayer.style.transform = wScale === 1 && wX === 0 && wY === 0
       ? "" : `translate(${wX}px,${wY}px) scale(${wScale})`;
+    // zoomed in = there is somewhere to drag to; drives the grab cursor and
+    // greys out zoom-out at the whole-world view
+    document.body.classList.toggle("wzoomed", wScale > 1);
+    const zo = document.getElementById("w-zoom-out");
+    if (zo) zo.disabled = wScale <= 1;
     scheduleCityRender(); // keep marker sizes constant as the map zooms
   }
   function wClamp() {
     wScale = Math.max(1, Math.min(W_MAX, wScale));
+    // repeated ×1.6 / ÷1.6 steps land on 1.0000000000000002 rather than 1, which
+    // would leave the map "zoomed" with nowhere to pan; snap that dust away
+    if (wScale < 1.001) wScale = 1;
     // Horizontal: the map fills the clip width, so keep it covering its footprint.
     wX = Math.max(wBoxW * (1 - wScale), Math.min(0, wX));
     // Vertical: on mobile the clip (#mapclip) is taller than the map's rest box,
@@ -514,6 +537,7 @@
   let wMouse = null;
   worldSurface.addEventListener("mousedown", e => {
     if (isMobileSplash() || wScale <= 1 || e.button !== 0) return;
+    if (e.target.closest && e.target.closest("#worldctl")) return; // the buttons handle themselves
     wMouse = { x: e.clientX - wX, y: e.clientY - wY };
     worldMapLayer.style.cursor = "grabbing";
   });
@@ -525,6 +549,56 @@
     if (!wMouse) return;
     wMouse = null; worldMapLayer.style.cursor = "";
   });
+
+  /* ── world controls: +, −, grab-pan (right edge), plus double-click to zoom.
+        All three go through the same transform model as wheel and pinch. ── */
+  // Zoom by a factor about a screen point; with no point given, about the
+  // middle of the visible map, which is what a button press should do.
+  function wZoomBy(factor, clientX, clientY) {
+    if (clientX === undefined) {
+      const c = mapClip.getBoundingClientRect();
+      clientX = c.left + c.width / 2; clientY = c.top + c.height / 2;
+    }
+    const f = wCursorFocal(clientX, clientY);
+    const ns = Math.max(1, Math.min(W_MAX, wScale * factor));
+    if (ns === wScale) return;
+    wX = f.x - (f.x - wX) * (ns / wScale);
+    wY = f.y - (f.y - wY) * (ns / wScale);
+    wScale = ns; wClamp(); wApply();
+  }
+  document.getElementById("w-zoom-in").onclick = () => wZoomBy(1.6);
+  document.getElementById("w-zoom-out").onclick = () => wZoomBy(1 / 1.6);
+
+  // Double-click an empty spot to zoom toward it. A double-click on a city
+  // marker is that city's own click (it already opened), so leave it alone.
+  worldSurface.addEventListener("dblclick", e => {
+    if (!e.target.closest) return;
+    // a city marker's double-click is that city's own click; the buttons zoom
+    // through their own handlers and must not zoom twice
+    if (e.target.closest("#citylayer g") || e.target.closest("#worldctl")) return;
+    e.preventDefault();
+    wZoomBy(2, e.clientX, e.clientY);
+  });
+
+  // Grab-pan: press the hand and drag to move the map, no dragging on the map
+  // itself needed. Pointer capture keeps it tracking outside the button.
+  const wPanBtn = document.getElementById("w-pan");
+  let wPanLast = null;
+  wPanBtn.addEventListener("pointerdown", e => {
+    wPanBtn.setPointerCapture(e.pointerId);
+    wPanLast = { x: e.clientX, y: e.clientY };
+    wPanBtn.classList.add("active");
+    e.preventDefault();
+  });
+  wPanBtn.addEventListener("pointermove", e => {
+    if (!wPanLast) return;
+    wX += e.clientX - wPanLast.x; wY += e.clientY - wPanLast.y;
+    wPanLast = { x: e.clientX, y: e.clientY };
+    wClamp(); wApply();
+  });
+  function wEndPan() { if (wPanLast) { wPanLast = null; wPanBtn.classList.remove("active"); } }
+  wPanBtn.addEventListener("pointerup", wEndPan);
+  wPanBtn.addEventListener("pointercancel", wEndPan);
 
   /* ── city screen: map + chrome ─────────── */
   let map = null;
@@ -657,7 +731,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260916-5"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260916-6"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
