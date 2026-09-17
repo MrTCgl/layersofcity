@@ -107,6 +107,7 @@ main{flex:1; position:relative; overflow:hidden}
 #worldctl button:disabled{opacity:.3; cursor:default; box-shadow:none}
 #worldctl button:disabled:hover{color:var(--ink-soft)}
 /* grab-pan: press and drag this to move the map (mouse-free) */
+#worldctl .w-apart{margin-top:6px}
 #w-pan{touch-action:none; cursor:grab}
 #w-pan.active{color:var(--lilac); cursor:grabbing; background:var(--powder)}
 :root[data-theme="dark"] #w-pan.active{background:var(--line)}
@@ -433,6 +434,12 @@ body.city #topchips{display:flex}
 }
 #locbtn:hover{color:var(--lilac)}
 #locbtn[aria-pressed="true"]{color:var(--lilac)}
+#sharebtn{
+  width:44px; height:44px;
+  border-radius:999px; background:var(--surface); box-shadow:var(--shadow);
+  border:1px solid var(--line); display:grid; place-items:center; color:var(--ink-soft);
+}
+#sharebtn:hover{color:var(--lilac)}
 #immersivebtn{
   width:44px; height:44px;
   border-radius:999px; background:var(--surface); box-shadow:var(--shadow);
@@ -452,7 +459,8 @@ body.immersive #bottombar,
 body.immersive .sheet,
 body.immersive #zoomctl,
 body.immersive .ctlwrap,
-body.immersive #locbtn{display:none !important}
+body.immersive #locbtn,
+body.immersive #sharebtn{display:none !important}
 
 /* user location marker */
 .me-marker{width:18px; height:18px; position:relative}

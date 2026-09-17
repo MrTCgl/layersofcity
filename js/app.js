@@ -731,7 +731,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260917-1"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260917-2"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -1210,6 +1210,19 @@
     const label = (note && note.trim()) || name || coord;
     const url = pointShareURL({ lat: pcPoint.lat, lng: pcPoint.lng, name, note, save: !!saved });
     shareOrCopy({ title: label, text: label + " — layers of city", url });
+  };
+  // Share the city you are looking at: shareBaseURL() is already "#/<city>",
+  // which is exactly the link that reopens this city on the receiver's device.
+  document.getElementById("sharebtn").onclick = () => {
+    const name = document.getElementById("cb-name").textContent || "layers of city";
+    shareOrCopy({ title: name, text: name + " — layers of city", url: shareBaseURL() });
+  };
+  // Share the app itself from the world screen. Built without shareBaseURL()
+  // because that carries the last city visited in this tab, and the opening
+  // screen should hand over the opening screen.
+  document.getElementById("w-share").onclick = () => {
+    shareOrCopy({ title: "layers of city", text: "layers of city",
+                  url: location.origin + location.pathname + "#/" });
   };
   document.getElementById("bmlist-share").onclick = () => {
     const arr = loadBookmarks();

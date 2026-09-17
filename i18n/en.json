@@ -89,6 +89,8 @@
   "bookmark.removed": "Removed",
   "share.point": "share",
   "share.list": "share list",
+  "share.city": "share this city",
+  "share.app": "share the app",
   "share.listTitle": "layers of city — saved places",
   "share.copied": "Link copied",
   "share.copyManual": "Copy the link:",
