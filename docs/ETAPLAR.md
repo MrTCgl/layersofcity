@@ -2024,3 +2024,73 @@ Bitti sayılır:
 Durum notu: Tamam. Göz kontrolü beklenen yer: metro 1'in palet rengi 2 ve 3'ten
 ayırt edilebiliyor mu, ve monoray + LRT'nin Yeni İdari Başkent'e giden
 kollarının haritanın doğu kenarında kalabalık yapıp yapmadığı.
+
+---
+
+## Amsterdam — genişletme ✅ tamam (2026-09-17)
+
+Şehir 2026-07-22'de eklenmişti; bu oturumda kullanıcı onayıyla dört iş yapıldı.
+Yeni şehir değil, mevcut verinin genişletilmesi — `cities.json` zaten `ready`.
+
+- **IJ vapurları eklendi (8 hat, `lineRef: ferry`).** F1, F2, F3, F4, F6, F7,
+  F9 ve F20 (Hempont). Gerçek OSM `route=ferry` geometrisi; 10 iskele
+  `kind: stop` olarak girdi. Amsterdam Noord'a geçiş bu vapurlarla oluyor ve
+  omurgada hiç temsil edilmiyordu. Kırıntı eşiği ferry için 200 m'den **60 m**'ye
+  indirildi: bir IJ geçişi 500 m, rail için kullanılan eşik hattı komple yerdi.
+- **NS halkası eklendi (5 servis, `lineRef: train`).** 4000 (Zaandam↔Bijlmer),
+  4300 (Schiphol↔Diemen Zuid), 8100 (Centraal↔Zuid↔Schiphol), 5800
+  (Centraal↔Weesp), 5400 (Centraal↔Haarlem) + 10 istasyon.
+  **Bu, 2026-07-22'deki kararın tersine çevrilmesidir.** O gün "NS trenleri
+  çizilmedi, hepsi tren-numarası ref'li, temiz hat değil" denmişti. Gerekçe
+  hâlâ kısmen geçerli (kutuda **44 farklı ref** var), ama sorgu gösterdi ki
+  bunların çoğu aynı raydan geçen uzun mesafe seferi. Her koridoru **bir kez**
+  kapsayan 5 servis seçilince ağ okunur hale geliyor: Sloterdijk, Lelylaan,
+  Zuid, RAI, Amstel, Muiderpoort, Science Park, Bijlmer, Duivendrecht ve
+  Schiphol artık omurgada.
+- **Çift kayıtlar temizlendi.** Rembrandthuis ve Eye Filmmuseum hem Keşfet hem
+  İhtiyaç/müze katmanında **birebir aynı koordinatta** duruyordu; ikisi de
+  keşif simgesi olduğu için İhtiyaç kopyaları düşürüldü. `audit_data` dup
+  bulgusu **2 → 0**.
+- **Zayıf kategoriler dolduruldu.** Gastronomi **19 → 38** (wikidata'lı mekânlar
+  + Amsterdam'ın adlı pazarları: Albert Cuyp, Noordermarkt vb.). Hastane
+  **5 → 8**. Not: hastane azlığı boru hattı kusuru değildi — OSM'de kutu içinde
+  toplam **9** adlı hastane var; özgün kayıttaki "merkez bbox'ta az" notu
+  doğruymuş, seyreltme birkaçını daha kesmiş.
+
+Boru hattında öğrenilenler:
+- **Ad eşleşmesiyle çift ayıklamak yetmiyor.** Aynı tesis iki dilde iki ad
+  taşıyabiliyor: *Antoni van Leeuwenhoek* = *Netherlands Cancer Institute*
+  (0 m), *Amsterdam Centraal* = *Amsterdam Central Station* (8 m). Mesafe
+  ölçütü şart.
+- **Mesafe eşiği kategoriye göre değişmeli.** Hastane kampüsü için 350 m
+  doğru; restoran için değil — 350 m ile *Lastage/Vermeer* ve
+  *Yamazato/Ciel Bleu* yanlışlıkla elendi, geri alındı. Gastronomide ölçüt
+  `audit_data`'nın kendi ölçütü: **aynı koordinat** (30 m).
+- **Hollanda demiryolu gerçekten düz.** 4 NS hattında 2 km'yi aşan segment
+  çıktı ama kıvrım oranlarının hepsi **1.00x** — polder hattı düz, onarım
+  yalnız gerçek güzergâhtan ara nokta dikti.
+
+Denetim:
+- `tools/audit_omurga.py amsterdam` → 4 ihlal (yalnız yeni NS hatları);
+  `repair.py --apply` sonrası **TEMİZ**. Vapurlar kural gereği muaf, zaten
+  ihlal vermedi.
+- `tools/audit_data.py --city amsterdam` → **17 bulgu, hepsi kutu** (gerçekten
+  dikdörtgen çizilmiş OSM alanı); dup/orphan/bounds/id/size sıfır.
+- `tools/spec.json`'a **amsterdam** girdisi eklendi (34 hat seçicisi) — şehir
+  daha önce orada yoktu, bu yüzden `repair.py` onu hiç onaramıyordu.
+- Tarayıcı dumanı: `data/amsterdam` isteklerinde 4xx/5xx yok, beş hat çipi
+  (metro/tram/bus/train/ferry) yerinde, şehir çubuğu "Amsterdam · 17 Sept ·
+  10:28" (CEST = UTC+2 doğru). Konsoldaki çıplak "Error" satırları çevresel:
+  dokunulmamış Roma'da da 12 tane çıkıyor (sandbox sertifikası karoları
+  düşürüyor).
+
+Omurga 104 KB → **124 KB** (34 hat: 16 tram, 8 vapur, 5 metro, 5 NS).
+
+Bitti sayılır:
+- [x] Önbellek sürümleri birlikte **20260917-1**
+- [x] Katman dosyaları hedefin altında
+- [x] Denetim araçları temiz
+
+Durum notu: Tamam. Göz kontrolü beklenen yer: NS hatlarının metro 50/51'in
+Ringlijn'iyle batı halkasında üst üste binip binmediği, ve IJ vapurlarının
+Centraal'ın kuzeyinde birbirinden ayırt edilebilirliği.
