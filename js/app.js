@@ -324,38 +324,33 @@
   let cityLayer = null, cityRenderScale = -1, cityRenderRAF = 0;
 
   /* ── the grey dot fabric ──────────────────
-     Two tiers of the same map. The shipped coordinate list (js/world-dots.js,
-     ~5.2 unit lattice) is the coarse one; js/world-dots-fine.js holds the same
-     land as a bitmask on a half-size lattice and is fetched only when needed.
-     The fabric scales with the map, so on a screen that draws the world large —
-     a 10" tablet opens it ~1.7x bigger than a phone — the coarse dots grow into
-     blobs. Swapping tiers keeps the halftone roughly the same size on screen.
+     Both fabrics come out of one land bitmask (js/world-mask.js): the fine one
+     is its lattice, the coarse one every second cell of it — exactly the
+     lattice the original coordinate list used. The mask is 11 KB against the
+     40 KB that list took, so the page now loads less and draws finer.
 
-     Both tiers are drawn as ONE <path> of zero-length round-capped segments
-     ("M x y h.01" is a dot whose diameter is the stroke width) rather than as
-     circles: the fine tier is 22k dots, and 22k elements is a DOM the browser
-     would carry around for the whole session. */
-  let dotLayer = null, dotsFine = false, fineState = "";
+     The fabric scales with the map, so the dots grow as the map is drawn
+     bigger. The fine fabric is what nearly every view gets; the coarse one is
+     kept for the whole-world view on a phone, where the fine dots fall below a
+     pixel and the continents wash out into grey.
+
+     Drawn as ONE <path> of zero-length round-capped segments ("M x y h.01" is a
+     dot whose diameter is the stroke width) rather than as circles: the fine
+     fabric is 22k dots, and 22k elements is a DOM the browser would carry
+     around for the whole session. */
+  let dotLayer = null, dotsFine = null;
   const DOT_D_COARSE = 2.8, DOT_D_FINE = 1.4;   // dot diameter, in map units
-  // Above this rendered world width (CSS px) the coarse fabric starts to read
-  // as blobs; the phone's opening frame (~1400 px) and the desktop map
-  // (1320 px) stay comfortably below it.
-  const FINE_FROM_PX = 1900;
+  // Below this rendered world width (CSS px) the fine fabric stops reading as
+  // dots; only a phone pinched right out to the whole world gets there.
+  const FINE_FROM_PX = 700;
 
-  function coarseDotPath() {
+  // step 1 = the mask's own lattice (fine), 2 = every second cell (coarse).
+  function dotPath(step) {
+    const f = WORLD_MASK, raw = atob(f.bits);
     let d = "";
-    for (let i = 0; i < WORLD_DOTS.length; i += 2)
-      d += `M${WORLD_DOTS[i]} ${WORLD_DOTS[i + 1]}h.01`;
-    return d;
-  }
-  // Expand the bitmask: one bit per lattice cell, odd rows staggered by half a
-  // step (the same halftone the coarse fabric uses).
-  function fineDotPath() {
-    const f = WORLD_DOTS_FINE, raw = atob(f.bits);
-    let d = "";
-    for (let row = 0; row < f.rows; row++) {
+    for (let row = 0; row < f.rows; row += step) {
       const y = +(f.y0 + row * f.sy).toFixed(2), ox = row % 2 ? f.sx / 2 : 0;
-      for (let col = 0; col < f.cols; col++) {
+      for (let col = 0; col < f.cols; col += step) {
         const i = row * f.cols + col;
         if (raw.charCodeAt(i >> 3) >> (i & 7) & 1)
           d += `M${+(f.x0 + ox + col * f.sx).toFixed(2)} ${y}h.01`;
@@ -374,31 +369,16 @@
       worldSvg.appendChild(cityLayer);   // markers stay above the fabric
     }
     dotLayer.setAttribute("stroke-width", fine ? DOT_D_FINE : DOT_D_COARSE);
-    dotLayer.setAttribute("d", fine ? fineDotPath() : coarseDotPath());
+    dotLayer.setAttribute("d", dotPath(fine ? 1 : 2));
     dotsFine = !!fine;
   }
 
-  // Fetch the fine fabric once, the first time a view actually needs it. A
-  // phone at its opening frame never pays for it; if the request fails the map
-  // simply stays on the coarse fabric.
-  function loadFineDots() {
-    if (fineState) return;
-    fineState = "loading";
-    const sc = document.createElement("script");
-    sc.src = `js/world-dots-fine.js?v=${BM_VER}`;
-    sc.onload = () => { fineState = "ready"; syncDotDensity(); };
-    sc.onerror = () => { fineState = "failed"; };
-    document.head.appendChild(sc);
-  }
-
-  // Pick the tier for the view as it stands. Called once the view settles, not
-  // mid-gesture: building the fine path is a few ms and a swap mid-pinch would
+  // Pick the fabric for the view as it stands. Called once the view settles,
+  // not mid-gesture: rebuilding the path is a few ms and a swap mid-pinch would
   // show as a flicker.
   function syncDotDensity() {
     const want = worldMapLayer.clientWidth * wScale > FINE_FROM_PX;
-    if (want === dotsFine) return;
-    if (want && fineState !== "ready") { loadFineDots(); return; }
-    renderWorldDots(want);
+    if (want !== dotsFine) renderWorldDots(want);
   }
 
   // City dots + names, redrawn at a constant on-screen size. `u` is user units
@@ -2418,7 +2398,7 @@
     const res = await fetch(`data/cities.json?v=${BM_VER}`);
     cities = res.ok ? (await res.json()).cities : [];
     applyI18n();
-    renderWorldDots();
+    renderWorldDots(true);   // fine is what nearly every view wants; syncDotDensity() steps down if this one doesn't
     renderCities();
     route();
     // once the map has real layout size, land the mobile Africa frame (avoids a

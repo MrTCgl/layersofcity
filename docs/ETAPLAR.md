@@ -2143,7 +2143,7 @@ Durum notu: Tamam. Göz kontrolü beklenen yer: gerçek 10" tablette logotip
 tavanının (110 px) yerinde durup durmadığı ve iPhone'da sıkıştırarak yaklaşırken
 noktaların keskin kalması.
 
-## Açılış haritası — iki kademeli nokta dokusu ✅ tamam (2026-09-19)
+## Açılış haritası — ince nokta dokusu ✅ tamam (2026-09-19)
 
 Kullanıcı isteği: "ekranı büyüttükçe noktalar küçülüp daha sık bir duruma
 gelebilir mi?" Doku sabit veriydi (5.157 nokta, ~5.2 birim aralık) ve haritayla
@@ -2151,33 +2151,41 @@ birlikte ölçeklendiği için harita ne kadar büyük çizilirse noktalar da o 
 büyüyordu. Ölçüldü: telefon açılışı 1403 px'lik dünya → 7.9 px aralık; masaüstü
 1320 px → 7.5 px; **10" tablet 2348 px → 13.3 px** (iri duruşun sebebi buydu).
 
+Kullanıcıya 1.5× ve 2× önizlemesi gösterildi; **2×** seçildi, ardından "her
+yerde ince olsun" dendi. Nihai durum: ince doku fiilen her görünümde.
+
 Yapılanlar:
-- **İnce kademe eklendi** (`js/world-dots-fine.js`): yarı aralıklı ızgarada
-  21.944 nokta. Koordinat listesi olarak ~240 KB tutardı; **kara bit maskesi**
-  olarak **11 KB**. Maske mevcut noktalardan türetildi (her noktanın çevresinde
-  3.5 birimlik disk birleşimi), yani siluet birebir aynı — yalnız doku inceldi.
-  Doğrulama: aynı yöntem 1× ile çalıştırılınca 5.563 nokta üretti (bugünkü
-  5.157'ye yakın), maske sadık.
-- **Kademe, ekrandaki dünya genişliğine göre seçiliyor** (eşik 1900 px).
-  Telefon açılışı ve masaüstü kaba kademede kalıyor (görünüm değişmedi ve ince
-  dosya hiç indirilmiyor); tablet ve yaklaşılmış görünüm ince kademeye geçiyor.
-  Seçim yalnız görüntü durulduğunda yapılıyor (hareket ortasında takla atmasın).
+- **Tek veri kaynağı: kara bit maskesi** (`js/world-mask.js`). Mevcut
+  noktalardan türetildi (her noktanın çevresinde 3.5 birimlik disk birleşimi),
+  yarı aralıklı ızgarada 21.944 nokta. Koordinat listesi olarak ~240 KB tutardı;
+  hücre başına bir bit ile **11 KB**. Üretici: `tools/gen_world_mask.py`.
+  Doğrulama: aynı yöntem 1× ile 5.563 nokta üretiyor (bugünkü 5.157'ye yakın),
+  maske sadık.
+- **İki doku da aynı maskeden çiziliyor:** ince = maskenin ızgarası, kaba =
+  her ikinci hücresi (tam olarak eski koordinat listesinin ızgarası). Böylece
+  sayfaya giden 40 KB'lık `js/world-dots.js` kaldırıldı — dosya depoda kalıyor
+  ama yalnız maskenin kaynağı olarak. **Sayfa ~29 KB hafifledi.**
+- **Kaba doku yalnız bir durumda:** ekrandaki dünya 700 px'in altına düşünce.
+  Buna sadece telefonda tamamen uzaklaşıp tüm dünyaya bakınca varılıyor; orada
+  ince noktalar piksel altına düşüp kıtaları gri bir pusa çeviriyordu
+  (ekran görüntüsüyle doğrulandı). Seçim yalnız görüntü durulduğunda yapılıyor.
 - **Doku artık tek bir `<path>`.** Nokta = sıfır uzunlukta, yuvarlak uçlu segment
   (`M x y h.01`); çap = `stroke-width`. 21.944 `<circle>` düğümü yerine 1 düğüm.
   `.worlddot` kuralı `fill` yerine `stroke` kullanıyor (iki tema da güncellendi).
 
 Ölçümler: ince yolun üretimi **11 ms**; `#worldmap` içindeki düğüm sayısı 5157+
-→ **132**; ince dosya yalnız gerektiğinde ve bir kez indiriliyor.
+→ **132**; `world-mask.js` 10.886 bayt (eski `world-dots.js` 40 KB idi).
 
-Denetim (Chromium): telefon açılış kaba (indirme yok) → bir kademe yaklaşınca
-ince → tam uzaklaşınca yine kaba; tablet dikey ince, tablet yatay ve masaüstü
-kaba; koyu temada nokta rengi doğru (#565060); şehir açma (`#/roma`) sağlam,
-konsol hatası yok.
+Denetim (Chromium): telefon/tablet dikey/tablet yatay/masaüstü — hepsi ince
+(21.944 nokta, çap 1.4); telefonda tamamen uzaklaşınca kaba (5.502 nokta,
+çap 2.8) ve geri yaklaşınca tekrar ince; koyu temada nokta rengi doğru
+(#565060); şehir açma (`#/roma`) sağlam, konsol hatası yok.
 
 Bitti sayılır:
-- [x] Büyük çizilen haritada noktalar küçülüp sıklaşıyor
-- [x] Telefon ve masaüstü görünümü ile veri yükü değişmedi
-- [x] Önbellek sürümleri **20260919-2**
+- [x] Nokta dokusu her görünümde ince
+- [x] Tüm dünya görünümü okunaklı kaldı (kaba yedek)
+- [x] Sayfaya giden veri küçüldü
+- [x] Önbellek sürümleri **20260919-3**
 
-Durum notu: Tamam. Açık uç: kullanıcı ince dokuyu **her yerde** isterse eşik
-(`FINE_FROM_PX`) düşürülür; tek satır.
+Durum notu: Tamam. Göz kontrolü beklenen yer: gerçek telefonda sıkıştırarak tam
+uzaklaşırken kaba→ince geçişinin göze batıp batmadığı.
