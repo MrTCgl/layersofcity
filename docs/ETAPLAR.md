@@ -2142,3 +2142,42 @@ Bitti sayılır:
 Durum notu: Tamam. Göz kontrolü beklenen yer: gerçek 10" tablette logotip
 tavanının (110 px) yerinde durup durmadığı ve iPhone'da sıkıştırarak yaklaşırken
 noktaların keskin kalması.
+
+## Açılış haritası — iki kademeli nokta dokusu ✅ tamam (2026-09-19)
+
+Kullanıcı isteği: "ekranı büyüttükçe noktalar küçülüp daha sık bir duruma
+gelebilir mi?" Doku sabit veriydi (5.157 nokta, ~5.2 birim aralık) ve haritayla
+birlikte ölçeklendiği için harita ne kadar büyük çizilirse noktalar da o kadar
+büyüyordu. Ölçüldü: telefon açılışı 1403 px'lik dünya → 7.9 px aralık; masaüstü
+1320 px → 7.5 px; **10" tablet 2348 px → 13.3 px** (iri duruşun sebebi buydu).
+
+Yapılanlar:
+- **İnce kademe eklendi** (`js/world-dots-fine.js`): yarı aralıklı ızgarada
+  21.944 nokta. Koordinat listesi olarak ~240 KB tutardı; **kara bit maskesi**
+  olarak **11 KB**. Maske mevcut noktalardan türetildi (her noktanın çevresinde
+  3.5 birimlik disk birleşimi), yani siluet birebir aynı — yalnız doku inceldi.
+  Doğrulama: aynı yöntem 1× ile çalıştırılınca 5.563 nokta üretti (bugünkü
+  5.157'ye yakın), maske sadık.
+- **Kademe, ekrandaki dünya genişliğine göre seçiliyor** (eşik 1900 px).
+  Telefon açılışı ve masaüstü kaba kademede kalıyor (görünüm değişmedi ve ince
+  dosya hiç indirilmiyor); tablet ve yaklaşılmış görünüm ince kademeye geçiyor.
+  Seçim yalnız görüntü durulduğunda yapılıyor (hareket ortasında takla atmasın).
+- **Doku artık tek bir `<path>`.** Nokta = sıfır uzunlukta, yuvarlak uçlu segment
+  (`M x y h.01`); çap = `stroke-width`. 21.944 `<circle>` düğümü yerine 1 düğüm.
+  `.worlddot` kuralı `fill` yerine `stroke` kullanıyor (iki tema da güncellendi).
+
+Ölçümler: ince yolun üretimi **11 ms**; `#worldmap` içindeki düğüm sayısı 5157+
+→ **132**; ince dosya yalnız gerektiğinde ve bir kez indiriliyor.
+
+Denetim (Chromium): telefon açılış kaba (indirme yok) → bir kademe yaklaşınca
+ince → tam uzaklaşınca yine kaba; tablet dikey ince, tablet yatay ve masaüstü
+kaba; koyu temada nokta rengi doğru (#565060); şehir açma (`#/roma`) sağlam,
+konsol hatası yok.
+
+Bitti sayılır:
+- [x] Büyük çizilen haritada noktalar küçülüp sıklaşıyor
+- [x] Telefon ve masaüstü görünümü ile veri yükü değişmedi
+- [x] Önbellek sürümleri **20260919-2**
+
+Durum notu: Tamam. Açık uç: kullanıcı ince dokuyu **her yerde** isterse eşik
+(`FINE_FROM_PX`) düşürülür; tek satır.

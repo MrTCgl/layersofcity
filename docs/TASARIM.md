@@ -146,6 +146,13 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   (px/birim) tutar — büyük ekran daha çok dünya görür. Azami yaklaşma ise
   "ekrandaki dünya genişliği 7920 px" olarak yazılıdır; böylece her cihaz aynı
   en yakın görüntüye ulaşır (masaüstünde bu tam olarak ×6'dır).
+- **Nokta dokusu iki kademelidir (2026-09-19):** kaba kademe `js/world-dots.js`
+  (5.157 nokta, ~5.2 birim aralık, çap 2.8), ince kademe `js/world-dots-fine.js`
+  (yarı aralık, çap 1.4) — ikincisi koordinat listesi değil **kara bit
+  maskesidir** (11 KB) ve yalnız gerektiğinde indirilir. Kademe, **ekrandaki
+  dünya genişliğine** göre seçilir (eşik 1900 px): amaç noktanın ekrandaki
+  boyunu her cihazda aynı tutmak. Doku tek bir `<path>` ile çizilir (nokta =
+  yuvarlak uçlu sıfır segment), rengi `stroke`'tur.
 - **Açılış ekranı ek öğeleri (2026-07-14):** en altta ortada iletişim adresi
   `layersofcity@gmail.com` — küçük (11px), ince (300), geniş harf aralıklı
   (`letter-spacing:.32em`), `--ink-soft`. Sağ üstte dil düğmesinin solunda

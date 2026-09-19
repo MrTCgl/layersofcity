@@ -196,8 +196,11 @@ body.city .appinfo{padding-right:28px}
   }
   #worldwrap{ width:100%; }
 }
-.worlddot{fill:#C4BAAC}
-:root[data-theme="dark"] .worlddot{fill:#565060}
+/* the dot fabric is one path of zero-length round-capped segments — the dots
+   are the caps, so their colour is the stroke and their size is set on the
+   element by renderWorldDots() (see app.js) */
+.worlddot{fill:none; stroke:#C4BAAC; stroke-linecap:round}
+:root[data-theme="dark"] .worlddot{stroke:#565060}
 .city-ready{cursor:pointer}
 .city-ready .halo{
   fill:var(--lilac); opacity:.25; animation:pulse 2.6s ease-out infinite;

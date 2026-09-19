@@ -323,15 +323,82 @@
 
   let cityLayer = null, cityRenderScale = -1, cityRenderRAF = 0;
 
-  // Grey world dots are map fabric — drawn once and left to scale with the map.
-  function renderWorldDots() {
-    let html = "";
+  /* ── the grey dot fabric ──────────────────
+     Two tiers of the same map. The shipped coordinate list (js/world-dots.js,
+     ~5.2 unit lattice) is the coarse one; js/world-dots-fine.js holds the same
+     land as a bitmask on a half-size lattice and is fetched only when needed.
+     The fabric scales with the map, so on a screen that draws the world large —
+     a 10" tablet opens it ~1.7x bigger than a phone — the coarse dots grow into
+     blobs. Swapping tiers keeps the halftone roughly the same size on screen.
+
+     Both tiers are drawn as ONE <path> of zero-length round-capped segments
+     ("M x y h.01" is a dot whose diameter is the stroke width) rather than as
+     circles: the fine tier is 22k dots, and 22k elements is a DOM the browser
+     would carry around for the whole session. */
+  let dotLayer = null, dotsFine = false, fineState = "";
+  const DOT_D_COARSE = 2.8, DOT_D_FINE = 1.4;   // dot diameter, in map units
+  // Above this rendered world width (CSS px) the coarse fabric starts to read
+  // as blobs; the phone's opening frame (~1400 px) and the desktop map
+  // (1320 px) stay comfortably below it.
+  const FINE_FROM_PX = 1900;
+
+  function coarseDotPath() {
+    let d = "";
     for (let i = 0; i < WORLD_DOTS.length; i += 2)
-      html += `<circle class="worlddot" cx="${WORLD_DOTS[i]}" cy="${WORLD_DOTS[i + 1]}" r="1.4"/>`;
-    worldSvg.innerHTML = html;
-    cityLayer = document.createElementNS(SVG_NS, "g");
-    cityLayer.setAttribute("id", "citylayer");
-    worldSvg.appendChild(cityLayer);
+      d += `M${WORLD_DOTS[i]} ${WORLD_DOTS[i + 1]}h.01`;
+    return d;
+  }
+  // Expand the bitmask: one bit per lattice cell, odd rows staggered by half a
+  // step (the same halftone the coarse fabric uses).
+  function fineDotPath() {
+    const f = WORLD_DOTS_FINE, raw = atob(f.bits);
+    let d = "";
+    for (let row = 0; row < f.rows; row++) {
+      const y = +(f.y0 + row * f.sy).toFixed(2), ox = row % 2 ? f.sx / 2 : 0;
+      for (let col = 0; col < f.cols; col++) {
+        const i = row * f.cols + col;
+        if (raw.charCodeAt(i >> 3) >> (i & 7) & 1)
+          d += `M${+(f.x0 + ox + col * f.sx).toFixed(2)} ${y}h.01`;
+      }
+    }
+    return d;
+  }
+
+  function renderWorldDots(fine) {
+    if (!dotLayer) {
+      dotLayer = document.createElementNS(SVG_NS, "path");
+      dotLayer.setAttribute("class", "worlddot");
+      worldSvg.appendChild(dotLayer);
+      cityLayer = document.createElementNS(SVG_NS, "g");
+      cityLayer.setAttribute("id", "citylayer");
+      worldSvg.appendChild(cityLayer);   // markers stay above the fabric
+    }
+    dotLayer.setAttribute("stroke-width", fine ? DOT_D_FINE : DOT_D_COARSE);
+    dotLayer.setAttribute("d", fine ? fineDotPath() : coarseDotPath());
+    dotsFine = !!fine;
+  }
+
+  // Fetch the fine fabric once, the first time a view actually needs it. A
+  // phone at its opening frame never pays for it; if the request fails the map
+  // simply stays on the coarse fabric.
+  function loadFineDots() {
+    if (fineState) return;
+    fineState = "loading";
+    const sc = document.createElement("script");
+    sc.src = `js/world-dots-fine.js?v=${BM_VER}`;
+    sc.onload = () => { fineState = "ready"; syncDotDensity(); };
+    sc.onerror = () => { fineState = "failed"; };
+    document.head.appendChild(sc);
+  }
+
+  // Pick the tier for the view as it stands. Called once the view settles, not
+  // mid-gesture: building the fine path is a few ms and a swap mid-pinch would
+  // show as a flicker.
+  function syncDotDensity() {
+    const want = worldMapLayer.clientWidth * wScale > FINE_FROM_PX;
+    if (want === dotsFine) return;
+    if (want && fineState !== "ready") { loadFineDots(); return; }
+    renderWorldDots(want);
   }
 
   // City dots + names, redrawn at a constant on-screen size. `u` is user units
@@ -458,7 +525,10 @@
     // hint once the gesture settles makes the browser redraw the dots sharp.
     worldMapLayer.classList.add("wzooming");
     clearTimeout(wSettleT);
-    wSettleT = setTimeout(() => worldMapLayer.classList.remove("wzooming"), 180);
+    wSettleT = setTimeout(() => {
+      worldMapLayer.classList.remove("wzooming");
+      syncDotDensity();  // settled: pick the dot fabric that fits this size
+    }, 180);
     // zoomed in = there is somewhere to drag to; drives the grab cursor and
     // greys out zoom-out at the whole-world view
     document.body.classList.toggle("wzoomed", wScale > 1);
@@ -2375,6 +2445,7 @@
       // while it is still the untouched home view
       if (!wTouched && isMobileSplash()) resetWorldZoom();
       cityRenderScale = -1; renderCities();
+      syncDotDensity();   // a wider/narrower map may want the other fabric
     }, 150);
   });
 })();
