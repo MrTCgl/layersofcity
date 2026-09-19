@@ -135,6 +135,17 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   OFL lisanslı — kullanıcı seçimi), `assets/fonts/` altında **yerel**
   barındırılır (CDN yok). Renkler (2026-07-14): "layers" ve "city" `--peach`
   (yavruağzı), "of" `--lilac`.
+- **Logotip ölçüsü ekrana göredir (2026-09-19):** masaüstünde
+  `clamp(46px,7.5vw,76px)` + `scale(1.5)`; dokunmatik ekranlarda
+  `clamp(42px, min(22vw, 15vh), 110px)`. `22vw` telefonu dolduruyor, `15vh`
+  yatay/kısa ekranlarda haritanın önünü açıyor, **110 px tavanı** 10" tablette
+  yazının ekranı yutmasını engelliyor (masaüstü logotipinin ekrandaki boyuyla
+  aynı). Tek eksene (yalnız `vw`) bağlı ölçü kullanma.
+- **Açılış haritasının kadrajı ve azami yaklaşması da ekran boyutundan türer
+  (2026-09-19):** Afrika kadrajı sabit bir çarpan değil, sabit **nokta boyutu**
+  (px/birim) tutar — büyük ekran daha çok dünya görür. Azami yaklaşma ise
+  "ekrandaki dünya genişliği 7920 px" olarak yazılıdır; böylece her cihaz aynı
+  en yakın görüntüye ulaşır (masaüstünde bu tam olarak ×6'dır).
 - **Açılış ekranı ek öğeleri (2026-07-14):** en altta ortada iletişim adresi
   `layersofcity@gmail.com` — küçük (11px), ince (300), geniş harf aralıklı
   (`letter-spacing:.32em`), `--ink-soft`. Sağ üstte dil düğmesinin solunda

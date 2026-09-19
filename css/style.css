@@ -168,7 +168,11 @@ body.city .appinfo{padding-right:28px}
    wordmark. At rest (scale 1) it hugs the map exactly, so nothing is cropped. */
 #mapclip{display:flex; justify-content:center; width:100%; overflow:hidden}
 #worldwrap{width:min(1320px,98%); position:relative; z-index:1;
-  transform-origin:0 0; will-change:transform}
+  transform-origin:0 0}
+/* Only while the map is actually moving — see wApply() in app.js: a permanent
+   will-change pins the layer's raster at the scale it was first drawn at, so a
+   map zoomed in far stays as coarse as its zoomed-out bitmap. */
+#worldwrap.wzooming{will-change:transform}
 #worldmap{width:100%; height:auto; display:block}
 /* Mobile (touch): a big, full-width wordmark is pinned in the upper area and
    stays put; the world map lives in a clipped box below it and zooms/pans
@@ -177,13 +181,18 @@ body.city .appinfo{padding-right:28px}
 @media (hover: none) and (pointer: coarse){
   #worldzoom{ justify-content:flex-start; padding:0; gap:0; }
   #wordmark{
-    margin:7vh 0 0; padding:0 3vw; width:100%; text-align:center;
-    font-size:22vw; line-height:1.05; /* fill the screen width — full, plump */
+    margin:min(7vh, 56px) 0 0; padding:0 3vw; width:100%; text-align:center;
+    /* Sized from BOTH axes and capped, so the logotype reads the same on every
+       screen size: 22vw fills a phone width (full, plump), but the same ratio
+       on a 10" tablet (800 px+ wide) gives a ~180 px word that swallows the
+       screen. The vh term keeps it off the map on short/landscape screens and
+       the 110 px ceiling matches the desktop logotype's rendered size. */
+    font-size:clamp(42px, min(22vw, 15vh), 110px); line-height:1.05;
   }
   #mapclip{
     display:flex; justify-content:center; align-items:flex-start;
     flex:1 1 auto; width:100%; min-height:0; overflow:hidden;
-    margin-top:4vh;
+    margin-top:min(4vh, 32px);
   }
   #worldwrap{ width:100%; }
 }

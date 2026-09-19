@@ -2094,3 +2094,51 @@ Bitti sayılır:
 Durum notu: Tamam. Göz kontrolü beklenen yer: NS hatlarının metro 50/51'in
 Ringlijn'iyle batı halkasında üst üste binip binmediği, ve IJ vapurlarının
 Centraal'ın kuzeyinde birbirinden ayırt edilebilirliği.
+
+## Açılış ekranı — ekran boyutuna göre ölçü ✅ tamam (2026-09-19)
+
+Kullanıcı bildirimi: 10" tablette açılış ekranındaki "layers of city" logotipi çok
+büyük duruyor; iPhone'da ise açılış haritası yeterince büyütülemiyor.
+
+Yapılanlar:
+- **Logotip artık iki eksenden ölçülüyor.** Dokunmatik dalda tek başına `22vw`
+  vardı: telefonda (390 px) 86 px ile dolgun duruyor, ama 10" tablette (800 px+)
+  aynı oran 176 px'lik dev bir yazı üretiyordu. Yeni ölçü
+  `clamp(42px, min(22vw, 15vh), 110px)` — telefonda hiç değişmedi, tablette
+  110 px'te (masaüstü logotipinin ekrandaki boyu) durdu, yatay/kısa ekranlarda
+  `15vh` terimi haritanın önünü açıyor. Üst boşluklar da tavanlandı
+  (`min(7vh,56px)` / `min(4vh,32px)`).
+- **Açılış kadrajı da ekran boyutuna duyarlı.** `frameAfrica()` Afrika penceresini
+  sabit ×3.5 ile açıyordu; tablet de dokunmatik olduğu için aynı kadrajı alıyor,
+  nokta dokusu şişiyordu. Artık nokta boyutu (px/birim) sabit tutuluyor, büyük
+  ekran daha çok dünya görüyor; kadraj hiçbir zaman klibi dolduramayacak kadar
+  uzaklaşmıyor, yani boş bant oluşmuyor. Telefonda sonuç aynı (×3.6), 10" dikeyde
+  ×2.3, yatayda ×1.1.
+- **Azami yaklaşma ekran genişliğinden türüyor.** Sabit ×6 tavanı masaüstünde
+  1320×6 = 7920 px'lik dünya demekken telefonda yalnız 2340 px'ti; üstelik mobil
+  açılış zaten ×3.5'te olduğundan elde 1.7× kalıyordu. Tavan artık "ekrandaki
+  dünya genişliği 7920 px" olarak yazıldı: masaüstünde tam olarak ×6 (değişmedi),
+  iPhone'da ×20 — açılış kadrajından 5.6× yaklaşma.
+- **Yaklaşınca noktalar bulanıklaşmıyor.** Kalıcı `will-change:transform`
+  katmanın rasterini ilk ölçekte dondurduğu için ×15'teki harita ×1 bitmap'i
+  kadar kaba görünüyordu; ipucu artık yalnız hareket sürerken (`.wzooming`,
+  180 ms sonra kalkıyor) veriliyor.
+- iOS Safari'nin kendi `gesture*` olayları yutuldu (sıkıştırma hareketi sayfayı
+  değil yalnız haritayı büyütsün).
+- Yeniden boyutlanmada (tablet split view, pencere) dokunulmamış açılış kadrajı
+  yeniden hesaplanıyor; ziyaretçi kendi yaklaştıysa kadrajına karışılmıyor.
+
+Doğrulama: Chromium'da 11 ekran ölçüsü (iPhone SE/14/14PM + yatay, iPad
+mini/10/Pro11/Pro12 yatay, küçük Android, dizüstü, masaüstü) — yatay taşma yok,
+logotip tavanı tutuyor; sıkıştırma ×20.31'e çıkıp ×1'e dönüyor; şehir açma
+(`#/roma`) ve logoyla dönüş sağlam, konsol hatası yok. İki temada da bakıldı.
+
+Bitti sayılır:
+- [x] Logotip her ekran boyutunda ölçülü
+- [x] iPhone'da harita anlamlı biçimde büyüyor
+- [x] Masaüstü kadrajı ve azami yaklaşması değişmedi
+- [x] Önbellek sürümleri **20260919-1**
+
+Durum notu: Tamam. Göz kontrolü beklenen yer: gerçek 10" tablette logotip
+tavanının (110 px) yerinde durup durmadığı ve iPhone'da sıkıştırarak yaklaşırken
+noktaların keskin kalması.

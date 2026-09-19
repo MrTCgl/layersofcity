@@ -432,11 +432,33 @@
   const mapClip = document.getElementById("mapclip"); // visible (clipped) viewport
   let wScale = 1, wX = 0, wY = 0, wMode = null, wStartDist = 0, wStartScale = 1, wMid = null, wPan = null;
   // rest box of the map (layout size/position, unaffected by the transform)
-  let wBoxW = 0, wBoxH = 0;
-  const W_MAX = 6;
+  let wBoxW = 0, wBoxH = 0, wSettleT = 0;
+  // true once the visitor has zoomed or panned themselves: their view is
+  // theirs, so a later re-frame (a resize) must leave it alone
+  let wTouched = false;
+  /* Closest view. Expressed as a rendered world WIDTH in CSS px rather than a
+     bare scale factor: the map box is the screen width, so a flat x6 cap let
+     the world grow to 1320*6 = 7920 px on a desktop but only ~2340 px on a
+     390 px phone — the pinch ran out three times earlier on the screen that
+     needs it most (and on mobile the opening frame is already x3.5, so barely
+     any zoom was left). Capping the rendered width instead gives every device
+     the same closest view; on the 1320 px desktop box it still works out to
+     exactly x6, so desktop framing is unchanged. */
+  const W_WORLD_MAX = 7920, W_MAX_MIN = 6;
+  function wMax() {
+    const mw = worldMapLayer.clientWidth || wBoxW;
+    return mw ? Math.max(W_MAX_MIN, W_WORLD_MAX / mw) : W_MAX_MIN;
+  }
   function wApply() {
     worldMapLayer.style.transform = wScale === 1 && wX === 0 && wY === 0
       ? "" : `translate(${wX}px,${wY}px) scale(${wScale})`;
+    // Give the map its own composited layer only while it moves. A permanent
+    // will-change keeps the layer's raster at the scale it was first drawn at,
+    // so a map zoomed to x15 stayed as coarse as its x1 bitmap; dropping the
+    // hint once the gesture settles makes the browser redraw the dots sharp.
+    worldMapLayer.classList.add("wzooming");
+    clearTimeout(wSettleT);
+    wSettleT = setTimeout(() => worldMapLayer.classList.remove("wzooming"), 180);
     // zoomed in = there is somewhere to drag to; drives the grab cursor and
     // greys out zoom-out at the whole-world view
     document.body.classList.toggle("wzoomed", wScale > 1);
@@ -445,7 +467,7 @@
     scheduleCityRender(); // keep marker sizes constant as the map zooms
   }
   function wClamp() {
-    wScale = Math.max(1, Math.min(W_MAX, wScale));
+    wScale = Math.max(1, Math.min(wMax(), wScale));
     // repeated ×1.6 / ÷1.6 steps land on 1.0000000000000002 rather than 1, which
     // would leave the map "zoomed" with nowhere to pan; snap that dust away
     if (wScale < 1.001) wScale = 1;
@@ -461,21 +483,37 @@
       ? Math.max(clipH - spanH, Math.min(0, wY))     // cover the clip
       : Math.max(0, Math.min(clipH - spanH, wY));    // free within the clip
   }
+  // Opening dot size, in CSS px per map unit: the Africa window (260 units)
+  // filling a ~390 px phone screen is what this frame was drawn for. A 10"
+  // tablet is a touch screen too, so it used to take the same x3.5 and blow the
+  // dot fabric up to tablet-sized blobs; holding the dot size instead lets the
+  // bigger screen simply show more world.
+  const W_HOME_PX_PER_UNIT = 390 / AFR.w;
+
   // Frame the whole-world map on Africa (mobile opening view). Computed from the
-  // map's live pixel size, so it's identical on every device. Returns false if
-  // the map has no layout size yet (retried after layout).
+  // map's live pixel size, so the dots come out the same size on every device.
+  // Returns false if the map has no layout size yet (retried after layout).
   function frameAfrica() {
     const mw = worldMapLayer.clientWidth;
     if (!mw) return false;
     const mh = mw * VB.h / VB.w;
     wBoxW = mw; wBoxH = mh;
-    wScale = Math.min(VB.w / AFR.w, W_MAX);      // fit the Africa window to the width
-    wX = -wScale * (AFR.x0 - VB.x) / VB.w * mw;
+    const clipH = mapClip.clientHeight || mh;
+    // Screen-size aware: keep the opening dot size, but never zoom out past
+    // what it takes to fill the clip, so no screen opens with white bands.
+    const dotFit = W_HOME_PX_PER_UNIT * VB.w / mw;
+    wScale = Math.max(1, Math.min(Math.max(dotFit, clipH / mh), wMax()));
+    // Centre the Africa window across whatever width the screen shows. A phone
+    // sees less than the window, so this is its left edge, exactly as before.
+    const seen = VB.w / wScale;                   // world units across the view
+    const left = seen >= AFR.w ? AFR.x0 + (AFR.w - seen) / 2 : AFR.x0;
+    wX = -wScale * (left - VB.x) / VB.w * mw;
     wY = -wScale * (AFR.y0 - VB.y) / VB.h * mh;
     wClamp(); wApply();
     return true;
   }
   function resetWorldZoom() {
+    wTouched = false;
     if (isMobileSplash() && frameAfrica()) return; // mobile home = Africa frame
     wScale = 1; wX = 0; wY = 0; wBoxW = wBoxH = 0; wApply();
   }
@@ -497,8 +535,9 @@
   worldSurface.addEventListener("touchmove", e => {
     if (wMode === "pinch" && e.touches.length === 2) {
       e.preventDefault();
+      wTouched = true;
       let ns = wStartScale * (wDist(e.touches) / wStartDist);
-      ns = Math.max(1, Math.min(W_MAX, ns));
+      ns = Math.max(1, Math.min(wMax(), ns));
       wX = wMid.x - (wMid.x - wX) * (ns / wScale); // zoom around the pinch focal point
       wY = wMid.y - (wMid.y - wY) * (ns / wScale);
       wScale = ns; wClamp(); wApply();
@@ -507,11 +546,17 @@
       // pan when zoomed in, or when the map is shorter than the clip and can
       // still slide vertically (so a zoomed-out map isn't stuck at the top)
       e.preventDefault();
+      wTouched = true;
       wX = e.touches[0].clientX - wPan.x; wY = e.touches[0].clientY - wPan.y;
       wClamp(); wApply();
     }
   }, { passive: false });
   worldSurface.addEventListener("touchend", e => { if (e.touches.length === 0) wMode = null; });
+  // iOS Safari raises its own gesture events alongside the touch ones and will
+  // happily page-zoom on top of the map's pinch. Swallow them here so a pinch
+  // on this screen only ever moves the map. (Not fired by other browsers.)
+  for (const g of ["gesturestart", "gesturechange", "gestureend"])
+    worldSurface.addEventListener(g, e => e.preventDefault(), { passive: false });
 
   /* Desktop (mouse): wheel zooms the map toward the cursor, drag pans once
      zoomed in. Same transform-only model as the touch path — the wordmark
@@ -527,9 +572,10 @@
   worldSurface.addEventListener("wheel", e => {
     if (isMobileSplash()) return; // touch devices use the pinch path
     e.preventDefault();
+    wTouched = true;
     const f = wCursorFocal(e.clientX, e.clientY);
     let ns = wScale * Math.exp(-e.deltaY * 0.0015);
-    ns = Math.max(1, Math.min(W_MAX, ns));
+    ns = Math.max(1, Math.min(wMax(), ns));
     wX = f.x - (f.x - wX) * (ns / wScale); // zoom around the cursor
     wY = f.y - (f.y - wY) * (ns / wScale);
     wScale = ns; wClamp(); wApply();
@@ -543,6 +589,7 @@
   });
   window.addEventListener("mousemove", e => {
     if (!wMouse) return;
+    wTouched = true;
     wX = e.clientX - wMouse.x; wY = e.clientY - wMouse.y; wClamp(); wApply();
   });
   window.addEventListener("mouseup", () => {
@@ -555,12 +602,13 @@
   // Zoom by a factor about a screen point; with no point given, about the
   // middle of the visible map, which is what a button press should do.
   function wZoomBy(factor, clientX, clientY) {
+    wTouched = true;
     if (clientX === undefined) {
       const c = mapClip.getBoundingClientRect();
       clientX = c.left + c.width / 2; clientY = c.top + c.height / 2;
     }
     const f = wCursorFocal(clientX, clientY);
-    const ns = Math.max(1, Math.min(W_MAX, wScale * factor));
+    const ns = Math.max(1, Math.min(wMax(), wScale * factor));
     if (ns === wScale) return;
     wX = f.x - (f.x - wX) * (ns / wScale);
     wY = f.y - (f.y - wY) * (ns / wScale);
@@ -592,6 +640,7 @@
   });
   wPanBtn.addEventListener("pointermove", e => {
     if (!wPanLast) return;
+    wTouched = true;
     wX += e.clientX - wPanLast.x; wY += e.clientY - wPanLast.y;
     wPanLast = { x: e.clientX, y: e.clientY };
     wClamp(); wApply();
@@ -2320,6 +2369,12 @@
   window.addEventListener("resize", () => {
     if (document.body.classList.contains("city")) return;
     clearTimeout(worldResizeTimer);
-    worldResizeTimer = setTimeout(() => { cityRenderScale = -1; renderCities(); }, 150);
+    worldResizeTimer = setTimeout(() => {
+      // the opening frame is measured from the screen, so a width change (a
+      // tablet split view, a resized window) has to re-frame it — but only
+      // while it is still the untouched home view
+      if (!wTouched && isMobileSplash()) resetWorldZoom();
+      cityRenderScale = -1; renderCities();
+    }, 150);
   });
 })();
