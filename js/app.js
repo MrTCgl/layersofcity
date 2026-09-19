@@ -321,7 +321,7 @@
   // readable instead of collapsing into overlapping names.
   const CITY_FULL_W = 1100, CITY_MIN_K = 0.75;
 
-  let cityLayer = null, cityRenderScale = -1, cityRenderRAF = 0;
+  let cityLayer = null, cityNodes = [];
 
   /* ── the grey dot fabric ──────────────────
      Both fabrics come out of one land bitmask (js/world-mask.js): the fine one
@@ -381,23 +381,34 @@
     if (want !== dotsFine) renderWorldDots(want);
   }
 
-  // City dots + names, redrawn at a constant on-screen size. `u` is user units
-  // per on-screen pixel at the current zoom; every size/offset is multiplied by
-  // it, so the map (grey dots, land) grows on zoom-in while the city markers stay
-  // put — dots pull apart and names re-flow to keep clear of each other. Re-run
-  // on zoom, language change and layout resize.
+  /* City dots + names. The markers must keep a constant ON-SCREEN size while
+     the map scales under them, and they used to be rebuilt from scratch — a
+     fresh label layout plus a full innerHTML — on every zoom frame. Measured on
+     a phone-class CPU that was 11 ms of label placement + 5 ms of DOM per
+     frame, which is the whole 60 fps budget: pinching stuttered.
+
+     So the work is split in two. Each city is ONE group anchored at its dot and
+     scaled by `u` (user units per screen pixel), with every child drawn in
+     screen pixels. A zoom then only has to rewrite that one scale per group
+     (scaleCities, ~26 attribute writes, well under a millisecond) — the
+     markers hold their size for free. The expensive pass below re-flows the
+     labels for the new spacing and runs once the gesture settles, not during
+     it, plus on language change and layout resize. */
   function renderCities() {
     if (!cityLayer) return;
     const mw = worldMapLayer.clientWidth;
     if (!mw) return; // no layout yet — retried after first frame / on zoom
     const u = VB.w / mw / wScale;
-    cityRenderScale = wScale;
     // How wide the whole world is on screen right now (map width × zoom).
     // When that is small — a phone-width window showing the whole world — the
     // same 23 names fight over a fraction of the space, so names and markers
     // step down to give the placer room; zooming in brings them back to full
     // size. Touch targets don't shrink.
     const k = Math.min(1, Math.max(CITY_MIN_K, mw * wScale / CITY_FULL_W));
+    // The placer works in MAP UNITS and has map-unit constants of its own (the
+    // viewBox frame it keeps labels inside, the outward-push directions), so it
+    // is fed exactly what it always was. Only the drawing below moves into the
+    // group's screen-pixel space, by dividing through by u.
     const fs = CITY_TXT * k * u, soonFs = CITY_SOON_TXT * k * u;
     const coreR = CITY_CORE * k * u, haloR = CITY_HALO * k * u, hitR = CITY_HIT * u,
           soonR = CITY_SOOND * k * u, stroke = CITY_STROKE * k * u;
@@ -440,33 +451,43 @@
     const slots = layoutLabels(items, obstacles);
 
     let html = "";
+    const q = v => +(v / u).toFixed(2);    // map units -> the group's screen px
     items.forEach((it, i) => {
       const { x, y, ready, name, label, f, c } = it, p = slots[i];
       const hr = Math.max(coreR * 0.5, Math.min(hitR, hitCap[i]));
+      // the group sits on the dot and carries the zoom; its children are drawn
+      // in screen pixels, so the label offset is the slot's distance from the dot
+      const at = `transform="translate(${x} ${y}) scale(${u})"`;
       html += ready
-        ? `<g class="city-ready" role="button" tabindex="0" data-city="${c.id}">
-             <circle class="hit" cx="${x}" cy="${y}" r="${hr}" fill="transparent"/>
-             <circle class="halo" cx="${x}" cy="${y}" r="${haloR}"/>
-             <circle class="core" cx="${x}" cy="${y}" r="${coreR}" stroke-width="${stroke}"/>
-             <text x="${p.ax}" y="${p.ay}" text-anchor="${p.anchor}" font-size="${f}">${name}</text>
+        ? `<g class="city-ready" role="button" tabindex="0" data-city="${c.id}" ${at}>
+             <circle class="hit" r="${q(hr)}" fill="transparent"/>
+             <circle class="halo" r="${q(haloR)}"/>
+             <circle class="core" r="${q(coreR)}" stroke-width="${q(stroke)}"/>
+             <text x="${q(p.ax - x)}" y="${q(p.ay - y)}" text-anchor="${p.anchor}" font-size="${q(f)}">${name}</text>
            </g>`
-        : `<g class="city-soon">
-             <circle cx="${x}" cy="${y}" r="${soonR}"/>
-             <text x="${p.ax}" y="${p.ay}" text-anchor="${p.anchor}" font-size="${f}">${label}</text>
+        : `<g class="city-soon" ${at}>
+             <circle r="${q(soonR)}"/>
+             <text x="${q(p.ax - x)}" y="${q(p.ay - y)}" text-anchor="${p.anchor}" font-size="${q(f)}">${label}</text>
            </g>`;
     });
     cityLayer.innerHTML = html;
+    cityNodes = [...cityLayer.children].map((g, i) =>
+      ({ g, x: dots[i][0], y: dots[i][1] }));
+    cityScaleAt = u;
   }
 
-  // Re-render markers after a zoom change (rAF-throttled; a pan leaves the scale
-  // untouched so it is skipped). Panning moves markers with the map for free.
-  function scheduleCityRender() {
-    if (cityRenderRAF) return;
-    cityRenderRAF = requestAnimationFrame(() => {
-      cityRenderRAF = 0;
-      if (cityRenderScale < 0 || Math.abs(wScale - cityRenderScale) / cityRenderScale > 0.02)
-        renderCities();
-    });
+  // The zoom pass: markers hold their on-screen size, so only the per-group
+  // scale changes. Cheap enough to run on every frame of a pinch.
+  let cityScaleAt = 0;
+  function scaleCities() {
+    if (!cityNodes.length) return;
+    const mw = worldMapLayer.clientWidth;
+    if (!mw) return;
+    const u = VB.w / mw / wScale;
+    if (u === cityScaleAt) return;   // a pan leaves the scale alone — nothing to do
+    cityScaleAt = u;
+    for (const n of cityNodes)
+      n.g.setAttribute("transform", `translate(${n.x} ${n.y}) scale(${u})`);
   }
 
   /* ── world zoom (touch only, i.e. mobile): the dotted map scales/pans behind
@@ -479,7 +500,7 @@
   const mapClip = document.getElementById("mapclip"); // visible (clipped) viewport
   let wScale = 1, wX = 0, wY = 0, wMode = null, wStartDist = 0, wStartScale = 1, wMid = null, wPan = null;
   // rest box of the map (layout size/position, unaffected by the transform)
-  let wBoxW = 0, wBoxH = 0, wSettleT = 0;
+  let wBoxW = 0, wBoxH = 0, wSettleT = 0, wSettledScale = -1;
   // true once the visitor has zoomed or panned themselves: their view is
   // theirs, so a later re-frame (a resize) must leave it alone
   let wTouched = false;
@@ -506,15 +527,21 @@
     worldMapLayer.classList.add("wzooming");
     clearTimeout(wSettleT);
     wSettleT = setTimeout(() => {
-      worldMapLayer.classList.remove("wzooming");
+      // Only a zoom leaves anything to settle. A pan moves an already-correct
+      // raster around, so redoing this after one would just drop a frame for
+      // nothing — which is exactly what it did.
+      if (wScale === wSettledScale) return;
+      wSettledScale = wScale;
+      worldMapLayer.classList.remove("wzooming");  // re-raster crisp at this scale
       syncDotDensity();  // settled: pick the dot fabric that fits this size
+      renderCities();    // and re-flow the labels for the new spacing
     }, 180);
     // zoomed in = there is somewhere to drag to; drives the grab cursor and
     // greys out zoom-out at the whole-world view
     document.body.classList.toggle("wzoomed", wScale > 1);
     const zo = document.getElementById("w-zoom-out");
     if (zo) zo.disabled = wScale <= 1;
-    scheduleCityRender(); // keep marker sizes constant as the map zooms
+    scaleCities();      // markers hold their on-screen size as the map zooms
   }
   function wClamp() {
     wScale = Math.max(1, Math.min(wMax(), wScale));
@@ -2424,7 +2451,7 @@
       // tablet split view, a resized window) has to re-frame it — but only
       // while it is still the untouched home view
       if (!wTouched && isMobileSplash()) resetWorldZoom();
-      cityRenderScale = -1; renderCities();
+      renderCities();
       syncDotDensity();   // a wider/narrower map may want the other fabric
     }, 150);
   });

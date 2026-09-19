@@ -2189,3 +2189,60 @@ Bitti sayılır:
 
 Durum notu: Tamam. Göz kontrolü beklenen yer: gerçek telefonda sıkıştırarak tam
 uzaklaşırken kaba→ince geçişinin göze batıp batmadığı.
+
+## Açılış haritası — sıkıştırma/kaydırma akıcılığı ✅ tamam (2026-09-19)
+
+Kullanıcı bildirimi: telefonda açılış haritasını küçültüp/büyütüp kaydırmak
+"takılarak" gerçekleşiyor, keyifsiz.
+
+Ölçüm (Chromium, telefon viewport'u, **CPU 6× yavaşlatılmış**, gerçek iki
+parmak sıkıştırma olayları): kare sürelerinin p95'i **64 ms**, 32 ms'yi aşan
+**55 kare**. İki ayırma deneyi suçluyu kesinleştirdi:
+- nokta dokusu tamamen kaldırılınca: 54 kötü kare (**değişmedi** — doku suçlu değil)
+- şehir işaretçisi katmanı kaldırılınca: **10 kötü kare** (suçlu bu)
+
+İçini ölçtük: her zoom karesinde `layoutLabels` **11.4 ms** + `innerHTML`
+**5.4 ms** = ~17 ms; 60 fps bütçesinin tamamı. Sorun eskiydi, bu oturumun
+değişiklikleri getirmedi — eski sürüm (86532e1) aynı testte p95 **102 ms**,
+57 kötü kare veriyor (yani şimdiki hâli zaten biraz daha iyiydi).
+
+Yapılanlar:
+- **İşaretçi çizimi ikiye bölündü.** Her şehir artık noktasına çakılı **tek bir
+  grup**; grup `u` (birim/piksel) ile ölçekleniyor, çocukları ekran pikseliyle
+  çiziliyor. Zoom karesinde yapılan tek iş, grup başına bir `transform` yazmak
+  (`scaleCities`, 26 yazım, milisaniyenin altı) — işaretçiler ekran boyunu
+  bedavaya koruyor. Pahalı geçiş (etiket yerleşimi + `innerHTML`) yalnız hareket
+  **durulduğunda**, dil değişiminde ve yeniden boyutlanmada koşuyor.
+- **Yerleştirici kullanıcı biriminde bırakıldı.** İlk denemede ona ekran
+  pikseli verilmişti; `LBL_PAD`, viewBox kırpması ve `outwardDir` kullanıcı
+  birimine bağlı sabitler olduğu için Tokyo/Seoul ve İstanbul/İzmir etiketleri
+  çakıştı. Yerleşim eskisi gibi kullanıcı biriminde hesaplanıp yalnız çizim
+  anında piksele bölünüyor; çakışma testi tekrar temiz.
+- **Durulma işi yalnız ölçek değiştiyse.** Kaydırmada ölçek sabit olduğu için bu
+  iş boşuna koşup parmak kalkınca kare düşürüyordu.
+- Kaydırmada gereksiz `transform` yazımları da atlanıyor (`cityScaleAt`).
+
+Sonuç (aynı test):
+| | p50 | p95 | >32 ms kare |
+|---|---|---|---|
+| Eski sürüm (86532e1) | 31 ms | 102 ms | 57 |
+| Bu oturumun öncesi | 18 ms | 64 ms | 55 |
+| **Şimdi** | **17 ms** | **28 ms** | **3** |
+
+Kaydırma: eski 0 kötü kare / max 27 ms — yeni **0 / 27 ms** (eşit).
+
+Denetim: eski sürümle piksel karşılaştırması — telefon %0.034, masaüstü %0.032
+piksel farkı (yalnız yazı kenarı yumuşatması); nokta çapı birebir aynı (15 px);
+etiket çakışması yok; 6 şehrin tıklaması doğru açılıyor; dil değişimi, kademe
+seçimi (telefon/tablet/masaüstü), tam uzakta kaba dokuya inme ve yeniden
+boyutlanma testleri sağlam; konsol hatası yok.
+
+Bitti sayılır:
+- [x] Sıkıştırma telefonda akıcı
+- [x] Kaydırma en az eski kadar akıcı
+- [x] Görünüm ve etiket yerleşimi değişmedi
+- [x] Önbellek sürümleri **20260919-4**
+
+Durum notu: Tamam. Göz kontrolü beklenen yer: gerçek iPhone'da sıkıştırırken
+etiketlerin parmak kalkana kadar yerinde durup sonra yeniden dizilmesi
+rahatsız edici mi.

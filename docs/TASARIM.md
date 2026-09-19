@@ -154,6 +154,12 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
   altına düşüp kıtaları siliyor. Doku tek bir `<path>` ile çizilir (nokta =
   yuvarlak uçlu sıfır segment), rengi `stroke`'tur. Kaynak liste
   `js/world-dots.js` depoda kalır, tarayıcıya yüklenmez.
+- **Şehir işaretçileri ekran boyunu korur, harita altlarında ölçeklenir
+  (2026-09-19):** her şehir noktasına çakılı tek bir gruptur, grup birim/piksel
+  oranıyla ölçeklenir ve çocukları ekran pikseliyle çizilir. Zoom karesinde
+  yalnız o ölçek yazılır; etiket yerleşimi (pahalı) hareket durulunca koşar.
+  Etiket yerleştiricisi **kullanıcı biriminde** çalışır — `LBL_PAD`, viewBox
+  kırpması ve dışa itme yönü hep o birime bağlıdır, ona ekran pikseli verme.
 - **Açılış ekranı ek öğeleri (2026-07-14):** en altta ortada iletişim adresi
   `layersofcity@gmail.com` — küçük (11px), ince (300), geniş harf aralıklı
   (`letter-spacing:.32em`), `--ink-soft`. Sağ üstte dil düğmesinin solunda
