@@ -2246,3 +2246,61 @@ Bitti sayılır:
 Durum notu: Tamam. Göz kontrolü beklenen yer: gerçek iPhone'da sıkıştırırken
 etiketlerin parmak kalkana kadar yerinde durup sonra yeniden dizilmesi
 rahatsız edici mi.
+
+## Açılış haritası — yaklaşma sonrası ilk kaydırmadaki takılma ✅ tamam (2026-09-19)
+
+Kullanıcı bildirimi: "Yaklaşırken ya da uzaklaşırken sorun yok ama yaklaştıktan
+sonra kaydırma yaparken anlık bir takılma var, sonraki kaydırmada yok."
+
+Tekrar üretildi (Chromium, telefon viewport'u, CPU 6× yavaşlatılmış): yaklaşma
+bitiminden **150 ms sonra** kaydırmaya başlayınca ilk kaydırmada **74 ms**'lik
+kare; 400 ms beklenince temiz. Ayırma deneyleriyle suçlu bulundu:
+
+| Deney | zoom sonrası ilk kaydırmada en kötü kare |
+|---|---|
+| Olduğu gibi | 51 ms |
+| Şehir etiketleri yeniden dizilmiyor | 58 ms (**suçlu değil**) |
+| `will-change` bırakılmıyor | **26 ms** (suçlu bu) |
+
+Yani bedel, dokunun keskin çizilmesi için katmanın serbest bırakılıp 22 bin
+noktalı yolun yeniden rasterize edilmesi. JS tarafı 0.1 ms; iş derleyicide ve
+tarayıcı onu tembelce, çoğu zaman bir sonraki hareketin ilk karesinde yapıyor.
+Nokta sayısıyla ölçeklendiği ölçüldü: 22k → 51 ms, 5,5k → 28 ms, 1,4k → 20 ms.
+(Canvas'a geçmek çare değil: 22 bin noktanın canvas'a çizimi aynı koşulda
+94 ms.)
+
+Yapılanlar:
+- **Durulma işi zamanlayıcıdan alınıp parmak kalkışına bağlandı.** 180 ms'lik
+  zamanlayıcıyı kaydırma sürekli öteliyor, iş de kaydırmanın ortasına düşüyordu.
+  Fare ve düğmeler için zamanlayıcı duruyor.
+- **Doku yalnız ekrandaki bölge için çiziliyor** (+ her yöne 1,2 ekran marj).
+  Uygulamada **atalet yok** — harita yalnız parmağın gittiği kadar gider, parmak
+  da ekrandan çıkamaz — dolayısıyla tek bir hamle marjı aşamaz. Yayındaki
+  sürümle hareket ortasında ekran görüntüsü karşılaştırıldı: birebir aynı.
+- Bölge yeniden çizimi, görüş alanı çizili bölgeden çıkınca **veya** çizili
+  bölge gereğinden iki kat genişse (yaklaşınca olur) tetikleniyor.
+- Durulmadan sonra katmanı yeniden "promote" etme denemesi geri alındı: kazanç
+  vermiyordu ve haritayı kalıcı katmana taşıdığı için yazılar alt-piksel
+  yumuşatmasını kaybediyordu (6× büyütülmüş karşılaştırmada görüldü).
+
+Sonuç (3'er koşunun ortancası, zoom bitişinden sonra beklenen süreye göre):
+| bekleme | yayındaki | yeni |
+|---|---|---|
+| 60 ms | 54 ms | **35 ms** |
+| 150 ms | 67 ms | **33 ms** |
+| 400 ms | 28 ms | 35 ms |
+
+Genel sıkıştırma p95 26 ms / 32 ms üstü 3 kare; kaydırma p95 20 ms.
+
+Denetim: etiket çakışması yok, 6 şehrin tıklaması doğru, dil değişimi, kademe
+seçimi (telefon/tablet/masaüstü), tam uzakta kaba dokuya inme, yeniden
+boyutlanma ve uzun kaydırma testleri sağlam; konsol hatası yok.
+
+Bitti sayılır:
+- [x] Yaklaşma sonrası ilk kaydırma takılmıyor
+- [x] Kaydırırken boş alan görünmüyor
+- [x] Önbellek sürümleri **20260919-5**
+
+Durum notu: Tamam. Açık uç: 400 ms sonra başlayan kaydırmada 28 → 35 ms'lik
+küçük bir gerileme var (derleyici katman işi, JS değil); şikâyet edilen
+durumlar 54→35 ve 67→33 iyileşti.

@@ -344,13 +344,61 @@
   // dots; only a phone pinched right out to the whole world gets there.
   const FINE_FROM_PX = 700;
 
-  // step 1 = the mask's own lattice (fine), 2 = every second cell (coarse).
-  function dotPath(step) {
+  // The fabric is only drawn for the part of the world on screen, plus a
+  // screen's worth of margin each way so an ordinary drag never runs off its
+  // edge. Zoomed in that is a small fraction of the 22k dots — and the cost of
+  // redrawing it scales with how many it holds: measured on a phone-class CPU,
+  // the redraw after a zoom took 51 ms with all of them against 20 ms with a
+  // quarter, and that redraw is what used to land on the first drag after a
+  // pinch as a dropped frame.
+  let dotRect = null;   // the map-unit rect the current path covers
+  // Margin, in screens, drawn beyond the view. There is no inertia here — the
+  // map only travels as far as the finger does, and a finger cannot leave the
+  // screen — so one screen is all a single drag can ever ask for; the extra
+  // fifth is for rounding. The drawn region is renewed when the drag ends.
+  const DOT_MARGIN = 1.2;
+
+  // Visible map-unit rect (read off the live transform), grown by `grow` screens.
+  function viewRect(grow) {
+    const mw = worldMapLayer.clientWidth || 1;
+    const cw = mapClip.clientWidth || mw, ch = mapClip.clientHeight || mw * VB.h / VB.w;
+    const k = VB.w / mw;                       // map units per layer pixel
+    const mx = cw / wScale * grow, my = ch / wScale * grow;
+    return { x0: VB.x + ((0 - wX) / wScale - mx) * k,
+             x1: VB.x + ((cw - wX) / wScale + mx) * k,
+             y0: VB.y + ((0 - wY) / wScale - my) * k,
+             y1: VB.y + ((ch - wY) / wScale + my) * k };
+  }
+
+  // Does the fabric need redrawing for the view as it stands? Either it no
+  // longer reaches far enough (a drag left the drawn margin), or it reaches far
+  // too far — zooming in shrinks the view inside the old rect, and leaving the
+  // whole world in the path is exactly the cost this culling is here to avoid.
+  function dotsNeedRedraw() {
+    if (!dotRect) return true;
+    if (!dotsFine) return false;        // the coarse tier already covers the world
+    const v = viewRect(0);
+    if (v.x0 < dotRect.x0 || v.x1 > dotRect.x1 ||
+        v.y0 < dotRect.y0 || v.y1 > dotRect.y1) return true;
+    const want = viewRect(DOT_MARGIN);
+    return (dotRect.x1 - dotRect.x0) > (want.x1 - want.x0) * 2 ||
+           (dotRect.y1 - dotRect.y0) > (want.y1 - want.y0) * 2;
+  }
+
+  // step 1 = the mask's own lattice (fine), 2 = every second cell (coarse);
+  // `r` is the map-unit rect to cover.
+  function dotPath(step, r) {
     const f = WORLD_MASK, raw = atob(f.bits);
+    let row = Math.max(0, Math.floor((r.y0 - f.y0) / f.sy));
+    row -= row % step;                          // keep the lattice phase
+    const lastRow = Math.min(f.rows - 1, Math.ceil((r.y1 - f.y0) / f.sy));
     let d = "";
-    for (let row = 0; row < f.rows; row += step) {
+    for (; row <= lastRow; row += step) {
       const y = +(f.y0 + row * f.sy).toFixed(2), ox = row % 2 ? f.sx / 2 : 0;
-      for (let col = 0; col < f.cols; col += step) {
+      let col = Math.max(0, Math.floor((r.x0 - f.x0 - ox) / f.sx));
+      col -= col % step;
+      const lastCol = Math.min(f.cols - 1, Math.ceil((r.x1 - f.x0 - ox) / f.sx));
+      for (; col <= lastCol; col += step) {
         const i = row * f.cols + col;
         if (raw.charCodeAt(i >> 3) >> (i & 7) & 1)
           d += `M${+(f.x0 + ox + col * f.sx).toFixed(2)} ${y}h.01`;
@@ -368,8 +416,9 @@
       cityLayer.setAttribute("id", "citylayer");
       worldSvg.appendChild(cityLayer);   // markers stay above the fabric
     }
+    dotRect = viewRect(DOT_MARGIN);
     dotLayer.setAttribute("stroke-width", fine ? DOT_D_FINE : DOT_D_COARSE);
-    dotLayer.setAttribute("d", dotPath(fine ? 1 : 2));
+    dotLayer.setAttribute("d", dotPath(fine ? 1 : 2, dotRect));
     dotsFine = !!fine;
   }
 
@@ -378,7 +427,7 @@
   // show as a flicker.
   function syncDotDensity() {
     const want = worldMapLayer.clientWidth * wScale > FINE_FROM_PX;
-    if (want !== dotsFine) renderWorldDots(want);
+    if (want !== dotsFine || dotsNeedRedraw()) renderWorldDots(want);
   }
 
   /* City dots + names. The markers must keep a constant ON-SCREEN size while
@@ -526,16 +575,7 @@
     // hint once the gesture settles makes the browser redraw the dots sharp.
     worldMapLayer.classList.add("wzooming");
     clearTimeout(wSettleT);
-    wSettleT = setTimeout(() => {
-      // Only a zoom leaves anything to settle. A pan moves an already-correct
-      // raster around, so redoing this after one would just drop a frame for
-      // nothing — which is exactly what it did.
-      if (wScale === wSettledScale) return;
-      wSettledScale = wScale;
-      worldMapLayer.classList.remove("wzooming");  // re-raster crisp at this scale
-      syncDotDensity();  // settled: pick the dot fabric that fits this size
-      renderCities();    // and re-flow the labels for the new spacing
-    }, 180);
+    wSettleT = setTimeout(settleWorld, 180);
     // zoomed in = there is somewhere to drag to; drives the grab cursor and
     // greys out zoom-out at the whole-world view
     document.body.classList.toggle("wzoomed", wScale > 1);
@@ -543,6 +583,28 @@
     if (zo) zo.disabled = wScale <= 1;
     scaleCities();      // markers hold their on-screen size as the map zooms
   }
+  /* Everything a finished zoom leaves to do. Timed at 180 ms for the mouse and
+     the buttons, but a touch gesture calls it the moment the last finger
+     leaves: on a timer a pan starting right after a pinch kept pushing it
+     back, and the work then landed in the middle of that pan — a 74 ms frame
+     where the map was being dragged. With the fingers off the glass nothing is
+     moving, so the same work is invisible. A pan changes no scale and has
+     nothing to settle. */
+  function settleWorld() {
+    clearTimeout(wSettleT);
+    const zoomed = wScale !== wSettledScale;
+    // a drag long enough to leave the drawn margin needs a redraw of its own
+    if (!zoomed && !dotsNeedRedraw()) return;
+    wSettledScale = wScale;
+    // Drop the compositor hint so the fabric is redrawn sharp at this scale.
+    // It goes back on at the first move of the next gesture; leaving it on at
+    // rest would keep the map on its own layer, and text on a composited layer
+    // loses subpixel antialiasing.
+    worldMapLayer.classList.remove("wzooming");
+    syncDotDensity();  // pick the dot fabric, and the region it must cover
+    if (zoomed) renderCities();   // re-flow the labels for the new spacing
+  }
+
   function wClamp() {
     wScale = Math.max(1, Math.min(wMax(), wScale));
     // repeated ×1.6 / ÷1.6 steps land on 1.0000000000000002 rather than 1, which
@@ -628,7 +690,11 @@
       wClamp(); wApply();
     }
   }, { passive: false });
-  worldSurface.addEventListener("touchend", e => { if (e.touches.length === 0) wMode = null; });
+  worldSurface.addEventListener("touchend", e => {
+    if (e.touches.length) return;
+    wMode = null;
+    settleWorld();   // fingers off: do the after-zoom work now, not mid-pan
+  });
   // iOS Safari raises its own gesture events alongside the touch ones and will
   // happily page-zoom on top of the map's pinch. Swallow them here so a pinch
   // on this screen only ever moves the map. (Not fired by other browsers.)
