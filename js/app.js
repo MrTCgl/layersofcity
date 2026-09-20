@@ -893,7 +893,32 @@
     return "";
   }
 
-  function showPlaceCard(name, lng, lat, note, type) {
+  // Lines calling at the stop shown on the card (bus stops only). Kept so the
+  // chips can be re-drawn with their pressed state when a line is added or
+  // removed while the card is open.
+  let pcLines = null;
+  function refreshPlaceCardLines() {
+    const box = document.getElementById("pc-lines");
+    if (!box) return;
+    if (!pcLines || !pcLines.length) { box.hidden = true; box.innerHTML = ""; return; }
+    box.innerHTML = "";
+    pcLines.forEach(no => {
+      const b = document.createElement("button");
+      b.textContent = no;
+      const entry = busPicked.get(no);
+      b.setAttribute("aria-pressed", entry ? "true" : "false");
+      if (entry) b.style.background = entry.color;
+      b.title = busLineName(no);
+      // tapping a number draws that line (or removes it) — the reader builds
+      // their own picture; the app never proposes one
+      b.onclick = () => { entry ? busRemove(no) : busAdd(no, false); };
+      box.appendChild(b);
+    });
+    box.hidden = false;
+  }
+
+  function showPlaceCard(name, lng, lat, note, type, lines) {
+    pcLines = lines || null;
     // Drop a Google Maps pin at the EXACT tapped coordinates (q=lat,lng), with
     // the label as the pin text — no text search, so it never snaps to a
     // same-named place or a nearby street. Unlabeled points get a bare pin.
@@ -913,17 +938,19 @@
     pcPoint = { lng, lat, name: name || "", note: note || "" };
     const already = loadBookmarks().some(b => bmRound(b.lng) === bmRound(lng) && bmRound(b.lat) === bmRound(lat));
     document.getElementById("pc-edit").setAttribute("aria-pressed", already ? "true" : "false");
+    refreshPlaceCardLines();
     placeCard.hidden = false;
     requestAnimationFrame(() => placeCard.classList.add("show"));
   }
   function hidePlaceCard() {
     placeCard.classList.remove("show");
     placeCard.hidden = true;
+    pcLines = null;
   }
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260917-2"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260920-1"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -1579,6 +1606,21 @@
         map.on("mouseleave", id, () => { map.getCanvas().style.cursor = ""; clearHoverType(); });
         if (!noHover) map.on("mousemove", id, e => onHoverType(e, id));
       });
+      // A stop on a drawn bus line: the card names it and lists every other
+      // line calling there, each tappable to draw. That list is the transfer
+      // information — offered, never chosen for the reader.
+      map.on("click", "buspick-stop", e => {
+        const f = e.features && e.features[0];
+        if (!f) return;
+        const [lng, lat] = f.geometry.coordinates;
+        let others = f.properties.lines || [];
+        if (typeof others === "string") { try { others = JSON.parse(others); } catch { others = []; } }
+        const here = [f.properties.ref, ...others.filter(r => r !== f.properties.ref)];
+        clearHoverType();
+        showPlaceCard(f.properties.name || "", lng, lat, undefined, t("transit.bus"), here);
+      });
+      map.on("mouseenter", "buspick-stop", () => { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "buspick-stop", () => { map.getCanvas().style.cursor = ""; });
       map.on("click", "osmnotes-pt", e => {
         const f = e.features && e.features[0];
         if (!f) return;
@@ -1614,7 +1656,7 @@
       });
       map.on("click", e => {
         if (longPressFired) { longPressFired = false; return; } // keep the long-press card open
-        const live = tappable.concat(["osmnotes-pt", "lyr-bm-dot"]).filter(id => map.getLayer(id));
+        const live = tappable.concat(["osmnotes-pt", "lyr-bm-dot", "buspick-stop"]).filter(id => map.getLayer(id));
         if (!live.length) return;
         const hits = map.queryRenderedFeatures(e.point, { layers: live });
         if (!hits.length) hidePlaceCard();
@@ -1714,6 +1756,13 @@
   // Rome uses per-line refs (metro-a/b/c); other cities may use the generic
   // class name ("metro"/"tram"/"bus"/"train") — both are listed so either works.
   const TRANSIT_REFS = { metro: ["metro-a", "metro-b", "metro-c", "rail", "metro"], tram: ["tram"], bus: ["bus"], train: ["train"], ferry: ["ferry"] };
+  // Colours for bus lines the user draws by number. Muted like the rest of the
+  // palette (docs/TASARIM.md) but far enough apart that two lines crossing can
+  // be told apart at a glance — that reading is the whole point of the box.
+  const BUS_PICK_COLORS = ["#A67C42", "#3D69A8", "#B34F39", "#4F8A5F", "#7C5FB0", "#2F7F8C"];
+  // İzmir Metropolitan Municipality Open Data License requires the credit; it
+  // rides in the map's own attribution control next to the basemap's.
+  const BUS_ATTR = '<a href="https://acikveri.bizizmir.com/" target="_blank" rel="noopener">ESHOT · İzmir Açık Veri</a>';
   const transitState = { metro: true, tram: true, bus: true, train: true, ferry: true };
 
   // Keşfet: theme chips filter the POIs; the crowd icon toggles the zone wash.
@@ -1952,6 +2001,7 @@
     applyIhtiyacVisibility();
     applyBolgeVisibility();
     addOverlayExtras();
+    addBusPickLayers();  // user-drawn bus lines survive a theme/style reload
     applyBookmarks();   // re-add saved markers on top after a theme/style reload
   }
 
@@ -1986,6 +2036,7 @@
       const base = baseFilters[id];
       map.setFilter(id, base ? ["all", base, pred] : pred);
     });
+    applyBusVisibility();
   }
 
   function groupOf(layerId) {
@@ -2082,6 +2133,9 @@
     notesOn = gpsOn = walkOn = savedOn = false;
     if (bmPopup) { bmPopup.remove(); bmPopup = null; }
     pcPoint = null;
+    busIndex = null; busPicked.clear();
+    busBox.hidden = true; busSug.hidden = true; busNote.hidden = true;
+    busInput.value = ""; busDrawn.innerHTML = "";
     closeBookmarkEditor();
     closeBookmarkList();
     ["tog-notes", "tog-gps", "tog-walk", "tog-saved"].forEach(id => {
@@ -2157,6 +2211,258 @@
     closeBasemapMenu();
     openBookmarkList();
   };
+
+  /* ── bus lines by number ─────────────────────────────────────────────────
+     A city that ships data/<city>/bus/ (manifest flag `buslines`) gets a small
+     number box under the Hatlar icons. Typing a line number draws that route,
+     both directions, with its stops; every stop carries the other lines calling
+     there, so tapping one offers them for drawing too.
+
+     Deliberately NOT a journey planner: nothing here searches for a route or
+     proposes a transfer (CLAUDE.md — yol tarifi uygulama içinde çözülmez). The
+     app puts the lines on the map; the reader decides where to change. */
+  let busIndex = null;                 // { lines: [[no, name]], outside: [...] }
+  const busPicked = new Map();         // line no -> { color, features }
+  const busBox = document.getElementById("busbox");
+  const busInput = document.getElementById("businput");
+  const busSug = document.getElementById("bussug");
+  const busNote = document.getElementById("busnote");
+  const busDrawn = document.getElementById("busdrawn");
+  let busNoteTimer = null;
+
+  function busAvailable() { return !!(manifest && manifest.buslines); }
+
+  async function loadBusIndex() {
+    if (busIndex || !busAvailable()) return busIndex;
+    try {
+      const res = await fetch(`data/${loadedCityId}/bus/index.json?v=${BM_VER}`);
+      if (res.ok) busIndex = await res.json();
+    } catch { busIndex = null; }        // no index -> the box stays quiet
+    return busIndex;
+  }
+
+  function busFC() {
+    const features = [];
+    busPicked.forEach((entry, no) => {
+      entry.features.forEach(f => features.push({
+        ...f, properties: { ...f.properties, _color: entry.color, _ref: no }
+      }));
+    });
+    return { type: "FeatureCollection", features };
+  }
+
+  function busSourceUpdate() {
+    const src = map && map.getSource("buspick");
+    if (src) src.setData(busFC());
+  }
+
+  // Re-added on every style.load (theme change) alongside the city layers, then
+  // re-seeded from busPicked so a theme switch never drops a drawn line.
+  function addBusPickLayers() {
+    if (!map) return;
+    const pal = PALETTE[theme];
+    // Only a city that ships bus/ gets these layers, so no other city is
+    // credited to ESHOT in the map's attribution.
+    if (!busAvailable()) return;
+    ["buspick-line", "buspick-ref", "buspick-stop", "buspick-stop-label"].forEach(id => {
+      if (map.getLayer(id)) map.removeLayer(id);
+    });
+    if (map.getSource("buspick")) map.removeSource("buspick");
+    map.addSource("buspick", { type: "geojson", data: busFC(),
+      attribution: BUS_ATTR });
+    // the two directions are drawn side by side rather than on top of each
+    // other: where a line runs one way out and another way back, that split is
+    // exactly what the reader needs to see
+    // The zoom interpolation has to sit at the top of the property, so the
+    // direction flip lives in its outputs rather than wrapping it.
+    const flip = v => ["case", ["==", ["get", "dir"], 2], -v, v];
+    const dirOffset = ["interpolate", ["linear"], ["zoom"],
+      11, flip(0.8), 14, flip(2), 17, flip(3.4)];
+    map.addLayer({ id: "buspick-line", type: "line", source: "buspick",
+      filter: ["==", ["get", "kind"], "busline"],
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": ["get", "_color"],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 10, 2, 14, 3.6, 17, 5],
+        "line-offset": dirOffset,
+        "line-opacity": 0.95 } });
+    // the number repeated along the route, so several drawn lines stay legible
+    map.addLayer({ id: "buspick-ref", type: "symbol", source: "buspick",
+      filter: ["==", ["get", "kind"], "busline"], minzoom: 11,
+      layout: { "symbol-placement": "line", "symbol-spacing": 220,
+        "text-field": ["get", "ref"], "text-font": ["Noto Sans Regular"],
+        "text-size": 11.5, "text-keep-upright": true, "text-optional": true },
+      paint: { "text-color": "#ffffff", "text-halo-color": ["get", "_color"],
+        "text-halo-width": 2.4 } });
+    map.addLayer({ id: "buspick-stop", type: "circle", source: "buspick", minzoom: 12.5,
+      filter: ["==", ["get", "kind"], "busstop"],
+      paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 12.5, 2, 16, 4.2],
+        "circle-color": pal.surface, "circle-stroke-color": ["get", "_color"],
+        "circle-stroke-width": 1.5,
+        "circle-opacity": ["interpolate", ["linear"], ["zoom"], 12.5, 0, 13.2, 1],
+        "circle-stroke-opacity": ["interpolate", ["linear"], ["zoom"], 12.5, 0, 13.2, 1] } });
+    map.addLayer({ id: "buspick-stop-label", type: "symbol", source: "buspick", minzoom: 14.6,
+      filter: ["==", ["get", "kind"], "busstop"],
+      layout: { "text-field": ["get", "name"], "text-font": ["Noto Sans Regular"],
+        "text-size": 9.5, "text-anchor": "top", "text-offset": [0, 0.6],
+        "text-optional": true },
+      paint: { "text-color": pal.inkSoft, "text-halo-color": pal.halo, "text-halo-width": 1.2 } });
+    applyBusVisibility();
+  }
+
+  // The bus icon in the Hatlar menu governs every bus drawing, trunk and drawn
+  // alike, so turning buses off really does clear them off the map.
+  function applyBusVisibility() {
+    if (!map) return;
+    const vis = transitState.bus ? "visible" : "none";
+    ["buspick-line", "buspick-ref", "buspick-stop", "buspick-stop-label"].forEach(id => {
+      if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", vis);
+    });
+  }
+
+  function busNoteShow(key, arg) {
+    busNote.textContent = arg ? t(key).replace("{0}", arg) : t(key);
+    busNote.hidden = false;
+    clearTimeout(busNoteTimer);
+    busNoteTimer = setTimeout(() => { busNote.hidden = true; }, 4000);
+  }
+
+  function nextBusColor() {
+    const used = new Set([...busPicked.values()].map(v => v.color));
+    return BUS_PICK_COLORS.find(c => !used.has(c)) ||
+           BUS_PICK_COLORS[busPicked.size % BUS_PICK_COLORS.length];
+  }
+
+  function busLineName(no) {
+    const idx = busIndex && busIndex.lines.find(l => l[0] === no);
+    return idx ? idx[1] : "";
+  }
+
+  async function busAdd(no, fly = true) {
+    if (!map || !busAvailable()) return;
+    no = String(no).trim().toUpperCase();
+    if (!no) return;
+    if (busPicked.has(no)) { if (fly) busFly(no); return; }
+    await loadBusIndex();
+    if (busIndex) {
+      const outside = busIndex.outside.some(l => l[0] === no);
+      const known = busIndex.lines.some(l => l[0] === no);
+      // a real ESHOT line whose whole route lies beyond this city's maxBounds
+      // (Tire, Torbalı, Ödemiş…) — say so instead of "no such line"
+      if (outside) { busNoteShow("bus.outside", no); return; }
+      if (!known) { busNoteShow("bus.unknown", no); return; }
+    }
+    let data;
+    try {
+      const res = await fetch(`data/${loadedCityId}/bus/${encodeURIComponent(no)}.geojson?v=${BM_VER}`);
+      if (!res.ok) throw new Error("missing");
+      data = await res.json();
+    } catch { busNoteShow("bus.unknown", no); return; }
+    busPicked.set(no, { color: nextBusColor(), features: data.features });
+    if (!transitState.bus) {            // otherwise the new line draws invisibly
+      transitState.bus = true;
+      const chip = document.querySelector('#linemenu .lchip[data-transit="bus"]');
+      if (chip) chip.setAttribute("aria-pressed", "true");
+      applyTransitFilter();
+      updateOmurgaActive();
+    }
+    busSourceUpdate();
+    applyBusVisibility();
+    renderBusDrawn();
+    busBoxSync(!lineMenu.hidden);
+    if (fly) busFly();
+  }
+
+  function busRemove(no) {
+    if (!busPicked.delete(no)) return;
+    busSourceUpdate();
+    renderBusDrawn();
+    busBoxSync(!lineMenu.hidden);
+  }
+
+  // Frame every drawn line together: with two on the map, that view is where
+  // they cross — which is the thing the reader is looking for.
+  function busFly(only) {
+    let w = 180, s = 90, e = -180, n = -90, any = false;
+    busPicked.forEach((entry, no) => {
+      if (only && no !== only) return;
+      entry.features.forEach(f => {
+        if (f.properties.kind !== "busline") return;
+        const parts = f.geometry.type === "LineString"
+          ? [f.geometry.coordinates] : f.geometry.coordinates;
+        parts.forEach(part => part.forEach(([x, y]) => {
+          any = true;
+          if (x < w) w = x; if (x > e) e = x;
+          if (y < s) s = y; if (y > n) n = y;
+        }));
+      });
+    });
+    if (!any) return;
+    map.fitBounds([[w, s], [e, n]], { padding: 56, duration: 700 });
+  }
+
+  function renderBusDrawn() {
+    busDrawn.innerHTML = "";
+    busPicked.forEach((entry, no) => {
+      const b = document.createElement("button");
+      b.style.background = entry.color;
+      b.title = busLineName(no);
+      b.setAttribute("aria-label", t("bus.remove").replace("{0}", no));
+      b.innerHTML = `<span>${no}</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
+      b.onclick = () => busRemove(no);
+      busDrawn.appendChild(b);
+    });
+    refreshPlaceCardLines();
+  }
+
+  async function renderBusSuggestions() {
+    const q = busInput.value.trim().toUpperCase();
+    busSug.innerHTML = "";
+    if (!q) { busSug.hidden = true; return; }
+    await loadBusIndex();
+    if (!busIndex) { busSug.hidden = true; return; }
+    const starts = busIndex.lines.filter(l => l[0].startsWith(q));
+    const rest = q.length >= 2
+      ? busIndex.lines.filter(l => !l[0].startsWith(q) && l[1].toUpperCase().includes(q))
+      : [];
+    const hits = [...starts, ...rest].slice(0, 6);
+    if (!hits.length) { busSug.hidden = true; return; }
+    hits.forEach(([no, name]) => {
+      const b = document.createElement("button");
+      b.innerHTML = `<span class="bs-no">${no}</span><span class="bs-name">${name}</span>`;
+      b.onclick = () => { busInput.value = ""; busSug.hidden = true; busAdd(no); };
+      busSug.appendChild(b);
+    });
+    busSug.hidden = false;
+  }
+
+  busInput.addEventListener("input", renderBusSuggestions);
+  busInput.addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    const first = busSug.hidden ? null : busSug.querySelector("button");
+    if (first) { first.click(); return; }
+    const v = busInput.value.trim();
+    busInput.value = "";
+    busSug.hidden = true;
+    if (v) busAdd(v);
+  });
+  document.getElementById("busgo").onclick = () => {
+    const first = busSug.hidden ? null : busSug.querySelector("button");
+    if (first) { first.click(); return; }
+    const v = busInput.value.trim();
+    busInput.value = ""; busSug.hidden = true;
+    if (v) busAdd(v);
+  };
+
+  // With the Hatlar menu open this is the full box. With it closed but lines
+  // still drawn it stays as a bare legend of those lines — tapping a stop
+  // closes the menu, and the reader still needs a way to take a line off.
+  function busBoxSync(open) {
+    const full = !!(open && busAvailable());
+    busBox.hidden = !full && !busPicked.size;
+    busBox.classList.toggle("legend", !full);
+    if (!full) { busSug.hidden = true; busNote.hidden = true; }
+    else loadBusIndex();
+  }
 
   /* coordinate box: paste "lat, lon" -> fly there + place card */
   const coordBox = document.getElementById("coordbox");
@@ -2282,6 +2588,7 @@
     if (open) closeSheets();            // don't leave a bottom sheet open behind it
     lineMenu.hidden = !open;
     this.setAttribute("aria-expanded", open);
+    busBoxSync(open);
   };
   // Hatlar stays "active" (lilac) as long as at least one transit line is on.
   function updateOmurgaActive() {
@@ -2385,9 +2692,10 @@
     if (lineMenu.hidden) return;
     lineMenu.hidden = true;
     document.getElementById("chip-omurga").setAttribute("aria-expanded", "false");
+    busBoxSync(false);
   }
   document.addEventListener("click", e => {
-    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #drawer, #infocard, #basemapmenu, #coordbox, #langmenu")) return; // inside a menu
+    if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #busbox, #drawer, #infocard, #basemapmenu, #coordbox, #langmenu")) return; // inside a menu
     if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab, #citybar, #basemapbtn, #coordbtn, #langbtn")) return; // a trigger toggles itself
     closeSheets();
     closeLineMenu();

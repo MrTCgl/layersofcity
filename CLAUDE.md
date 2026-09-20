@@ -45,7 +45,18 @@ varsa kullanıcıya sor:
   +/−/pan yığını), Konumum. Maksimum zoom 19 (bina düzeyi); Sade altlıkta yazı
   detayı zoom'la kademeli artar (ilçe→mahalle→sokak→bina adları).
   Haritada uzun basma → yer kartı. Ayrıntı: `docs/TASARIM.md`.
-- **Yol tarifi uygulama içinde çözülmez.** Haritada seçilen yer için küçük yer
+- **Otobüs hattı okuma (2026-09-20, önce İzmir).** `city.json`'da
+  `"buslines": true` olan şehirde Hatlar menüsünün altında bir **hat no
+  kutusu** çıkar: numara/ad yazılır, o hat gidiş-dönüş güzergâhıyla çizilir;
+  birkaç hat aynı anda ayrı renklerde durabilir. Çizili hattın durağına
+  dokununca kart o durakta duran bütün hatları listeler ve çizdirir —
+  **aktarmayı kullanıcı gözüyle kurar, uygulama önermez.** Veri operatörün
+  açık verisinden gelir (İzmir'de ESHOT); ayrıntı `docs/VERI.md`.
+- **Yol tarifi uygulama içinde çözülmez.** (2026-09-20'de yeniden onaylandı:
+  kullanıcı iki nokta arası otobüs/aktarma arayan bir araç istedi, sonra
+  istemediğine karar verdi. Uygulama **rota aramaz, aktarma önermez**; hatları
+  görünür kılar, kararı kullanıcı verir. Çalışan bir prototip ölçüldü ve
+  yazılmadı — yeniden önerme.) Haritada seçilen yer için küçük yer
   kartı açılır; "Yol tarifi" düğmesi Google Maps'i **anahtarsız URL şemasıyla**
   dış bağlantı olarak açar. Uygulama oryantasyon aracıdır; navigasyon Google'a
   devredilir.

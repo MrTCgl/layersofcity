@@ -243,6 +243,62 @@ anında** üretilir (çalışma zamanı bağımlılığı yok; atıf altbilgide)
 | `kind:"stop"` | omurga | tramvay/otobüs/tren durağı (z12.5+) |
 | `kind:"district(-label)"` | bolge-* | bölge poligonu / etiket noktası |
 
+## Otobüs hatları — operatör açık verisi (2026-09-20, İzmir)
+
+Otobüs, OSM boru hattının **istisnasıdır**. İzmir'de OSM 441 ESHOT hattının
+~160'ını taşıyor ve bir kısmında `ref` bile yok; eksik hat adlandırılamıyor
+bile. Bu yüzden otobüs katmanı operatörün kendi açık verisinden üretilir.
+Raylı/vapur olduğu gibi OSM'de kalır (`tools/spec.json`).
+
+**Kaynak** (hepsi anahtarsız, build anında çekilir — çalışma zamanı bağımlılığı
+yok): `acikveri.bizizmir.com` → ESHOT. Güzergâh geometrisi
+`eshot-otobus-hat-guzergahlari.csv` (hat · yön · sıralı enlem-boylam; dosya
+sırası güzergâh sırasıdır), durak sırası `bus-eshot-gtfs.zip`, hat adları
+`eshot-otobus-hatlari.csv`. Lisans: İzmir Büyükşehir Açık Veri Lisansı —
+atıf zorunlu, haritanın attribution kutusunda (`BUS_ATTR`, js/app.js).
+
+**Araç:** `tools/izmir_bus.py [--apply]`. Yeni bir şehre uyarlarken kaynak
+URL'leri ve `BOUNDS`/`TRUNK` sabitlerini değiştirmek yeterli.
+
+**Çıktı:**
+
+```
+data/<sehir>/bus/
+  index.json        { updated, source, lines: [[no, ad]], outside: [[no, ad]] }
+  <hatno>.geojson   iki yön + o hattın durakları
+```
+
+- Hat feature'ı: `{ id:"bus-445-1", kind:"busline", ref:"445", dir:1 }`.
+  Yönler ayrı feature'dır; harita ikisini ±ofsetle yan yana çizer, böylece
+  tek yönlü sokaklarda ayrışma görünür.
+- Durak feature'ı: `{ id, kind:"busstop", ref, name, lines:[...] }` —
+  `lines` o durakta duran **diğer** hatlar. Aktarma bilgisi budur; kullanıcı
+  durağa dokunup gözüyle karar verir (aşağı bak).
+- `index.json` → `lines` haritada gösterilebilen hatlar; `outside` güzergâhı
+  tamamen şehrin `maxBounds`'u dışında kalan hatlar (Tire, Torbalı, Ödemiş,
+  Bayındır, Kemalpaşa — İzmir'de 82 hat). Arama kutusu "hat yok" yerine
+  "bu haritanın dışında" der.
+- `city.json`'da `"buslines": true` → Hatlar menüsünde hat no kutusu çıkar.
+  Bayrak yoksa kutu da, `buspick` kaynağı da, ESHOT atfı da hiç eklenmez.
+
+**Kırpma tuzağı:** güzergâhı `maxBounds`'a shapely `intersection` ile kırpmak
+hattı **kendi kesişim noktalarından** parçalar (445 üç parçaya bölünmüştü) ve
+ardından kısa-parça filtresi güzergâhın gerçek bölümlerini siliyordu. Kırpma
+bu yüzden nokta nokta yürüyerek yapılır: pencere içinde kalan hat tek parça
+LineString kalır (726 yönün 718'i), yalnız gerçekten dışarı çıkanlar bölünür.
+
+**Gerçekçilik denetimi:** 2 km kuralı burada da vekildir. Kaynak zaten aracın
+sürdüğü güzergâh olduğu için araç her uzun düzlüğü kaydın kendisiyle kıyaslar
+(`audit_trunk`): oran ~1.0 ise düzlük gerçektir. İzmir omurga setinde iki
+düzlük var — 800'ün Bornova yaklaşımı (1.05) ve 975'in Urla sahil yolu (1.00);
+ikisi de gerçek, **onarılmamalı**.
+
+**Omurga otobüs hatları:** `TRUNK` sabiti (izmir_bus.py) — iki adlandırılmış
+aktarma noktasını (aktarma merkezi / metro / İZBAN / iskele / otogar), raylı
+ağın örtmediği bir koridor üzerinden bağlayan, koridor başına bir hat, sefer
+sayısına göre seçilmiş 12 hat. Bunlar `omurga.geojson`'a `lineRef:"bus"` olarak
+yazılır (durakları yazılmaz — 480 durak haritayı benek denizine çevirirdi).
+
 ## Boru hattı & yayın tuzakları (2026-07-18, Berlin dersi)
 
 Ayrıntı: `.claude/skills/yeni-sehir/SKILL.md`. Özet:

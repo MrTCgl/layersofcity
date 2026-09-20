@@ -2304,3 +2304,71 @@ Bitti sayılır:
 Durum notu: Tamam. Açık uç: 400 ms sonra başlayan kaydırmada 28 → 35 ms'lik
 küçük bir gerileme var (derleyici katman işi, JS değil); şikâyet edilen
 durumlar 54→35 ve 67→33 iyileşti.
+
+## İzmir otobüs hatları — hat no kutusu + durak kartı ✅ tamam (2026-09-20)
+
+Kullanıcı isteği: "İzmir için otobüs hatlarını harita üzerinde doğru görmek
+istiyorum." Görüşme sırasında ihtiyaç netleşti: kullanıcı iki nokta arasında
+hangi otobüse bineceğine ve nerede aktarma yapacağına **kendi gözüyle** karar
+vermek istiyor (örnek: Çiğli Ekol Hastanesi → Bayraklı Çevre ve Şehircilik
+Müdürlüğü).
+
+**Kullanıcı kararı (2026-09-20):** CLAUDE.md'deki "yol tarifi uygulama içinde
+çözülmez" kararı **olduğu gibi kalıyor**. Uygulama rota aramaz, aktarma
+önermez. Yalnız hatları görünür kılar; kararı kullanıcı verir. (Çalışan bir
+aktarma arayıcı prototipi ölçüldü ve çalıştı — 153 KB'lık statik grafla
+tarayıcıda çözülüyor — ama kullanıcı istemedi, yazılmadı.)
+
+Yapılanlar:
+- **Veri kaynağı otobüste OSM'den ESHOT'a döndü.** OSM İzmir'in 441 hattının
+  ~160'ını taşıyor, bir kısmında `ref` yok. ESHOT kendi ağını açık veri olarak
+  yayımlıyor: güzergâh CSV'si + GTFS. `tools/izmir_bus.py` bunu çekip
+  `data/izmir/bus/` altına hat başına bir GeoJSON yazıyor. Ayrıntı ve tuzaklar:
+  `docs/VERI.md` → "Otobüs hatları — operatör açık verisi".
+- **363 hat** haritada gösterilebilir durumda (hat başına ort. 14 KB, istendiğinde
+  yüklenir); 82 hat güzergâhı tamamen şehir penceresi dışında (Tire, Torbalı,
+  Ödemiş…) — index'te `outside` olarak duruyor, kutu "bu haritanın dışında" diyor.
+- **Hat no kutusu** Hatlar menüsünün altında: numara ya da ad yazınca öneri
+  listesi, seçince hat çizilir. Birden çok hat aynı anda, altı ayrı renkte;
+  numara güzergâh boyunca tekrarlanıyor. Gidiş ve dönüş ±ofsetle yan yana —
+  tek yönlü sokaklarda ayrışma göz ile görülüyor (Çiğli Viyadüğü'nde doğrulandı).
+- **Durak kartı:** çizili hattın durağına dokun → durak adı + o durakta duran
+  bütün hatlar çip olarak. Çipe dokunmak o hattı da haritaya ekliyor. Aktarma
+  bilgisi bu; seçim kullanıcının. (En yoğun durak F. Altay, 30 hat; çip listesi
+  124 px'te kaydırmalı, kart ekranı taşırmıyor.)
+- **Omurga otobüs hatları:** Hatlar > otobüs ikonu artık boş değil — 12 kilit
+  hat (302, 304, 502, 510, 558, 671, 680, 800, 838, 912, 963, 975) omurgaya
+  girdi. Seçim ölçütü editoryal, `TRUNK` sabitinde ve VERI.md'de yazılı;
+  **kullanıcı gözden geçirmeli.**
+- Otobüs ikonu bütün otobüs çizimini yönetiyor (omurga + çizilen hatlar).
+  Menü kapanınca çizili hatlar küçük bir künye olarak kalıyor ki kaldırılabilsin.
+- ESHOT/İzmir Açık Veri atfı harita attribution kutusuna eklendi (lisans şartı);
+  yalnız `buslines: true` olan şehirde görünüyor.
+
+Yol boyunca çıkan ve düzeltilen gerçek hatalar:
+- Güzergâhı `maxBounds`'a shapely ile kırpmak hattı kendi kesişimlerinden
+  parçalıyor, sonra kısa-parça filtresi **güzergâhın gerçek bölümlerini
+  siliyordu** (445 üç parçaya bölünmüştü). Kırpma nokta nokta yürüyerek yapılıyor
+  artık; 726 yönün 718'i tek parça.
+- `line-offset` içinde iki zoom ifadesi → MapLibre katmanı hiç eklemiyordu
+  (hatlar görünmüyordu, konsolda sessiz değildi). Zoom en üst düzeye alındı.
+- Uzun düz segment denetimi: 800 ve 975'te 2 km'yi aşan iki düzlük var; kaydın
+  kendisiyle kıyaslandı (oran 1.05 ve 1.00) — **gerçek yollar, onarılmamalı.**
+
+Bitti sayılır:
+- [x] Hat no ile herhangi bir hat çizilebiliyor (363 hat)
+- [x] Aynı anda birden çok hat, ayırt edilebilir renklerde
+- [x] Durak kartı o duraktan geçen hatları listeliyor ve çizdirebiliyor
+- [x] Gidiş/dönüş ayrı okunuyor
+- [x] Otobüs ikonu artık boş değil (12 omurga hattı)
+- [x] Tema değişiminde çizili hatlar kayboluyor mu → kaybolmuyor
+- [x] Otobüs verisi olmayan şehir etkilenmiyor (kaynak da atıf da eklenmiyor)
+- [x] Konsol temiz (telefon 420 px + masaüstü 1280 px, iki tema)
+- [x] Önbellek sürümleri **20260920-1**
+
+Durum notu: Tamam. Kullanıcıdan beklenen iki şey: (1) 12 omurga hattının
+seçimini onaylaması, (2) gerçek telefonda hat no kutusunun klavye açıkken
+kullanışlı olup olmadığını denemesi. Ayrıca bu oturumda fark edilen ve
+**dokunulmayan** eski kusur: 420 px genişlikte Hatlar menüsündeki 5 ikon
+ekrana sığmıyor (sağdaki vapur çipi kenara dayanıyor) — otobüs işiyle ilgisi
+yok, İstanbul'da da aynı.
