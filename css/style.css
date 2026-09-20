@@ -283,9 +283,15 @@ body.city #topchips{display:flex}
 .bussug{
   width:100%; background:var(--surface); border:1px solid var(--line);
   border-radius:14px; box-shadow:var(--shadow);
-  /* capped by JS to the room above the soft keyboard; scrolls past that */
+  /* Capped by JS to the room above the soft keyboard; scrolls past that.
+     The resting cap is a real length rather than `none` so the JS cap has
+     something to animate from — `none` is not interpolable and the list would
+     snap. It has to stay clear of the tallest list the box can show: six rows
+     (renderBusSuggestions slices to 6) at ~29px, so ~180px. */
+  max-height:320px; transition:max-height .25s ease;
   overflow-x:hidden; overflow-y:auto; overscroll-behavior:contain;
 }
+@media (prefers-reduced-motion:reduce){.bussug{transition:none}}
 .bussug[hidden]{display:none}
 .bussug button{
   display:flex; gap:8px; align-items:baseline; width:100%; padding:7px 11px;

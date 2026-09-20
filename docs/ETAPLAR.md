@@ -2383,11 +2383,19 @@ bindirdiği için **geri alındı**. Uygulanan davranış:
   liste 323 → 180, sığıyor.) Orada şehir çubuğunun üstüne binmesi kabul —
   başka yer yok.
 - Odak gidince her şey sıfırlanıyor; künyeye düşerken de temizleniyor.
-Önbellek sürümleri **20260920-2**.
+- **Kırpma animasyonlu** (kullanıcı isteği): `.bussug` üzerinde
+  `transition: max-height .25s ease`. Bunun çalışması için listenin dinlenme
+  yüksekliği `none` değil gerçek bir uzunluk olmalı (`none` interpole edilmez,
+  liste zıplar) → `max-height: 320px`. Sınır altı satırlık en uzun listeden
+  (ölçüldü: 175 px) belirgin yüksek; `renderBusSuggestions`'daki `slice(0, 6)`
+  ile birlikte değişmesi gerekir, iki tarafa da not düşüldü.
+  `prefers-reduced-motion: reduce` altında geçiş kapalı (doğrulandı: hareket
+  isteyen kullanıcıda 16 ara değer, istemeyende tek değer).
+Önbellek sürümleri **20260920-3**.
 
-Durum notu: Tamam, omurga hattı seçimi onaylandı ve klavye davranışı yapıldı
-(2026-09-20). Göz kontrolü beklenen tek yer: gerçek iPhone'da klavye açılırken
-listenin kırpılması göze batıyor mu. Ayrıca bu oturumda fark edilen ve
+Durum notu: Tamam, omurga hattı seçimi onaylandı, klavye davranışı ve kırpma
+animasyonu yapıldı (2026-09-20). Göz kontrolü beklenen tek yer: gerçek
+iPhone'da 0.25 s'lik kırpma geçişinin klavye animasyonuyla uyumu. Ayrıca bu oturumda fark edilen ve
 **dokunulmayan** eski kusur: 420 px genişlikte Hatlar menüsündeki 5 ikon
 ekrana sığmıyor (sağdaki vapur çipi kenara dayanıyor) — otobüs işiyle ilgisi
 yok, İstanbul'da da aynı.

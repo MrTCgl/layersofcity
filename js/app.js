@@ -950,7 +950,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260920-2"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260920-3"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -2424,7 +2424,7 @@
     const rest = q.length >= 2
       ? busIndex.lines.filter(l => !l[0].startsWith(q) && l[1].toUpperCase().includes(q))
       : [];
-    const hits = [...starts, ...rest].slice(0, 6);
+    const hits = [...starts, ...rest].slice(0, 6);   // .bussug max-height assumes 6
     if (!hits.length) { busSug.hidden = true; return; }
     hits.forEach(([no, name]) => {
       const b = document.createElement("button");
