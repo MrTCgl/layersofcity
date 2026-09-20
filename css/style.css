@@ -311,7 +311,8 @@ body.city #topchips{display:flex}
 }
 .busnote[hidden]{display:none}
 /* whole-network view + its region chips */
-.busallbar{display:flex; flex-direction:column; align-items:center; gap:5px}
+.busallbar{display:flex; flex-direction:column; align-items:center; gap:5px;
+  max-width:100%; min-width:0}
 .busbox.legend .busallbar{display:none}
 .busalltog{
   padding:4px 12px; border-radius:999px; font-size:12px;
@@ -319,10 +320,19 @@ body.city #topchips{display:flex}
   border:1px solid var(--line); color:var(--ink-soft); box-shadow:var(--shadow);
 }
 .busalltog[aria-pressed="true"]{background:var(--lilac); border-color:var(--lilac); color:#fff}
-.busregions{display:flex; flex-wrap:wrap; gap:4px; justify-content:center}
+/* One row that scrolls sideways: seven chips wrapped to two rows ate the top
+   of a phone screen. The last chip is left clipped by the edge rather than
+   masked — that cut is what tells you the row keeps going. */
+.busregions{
+  display:flex; flex-wrap:nowrap; gap:4px; max-width:100%;
+  overflow-x:auto; overflow-y:hidden; scrollbar-width:none;
+  -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain;
+  padding:2px 2px 4px; scroll-padding-inline:2px;
+}
+.busregions::-webkit-scrollbar{display:none}
 .busregions[hidden]{display:none}
 .busregions button{
-  padding:3px 9px; border-radius:999px; font-size:11.5px;
+  padding:3px 9px; border-radius:999px; font-size:11.5px; flex:none; white-space:nowrap;
   background:color-mix(in srgb, var(--surface) 88%, transparent);
   border:1px solid var(--line); box-shadow:var(--shadow);
   display:flex; align-items:center; gap:5px;

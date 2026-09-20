@@ -950,7 +950,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260920-4"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260920-5"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -2149,10 +2149,11 @@
     pcPoint = null;
     busIndex = null; busPicked.clear();
     busAllData = null; busAllOn = false; busRegion = null; busHiRef = null;
+    busPanelRevealed = false;
     busAllTog.setAttribute("aria-pressed", "false");
     busRegions.hidden = true; busRegions.innerHTML = "";
     busBox.hidden = true; busSug.hidden = true; busNote.hidden = true;
-    busInput.value = ""; busDrawn.innerHTML = "";
+    busInput.value = ""; busSug.hidden = true; busDrawn.innerHTML = "";
     closeBookmarkEditor();
     closeBookmarkList();
     ["tog-notes", "tog-gps", "tog-walk", "tog-saved"].forEach(id => {
@@ -2244,6 +2245,10 @@
   let busAllOn = false;                // whole-network view showing?
   let busRegion = null;                // region chip selected -> the rest dims
   let busHiRef = null;                 // line typed in the box -> drawn bold
+  // The line box and the whole-network switch stay out of the way until the
+  // bus icon is actually tapped: opening Hatlar should not dump bus controls
+  // on someone who came for the metro. Reset when the menu closes.
+  let busPanelRevealed = false;
   const busBox = document.getElementById("busbox");
   const busInput = document.getElementById("businput");
   const busSug = document.getElementById("bussug");
@@ -2466,6 +2471,11 @@
     busSourceUpdate();
     applyBusVisibility();
     renderBusDrawn();
+    // Drawing a line counts as asking for the controls — the box is also the
+    // only place its "x" lives, so it has to be reachable afterwards without
+    // hunting for the bus icon again. (A line added from a stop card is the
+    // case that matters: the menu was closed when the stop was tapped.)
+    busPanelRevealed = true;
     busBoxSync(!lineMenu.hidden);
     if (fly) busFly();
   }
@@ -2527,7 +2537,7 @@
     hits.forEach(([no, name]) => {
       const b = document.createElement("button");
       b.innerHTML = `<span class="bs-no">${no}</span><span class="bs-name">${name}</span>`;
-      b.onclick = () => { busInput.value = ""; busSug.hidden = true; busAdd(no); };
+      b.onclick = () => { busInputClear(); busAdd(no); };
       busSug.appendChild(b);
     });
     busSug.hidden = false;
@@ -2591,22 +2601,23 @@
 
   busInput.addEventListener("input", () =>
     renderBusSuggestions().then(() => { busFitAfterRender(); setBusHighlight(); }));
-  busInput.addEventListener("keydown", e => {
-    if (e.key !== "Enter") return;
-    const first = busSug.hidden ? null : busSug.querySelector("button");
-    if (first) { first.click(); return; }
-    const v = busInput.value.trim();
+  // Clearing the field in code fires no `input` event, so the search highlight
+  // has to be dropped here too — otherwise the bold dark line outlives the
+  // search and sits on the map after the drawn line is removed.
+  function busInputClear() {
     busInput.value = "";
     busSug.hidden = true;
-    if (v) busAdd(v);
-  });
-  document.getElementById("busgo").onclick = () => {
+    setBusHighlight();
+  }
+  function busSubmit() {
     const first = busSug.hidden ? null : busSug.querySelector("button");
     if (first) { first.click(); return; }
     const v = busInput.value.trim();
-    busInput.value = ""; busSug.hidden = true;
+    busInputClear();
     if (v) busAdd(v);
-  };
+  }
+  busInput.addEventListener("keydown", e => { if (e.key === "Enter") busSubmit(); });
+  document.getElementById("busgo").onclick = busSubmit;
 
   // With the Hatlar menu open this is the full box. With it closed but lines
   // still drawn it stays as a bare legend of those lines — tapping a stop
@@ -2687,7 +2698,7 @@
   }
 
   function busBoxSync(open) {
-    const full = !!(open && busAvailable());
+    const full = !!(open && busAvailable() && busPanelRevealed && transitState.bus);
     busBox.hidden = !full && !busPicked.size;
     busBox.classList.toggle("legend", !full);
     if (!full) { busSug.hidden = true; busNote.hidden = true; busKeyboardUnpin(); }
@@ -2814,11 +2825,11 @@
   /* Hatlar chip -> reveal metro/tram/bus icons; each icon toggles that transit type */
   const lineMenu = document.getElementById("linemenu");
   document.getElementById("chip-omurga").onclick = function () {
-    const open = lineMenu.hidden;
-    if (open) closeSheets();            // don't leave a bottom sheet open behind it
-    lineMenu.hidden = !open;
-    this.setAttribute("aria-expanded", open);
-    busBoxSync(open);
+    if (!lineMenu.hidden) { closeLineMenu(); return; }  // one close path, so the
+    closeSheets();          // bus panel flag is always reset with the menu
+    lineMenu.hidden = false;
+    this.setAttribute("aria-expanded", "true");
+    busBoxSync(true);
   };
   // Hatlar stays "active" (lilac) as long as at least one transit line is on.
   function updateOmurgaActive() {
@@ -2827,9 +2838,22 @@
   }
   document.querySelectorAll("#linemenu .lchip").forEach(b => {
     b.onclick = () => {
+      // First tap on the bus icon only reveals its controls — the trunk lines
+      // are already on by default, so toggling them off would be a surprising
+      // answer to "show me the bus stuff". After that it is the plain on/off
+      // toggle the other four chips are.
+      if (b.dataset.transit === "bus" && !busPanelRevealed && transitState.bus) {
+        busPanelRevealed = true;
+        busBoxSync(!lineMenu.hidden);
+        return;
+      }
       const on = b.getAttribute("aria-pressed") !== "true";
       b.setAttribute("aria-pressed", on);
       transitState[b.dataset.transit] = on;
+      if (b.dataset.transit === "bus") {
+        busPanelRevealed = on;          // buses off -> no bus controls either
+        busBoxSync(!lineMenu.hidden);
+      }
       applyTransitFilter();
       updateOmurgaActive();
     };
@@ -2922,6 +2946,7 @@
     if (lineMenu.hidden) return;
     lineMenu.hidden = true;
     document.getElementById("chip-omurga").setAttribute("aria-expanded", "false");
+    busPanelRevealed = false;   // next opening starts clean again
     busBoxSync(false);
   }
   document.addEventListener("click", e => {

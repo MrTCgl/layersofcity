@@ -46,8 +46,10 @@ varsa kullanıcıya sor:
   detayı zoom'la kademeli artar (ilçe→mahalle→sokak→bina adları).
   Haritada uzun basma → yer kartı. Ayrıntı: `docs/TASARIM.md`.
 - **Otobüs hattı okuma (2026-09-20, önce İzmir).** `city.json`'da
-  `"buslines": true` olan şehirde Hatlar menüsünün altında bir **hat no
-  kutusu** çıkar: numara/ad yazılır, o hat gidiş-dönüş güzergâhıyla çizilir;
+  `"buslines": true` olan şehirde Hatlar menüsündeki **otobüs ikonuna
+  dokununca** altında bir **hat no kutusu** açılır (ikona dokunulmadan
+  görünmez; menü kapanınca gizlenir — ama çizili hat varsa geri gelir, çünkü
+  hattı kaldıran "×" orada): numara/ad yazılır, o hat gidiş-dönüş güzergâhıyla çizilir;
   birkaç hat aynı anda ayrı renklerde durabilir. Çizili hattın durağına
   dokununca kart o durakta duran bütün hatları listeler ve çizdirir —
   **aktarmayı kullanıcı gözüyle kurar, uygulama önermez.** Aynı kutuda

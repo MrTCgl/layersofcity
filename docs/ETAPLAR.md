@@ -2454,3 +2454,43 @@ Durum notu: Tamam. Göz kontrolü beklenen yer: telefonda 7 bölge çipi iki sat
 yayılıyor ve menü açıkken ekranın üstünden epey yer kaplıyor; gerçek cihazda
 rahatsız edici mi. Yayına alınmadı — kullanıcı "canlıya al" derse main'e
 fast-forward.
+
+## Otobüs kutusu — üç düzeltme (açılış, çipler, kalıntı vurgu) ✅ tamam (2026-09-20)
+
+Kullanıcı canlıda kullanıp üç şey bildirdi; üçü de yapıldı.
+
+**1. Bölge çipleri tek satır, yatay kaydırmalı.** Yedi çip iki satıra yayılıp
+telefonda ekranın üstünü yiyordu. Artık `flex-wrap:nowrap` + `overflow-x:auto`,
+kaydırma çubuğu gizli. Kenarda maske/solma **yok**: son çipin kenarda kesilmesi
+zaten "devamı var" diyor, maske harita üzerinde bulanık duruyordu.
+
+**2. Otobüs kutusu artık ikonun arkasında.** Hatlar menüsü açılınca hat no
+kutusu ve "tüm hatlar" doğrudan görünüyordu; metro için gelen birine otobüs
+kontrolleri dayatılıyordu. Yeni kural: kutu yalnız **otobüs ikonuna
+dokununca** çıkar. İkon zaten açık olduğu için ilk dokunuş hatları
+söndürmüyor, sadece kontrolleri açıyor; sonraki dokunuşlar eskisi gibi aç/kapa
+(kapatınca kontroller de gidiyor). Menü kapanınca bayrak sıfırlanıyor.
+**Bilinçli istisna:** çizili hat varsa kutu ikon beklemeden geliyor — hattı
+kaldıran "×" orada yaşıyor ve durak kartından hat ekleyen biri menü kapalıyken
+ekliyor. (Ölçüldü: `cizili hat varken panel acik mi: true`.)
+
+**3. Kalıntı siyah hat.** Aranan hat vurgusu (`busHiRef`) yalnız `input`
+olayında güncelleniyordu; öneriden seçince kutu **kodla** temizleniyor ve o
+olay hiç doğmuyordu. Sonuç: arama bitse de koyu vurgu haritada kalıyor, hat
+kaldırılınca bile siyah katman duruyordu. Kutuyu temizleyen her yol tek bir
+`busInputClear()`'a bağlandı (Enter, → düğmesi, öneri tıklaması); Enter ve →
+zaten birbirinin kopyasıydı, `busSubmit()` altında birleşti.
+
+Yol boyunca çıkan bir hata daha: **Hatlar çipiyle menüyü kapatmak panel
+bayrağını sıfırlamıyordu** (yalnız `closeLineMenu()` sıfırlıyordu, çipin kendi
+işleyicisi `hidden`'ı doğrudan yazıyordu). Kapanış tek yola indirildi.
+
+Bitti sayılır:
+- [x] Bölge çipleri tek satır (ölçüldü: 1 satır, 506 px içerik / 370 px kutu)
+- [x] Hatlar açılınca otobüs kutusu görünmüyor; ikona dokununca çıkıyor
+- [x] Otobüs kapatılınca kontroller de gidiyor; menü kapanıp açılınca yine gizli
+- [x] Arama temizlenince vurgu gidiyor; hat kaldırılınca kalıntı yok (0 parça)
+- [x] Önceki testler (çekirdek, durak kartı, klavye, animasyon, genel bakış) temiz
+- [x] Önbellek sürümleri **20260920-5**
+
+Durum notu: Tamam, yayına alınmadı. Not: 3. madde **canlıda duran** bir kusurdu.
