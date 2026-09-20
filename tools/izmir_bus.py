@@ -53,7 +53,8 @@ SOURCES = {
 # Trunk lines drawn by the Hatlar > bus toggle. Rule (not taste): a line that
 # links two named hubs (aktarma merkezi / metro / İZBAN / iskele / otogar) along
 # a corridor the rail network does not already cover, one line per corridor,
-# picked by weekly trip count. Editorial — see docs/ETAPLAR.md.
+# picked by weekly trip count. Editorial, and approved by the user 2026-09-20 —
+# changing this set needs the same approval (docs/VERI.md, onay süreci).
 TRUNK = ["302", "800", "671", "510", "912", "502", "975", "304", "680", "838", "963", "558"]
 
 SIMPLIFY = 0.00012      # ~12 m: keeps the street the bus actually turns into

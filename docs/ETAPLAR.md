@@ -2339,7 +2339,8 @@ Yapılanlar:
 - **Omurga otobüs hatları:** Hatlar > otobüs ikonu artık boş değil — 12 kilit
   hat (302, 304, 502, 510, 558, 671, 680, 800, 838, 912, 963, 975) omurgaya
   girdi. Seçim ölçütü editoryal, `TRUNK` sabitinde ve VERI.md'de yazılı;
-  **kullanıcı gözden geçirmeli.**
+  **kullanıcı 2026-09-20'de onayladı.** (Yorumsal katman onay süreci —
+  `docs/VERI.md` → "Veri kaynakları ve onay süreci" — tamamlandı.)
 - Otobüs ikonu bütün otobüs çizimini yönetiyor (omurga + çizilen hatlar).
   Menü kapanınca çizili hatlar küçük bir künye olarak kalıyor ki kaldırılabilsin.
 - ESHOT/İzmir Açık Veri atfı harita attribution kutusuna eklendi (lisans şartı);
@@ -2366,9 +2367,8 @@ Bitti sayılır:
 - [x] Konsol temiz (telefon 420 px + masaüstü 1280 px, iki tema)
 - [x] Önbellek sürümleri **20260920-1**
 
-Durum notu: Tamam. Kullanıcıdan beklenen iki şey: (1) 12 omurga hattının
-seçimini onaylaması, (2) gerçek telefonda hat no kutusunun klavye açıkken
-kullanışlı olup olmadığını denemesi. Ayrıca bu oturumda fark edilen ve
-**dokunulmayan** eski kusur: 420 px genişlikte Hatlar menüsündeki 5 ikon
-ekrana sığmıyor (sağdaki vapur çipi kenara dayanıyor) — otobüs işiyle ilgisi
-yok, İstanbul'da da aynı.
+Durum notu: Tamam, omurga hattı seçimi onaylandı (2026-09-20). Kalan tek göz
+kontrolü: gerçek telefonda hat no kutusunun klavye açıkken kullanışlı olup
+olmadığı. Ayrıca bu oturumda fark edilen ve **dokunulmayan** eski kusur:
+420 px genişlikte Hatlar menüsündeki 5 ikon ekrana sığmıyor (sağdaki vapur
+çipi kenara dayanıyor) — otobüs işiyle ilgisi yok, İstanbul'da da aynı.
