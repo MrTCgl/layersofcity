@@ -82,6 +82,7 @@
   "bus.remove": "{0} hattını kaldır",
   "bus.unknown": "{0} diye bir hat yok",
   "bus.outside": "{0} bu haritanın dışında kalıyor",
+  "bus.all": "tüm hatlar",
   "bookmark.edit": "not ekle",
   "bookmark.placeholder": "Bu yer için bir not yaz…",
   "bookmark.save": "Kaydet",

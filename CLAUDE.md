@@ -50,8 +50,13 @@ varsa kullanıcıya sor:
   kutusu** çıkar: numara/ad yazılır, o hat gidiş-dönüş güzergâhıyla çizilir;
   birkaç hat aynı anda ayrı renklerde durabilir. Çizili hattın durağına
   dokununca kart o durakta duran bütün hatları listeler ve çizdirir —
-  **aktarmayı kullanıcı gözüyle kurar, uygulama önermez.** Veri operatörün
-  açık verisinden gelir (İzmir'de ESHOT); ayrıntı `docs/VERI.md`.
+  **aktarmayı kullanıcı gözüyle kurar, uygulama önermez.** Aynı kutuda
+  **tüm hatlar** anahtarı var: bütün ağ birden, geldiği **bölgeye göre renkli**
+  (kuzey/doğu/güneydoğu/güney/güneybatı/batı/merkez). Bölge çipine dokununca
+  gerisi soluyor ve o bölgenin her hattının numarası haritada çıkar; arama
+  kutusuna yazılan hat ağın içinde kalın ve tema kontrastıyla öne çıkar.
+  Veri operatörün açık verisinden gelir (İzmir'de ESHOT); ayrıntı
+  `docs/VERI.md`.
 - **Yol tarifi uygulama içinde çözülmez.** (2026-09-20'de yeniden onaylandı:
   kullanıcı iki nokta arası otobüs/aktarma arayan bir araç istedi, sonra
   istemediğine karar verdi. Uygulama **rota aramaz, aktarma önermez**; hatları

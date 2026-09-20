@@ -2401,3 +2401,56 @@ iPhone'da 0.25 s'lik kırpma geçişinin klavye animasyonuyla uyumu. Ayrıca bu 
 **dokunulmayan** eski kusur: 420 px genişlikte Hatlar menüsündeki 5 ikon
 ekrana sığmıyor (sağdaki vapur çipi kenara dayanıyor) — otobüs işiyle ilgisi
 yok, İstanbul'da da aynı.
+
+## İzmir otobüs — genel bakış katmanı (bölge renkli ağ) ✅ tamam (2026-09-20)
+
+Kullanıcı isteği: bütün hatları grup grup görmek; bölgeye göre renk, bölgeye
+dokununca gerisi sönsün ve o bölgenin hat numaraları haritada çıksın; arama
+kutusuna yazılan hat daha kalın ve belirgin renkte, iki temada da.
+
+Önce grup tanımı ölçüldü. **Numara serisi elendi:** 0xx–5xx serilerinin
+coğrafi merkezleri birbirinden 2 km içinde (hepsi iç şehir, iç içe), 6xx–9xx'in
+yayılımı 20-40 km. ESHOT numarası garaj kodu, harita değil. **Bölge tutuyor:**
+hattın dış ucu → OSM ilçe poligonu → pusula bölgesi; 363 hattın 363'ü yerleşti.
+
+Yapılanlar:
+- `tools/izmir_bus.py` → `data/izmir/bus/overview.geojson` (363 hat, tek yön,
+  ~30 m, `{ref, region}`, **298 KB**) + `index.json`'a `regions` (id, nameKey, n).
+  İlçe poligonları Overpass'tan (`tools/ovp.py` ile, önbellekli).
+- Harita: `busall-line` (bölge rengi, 0.5 opaklık) · `busall-ref` (hat numarası,
+  yalnız seçili bölgede + aranan hatta) · `busall-hi-case` + `busall-hi`
+  (aranan hat: yüzey renginde kılıf + `BUS_HI` — açık temada `#241F2C`, koyuda
+  `#FFFFFF`). Çizilen hatların katmanları bunların **üstünde** kalıyor.
+- Bölge seçilince o bölge 0.9 opaklık/kalın, gerisi 0.07 — sönüyor ama silinmiyor
+  (bölge, boş harita yerine ağın içinde okunsun). İkinci dokunuş seçimi kaldırıyor.
+- Arama kutusuna yazmak **önizleme**: tam eşleşen (ya da tek adaya inen) hat
+  ağın içinde vurgulanıyor; Enter hâlâ hattı normal şekilde çiziyor.
+- Tema değişiminde bölge renkleri, vurgu rengi ve çipler yeniden renkleniyor;
+  seçim ve vurgu korunuyor (ölçüldü).
+
+Yol boyunca çıkan ve düzeltilen gerçek hatalar:
+- **Kendini yeniden çizen çipe basınca menü kapanıyordu.** Çip `innerHTML` ile
+  yeniden üretilirken DOM'dan düşüyor, sonra genel "dışarı tıklandı" denetimi
+  `closest()` ile hangi menüden geldiğini göremiyor ve kutuyu kapatıyordu.
+  Bölge çipleri, çizili hat çipleri ve durak kartının hat çipleri — üçü de
+  etkileniyordu. Denetime "DOM'dan düşmüş hedef dışarı tıklama değildir"
+  koşulu eklendi.
+- **Kutu telefonda ekranın 44 px sağına taşıyordu.** Sebep: `#topchips` mobilde
+  **bilerek** sağa sabitli (şehir çubuğunun yanına, ikinci satır) — kusur değil,
+  tasarım. Kutu artık mobilde çipe değil ekrana hizalanıyor (10 px kenar boşluğu
+  ile tam genişlik). Böylece daha önce "eski kusur" diye not düştüğüm şeyin
+  aslında kasıtlı bir karar olduğu da anlaşıldı.
+
+Bitti sayılır:
+- [x] Tüm hatlar tek katmanda, bölgeye göre renkli
+- [x] Bölge çipi: gerisi soluyor, o bölge geliyor
+- [x] Bölge seçiliyken her hattın numarası haritada
+- [x] Aranan hat kalın + belirgin, açık ve koyu temada ayrı renkle
+- [x] Otobüs ikonu genel bakışı da yönetiyor; şehirden çıkınca sıfırlanıyor
+- [x] Telefon (390 px) ve masaüstü (1280 px), iki tema, konsol temiz
+- [x] Önbellek sürümleri **20260920-4**
+
+Durum notu: Tamam. Göz kontrolü beklenen yer: telefonda 7 bölge çipi iki satıra
+yayılıyor ve menü açıkken ekranın üstünden epey yer kaplıyor; gerçek cihazda
+rahatsız edici mi. Yayına alınmadı — kullanıcı "canlıya al" derse main'e
+fast-forward.

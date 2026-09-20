@@ -4,5 +4,12 @@
   "arr.alsancakgar.sub": "İZBAN extremo sur · tranvía a Konak",
   "arr.otogar.sub": "autobuses interurbanos · ESHOT al centro",
   "hub.halkapinar": "M1 · İZBAN · T2 tranvía intercambio",
-  "hub.konak": "M1 · T2 tranvía · ferry"
+  "hub.konak": "M1 · T2 tranvía · ferry",
+  "izm.reg.kuzey": "Norte",
+  "izm.reg.dogu": "Este",
+  "izm.reg.guneydogu": "Sureste",
+  "izm.reg.guney": "Sur",
+  "izm.reg.guneybati": "Suroeste",
+  "izm.reg.bati": "Oeste",
+  "izm.reg.merkez": "Centro"
 }

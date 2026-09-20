@@ -950,7 +950,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260920-3"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260920-4"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -1760,6 +1760,19 @@
   // palette (docs/TASARIM.md) but far enough apart that two lines crossing can
   // be told apart at a glance — that reading is the whole point of the box.
   const BUS_PICK_COLORS = ["#A67C42", "#3D69A8", "#B34F39", "#4F8A5F", "#7C5FB0", "#2F7F8C"];
+  // Whole-network view: one hue per region, so the map reads as geography
+  // rather than as 363 strands. Grouping by line number was measured and does
+  // not work — the 0xx-5xx series all sit on top of each other (docs/VERI.md).
+  // Same hues in both themes, lifted in the dark one to hold against it.
+  const REGION_COLORS = {
+    light: { kuzey: "#3D69A8", dogu: "#4F8A5F", guneydogu: "#7C5FB0", guney: "#2F7F8C",
+             guneybati: "#B34F39", bati: "#A67C42", merkez: "#6F6390" },
+    dark:  { kuzey: "#6E9AD6", dogu: "#79B98A", guneydogu: "#A88FD8", guney: "#57AEBC",
+             guneybati: "#D77E68", bati: "#CBA169", merkez: "#9A8EBE" }
+  };
+  // The searched line has to win against every region hue at once, so it is
+  // drawn in the theme's strongest neutral over a casing of the surface colour.
+  const BUS_HI = { light: "#241F2C", dark: "#FFFFFF" };
   // İzmir Metropolitan Municipality Open Data License requires the credit; it
   // rides in the map's own attribution control next to the basemap's.
   const BUS_ATTR = '<a href="https://acikveri.bizizmir.com/" target="_blank" rel="noopener">ESHOT · İzmir Açık Veri</a>';
@@ -2002,6 +2015,7 @@
     applyBolgeVisibility();
     addOverlayExtras();
     addBusPickLayers();  // user-drawn bus lines survive a theme/style reload
+    renderBusRegions();  // region chips carry theme colours, so restyle them too
     applyBookmarks();   // re-add saved markers on top after a theme/style reload
   }
 
@@ -2134,6 +2148,9 @@
     if (bmPopup) { bmPopup.remove(); bmPopup = null; }
     pcPoint = null;
     busIndex = null; busPicked.clear();
+    busAllData = null; busAllOn = false; busRegion = null; busHiRef = null;
+    busAllTog.setAttribute("aria-pressed", "false");
+    busRegions.hidden = true; busRegions.innerHTML = "";
     busBox.hidden = true; busSug.hidden = true; busNote.hidden = true;
     busInput.value = ""; busDrawn.innerHTML = "";
     closeBookmarkEditor();
@@ -2221,8 +2238,12 @@
      Deliberately NOT a journey planner: nothing here searches for a route or
      proposes a transfer (CLAUDE.md — yol tarifi uygulama içinde çözülmez). The
      app puts the lines on the map; the reader decides where to change. */
-  let busIndex = null;                 // { lines: [[no, name]], outside: [...] }
+  let busIndex = null;                 // { lines: [[no, name]], outside, regions }
   const busPicked = new Map();         // line no -> { color, features }
+  let busAllData = null;               // overview.geojson, fetched on first use
+  let busAllOn = false;                // whole-network view showing?
+  let busRegion = null;                // region chip selected -> the rest dims
+  let busHiRef = null;                 // line typed in the box -> drawn bold
   const busBox = document.getElementById("busbox");
   const busInput = document.getElementById("businput");
   const busSug = document.getElementById("bussug");
@@ -2258,12 +2279,88 @@
 
   // Re-added on every style.load (theme change) alongside the city layers, then
   // re-seeded from busPicked so a theme switch never drops a drawn line.
+  function busAllFC() {
+    return busAllData || { type: "FeatureCollection", features: [] };
+  }
+  const regionColorExpr = () => ["match", ["get", "region"],
+    ...Object.entries(REGION_COLORS[theme]).flat(), PALETTE[theme].inkSoft];
+
+  // Whole-network layers. Added before the picked-line ones so a line the user
+  // drew on purpose always sits on top of the background network.
+  function addBusAllLayers() {
+    const pal = PALETTE[theme];
+    ["busall-line", "busall-hi-case", "busall-hi", "busall-ref"].forEach(id => {
+      if (map.getLayer(id)) map.removeLayer(id);
+    });
+    if (map.getSource("busall")) map.removeSource("busall");
+    map.addSource("busall", { type: "geojson", data: busAllFC(), attribution: BUS_ATTR });
+    map.addLayer({ id: "busall-line", type: "line", source: "busall",
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": regionColorExpr(),
+        "line-width": ["interpolate", ["linear"], ["zoom"], 10, 0.9, 14, 1.7, 17, 3],
+        "line-opacity": 0.5 } });
+    // casing first, so the searched line stays readable over any region hue
+    map.addLayer({ id: "busall-hi-case", type: "line", source: "busall",
+      filter: ["==", ["get", "ref"], "\u0000"],
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": pal.surface,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 10, 5.5, 14, 7.5, 17, 10] } });
+    map.addLayer({ id: "busall-hi", type: "line", source: "busall",
+      filter: ["==", ["get", "ref"], "\u0000"],
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": BUS_HI[theme],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 10, 2.6, 14, 4, 17, 5.6] } });
+    // numbers along every line of the chosen region (and the searched one)
+    map.addLayer({ id: "busall-ref", type: "symbol", source: "busall",
+      filter: ["==", ["get", "ref"], "\u0000"],
+      layout: { "symbol-placement": "line", "symbol-spacing": 190,
+        "text-field": ["get", "ref"], "text-font": ["Noto Sans Regular"],
+        "text-size": 10.5, "text-keep-upright": true, "text-optional": true },
+      paint: { "text-color": "#ffffff",
+        "text-halo-color": ["case", ["==", ["get", "ref"], ["literal", ""]], pal.ink,
+          regionColorExpr()],
+        "text-halo-width": 2.2 } });
+    applyBusAllState();
+  }
+
+  // Re-derives every filter and opacity from (on, region, highlighted line).
+  function applyBusAllState() {
+    if (!map || !map.getLayer("busall-line")) return;
+    const show = busAllOn && transitState.bus ? "visible" : "none";
+    ["busall-line", "busall-hi-case", "busall-hi", "busall-ref"]
+      .forEach(id => map.getLayer(id) && map.setLayoutProperty(id, "visibility", show));
+    if (show === "none") return;
+    // a chosen region keeps its lines; the rest stay as a faint backdrop so the
+    // region is read against the whole network, not against an empty map
+    map.setPaintProperty("busall-line", "line-opacity", busRegion
+      ? ["case", ["==", ["get", "region"], busRegion], 0.9, 0.07]
+      : 0.5);
+    map.setPaintProperty("busall-line", "line-width", busRegion
+      ? ["interpolate", ["linear"], ["zoom"], 10,
+          ["case", ["==", ["get", "region"], busRegion], 1.3, 0.8], 14,
+          ["case", ["==", ["get", "region"], busRegion], 2.4, 1.4], 17,
+          ["case", ["==", ["get", "region"], busRegion], 3.6, 2.2]]
+      : ["interpolate", ["linear"], ["zoom"], 10, 0.9, 14, 1.7, 17, 3]);
+    const hi = busHiRef || "\u0000";
+    ["busall-hi-case", "busall-hi"].forEach(id =>
+      map.setFilter(id, ["==", ["get", "ref"], hi]));
+    map.setFilter("busall-ref", busRegion
+      ? ["any", ["==", ["get", "region"], busRegion], ["==", ["get", "ref"], hi]]
+      : ["==", ["get", "ref"], hi]);
+    // the searched line's number rides on the highlight colour, not its region's
+    map.setPaintProperty("busall-ref", "text-halo-color",
+      ["case", ["==", ["get", "ref"], hi], BUS_HI[theme], regionColorExpr()]);
+    map.setPaintProperty("busall-ref", "text-color",
+      ["case", ["==", ["get", "ref"], hi], PALETTE[theme].surface, "#ffffff"]);
+  }
+
   function addBusPickLayers() {
     if (!map) return;
     const pal = PALETTE[theme];
     // Only a city that ships bus/ gets these layers, so no other city is
     // credited to ESHOT in the map's attribution.
     if (!busAvailable()) return;
+    addBusAllLayers();
     ["buspick-line", "buspick-ref", "buspick-stop", "buspick-stop-label"].forEach(id => {
       if (map.getLayer(id)) map.removeLayer(id);
     });
@@ -2317,6 +2414,7 @@
     ["buspick-line", "buspick-ref", "buspick-stop", "buspick-stop-label"].forEach(id => {
       if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", vis);
     });
+    applyBusAllState();
   }
 
   function busNoteShow(key, arg) {
@@ -2491,7 +2589,8 @@
   // a fresh list of suggestions has to be re-capped against the same room
   const busFitAfterRender = () => { if (busBox.classList.contains("kbd") || busSug.style.maxHeight) busKeyboardFit(); };
 
-  busInput.addEventListener("input", () => renderBusSuggestions().then(busFitAfterRender));
+  busInput.addEventListener("input", () =>
+    renderBusSuggestions().then(() => { busFitAfterRender(); setBusHighlight(); }));
   busInput.addEventListener("keydown", e => {
     if (e.key !== "Enter") return;
     const first = busSug.hidden ? null : busSug.querySelector("button");
@@ -2512,6 +2611,81 @@
   // With the Hatlar menu open this is the full box. With it closed but lines
   // still drawn it stays as a bare legend of those lines — tapping a stop
   // closes the menu, and the reader still needs a way to take a line off.
+  /* whole-network view: the toggle, the region chips, and the searched line */
+  const busAllTog = document.getElementById("busalltog");
+  const busRegions = document.getElementById("busregions");
+
+  async function loadBusAll() {
+    if (busAllData) return busAllData;
+    try {
+      const res = await fetch(`data/${loadedCityId}/bus/overview.geojson?v=${BM_VER}`);
+      if (res.ok) busAllData = await res.json();
+    } catch { busAllData = null; }
+    return busAllData;
+  }
+
+  function renderBusRegions() {
+    busRegions.innerHTML = "";
+    const regions = (busIndex && busIndex.regions) || [];
+    busRegions.hidden = !busAllOn || !regions.length;
+    if (busRegions.hidden) return;
+    regions.forEach(r => {
+      const on = busRegion === r.id;
+      const color = REGION_COLORS[theme][r.id] || PALETTE[theme].inkSoft;
+      const b = document.createElement("button");
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      if (on) b.style.background = color;
+      b.title = r.n + " · " + t(r.nameKey);
+      const dot = document.createElement("span");
+      dot.className = "rdot";
+      dot.style.background = color;
+      b.appendChild(dot);
+      b.appendChild(document.createTextNode(t(r.nameKey)));
+      // second tap clears the choice: back to the whole network
+      b.onclick = () => { busRegion = on ? null : r.id; renderBusRegions(); applyBusAllState(); };
+      busRegions.appendChild(b);
+    });
+  }
+
+  async function setBusAll(on) {
+    busAllOn = on;
+    busAllTog.setAttribute("aria-pressed", on ? "true" : "false");
+    if (on) {
+      await Promise.all([loadBusIndex(), loadBusAll()]);
+      if (!transitState.bus) {          // otherwise the network draws invisibly
+        transitState.bus = true;
+        const chip = document.querySelector('#linemenu .lchip[data-transit="bus"]');
+        if (chip) chip.setAttribute("aria-pressed", "true");
+        applyTransitFilter();
+        updateOmurgaActive();
+      }
+      const src = map && map.getSource("busall");
+      if (src) src.setData(busAllFC());
+    } else {
+      busRegion = null;
+    }
+    renderBusRegions();
+    applyBusAllState();
+  }
+  busAllTog.onclick = () => setBusAll(!busAllOn);
+
+  // Typing a line number lights that line up inside the network view. It is a
+  // preview, not a choice: Enter still draws the line properly.
+  function setBusHighlight() {
+    const q = busInput.value.trim().toUpperCase();
+    let ref = null;
+    if (q && busIndex) {
+      if (busIndex.lines.some(l => l[0] === q)) ref = q;
+      else {
+        const starts = busIndex.lines.filter(l => l[0].startsWith(q));
+        if (starts.length === 1) ref = starts[0][0];   // narrowed to one
+      }
+    }
+    if (ref === busHiRef) return;
+    busHiRef = ref;
+    applyBusAllState();
+  }
+
   function busBoxSync(open) {
     const full = !!(open && busAvailable());
     busBox.hidden = !full && !busPicked.size;
@@ -2751,6 +2925,12 @@
     busBoxSync(false);
   }
   document.addEventListener("click", e => {
+    // A control that re-renders itself on click (region chips, drawn-line
+    // chips, the stop card's line chips) is already detached by the time this
+    // runs, so closest() can no longer see which menu it came from and the
+    // menu would close under the user's finger. A detached target is never an
+    // outside click.
+    if (!document.contains(e.target)) return;
     if (e.target.closest("#sheet-kesfet, #sheet-ihtiyac, #linemenu, #busbox, #drawer, #infocard, #basemapmenu, #coordbox, #langmenu")) return; // inside a menu
     if (e.target.closest("#bb-kesfet, #bb-ihtiyac, #chip-omurga, #drawertab, #citybar, #basemapbtn, #coordbtn, #langbtn")) return; // a trigger toggles itself
     closeSheets();

@@ -11,6 +11,9 @@ What it writes:
   data/izmir/bus/index.json     every line: number + name, for the line box
   data/izmir/bus/<no>.geojson   one line: both directions + its stops, each
                                 stop listing every line that calls there
+  data/izmir/bus/overview.geojson
+                                every line once, coarse, tagged with the region
+                                it comes from — the whole-network view
   data/izmir/layers/omurga.geojson
                                 the trunk lines (TRUNK below) as lineRef "bus",
                                 so the Hatlar > bus toggle is not empty
@@ -36,7 +39,11 @@ import sys
 import urllib.request
 import zipfile
 
-from shapely.geometry import LineString
+from shapely.geometry import LineString, Point
+from shapely.ops import polygonize, unary_union
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ovp  # noqa: E402  (shared Overpass helper: mirrors, md5 cache)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE = os.path.join(ROOT, "ovpcache", "eshot")
@@ -56,6 +63,25 @@ SOURCES = {
 # picked by weekly trip count. Editorial, and approved by the user 2026-09-20 —
 # changing this set needs the same approval (docs/VERI.md, onay süreci).
 TRUNK = ["302", "800", "671", "510", "912", "502", "975", "304", "680", "838", "963", "558"]
+
+# Regions for the whole-network view. A line belongs to the region its OUTER
+# terminal sits in — the end away from the centre, i.e. where the line comes
+# from. Grouping by line number was measured and thrown out: the 0xx-5xx series
+# all centre within 2 km of each other, so the numbers say nothing about place.
+# District -> region is editorial (compass sectors around Konak); the districts
+# themselves are real OSM admin_level=6 polygons.
+CENTRE = (27.129, 38.422)               # Konak, the point "outer" is measured from
+REGIONS = {
+    "kuzey":     ["Karşıyaka", "Çiğli", "Bayraklı", "Menemen", "Aliağa", "Foça"],
+    "dogu":      ["Bornova", "Kemalpaşa"],
+    "guneydogu": ["Buca", "Torbalı", "Bayındır"],
+    "guney":     ["Gaziemir", "Menderes"],
+    "guneybati": ["Karabağlar", "Balçova", "Narlıdere", "Güzelbahçe"],
+    "bati":      ["Urla", "Seferihisar"],
+    "merkez":    ["Konak"],
+}
+REGION_ORDER = ["kuzey", "dogu", "guneydogu", "guney", "guneybati", "bati", "merkez"]
+OVERVIEW_SIMPLIFY = 0.0003   # ~30 m: the overview is read as shape, not as street
 
 SIMPLIFY = 0.00012      # ~12 m: keeps the street the bus actually turns into
 ROUND = 5
@@ -250,6 +276,48 @@ def midpoint(parts):
     return flat[len(flat) // 2]
 
 
+def district_shapes():
+    """OSM ilçe (admin_level=6) polygons around İzmir, keyed by name."""
+    (w, s_), (e, n) = BOUNDS
+    query = (f"[out:json][timeout:250];"
+             f'relation["boundary"="administrative"]["admin_level"="6"]'
+             f"({s_ - 0.1},{w - 0.2},{n + 0.2},{e + 0.2});out body;way(r);out geom;")
+    body = ovp.fetch(query, timeout=260)
+    ways = {el["id"]: [(p["lon"], p["lat"]) for p in el["geometry"]]
+            for el in body["elements"] if el["type"] == "way" and el.get("geometry")}
+    out = {}
+    for rel in (el for el in body["elements"] if el["type"] == "relation"):
+        segs = [LineString(ways[m["ref"]]) for m in rel.get("members", [])
+                if m["type"] == "way" and m["ref"] in ways and len(ways[m["ref"]]) > 1]
+        if not segs:
+            continue
+        polys = list(polygonize(unary_union(segs)))
+        if polys:
+            out[rel["tags"].get("name")] = unary_union(polys)
+    return out
+
+
+def region_of(trace, shapes, lookup):
+    """Which region a line belongs to: the district holding its outer terminal.
+
+    A few regional lines (Beydağ, Kiraz) end far east of any district we hold,
+    yet still cross the map window. Colour has to describe where the line is
+    SEEN, so those fall back to the farthest point still inside the window.
+    """
+    candidates = []
+    a, b = trace[0], trace[-1]
+    candidates.append(a if metres(a, CENTRE) > metres(b, CENTRE) else b)
+    inside = [p for p in trace if in_bounds(p)]
+    if inside:
+        candidates.append(max(inside, key=lambda p: metres(p, CENTRE)))
+    for pt in candidates:
+        point = Point(pt)
+        for name, shape in shapes.items():
+            if shape.contains(point):
+                return lookup.get(name)
+    return None
+
+
 def trace_between(trace, a, b):
     """Length of the recorded trace between the two points nearest a and b."""
     i = min(range(len(trace)), key=lambda k: metres(trace[k], a))
@@ -363,10 +431,56 @@ def main():
         written += 1
         index.append([no, names.get(no, "")])
 
+    # --- whole-network overview ------------------------------------------
+    # One coarse strand per line (the outward direction is enough at this
+    # scale), tagged with its region so the map can colour the network by where
+    # each line comes from and dim everything but one region.
+    shapes = district_shapes()
+    lookup = {d: r for r, ds in REGIONS.items() for d in ds}
+    missing = [d for d in lookup if d not in shapes]
+    if missing:
+        print(f"  ! district polygon missing: {missing}", file=sys.stderr)
+    ov, unplaced, per_region = [], [], collections.Counter()
+    for no, _ in index:
+        trace = geo.get((no, "1")) or geo.get((no, "2"))
+        if not trace:
+            continue
+        region = region_of(trace, shapes, lookup)
+        if not region:
+            unplaced.append(no)
+            continue
+        parts = simplify_parts(trace)
+        # the overview is read as shape, so simplify harder than a drawn line
+        coarse = []
+        for part in parts:
+            q = LineString(part).simplify(OVERVIEW_SIMPLIFY, preserve_topology=False)
+            c = [[round(x, ROUND), round(y, ROUND)] for x, y in q.coords]
+            if len(c) > 1:
+                coarse.append(c)
+        if not coarse:
+            continue
+        per_region[region] += 1
+        ov.append({"type": "Feature",
+                   "properties": {"ref": no, "region": region},
+                   "geometry": geometry_of(coarse)})
+    ov_blob = json.dumps({"type": "FeatureCollection", "features": ov},
+                         ensure_ascii=False, separators=(",", ":"))
+    if args.apply:
+        with open(os.path.join(OUT, "overview.geojson"), "w", encoding="utf-8") as fh:
+            fh.write(ov_blob)
+    print(f"overview.geojson {len(ov)} lines, {len(ov_blob.encode()) // 1024} KB"
+          f"  (unplaced: {unplaced})")
+    for r in REGION_ORDER:
+        print(f"    {per_region[r]:>3}  {r}")
+
     idx = {"updated": "2026-09",
            "source": "ESHOT · İzmir Büyükşehir Açık Veri",
            "lines": index,
-           "outside": [[no, names.get(no, "")] for no in skipped]}
+           "outside": [[no, names.get(no, "")] for no in skipped],
+           # nameKey resolves through data/izmir/content/<lang>.json, so the
+           # region chips are translatable without the code knowing the city
+           "regions": [{"id": r, "nameKey": "izm.reg." + r, "n": per_region[r]}
+                       for r in REGION_ORDER if per_region[r]]}
     idx_blob = json.dumps(idx, ensure_ascii=False, separators=(",", ":"))
     if args.apply:
         with open(os.path.join(OUT, "index.json"), "w", encoding="utf-8") as fh:

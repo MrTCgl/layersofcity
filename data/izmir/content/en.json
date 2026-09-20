@@ -4,5 +4,12 @@
   "arr.alsancakgar.sub": "İZBAN south end · tram to Konak",
   "arr.otogar.sub": "intercity buses · ESHOT to center",
   "hub.halkapinar": "M1 · İZBAN · T2 tram interchange",
-  "hub.konak": "M1 · T2 tram · ferry"
+  "hub.konak": "M1 · T2 tram · ferry",
+  "izm.reg.kuzey": "North",
+  "izm.reg.dogu": "East",
+  "izm.reg.guneydogu": "Southeast",
+  "izm.reg.guney": "South",
+  "izm.reg.guneybati": "Southwest",
+  "izm.reg.bati": "West",
+  "izm.reg.merkez": "Centre"
 }

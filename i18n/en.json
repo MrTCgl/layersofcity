@@ -82,6 +82,7 @@
   "bus.remove": "remove line {0}",
   "bus.unknown": "no line {0}",
   "bus.outside": "line {0} runs outside this map",
+  "bus.all": "all lines",
   "bookmark.edit": "add note",
   "bookmark.placeholder": "Write a note for this place…",
   "bookmark.save": "Save",

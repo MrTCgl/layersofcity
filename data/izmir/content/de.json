@@ -4,5 +4,12 @@
   "arr.alsancakgar.sub": "İZBAN Südende · Tram nach Konak",
   "arr.otogar.sub": "Fernbusse · ESHOT ins Zentrum",
   "hub.halkapinar": "M1 · İZBAN · T2 Tram Umstieg",
-  "hub.konak": "M1 · T2 Tram · Fähre"
+  "hub.konak": "M1 · T2 Tram · Fähre",
+  "izm.reg.kuzey": "Nord",
+  "izm.reg.dogu": "Ost",
+  "izm.reg.guneydogu": "Südost",
+  "izm.reg.guney": "Süd",
+  "izm.reg.guneybati": "Südwest",
+  "izm.reg.bati": "West",
+  "izm.reg.merkez": "Zentrum"
 }

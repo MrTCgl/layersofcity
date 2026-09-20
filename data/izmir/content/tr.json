@@ -4,5 +4,12 @@
   "arr.alsancakgar.sub": "İZBAN güney ucu · Konak'a tramvay",
   "arr.otogar.sub": "şehirlerarası · ESHOT ile merkez",
   "hub.halkapinar": "M1 · İZBAN · T2 tramvay aktarma",
-  "hub.konak": "M1 · T2 tramvay · vapur"
+  "hub.konak": "M1 · T2 tramvay · vapur",
+  "izm.reg.kuzey": "Kuzey",
+  "izm.reg.dogu": "Doğu",
+  "izm.reg.guneydogu": "Güneydoğu",
+  "izm.reg.guney": "Güney",
+  "izm.reg.guneybati": "Güneybatı",
+  "izm.reg.bati": "Batı",
+  "izm.reg.merkez": "Merkez"
 }

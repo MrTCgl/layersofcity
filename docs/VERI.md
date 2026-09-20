@@ -274,6 +274,9 @@ data/<sehir>/bus/
 - Durak feature'ı: `{ id, kind:"busstop", ref, name, lines:[...] }` —
   `lines` o durakta duran **diğer** hatlar. Aktarma bilgisi budur; kullanıcı
   durağa dokunup gözüyle karar verir (aşağı bak).
+- `overview.geojson`: **genel bakış** — her hat bir kez (tek yön yeter),
+  ~30 m'ye sadeleştirilmiş, `{ ref, region }`. 363 hat = 298 KB. Ayrı dosya,
+  yalnız "tüm hatlar" açılınca yükleniyor.
 - `index.json` → `lines` haritada gösterilebilen hatlar; `outside` güzergâhı
   tamamen şehrin `maxBounds`'u dışında kalan hatlar (Tire, Torbalı, Ödemiş,
   Bayındır, Kemalpaşa — İzmir'de 82 hat). Arama kutusu "hat yok" yerine
@@ -292,6 +295,20 @@ sürdüğü güzergâh olduğu için araç her uzun düzlüğü kaydın kendisiy
 (`audit_trunk`): oran ~1.0 ise düzlük gerçektir. İzmir omurga setinde iki
 düzlük var — 800'ün Bornova yaklaşımı (1.05) ve 975'in Urla sahil yolu (1.00);
 ikisi de gerçek, **onarılmamalı**.
+
+**Bölgeler (genel bakış rengi).** Hat, **dış ucunun** (merkeze uzak uç)
+düştüğü ilçeye, o ilçe de bir bölgeye bağlanır. Numara serisine göre gruplama
+**ölçüldü ve elendi**: 0xx–5xx serilerinin coğrafi merkezleri birbirinden 2 km
+içinde, 6xx–9xx'in yayılımı 20-40 km — ESHOT numarası garaj kodu, yer bildirmiyor.
+İlçeler gerçek OSM `admin_level=6` poligonları (Overpass, `tools/ovp.py`);
+ilçe→bölge eşlemesi editoryal (`REGIONS`, Konak çevresinde pusula dilimleri):
+kuzey 114 · doğu 66 · güneydoğu 57 · güneybatı 58 · güney 36 · batı 16 ·
+merkez 16. Birkaç bölgesel hat (Beydağ, Kiraz) dış ucu poligonların doğusunda
+kaldığı için pencere içindeki **en uzak noktasına** göre yerleşir — renk,
+hattın haritada *görüldüğü* yeri anlatmalı. Bölge adları çevrilebilir olsun
+diye `index.json` her bölgeye `nameKey` yazar
+(`data/izmir/content/<dil>.json` → `izm.reg.*`); renk koda aittir
+(`REGION_COLORS`, iki tema).
 
 **Omurga otobüs hatları:** `TRUNK` sabiti (izmir_bus.py) — iki adlandırılmış
 aktarma noktasını (aktarma merkezi / metro / İZBAN / iskele / otogar), raylı
