@@ -83,6 +83,7 @@
   "bus.unknown": "keine Linie {0}",
   "bus.outside": "Linie {0} liegt außerhalb dieser Karte",
   "bus.all": "alle Linien",
+  "bus.more": "weitere Regionen",
   "bookmark.edit": "Notiz hinzufügen",
   "bookmark.placeholder": "Schreib eine Notiz zu diesem Ort…",
   "bookmark.save": "Speichern",

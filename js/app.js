@@ -950,7 +950,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260920-5"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260920-6"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -2151,7 +2151,7 @@
     busAllData = null; busAllOn = false; busRegion = null; busHiRef = null;
     busPanelRevealed = false;
     busAllTog.setAttribute("aria-pressed", "false");
-    busRegions.hidden = true; busRegions.innerHTML = "";
+    busRegionWrap.hidden = true; busRegions.innerHTML = ""; busMore.hidden = true;
     busBox.hidden = true; busSug.hidden = true; busNote.hidden = true;
     busInput.value = ""; busSug.hidden = true; busDrawn.innerHTML = "";
     closeBookmarkEditor();
@@ -2625,6 +2625,23 @@
   /* whole-network view: the toggle, the region chips, and the searched line */
   const busAllTog = document.getElementById("busalltog");
   const busRegions = document.getElementById("busregions");
+  const busRegionWrap = document.getElementById("busregionwrap");
+  const busMore = document.getElementById("busmore");
+
+  // The chevron is the only thing telling you the row scrolls, so it has to be
+  // honest: it shows exactly while there is row left to the right.
+  function updateRegionArrow() {
+    if (busRegionWrap.hidden) { busMore.hidden = true; return; }
+    busMore.hidden =
+      busRegions.scrollLeft + busRegions.clientWidth >= busRegions.scrollWidth - 2;
+  }
+  busRegions.addEventListener("scroll", updateRegionArrow, { passive: true });
+  window.addEventListener("resize", updateRegionArrow);
+  busMore.onclick = () => {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    busRegions.scrollBy({ left: Math.round(busRegions.clientWidth * 0.7),
+                          behavior: reduce ? "auto" : "smooth" });
+  };
 
   async function loadBusAll() {
     if (busAllData) return busAllData;
@@ -2638,8 +2655,8 @@
   function renderBusRegions() {
     busRegions.innerHTML = "";
     const regions = (busIndex && busIndex.regions) || [];
-    busRegions.hidden = !busAllOn || !regions.length;
-    if (busRegions.hidden) return;
+    busRegionWrap.hidden = !busAllOn || !regions.length;
+    if (busRegionWrap.hidden) { updateRegionArrow(); return; }
     regions.forEach(r => {
       const on = busRegion === r.id;
       const color = REGION_COLORS[theme][r.id] || PALETTE[theme].inkSoft;
@@ -2656,6 +2673,8 @@
       b.onclick = () => { busRegion = on ? null : r.id; renderBusRegions(); applyBusAllState(); };
       busRegions.appendChild(b);
     });
+    // measure after the chips are laid out, not before
+    requestAnimationFrame(updateRegionArrow);
   }
 
   async function setBusAll(on) {

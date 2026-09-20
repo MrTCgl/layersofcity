@@ -327,10 +327,23 @@ body.city #topchips{display:flex}
   display:flex; flex-wrap:nowrap; gap:4px; max-width:100%;
   overflow-x:auto; overflow-y:hidden; scrollbar-width:none;
   -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain;
-  padding:2px 2px 4px; scroll-padding-inline:2px;
+  /* right padding leaves the last chip clear of the scroll hint */
+  padding:2px 24px 4px 2px; scroll-padding-inline:2px 24px;
 }
 .busregions::-webkit-scrollbar{display:none}
-.busregions[hidden]{display:none}
+.busregionwrap{position:relative; display:flex; max-width:100%; min-width:0}
+.busregionwrap[hidden]{display:none}
+/* the scroll hint: sits over the right edge of the row and disappears once the
+   row is scrolled to its end, so it never claims there is more than there is */
+.busmore{
+  position:absolute; right:0; top:50%; transform:translateY(-50%);
+  width:20px; height:20px; border-radius:999px; display:grid; place-items:center;
+  background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
+  color:var(--ink-soft);
+}
+.busmore[hidden]{display:none}
+.busmore:hover{color:var(--lilac)}
+.busmore:active{transform:translateY(-50%) scale(.92)}
 .busregions button{
   padding:3px 9px; border-radius:999px; font-size:11.5px; flex:none; white-space:nowrap;
   background:color-mix(in srgb, var(--surface) 88%, transparent);

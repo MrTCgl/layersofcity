@@ -2493,4 +2493,12 @@ Bitti sayılır:
 - [x] Önceki testler (çekirdek, durak kartı, klavye, animasyon, genel bakış) temiz
 - [x] Önbellek sürümleri **20260920-5**
 
-Durum notu: Tamam, yayına alınmadı. Not: 3. madde **canlıda duran** bir kusurdu.
+**Ek: kaydırma oku (2026-09-20).** Tek satır çipler kaydırılabilir olduğunu
+yalnız kesik çiple belli ediyordu; sağa küçük bir chevron eklendi. Süs değil,
+dürüst: **yalnız sağda kalan satır varken** görünüyor, sona gelince kayboluyor
+(ölçüldü: telefon 0/158 → 158/158'de gizleniyor, geri kaydırınca dönüyor).
+Dokununca satırın %70'i kadar kaydırıyor; `prefers-reduced-motion` altında
+yumuşak kaydırma kapalı. Satıra 24 px sağ boşluk verildi ki sondaki çip okun
+altında kalmasın (sonda "Merkez" tam görünüyor).
+
+Durum notu: Tamam. Not: 3. madde **canlıda duran** bir kusurdu.
