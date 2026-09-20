@@ -523,8 +523,10 @@ servis etti; ayrıca `cities.json` cache-buster'sız çekiliyordu. Düzeltme:
 `index.html` → `app.js?v=20260718-17`; `fetch("data/cities.json")` →
 `?v=${BM_VER}`. Ders `yeni-sehir` skill'ine + `docs/VERI.md`'ye işlendi:
 yeni şehir yayınında **BM_VER + index.html app.js sürümü birlikte** artırılır.
-Yayın yolu: GitHub Pages, varsayılan daldan (`claude/rome-transit-map-app-*`)
-`layersofcity.com`'a; şehir dalı varsayılana fast-forward push'lanır.
+Yayın yolu: GitHub Pages, yayın dalından `layersofcity.com`'a; şehir dalı
+yayın dalına fast-forward push'lanır. **Yayın dalı 2026-09-20'de `main`'e
+taşınıyor** — ayrıntı ve hangisinin canlı olduğunu anlama yöntemi için
+`.claude/skills/yeni-sehir/SKILL.md` → "Canlıya alma".
 
 ---
 

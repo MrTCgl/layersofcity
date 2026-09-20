@@ -132,10 +132,22 @@ way(r)[!"building"];out geom;
 3. Gerçekçilik denetimini (2b) sayısal çalıştır: en uzun segment raporu.
 4. `cities.json`'da şehri `"ready"` yap; **önbellek sürümlerini birlikte artır**
    (aşağı bak), commit'le (mesaj Türkçe), push'la.
-5. **Canlıya alma:** GitHub Pages varsayılan daldan (`claude/rome-transit-map-app-*`)
-   `layersofcity.com`'a yayınlıyor; ayrı deploy workflow'u yok. Şehir dalını
-   varsayılan dala **fast-forward** push et. Pages build'i (Actions →
-   "pages build and deployment") ~1-2 dk sürer; başarılı olunca canlı.
+5. **Canlıya alma:** GitHub Pages `layersofcity.com`'a yayınlıyor; ayrı deploy
+   workflow'u yok. Şehir dalını **yayın dalına fast-forward** push et. Pages
+   build'i (Actions → "pages build and deployment") ~1-2 dk sürer.
+
+   **Hangi dal yayın dalı? Tahmin etme, ölç.** 2026-09-20'de `main` oluşturuldu
+   ve yayın oraya taşınıyor; eski dal `claude/rome-transit-map-app-hwl2rn` hâlâ
+   duruyor (geri dönüş için). Doğrulama tek komut — canlıdaki sürüm damgasını
+   dalların `index.html`'iyle karşılaştır:
+
+   ```sh
+   curl -s https://layersofcity.com/index.html | grep -o 'app.js?v=[0-9-]*'
+   git show origin/main:index.html            | grep -o 'app.js?v=[0-9-]*'
+   ```
+
+   Push'ladıktan sonra canlı damganın gerçekten değiştiğini gör; değişmiyorsa
+   yanlış dala push'lamışsındır.
 
 ## ⚠️ Önbellek sürümleri — HEPSİNİ birlikte artır (2026-07-18 dersi)
 
