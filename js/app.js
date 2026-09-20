@@ -950,7 +950,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260920-1"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260920-2"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
@@ -2435,7 +2435,63 @@
     busSug.hidden = false;
   }
 
-  busInput.addEventListener("input", renderBusSuggestions);
+  /* Keep the box usable while the soft keyboard is up.
+
+     On Android the layout viewport shrinks with the keyboard, so nothing needs
+     doing. iOS keeps the layout viewport at full height and only shrinks (and
+     may offset) the visual one, which can leave part of the box behind the
+     keyboard. Measured on a 390x844 phone the box itself still fits there, and
+     only the suggestion list runs past the keyboard on a short screen — so the
+     list is capped to the room that is left and the box stays put. It is moved
+     only when the input row itself would be behind the keyboard, which really
+     happens in landscape; there it pins to the top of the visible area even
+     though that covers the city bar, because there is nowhere else to go. */
+  const KBD_MIN = 120;                 // below this the gap is just browser UI
+  const MIN_LIST = 96;                 // a shorter list is not worth reading
+  function busKeyboardUnpin() {
+    busBox.classList.remove("kbd");
+    busBox.style.top = "";
+    busSug.style.maxHeight = "";
+  }
+  function busKeyboardFit() {
+    const vv = window.visualViewport;
+    if (!vv || busBox.hidden) return;
+    const hiddenBelow = window.innerHeight - vv.height - vv.offsetTop;
+    if (document.activeElement !== busInput || hiddenBelow <= KBD_MIN) {
+      busKeyboardUnpin();
+      return;
+    }
+    const visibleBottom = vv.offsetTop + vv.height;
+    const row = busBox.querySelector(".busbox-row");
+    busKeyboardUnpin();                          // measure the resting position
+    const roomAt = bottom => visibleBottom - (bottom + 6) - 10;
+    // Pin only when staying put would leave too little room to read the list —
+    // in landscape that is what bites, not the input row being hidden.
+    if (roomAt(row.getBoundingClientRect().bottom) < MIN_LIST) {
+      busBox.classList.add("kbd");
+      busBox.style.top = Math.round(vv.offsetTop + 8) + "px";
+    }
+    busSug.style.maxHeight =
+      Math.max(64, Math.round(roomAt(row.getBoundingClientRect().bottom))) + "px";
+  }
+  function busKeyboardWatch(on) {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    vv[on ? "addEventListener" : "removeEventListener"]("resize", busKeyboardFit);
+    vv[on ? "addEventListener" : "removeEventListener"]("scroll", busKeyboardFit);
+    if (!on) busKeyboardUnpin();
+  }
+  busInput.addEventListener("focus", () => {
+    busKeyboardWatch(true);
+    // the keyboard animates in; the viewport is only right a beat later
+    setTimeout(busKeyboardFit, 60);
+    setTimeout(busKeyboardFit, 320);
+  });
+  busInput.addEventListener("blur", () => busKeyboardWatch(false));
+  // a fresh list of suggestions has to be re-capped against the same room
+  const busFitAfterRender = () => { if (busBox.classList.contains("kbd") || busSug.style.maxHeight) busKeyboardFit(); };
+
+  busInput.addEventListener("input", () => renderBusSuggestions().then(busFitAfterRender));
   busInput.addEventListener("keydown", e => {
     if (e.key !== "Enter") return;
     const first = busSug.hidden ? null : busSug.querySelector("button");
@@ -2460,7 +2516,7 @@
     const full = !!(open && busAvailable());
     busBox.hidden = !full && !busPicked.size;
     busBox.classList.toggle("legend", !full);
-    if (!full) { busSug.hidden = true; busNote.hidden = true; }
+    if (!full) { busSug.hidden = true; busNote.hidden = true; busKeyboardUnpin(); }
     else loadBusIndex();
   }
 

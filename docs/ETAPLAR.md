@@ -2367,8 +2367,27 @@ Bitti sayılır:
 - [x] Konsol temiz (telefon 420 px + masaüstü 1280 px, iki tema)
 - [x] Önbellek sürümleri **20260920-1**
 
-Durum notu: Tamam, omurga hattı seçimi onaylandı (2026-09-20). Kalan tek göz
-kontrolü: gerçek telefonda hat no kutusunun klavye açıkken kullanışlı olup
-olmadığı. Ayrıca bu oturumda fark edilen ve **dokunulmayan** eski kusur:
-420 px genişlikte Hatlar menüsündeki 5 ikon ekrana sığmıyor (sağdaki vapur
-çipi kenara dayanıyor) — otobüs işiyle ilgisi yok, İstanbul'da da aynı.
+**Ek (2026-09-20, aynı gün): klavye açıkken kutu.** Kullanıcı isteğiyle bakıldı.
+Ölçüm, işin baştaki tahminden küçük olduğunu gösterdi: iOS'ta klavye layout
+viewport'unu değil yalnız görsel viewport'u kısaltıyor, ve 390×844 telefonda
+öneri listesi zaten sığıyor (liste altı 379, görünür alt sınır 464) — kutuyu
+yukarı almak gerekmiyor, hatta ilk deneme kutuyu şehir çubuğunun üstüne
+bindirdiği için **geri alındı**. Uygulanan davranış:
+- `visualViewport` izleniyor, yalnız hat no kutusu odaktayken.
+- Android'de layout viewport da kısaldığı için hiçbir şey yapılmıyor (doğru
+  davranış — gereksiz sıçrama yok).
+- iOS'ta öneri listesi klavyenin üstünde kalan yere göre kırpılıyor, kaydırmalı
+  oluyor; kutu yerinde duruyor. (iPhone SE 375×667: liste 379 → 357, sığıyor.)
+- Kutu **yalnız** listeye 96 px'den az yer kalıyorsa görünür alanın tepesine
+  sabitleniyor; pratikte bu yatay (landscape) durumu. (844×390: sabitlendi,
+  liste 323 → 180, sığıyor.) Orada şehir çubuğunun üstüne binmesi kabul —
+  başka yer yok.
+- Odak gidince her şey sıfırlanıyor; künyeye düşerken de temizleniyor.
+Önbellek sürümleri **20260920-2**.
+
+Durum notu: Tamam, omurga hattı seçimi onaylandı ve klavye davranışı yapıldı
+(2026-09-20). Göz kontrolü beklenen tek yer: gerçek iPhone'da klavye açılırken
+listenin kırpılması göze batıyor mu. Ayrıca bu oturumda fark edilen ve
+**dokunulmayan** eski kusur: 420 px genişlikte Hatlar menüsündeki 5 ikon
+ekrana sığmıyor (sağdaki vapur çipi kenara dayanıyor) — otobüs işiyle ilgisi
+yok, İstanbul'da da aynı.

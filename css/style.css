@@ -265,6 +265,9 @@ body.city #topchips{display:flex}
 }
 .busbox[hidden]{display:none}
 .busbox.legend .busbox-row, .busbox.legend .bussug{display:none}
+/* while the soft keyboard is up, the box leaves the chip anchor and pins to
+   the top of what is actually visible (JS sets `top`) */
+.busbox.kbd{position:fixed; top:auto}
 .busbox-row{
   display:flex; align-items:center; gap:6px; padding:5px 5px 5px 13px;
   background:var(--surface); border:1px solid var(--line); border-radius:999px;
@@ -279,7 +282,9 @@ body.city #topchips{display:flex}
 #busgo:active{transform:scale(.94)}
 .bussug{
   width:100%; background:var(--surface); border:1px solid var(--line);
-  border-radius:14px; box-shadow:var(--shadow); overflow:hidden;
+  border-radius:14px; box-shadow:var(--shadow);
+  /* capped by JS to the room above the soft keyboard; scrolls past that */
+  overflow-x:hidden; overflow-y:auto; overscroll-behavior:contain;
 }
 .bussug[hidden]{display:none}
 .bussug button{
