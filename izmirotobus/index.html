@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5"
+    />
+    <meta name="theme-color" content="#f7f7f5" />
+    <meta
+      name="description"
+      content="İzmir'de bulunduğunuz yerden gitmek istediğiniz noktaya doğrudan giden otobüs hatlarını bulun."
+    />
+    <title>İzmir Otobüs — aktarmasız hat bulma ve canlı otobüs konumları</title>
+
+    <!--
+      Open Graph etiketleri. Paylaşım önizlemesinin yanı sıra içerik
+      sınıflandırıcıları da bu alanları okuyor; sayfa gövdesi JavaScript
+      ile üretildiği için robotun gördüğü metin neredeyse yalnızca burada.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="İzmir Otobüs" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta
+      property="og:title"
+      content="İzmir Otobüs — aktarmasız hat bulma ve canlı otobüs konumları"
+    />
+    <meta
+      property="og:description"
+      content="İzmir'de bulunduğunuz yerden gitmek istediğiniz noktaya aktarmasız giden ESHOT otobüs hatlarını bulun; duraklara yaklaşan otobüsleri haritada canlı izleyin."
+    />
+    <meta property="og:url" content="https://layersofcity.com/izmirotobus/" />
+    <meta name="twitter:card" content="summary" />
+
+    <style>.js-yok{color:#1f2328;max-width:38rem;margin:3rem auto;padding:0 1.25rem;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;line-height:1.6}.js-yok h1{font-size:1.5rem}.js-yok ul{padding-left:1.2rem}.js-yok .soluk{color:#656d76;font-size:.9rem}</style>
+
+    <!--
+      Tek adres.
+
+      Site Cloudflare Pages'te barındığı için <proje>.pages.dev adresinden
+      de açılıyor; o adres Türkiye'de engelli ve trafiği ikiye bölüyor.
+      Kanonik etiket arama motorlarına asıl adresi söylüyor, aşağıdaki
+      betik de oraya düşen ziyaretçiyi yönlendiriyor.
+
+      Betik satır içi ve <head> içinde: uygulama paketi (364 KB) hiç
+      indirilmeden yönlendirme gerçekleşsin diye. `layersofcity.com`
+      derleme sırasında Vite tarafından değiştiriliyor; tanımlı değilse
+      (yerel geliştirme) yer tutucu olduğu gibi kalır ve betik hiçbir şey
+      yapmaz.
+    -->
+    <link rel="canonical" href="https://layersofcity.com/izmirotobus/" />
+    <script>
+      (function () {
+        var kanonik = 'layersofcity.com';
+        if (kanonik.charAt(0) === '%') {
+          // Değişken verilmeden derlenmiş: kanonik adres yer tutucu
+          // içeriyor ve yanıltıcı olur, kaldırıyoruz.
+          var etiketler = document.querySelectorAll(
+            'link[rel="canonical"], meta[property="og:url"]',
+          );
+          for (var i = 0; i < etiketler.length; i++) etiketler[i].remove();
+          return;
+        }
+        if (kanonik === location.hostname) return;
+        if (!/\.pages\.dev$/.test(location.hostname)) return;
+        location.replace(
+          'https://' + kanonik + location.pathname + location.search + location.hash,
+        );
+      })();
+    </script>
+    <script type="module" crossorigin src="/izmirotobus/assets/index-txpyrnv0.js"></script>
+    <link rel="stylesheet" crossorigin href="/izmirotobus/assets/index-BIP88_5K.css">
+  </head>
+  <body>
+    <div id="kok"></div>
+
+    <!--
+      JavaScript kapalıyken uygulama çalışmıyor; harita ve canlı veri
+      tarayıcıda hesaplanıyor. Boş bir sayfa bırakmak yerine sitenin ne
+      olduğunu anlatıyoruz. Bu metin aynı zamanda sayfanın robotlara
+      görünen tek içeriği: gövde normalde JavaScript ile üretiliyor.
+    -->
+    <noscript>
+      <div class="js-yok">
+        <h1>İzmir Otobüs</h1>
+        <p>
+          İzmir'de bulunduğunuz yerden gitmek istediğiniz noktaya
+          <strong>aktarmasız</strong> giden ESHOT otobüs hatlarını bulmanızı sağlayan,
+          harita odaklı bir toplu taşıma uygulaması.
+        </p>
+        <ul>
+          <li>Başlangıç ve varış noktası seçip doğrudan giden hatları listeleyin.</li>
+          <li>
+            Bulunduğunuz noktanın 500 metre çevresindeki durakları ve o duraklardan
+            geçen hatları görün.
+          </li>
+          <li>Seçtiğiniz hattın otobüslerini harita üzerinde canlı izleyin.</li>
+          <li>İZBAN, metro, tramvay ve vapur katmanlarını açıp aktarma planlayın.</li>
+          <li>Vapur iskelelerinin günlük sefer saatlerine bakın.</li>
+        </ul>
+        <p>
+          Uygulamayı kullanabilmek için tarayıcınızda JavaScript'in açık olması
+          gerekiyor.
+        </p>
+        <p class="soluk">
+          Veri: İzmir Büyükşehir Belediyesi Açık Veri Portalı (ESHOT, İZBAN, İZDENİZ).
+          Harita altlığı OpenStreetMap katkıcıları ve OpenFreeMap.
+        </p>
+      </div>
+    </noscript>
+
+  </body>
+</html>
