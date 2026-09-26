@@ -43,6 +43,10 @@
     "bolge-dogal"
   ],
   "buslines": true,
+  "transitApp": {
+    "name": "DurakBul",
+    "url": "https://izmir.durakbul.com/"
+  },
   "prices": {
     "updated": "2026-07",
     "water05": 9,

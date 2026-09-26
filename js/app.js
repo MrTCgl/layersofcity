@@ -933,6 +933,23 @@
     pcType.hidden = !type;
     document.getElementById("pc-dir").href =
       "https://www.google.com/maps?q=" + ll + (label ? "(" + encodeURIComponent(label) + ")" : "");
+    // A city whose manifest names a transit app (İzmir: DurakBul) gets a second
+    // hand-off next to Google Maps: the app opens with this point as its start
+    // and lists the bus stops around it. Like "Directions", this only hands the
+    // point over — layersofcity itself still never routes.
+    const transit = document.getElementById("pc-transit");
+    const ta = manifest && manifest.transitApp;
+    if (ta && ta.url) {
+      const q = new URLSearchParams({ nokta: ll });
+      if (label) q.set("ad", label);
+      transit.href = ta.url + "?" + q.toString().replace(/%2C/gi, ",");
+      transit.title = ta.name || "";
+      transit.hidden = false;
+    } else {
+      transit.hidden = true;
+      transit.removeAttribute("href");
+      transit.title = "";
+    }
     // remember this point so the pencil can bookmark it; show a filled pencil
     // when it is already saved
     pcPoint = { lng, lat, name: name || "", note: note || "" };
@@ -950,7 +967,7 @@
   document.getElementById("pc-close").onclick = hidePlaceCard;
 
   /* ── basemap modes: sade (themed vector) / detay (OSM-look vector) / uydu ── */
-  const BM_VER = "20260920-6"; // cache-bust for basemap styles + city/layer data
+  const BM_VER = "20260926-1"; // cache-bust for basemap styles + city/layer data
   let basemapMode = localStorage.getItem("loc-basemap") || "sade";
   if (basemapMode === "detay+uydu") basemapMode = "karma"; // legacy value
   if (!["sade", "detay", "uydu", "uyduhd", "karma"].includes(basemapMode)) basemapMode = "sade";
