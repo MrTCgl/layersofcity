@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://layersofcity.com/izmirotobus/sitemap.xml
