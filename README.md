@@ -80,3 +80,17 @@ The "layers of city" wordmark uses the **Ballet** typeface
 ## Contact
 
 layersofcity@gmail.com
+
+## Deployment
+
+| | |
+|---|---|
+| Live address | https://layersofcity.com |
+| Hosting | GitHub Pages (served from this repository's default branch) |
+| DNS | Cloudflare, `CNAME` record pointing to `mrtcgl.github.io` |
+| Custom domain file | `CNAME` in the repo root |
+| How to update | Merge into the default branch; GitHub Pages republishes within a few minutes |
+| Search Console | Domain property `layersofcity.com`, sitemap at `/sitemap.xml` |
+
+The city pages use hash routes (`#/istanbul`), which search engines treat as
+the same page, so the sitemap lists only the root address.
