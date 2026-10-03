@@ -85,21 +85,23 @@ main{flex:1; position:relative; overflow:hidden}
    It's a visual scale (layout box unchanged) anchored to its bottom edge, so the
    wordmark grows *upward* into the gap and the map stays exactly where it is. */
 @media (hover: hover) and (pointer: fine){
-  /* the star grid reaches ~1.45em above the layout box once scaled, so reserve
-     that much on top; the vh term shrinks it on short (laptop) screens */
+  /* the scale grows the script ~.5em above its layout box; 1em keeps a clear
+     gap under the star grid. The vh term shrinks it on short (laptop) screens */
   #wordmark{ transform:rotate(-2deg) scale(1.5); transform-origin:center bottom;
-    font-size:clamp(40px, min(7.5vw, 9vh), 76px); margin-top:1.5em; }
+    font-size:clamp(40px, min(7.5vw, 9vh), 76px); margin-top:1em; }
 }
 #wordmark{line-height:1}
 #wordmark .wm, #wordmark .of{color:var(--brand-script)}
-/* brand symbol: a smaller 3×3 star grid centred above the script; only its
-   lower row tucks behind the tops of the letters */
-.wm-mark{
-  position:absolute; left:50%; bottom:62%;
-  width:1em; height:1em;
-  transform:translateX(-50%) rotate(2deg); /* undo the h1's -2deg tilt */
-  fill:var(--peach); z-index:-1; pointer-events:none;
-}
+/* brand symbol: the 3×3 star grid sits on its own, centred in the empty band
+   above the script with a clear gap to the letters. #wmtop takes half the free
+   height (the ::after spacer below the map takes the other half), so the
+   wordmark + map keep their centred composition and the stars float in the
+   middle of the space above them. */
+#wmtop{flex:1 1 0; min-height:calc(min(11vh, 96px) + 24px);
+  display:flex; align-items:center; justify-content:center}
+#worldzoom::after{content:""; flex:1 1 0}
+.wm-mark{width:min(11vh, 96px); height:min(11vh, 96px); flex:none;
+  fill:var(--peach); pointer-events:none}
 /* world map controls: round, line-drawn, on the right edge and vertically
    centred. Same three actions as the city screen's +/−/pan stack, but loose
    circles instead of a joined column — the world screen carries no other
@@ -191,8 +193,12 @@ body.city .appinfo{padding-right:28px}
    (hover) keeps the current vertically-centered composition untouched. */
 @media (hover: none) and (pointer: coarse){
   #worldzoom{ justify-content:flex-start; padding:0; gap:0; }
+  #worldzoom::after{ content:none; }
+  /* fixed band under the header: stars centred in it, gap to the script */
+  #wmtop{ flex:0 0 auto; min-height:0; padding:min(3vh, 24px) 0 min(5.5vh, 44px); }
+  .wm-mark{ width:min(18vw, 9vh, 88px); height:min(18vw, 9vh, 88px); }
   #wordmark{
-    margin:calc(min(7vh, 56px) + .45em) 0 0; padding:0 3vw; width:100%; text-align:center;
+    margin:0; padding:0 3vw; width:100%; text-align:center;
     /* Sized from BOTH axes and capped, so the logotype reads the same on every
        screen size: 22vw fills a phone width (full, plump), but the same ratio
        on a 10" tablet (800 px+ wide) gives a ~180 px word that swallows the
