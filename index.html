@@ -20,7 +20,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://layersofcity.com/assets/brand/og-image.png">
 <link rel="stylesheet" href="assets/vendor/maplibre-gl.css">
-<link rel="stylesheet" href="css/style.css?v=20261003-1">
+<link rel="stylesheet" href="css/style.css?v=20261003-2">
 <!-- Cloudflare Web Analytics (cookieless). The site is served by a Worker, so
      Cloudflare's automatic injection never reaches the page; snippet added by hand. -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f44a393d9f8b4763874a79da22566ce0"}'></script>
@@ -100,7 +100,6 @@
   <!-- ═══ WORLD SCREEN (city picker) ═══ -->
   <section class="screen" id="scr-world">
     <div id="worldzoom">
-      <div id="wmtop"><svg class="wm-mark" viewBox="0 0 3 3" aria-hidden="true"><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(0.5 0.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(0.5 1.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(0.5 2.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(1.5 0.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(1.5 1.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(1.5 2.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(2.5 0.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(2.5 1.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(2.5 2.5)"/></svg></div>
       <h1 id="wordmark"><span class="wm">layers</span> <span class="of">of</span> <span class="wm">city</span></h1>
       <!-- clip box: the map zooms/pans inside it (desktop mouse wheel + drag,
            mobile pinch) and can never overflow up over the fixed wordmark. -->
