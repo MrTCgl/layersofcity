@@ -5,9 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>layers of city</title>
 <meta name="description" content="Read a new city, layer by layer.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B9A6DC' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L21 8 L12 13 L3 8 Z'/%3E%3Cpath d='M3 12.5 L12 17.5 L21 12.5' opacity='.55'/%3E%3Cpath d='M3 17 L12 22 L21 17' opacity='.25'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="assets/brand/mark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/brand/favicon-16.png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<meta name="theme-color" content="#FBF8F6">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://layersofcity.com/">
+<meta property="og:title" content="layers of city">
+<meta property="og:description" content="Read a new city, layer by layer.">
+<meta property="og:image" content="https://layersofcity.com/assets/brand/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://layersofcity.com/assets/brand/og-image.png">
 <link rel="stylesheet" href="assets/vendor/maplibre-gl.css">
-<link rel="stylesheet" href="css/style.css?v=20260926-1">
+<link rel="stylesheet" href="css/style.css?v=20261003-1">
 <!-- Cloudflare Web Analytics (cookieless). The site is served by a Worker, so
      Cloudflare's automatic injection never reaches the page; snippet added by hand. -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f44a393d9f8b4763874a79da22566ce0"}'></script>
@@ -16,9 +29,7 @@
 
 <header>
   <button class="logo" id="homebtn" data-i18n-label="aria.home">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--lilac)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 3 L21 8 L12 13 L3 8 Z"/><path d="M3 12.5 L12 17.5 L21 12.5" opacity=".55"/><path d="M3 17 L12 22 L21 17" opacity=".25"/>
-    </svg>
+    <svg class="logo-mark" width="22" height="22" viewBox="0 0 3 3" aria-hidden="true"><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(0.5 0.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(0.5 1.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(0.5 2.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(1.5 0.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(1.5 1.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(1.5 2.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(2.5 0.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(2.5 1.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(2.5 2.5)"/></svg>
     <span>layers<span class="dim">of</span>city</span>
   </button>
   <div id="topchips">
@@ -89,7 +100,7 @@
   <!-- ═══ WORLD SCREEN (city picker) ═══ -->
   <section class="screen" id="scr-world">
     <div id="worldzoom">
-      <h1 id="wordmark"><span class="wm">layers</span> <span class="of">of</span> <span class="wm">city</span></h1>
+      <h1 id="wordmark"><svg class="wm-mark" viewBox="0 0 3 3" aria-hidden="true"><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(0.5 0.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(0.5 1.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(0.5 2.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(1.5 0.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(1.5 1.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(1.5 2.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(2.5 0.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(2.5 1.5)"/><path d="M0 -0.5A0.75 0.75 0 0 0 0.5 0A0.75 0.75 0 0 0 0 0.5A0.75 0.75 0 0 0 -0.5 0A0.75 0.75 0 0 0 0 -0.5Z" transform="translate(2.5 2.5)"/></svg><span class="wm">layers</span> <span class="of">of</span> <span class="wm">city</span></h1>
       <!-- clip box: the map zooms/pans inside it (desktop mouse wheel + drag,
            mobile pinch) and can never overflow up over the fixed wordmark. -->
       <div id="mapclip">
