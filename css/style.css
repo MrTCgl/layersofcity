@@ -11,11 +11,13 @@
   --bg:#FBF8F6; --surface:#FFFFFF; --ink:#3E3A45; --ink-soft:#8B8494;
   --line:#EAE4EE; --lilac:#B9A6DC; --peach:#F2BBA8; --powder:#EFD9DE;
   --land:#E4DDD6; --water:#F7F4F1; --shadow:0 2px 12px rgba(0,0,0,.06);
+  --brand-script:#8A72BF;
 }
 :root[data-theme="dark"]{
   --bg:#232028; --surface:#2C2833; --ink:#EDE9F2; --ink-soft:#9A93A6;
   --line:#3A3542; --lilac:#C4B2E4; --peach:#E8B39E; --powder:#8A7480;
   --land:#332E3D; --water:#262230; --shadow:none;
+  --brand-script:#FBF8F6;
 }
 
 *{box-sizing:border-box; margin:0}
@@ -37,6 +39,7 @@ header{
 body.city header{position:absolute; top:0; left:0; right:0}
 .logo{display:flex; align-items:center; gap:10px; letter-spacing:.18em; font-size:15px; font-weight:600}
 .logo svg{flex:none}
+.logo-mark{fill:var(--peach)}
 .logo .dim{color:var(--ink-soft); font-weight:400}
 header .grow{flex:1}
 .langwrap{position:relative}
@@ -82,13 +85,21 @@ main{flex:1; position:relative; overflow:hidden}
    It's a visual scale (layout box unchanged) anchored to its bottom edge, so the
    wordmark grows *upward* into the gap and the map stays exactly where it is. */
 @media (hover: hover) and (pointer: fine){
-  #wordmark{ transform:rotate(-2deg) scale(1.5); transform-origin:center bottom; }
+  /* the star grid reaches ~1em above the layout box once scaled, so reserve
+     that much on top; the vh term shrinks it on short (laptop) screens */
+  #wordmark{ transform:rotate(-2deg) scale(1.5); transform-origin:center bottom;
+    font-size:clamp(40px, min(7.5vw, 9vh), 76px); margin-top:1em; }
 }
-#wordmark .of{color:var(--lilac)}
-#wordmark .wm{color:var(--peach)}
-/* light theme: swap — "of" in peach, the rest in lilac */
-:root[data-theme="light"] #wordmark .of{color:var(--peach)}
-:root[data-theme="light"] #wordmark .wm{color:var(--lilac)}
+#wordmark{line-height:1; margin-bottom:.4em} /* keeps the star grid off the world map */
+#wordmark .wm, #wordmark .of{color:var(--brand-script)}
+/* brand symbol: 3×3 star grid behind the script; the script crosses it from
+   outside left to outside right (stars 232 : script 136 → 1.706em) */
+.wm-mark{
+  position:absolute; left:50%; top:50%;
+  width:1.706em; height:1.706em;
+  transform:translate(-50%,-49%) rotate(2deg); /* undo the h1's -2deg tilt */
+  fill:var(--peach); z-index:-1; pointer-events:none;
+}
 /* world map controls: round, line-drawn, on the right edge and vertically
    centred. Same three actions as the city screen's +/−/pan stack, but loose
    circles instead of a joined column — the world screen carries no other
