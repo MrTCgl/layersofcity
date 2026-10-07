@@ -283,6 +283,12 @@ data/<sehir>/bus/
   "bu haritanın dışında" der.
 - `city.json`'da `"buslines": true` → Hatlar menüsünde hat no kutusu çıkar.
   Bayrak yoksa kutu da, `buspick` kaynağı da, ESHOT atfı da hiç eklenmez.
+- `city.json`'da `"transitApp": { "name", "url" }` → yer kartında Google
+  Haritalar düğmesinin yanında **Otobüs** düğmesi çıkar; noktayı o kentin
+  toplu taşıma uygulamasına devreder (`<url>?nokta=<enlem>,<boylam>&ad=<ad>`).
+  İzmir'de DurakBul (`izmir.durakbul.com`): nokta başlangıç olur, çevresindeki
+  duraklar listelenir. Rota yine layersofcity'de çözülmez. Alan yoksa düğme
+  görünmez.
 
 **Kırpma tuzağı:** güzergâhı `maxBounds`'a shapely `intersection` ile kırpmak
 hattı **kendi kesişim noktalarından** parçalar (445 üç parçaya bölünmüştü) ve

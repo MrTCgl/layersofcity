@@ -86,8 +86,9 @@ varsa kullanıcıya sor:
 - **Tema:** açık (soluk pastel) + koyu. Harita altlığı temayla birlikte değişir.
 - **6 dil mimarisi** (en, de, fr, it, es, tr); içerik önce en+tr.
   Arayüzde sabit yazı (hardcoded string) bırakma; her metin i18n dosyasından gelir.
-- **Üyelik yok.** Tercihler `localStorage`'da. Analitik ancak yayın etabında ve
-  çerezsiz araçla (Plausible/Umami) eklenir.
+- **Üyelik yok.** Tercihler `localStorage`'da. Analitik yalnızca çerezsiz araçla:
+  **Cloudflare Web Analytics** (2026-10-01, kullanıcı kararı; `index.html`'de elle
+  eklenen beacon — site Worker üzerinden sunulduğu için otomatik ekleme çalışmıyor).
 - **Rehberli mod** isteğe bağlıdır; varsayılan kapalı, kimseye dayatılmaz.
 
 ## Çalışma disiplini (limitli oturumlar için)

@@ -128,13 +128,21 @@ Resmi renklerin soluklaştırılmış halleri — tanınırlık korunur, bağır
 
 ## Logotip
 
-- Üst barda sade: `layers of city` — küçük harf, kelime araları geniş (`0.18em`),
-  sistem fontu.
+- **Kurumsal kimlik (2026-10-03):** sembol 3×3 **dört köşeli yıldız ızgarası**,
+  `var(--peach)` ile dolu (`assets/brand/mark.svg`). Logotip rengi
+  `--brand-script`: açık temada `#8A72BF`, koyuda `#FBF8F6`. Açılış ekranında
+  **yıldız sembolü yok** — yalnız el yazısı logotip (2026-10-03, kullanıcı
+  kararı: denenen yerleşimler beğenilmedi, sembol kaldırıldı). Sembol üst
+  barda, favicon'da ve paylaşım görselinde kalır. Slogan:
+  "Read a new city, layer by layer." — sistem fontu, ağırlık 300,
+  `letter-spacing:.14em`, `--ink`. Favicon, ana ekran ikonları ve paylaşım
+  görseli (`og-image.png`, 1200×630) `assets/brand/` altında.
+- Üst barda sade: yıldız sembolü + `layers of city` — küçük harf, kelime araları
+  geniş (`0.18em`), sistem fontu.
 - **Açılış ekranında** büyük logotip **el yazısı** karakterdedir: turistik,
   uçarı his; hafif eğim (yaklaşık -2°). Font: **Ballet** (Omnibus-Type,
   OFL lisanslı — kullanıcı seçimi), `assets/fonts/` altında **yerel**
-  barındırılır (CDN yok). Renkler (2026-07-14): "layers" ve "city" `--peach`
-  (yavruağzı), "of" `--lilac`.
+  barındırılır (CDN yok). Renkler (2026-10-03): üç kelime de `--brand-script`.
 - **Logotip ölçüsü ekrana göredir (2026-09-19):** masaüstünde
   `clamp(46px,7.5vw,76px)` + `scale(1.5)`; dokunmatik ekranlarda
   `clamp(42px, min(22vw, 15vh), 110px)`. `22vw` telefonu dolduruyor, `15vh`
